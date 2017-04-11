@@ -6,7 +6,7 @@ class PartnerModule {
         app.router.addRoutes([{
             path: '/partners',
             name: 'list',
-            component: app.components.partners_list,
+            component: app.components.partners_index,
         }])
     }
 }
