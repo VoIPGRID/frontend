@@ -1,0 +1,65 @@
+{
+  "name": "voipgrid-frontend",
+  "version": "3.0.0",
+  "private": true,
+  "description": "VoIPGRID Frontend for API V2.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VoIPGRID/voipgrid-frontend.git"
+  },
+  "keywords": [
+    "spa",
+    "javascript",
+    "voipgrid"
+  ],
+  "author": "Devhouse Spindle",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/VoIPGRID/voipgrid-frontend/issues"
+  },
+  "browser": {
+    "vue": "vue/dist/vue.common.js"
+  },
+  "homepage": "https://github.com/VoIPGRID/voipgrid-frontend#readme",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "browserify": "^14.1.0",
+    "connect": "^3.6.0",
+    "connect-mount": "^1.0.0",
+    "envify": "^4.0.0",
+    "gulp": "^3.9.1",
+    "gulp-add-src": "^0.2.0",
+    "gulp-babel": "^6.1.2",
+    "gulp-clean-css": "^3.0.4",
+    "gulp-concat": "^2.6.1",
+    "gulp-envify": "^1.0.0",
+    "gulp-gh-pages": "^0.5.4",
+    "gulp-help": "^1.6.1",
+    "gulp-if-else": "^1.0.3",
+    "gulp-jsdoc3": "^1.0.1",
+    "gulp-livereload": "^3.8.1",
+    "gulp-notify": "^3.0.0",
+    "gulp-sass": "^3.1.0",
+    "gulp-size": "^2.1.0",
+    "gulp-sourcemaps": "^2.5.0",
+    "gulp-uglify": "^2.1.2",
+    "gulp-zip": "^4.0.0",
+    "jsdoc-rtd": "^1.0.3",
+    "serve-static": "^1.12.1",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "vueify": "^9.4.1",
+    "watchify": "^3.9.0",
+    "yargs": "^7.0.2"
+  },
+  "dependencies": {
+    "logatim": "^0.9.0",
+    "vue": "^2.2.6",
+    "vue-router": "^2.4.0"
+  }
+}
