@@ -98,12 +98,13 @@ gulp.task('js-app', 'Process all application Javascript.', (done) => {
 
     if (watcher) b.plugin(watchify)
     b.bundle()
+    .on('error', notify.onError('Error: <%= error.message %>'))
     .pipe(source('app.js'))
     .pipe(buffer())
     .pipe(ifElse(!deployMode, () => {
         return sourcemaps.init({loadMaps: true})
     }))
-    .on('error', notify.onError('Error: <%= error.message %>'))
+
     .on('end', () => {
         if (watcher) livereload.changed('app.js')
         done()
@@ -157,13 +158,15 @@ gulp.task('scss', 'Find all scss files from the apps directory, concat them and 
 })
 
 
-gulp.task('templates', 'Builds all Vue components.', () => {
+gulp.task('components', 'Builds all Vue components.', () => {
     gulp.src('./src/js/**/*.vue')
-    .pipe(vue('templates.js', {
-        namespace: '_GLOBAL.templates',
+    .pipe(vue('components.js', {
+        namespace: 'window.components',
+        prefixStart: 'modules',
+        prefixIgnore: ['components'],
     }))
     .on('error', notify.onError('Error: <%= error.message %>'))
-    .pipe(size(extend({title: 'templates'}, sizeOptions)))
+    .pipe(size(extend({title: 'components'}, sizeOptions)))
     .pipe(gulp.dest(BUILD_DIR))
     .pipe(ifElse(watcher, livereload))
 })
@@ -176,13 +179,6 @@ gulp.task('watch', 'Start a development server and watch for changes.', () => {
     app.use(serveStatic(path.join(__dirname, 'build')))
     app.use(mount('/docs', serveStatic(path.join(__dirname, 'docs', 'build'))))
     http.createServer(app).listen(8999)
-
-    gulp.watch([
-        path.join(__dirname, 'src', 'js', 'vendor.js'),
-    ], () => {
-        gulp.start('js-vendor')
-    })
-
     gulp.watch([
         path.join(__dirname, 'src', 'js', '**', '*.js'),
         `!${path.join(__dirname, 'src', 'js', 'vendor.js')}`,
@@ -191,22 +187,8 @@ gulp.task('watch', 'Start a development server and watch for changes.', () => {
         if (withDocs) gulp.start('docs')
     })
 
-    gulp.watch([
-        path.join(__dirname, 'src', 'js', '**', '*.vue'),
-    ], () => {
-        gulp.start('templates')
-    })
-
-    gulp.watch([
-        path.join(__dirname, 'src', 'html', '**', '*.html'),
-    ], () => {
-        gulp.start('assets')
-    })
-
-
-    gulp.watch([
-        path.join(__dirname, 'src', 'scss', '**', '*.scss'),
-    ], () => {
-        gulp.start('scss')
-    })
+    gulp.watch(path.join(__dirname, 'src', 'js', 'vendor.js'), ['js-vendor'])
+    gulp.watch(path.join(__dirname, 'src', 'js', '**', '*.vue'), ['components'])
+    gulp.watch(path.join(__dirname, 'src', 'html', '**', '*.html'), ['assets'])
+    gulp.watch(path.join(__dirname, 'src', 'scss', '**', '*.scss'), ['scss'])
 })

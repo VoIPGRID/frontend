@@ -1,0 +1,3 @@
+<div>
+Partner list
+</div>

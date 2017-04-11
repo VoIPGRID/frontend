@@ -13,7 +13,8 @@
     },
     "globals": {
         "Vue": true,
-        "VueRouter": true
+        "VueRouter": true,
+        "components": true
     },
     "plugins": [
 

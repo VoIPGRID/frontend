@@ -2,12 +2,15 @@
 
 
 class App {
-    constructor() {
+    /**
+     *
+     */
+    constructor(templates) {
+        // Assign the template global to the app context.
+        this.components = components
         this._modules = [
-            {
-                name: 'client',
-                Module: require('./modules/client/module'),
-            },
+            {name: 'clients', Module: require('./modules/clients/module')},
+            {name: 'partners', Module: require('./modules/partners/module')},
         ]
 
         Vue.use(VueRouter)
@@ -15,17 +18,26 @@ class App {
             mode: 'history',
         })
 
+        this.initModules()
+
+        // Start up virtual DOM.
+        this.vdom = new Vue({
+            router: this.router,
+            render: createEle => createEle(this.components.main_main),
+        }).$mount('#app')
+    }
+
+
+    /**
+     * Initialize all modules.
+     */
+    initModules() {
         this.modules = {}
         for (let {name, Module} of this._modules) {
             this.modules[name] = new Module(this)
         }
-
-        // Start up our app
-        new Vue({
-            router: this.router,
-            render: h => h(App)
-        }).$mount('#app')
     }
 }
-
-window.app = new App()
+window.onload = function() {
+    window.app = new App(window.components)
+}
