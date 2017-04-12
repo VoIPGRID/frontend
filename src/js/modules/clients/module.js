@@ -5,7 +5,7 @@ class ClientModule {
     constructor(app) {
         app.router.addRoutes([{
             path: '/clients',
-            name: 'list',
+            name: 'clients_index',
             component: app.components.clients_index,
         }])
     }

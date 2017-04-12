@@ -3,9 +3,10 @@
 class PartnerModule {
 
     constructor(app) {
+
         app.router.addRoutes([{
             path: '/partners',
-            name: 'list',
+            name: 'partners_index',
             component: app.components.partners_index,
         }])
     }
