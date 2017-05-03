@@ -6,7 +6,7 @@ class ClientModule {
         app.router.addRoutes([{
             path: '/clients',
             name: 'clients_index',
-            component: app.components.clients_index,
+            component: app.templates.clients_index,
         }])
     }
 }

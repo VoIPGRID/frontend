@@ -49,7 +49,8 @@ if (deployMode) gutil.log('Running gulp optimized for deployment...')
 gulp.task('assets', 'Move assets to the build directory.', () => {
     return gulp.src('./src/img/**', {base: './src'})
     .pipe(addsrc('./src/fonts/**', {base: './src/'}))
-    .pipe(addsrc('./src/html/*.html', {base: './src/html'}))
+    .pipe(addsrc(path.join(NODE_PATH, 'font-awesome', 'fonts', '**'), {base: path.join(NODE_PATH, 'font-awesome')}))
+    .pipe(addsrc('./src/templates/index.html', {base: './src/templates'}))
     .pipe(gulp.dest(BUILD_DIR))
     .pipe(size(extend({title: 'assets'}, sizeOptions)))
     .pipe(ifElse(watcher, livereload))
@@ -57,9 +58,11 @@ gulp.task('assets', 'Move assets to the build directory.', () => {
 
 
 gulp.task('build', 'Metatask that builds everything.', [
-    'js',
+    'js-app',
+    'js-vendor',
+    'templates',
     'scss',
-    'docs',
+    'scss-vendor',
 ])
 
 
@@ -123,6 +126,7 @@ gulp.task('js-vendor', 'Process all vendor Javascript.', (done) => {
     })
     b.transform('envify', {global: true, _: 'purge', NODE_ENV: NODE_ENV})
     b.bundle()
+    .on('error', notify.onError('Error: <%= error.message %>'))
     .pipe(source('vendor.js'))
     .pipe(buffer())
     .pipe(ifElse(deployMode, () => {
@@ -158,15 +162,31 @@ gulp.task('scss', 'Find all scss files from the apps directory, concat them and 
 })
 
 
-gulp.task('components', 'Builds all Vue components.', () => {
-    gulp.src('./src/js/**/*.vue')
-    .pipe(vue('components.js', {
-        namespace: 'window.components',
-        prefixStart: 'modules',
-        prefixIgnore: ['components'],
+/**
+ * Generate one css file out of all app styles.scss files and it's imports.
+ */
+gulp.task('scss-vendor', 'Find all scss files from the apps directory, concat them and save as one css file.', () => {
+    return gulp.src('./src/scss/vendor.scss')
+    .pipe(sass({includePaths: NODE_PATH}))
+    .on('error', notify.onError('Error: <%= error.message %>'))
+    .pipe(concat('vendor.css'))
+    .pipe(ifElse(deployMode, () => cleanCSS({
+        advanced: true,
+    })))
+    .pipe(gulp.dest(BUILD_DIR))
+    .pipe(size(extend({title: 'scss'}, sizeOptions)))
+    .pipe(ifElse(watcher, livereload))
+})
+
+
+gulp.task('templates', 'Builds all Vue templates.', () => {
+    gulp.src('./src/templates/**/*.vue')
+    .pipe(vue('templates.js', {
+        namespace: 'window.templates',
+        prefixStart: 'templates',
     }))
     .on('error', notify.onError('Error: <%= error.message %>'))
-    .pipe(size(extend({title: 'components'}, sizeOptions)))
+    .pipe(size(extend({title: 'templates'}, sizeOptions)))
     .pipe(gulp.dest(BUILD_DIR))
     .pipe(ifElse(watcher, livereload))
 })
@@ -188,7 +208,11 @@ gulp.task('watch', 'Start a development server and watch for changes.', () => {
     })
 
     gulp.watch(path.join(__dirname, 'src', 'js', 'vendor.js'), ['js-vendor'])
-    gulp.watch(path.join(__dirname, 'src', 'js', '**', '*.vue'), ['components'])
-    gulp.watch(path.join(__dirname, 'src', 'html', '**', '*.html'), ['assets'])
-    gulp.watch(path.join(__dirname, 'src', 'scss', '**', '*.scss'), ['scss'])
+    gulp.watch(path.join(__dirname, 'src', 'templates', '**', '*.vue'), ['templates'])
+    gulp.watch(path.join(__dirname, 'src', 'templates', 'index.html'), ['assets'])
+    gulp.watch(path.join(__dirname, 'src', 'scss', 'vendor.scss'), ['scss-vendor'])
+    gulp.watch([
+        path.join(__dirname, 'src', 'scss', '**', '*.scss'),
+        `!${path.join(__dirname, 'src', 'scss', 'vendor.scss')}`,
+    ], ['scss'])
 })

@@ -14,7 +14,13 @@
     "globals": {
         "Vue": true,
         "VueRouter": true,
-        "components": true
+        "Vuex": true,
+        "templates": true,
+        "axios": true,
+        "csrf": true,
+        "VeeValidate": true,
+        "VueNotifications": true,
+        "miniToastr": true
     },
     "plugins": [
 
