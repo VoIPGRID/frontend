@@ -16,8 +16,9 @@ class App {
         this.templates = templates
 
         this._modules = [
-            {name: 'main', Module: require('./modules/main')},
             {name: 'clients', Module: require('./modules/clients')},
+            {name: 'dashboard', Module: require('./modules/dashboard')},
+            {name: 'main', Module: require('./modules/main')},
             {name: 'partners', Module: require('./modules/partners')},
         ]
 

@@ -20,6 +20,18 @@ class LoginComponent extends Component {
         this.methods = Vuex.mapActions([
             'login',
         ])
+
+        Vue.component('login', {
+            render: this.template.render,
+            staticRenderFns: this.template.staticRenderFns,
+            computed: Vuex.mapState({
+                credentials: state => state.main.credentials,
+                authenticated: state => state.main.authenticated,
+            }),
+            methods: Vuex.mapActions([
+                'login',
+            ]),
+        })
     }
 }
 

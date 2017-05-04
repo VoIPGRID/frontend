@@ -20,8 +20,16 @@
                 </td>
                 <td>{{ client.description }}</td>
                 <td>
-                    <router-link :to="{name: 'edit_client', params: {client_id: client.id}}">Edit</router-link>
-                    <router-link :to="{name: 'delete_client', params: {client_id: client.id}}">Delete</router-link>
+                    <router-link :to="{name: 'edit_client', params: {client_id: client.id}}">
+                        <span class="icon">
+                            <i class="fa fa-edit"></i>
+                        </span>
+                    </router-link>
+                    <router-link :to="{name: 'delete_client', params: {client_id: client.id}}">
+                        <span class="icon">
+                            <i class="fa fa-remove"></i>
+                        </span>
+                    </router-link>
                 </td>
             </tr>
         </tbody>

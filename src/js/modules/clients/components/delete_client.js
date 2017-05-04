@@ -18,7 +18,7 @@ class DeleteClientComponent extends Component {
 
     // Mount actions from the store to the component.
     mounted() {
-        this.app.vuex.dispatch('clients/readPartner', this.app.router.currentRoute.params.client_id)
+        this.app.vuex.dispatch('clients/readClient', this.app.router.currentRoute.params.client_id)
     }
 }
 

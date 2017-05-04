@@ -1,0 +1,22 @@
+.dashboard-home {
+    .module {
+        text-align: center;
+
+        &:hover {
+            background: $primary;
+            color: #fff;
+            cursor: pointer;
+
+            .subtitle {
+                color: #fff;
+            }
+        }
+
+        .icon {
+            margin-bottom: 0.5rem;
+            i {
+                font-size: 1.5rem;
+            }
+        }
+    }
+}
