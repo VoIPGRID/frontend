@@ -50,6 +50,7 @@ gulp.task('assets', 'Move assets to the build directory.', () => {
     return gulp.src('./src/img/**', {base: './src'})
     .pipe(addsrc('./src/fonts/**', {base: './src/'}))
     .pipe(addsrc(path.join(NODE_PATH, 'font-awesome', 'fonts', '**'), {base: path.join(NODE_PATH, 'font-awesome')}))
+    .pipe(addsrc(path.join(NODE_PATH, 'vg-icons', 'fonts', '**'), {base: path.join(NODE_PATH, 'vg-icons')}))
     .pipe(addsrc('./src/templates/index.html', {base: './src/templates'}))
     .pipe(gulp.dest(BUILD_DIR))
     .pipe(size(extend({title: 'assets'}, sizeOptions)))

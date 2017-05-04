@@ -1,3 +1,17 @@
 @import "variables";
+
+.vg-icon {
+    font-family: voipgrid-icons;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+@import "vg-icons/sass/vg-icons";
+
 @import "font-awesome/scss/font-awesome";
 @import "bulma/bulma";

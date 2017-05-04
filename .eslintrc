@@ -19,7 +19,8 @@
         "axios": true,
         "csrf": true,
         "VeeValidate": true,
-        "VueNotifications": true
+        "VueNotifications": true,
+        "__state": true
     },
     "plugins": [
 

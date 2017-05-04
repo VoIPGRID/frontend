@@ -7,7 +7,7 @@
                     <a class="nav-item logo">
                         <img src="/img/logo.png" alt="VoIPGRID logo">
                     </a>
-                    <router-link class="nav-item is-tab is-hidden-mobile" to="/" exact>Home</router-link>
+                    <router-link class="nav-item is-tab is-hidden-mobile" to="/" exact>Dashboard</router-link>
                     <router-link class="nav-item is-tab is-hidden-mobile" to="/partners">Partners</router-link>
                     <router-link class="nav-item is-tab is-hidden-mobile" to="/clients">Clients</router-link>
                 </div>

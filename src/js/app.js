@@ -2,10 +2,10 @@
 
 const globalActions = require('./lib/actions')
 const globalMutations = require('./lib/mutations')
+const Helpers = require('./lib/helpers')
 const Logger = require('./lib/logger')
 const Store = require('./lib/store')
 const Notifications = require('./lib/notifications')
-
 
 class App {
     /**
@@ -39,6 +39,10 @@ class App {
             },
         })
 
+        Vue.use(Helpers)
+        this.utils = require('./lib/utils')
+
+
         this.router = new VueRouter({
             mode: 'history',
             linkActiveClass: 'is-active',
@@ -49,8 +53,9 @@ class App {
         this.api = axios.create({
             baseURL: 'http://localhost/api/v2/',
             timeout: 1000,
-            headers: {'X-CSRFToken': csrf},
+            headers: {'X-CSRFToken': __state.csrf},
         })
+
         this.logger = new Logger(this)
         this.store = new Store(this)
 
@@ -60,7 +65,7 @@ class App {
         // Initialize Notifications component.
         Vue.use(Notifications, this.vuex)
 
-        this.vuex.commit('main/AUTHENTICATE', this.store.get('user'))
+        this.vuex.commit('main/AUTHENTICATE', __state.authenticated)
 
         // Start up virtual DOM.
         this.vdom = new Vue({
