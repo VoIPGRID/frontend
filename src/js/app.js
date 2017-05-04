@@ -1,7 +1,10 @@
 'use strict'
 
+const globalActions = require('./lib/actions')
+const globalMutations = require('./lib/mutations')
 const Logger = require('./lib/logger')
 const Store = require('./lib/store')
+const Notifications = require('./lib/notifications')
 
 
 class App {
@@ -50,10 +53,11 @@ class App {
         this.logger = new Logger(this)
         this.store = new Store(this)
 
+        this.modules = this.loadModules()
+        this.vuex = this.initStore()
 
-        this.loadModules()
-
-        this.initStore()
+        // Initialize Notifications component.
+        Vue.use(Notifications, this.vuex)
 
         this.vuex.commit('main/AUTHENTICATE', this.store.get('user'))
 
@@ -62,6 +66,7 @@ class App {
             router: this.router,
             store: this.vuex,
             render: create => create(this.templates.main_main),
+            methods: Vuex.mapActions(['notify']),
         }).$mount('#app')
 
     }
@@ -71,16 +76,18 @@ class App {
      * Initialize all modules.
      */
     loadModules() {
-        this.modules = {}
+        let modules = {}
         for (let {name, Module} of this._modules) {
-            this.modules[name] = new Module(this)
+            modules[name] = new Module(this)
         }
+        return modules
     }
 
 
     /**
-     * Combines all actions and mutations from modules
-     * and init a Vuex store.
+     * Combines all actions and mutations from modules and add them to
+     * their own namespace in the Vuex store. Also add global actions
+     * and mutations for generic state.
      */
     initStore() {
         let vuexModules = {}
@@ -97,8 +104,13 @@ class App {
             }
         }
 
-        this.vuex = new Vuex.Store({
+        return new Vuex.Store({
             modules: vuexModules,
+            actions: globalActions(this),
+            mutations: globalMutations(this),
+            state: {
+                notifications: [],
+            },
         })
     }
 }

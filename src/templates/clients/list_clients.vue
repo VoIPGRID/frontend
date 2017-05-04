@@ -2,7 +2,7 @@
     <router-view></router-view>
     <div class="field is-grouped">
         <p class="control">
-            <router-link class="button is-primary" to="/partners/add/">Add Partner</router-link>
+            <router-link class="button is-primary" to="/clients/add/">Add Client</router-link>
         </p>
     </div>
     <table class="table">
@@ -14,14 +14,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="partner in partners">
+            <tr v-for="client in clients">
                 <td>
-                    {{partner.name}}
+                    {{client.name}}
                 </td>
-                <td>{{ partner.description }}</td>
+                <td>{{ client.description }}</td>
                 <td>
-                    <router-link :to="{name: 'edit_partner', params: {partner_id: partner.id}}">Edit</router-link>
-                    <router-link :to="{name: 'delete_partner', params: {partner_id: partner.id}}">Delete</router-link>
+                    <router-link :to="{name: 'edit_client', params: {client_id: client.id}}">Edit</router-link>
+                    <router-link :to="{name: 'delete_client', params: {client_id: client.id}}">Delete</router-link>
                 </td>
             </tr>
         </tbody>

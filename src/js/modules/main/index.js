@@ -19,6 +19,12 @@ class MainModule {
             },
         }
 
+        this.methods = {
+            notify(notification) {
+                this.vuex.actions.notify(notification)
+            },
+        }
+
         const loginComponent = new LoginComponent(app)
         app.router.addRoutes([{
             path: '/login',

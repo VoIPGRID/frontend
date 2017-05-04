@@ -14,9 +14,9 @@ module.exports = function(app) {
             })
         },
         createPartner: (store) => {
-            console.log(store.state)
             const partner = store.state.partner
             app.api.post('partners/', partner).then((res) => {
+                store.dispatch('notify', {message: `Partner ${partner.name} succesfully created`}, {root: true})
                 app.router.push({name: 'list_partners'})
             })
         },
@@ -24,6 +24,7 @@ module.exports = function(app) {
             const partner = store.state.partner
             app.api.put(`partners/${partner.id}/`, partner).then((res) => {
                 store.commit('PARTNER_CHANGED', res.data)
+                store.dispatch('notify', {message: `Partner ${partner.name} succesfully updated`}, {root: true})
                 app.router.push({name: 'list_partners'})
             })
         },
@@ -31,6 +32,7 @@ module.exports = function(app) {
             const partner = store.state.partner
             app.api.delete(`partners/${partner.id}/`).then((res) => {
                 store.commit('PARTNER_DELETED', partner)
+                store.dispatch('notify', {message: `Partner ${partner.name} succesfully deleted`}, {root: true})
                 app.router.push({name: 'list_partners'})
             })
         },

@@ -1,3 +1,3 @@
 <div>
-    <notification v-for="notification in notifications"></notification>
+    <notification v-for="notification in notifications" transition="fade"></notification>
 </div>

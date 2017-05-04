@@ -9,11 +9,5 @@ module.exports = function(app) {
                 state.authenticated = false
             }
         },
-        ADD_NOTIFICATION(state, notification) {
-            state.notifications.push(notification)
-        },
-        REMOVE_NOTIFICATION(state, notification) {
-            state.notifications.$remove(notification)
-        },
     }
 }

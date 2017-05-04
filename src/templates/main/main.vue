@@ -1,4 +1,5 @@
 <div>
+    <notifications></notifications>
     <nav class="nav has-shadow">
         <div class="container">
             <div class="nav-left">
@@ -20,7 +21,7 @@
                 <router-link class="nav-item is-tab is-hidden-tablet" to="/" exact>Home</router-link>
                 <router-link class="nav-item is-tab is-hidden-tablet" to="/partners">Partners</router-link>
                 <router-link class="nav-item is-tab is-hidden-tablet" to="/clients">Clients</router-link>
-                <a class="nav-item is-tab">
+                <a class="nav-item is-tab" @click="$store.dispatch('notify', {message: 'lorum ewef qonmiwefnm qweoifnqweoifn oifn oimnef '})">
                     <figure class="image is-16x16" style="margin-right: 8px;">
 
                     </figure>
