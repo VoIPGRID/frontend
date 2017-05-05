@@ -2,7 +2,7 @@
 
 
 /**
- * This module handles client moderation.
+ * This module handles client management.
  */
 class ClientsModule {
 
@@ -27,16 +27,18 @@ class ClientsModule {
             ],
         }])
 
+        const AddEditClientComponent = require('./components/add-edit_client')(app)
+
         app.router.addRoutes([{
             path: '/clients/add',
             name: 'add_client',
-            component: require('./components/add_client')(app),
+            component: AddEditClientComponent,
         }])
 
         app.router.addRoutes([{
             path: '/clients/:client_id/edit',
             name: 'edit_client',
-            component: require('./components/edit_client')(app),
+            component: AddEditClientComponent,
         }])
     }
 }

@@ -2,7 +2,7 @@
 
 
 /**
- * This module handles partner moderation.
+ * This module handles partner management.
  */
 class PartnerModule {
 
@@ -27,16 +27,18 @@ class PartnerModule {
             ],
         }])
 
+        const AddEditPartnerComponent = require('./components/add-edit_partner')(app)
+
         app.router.addRoutes([{
             path: '/partners/add',
             name: 'add_partner',
-            component: require('./components/add_partner')(app),
+            component: AddEditPartnerComponent,
         }])
 
         app.router.addRoutes([{
             path: '/partners/:partner_id/edit',
             name: 'edit_partner',
-            component: require('./components/edit_partner')(app),
+            component: AddEditPartnerComponent,
         }])
     }
 }

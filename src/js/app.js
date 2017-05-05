@@ -7,13 +7,18 @@ const Logger = require('./lib/logger')
 const Notifications = require('./lib/notifications')
 
 
+/**
+ * The VoIPGRID frontend V2 application class.
+ */
 class App {
     /**
-     * The VoIPGRID frontend V2 application class.
+     * @param {Object} templates - The compiled Vue templates to start with.
      */
     constructor(templates) {
         // Assign the template global to the app context.
         this.templates = templates
+        this.logger = new Logger(this)
+        this.utils = require('./lib/utils')
 
         Vue.use(Helpers)
         Vue.use(VueRouter)
@@ -33,22 +38,18 @@ class App {
             },
         })
 
-        this.utils = require('./lib/utils')
-
         this.router = new VueRouter({
             mode: 'history',
             linkActiveClass: 'is-active',
         })
 
         // Add the Django csrf token in the header and set the base URL
-        // for our API.
+        // to VoIPGRID api V2.
         this.api = axios.create({
             baseURL: 'http://localhost/api/v2/',
             timeout: 3000,
             headers: {'X-CSRFToken': __state.csrf},
         })
-
-        this.logger = new Logger(this)
 
         this.modules = this.loadModules()
         this.vuex = this.setupStore()

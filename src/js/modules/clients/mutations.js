@@ -11,6 +11,9 @@ module.exports = function(app) {
         CLIENT_CHANGED: (state, client) => {
             state.client = client
         },
+        CLIENT_EMPTIED: (state) => {
+            state.partner = {}
+        },
         /**
          * Remove the client from the store's clients.
          */

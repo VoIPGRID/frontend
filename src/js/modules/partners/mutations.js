@@ -11,6 +11,9 @@ module.exports = function(app) {
         PARTNER_CHANGED: (state, partner) => {
             state.partner = partner
         },
+        PARTNER_EMPTIED: (state) => {
+            state.partner = {}
+        },
         /**
          * Remove the partner from the store's partners.
          */

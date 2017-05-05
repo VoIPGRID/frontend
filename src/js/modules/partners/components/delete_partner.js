@@ -2,7 +2,7 @@
 
 
 module.exports = (app) => {
-    const template = app.templates.partners_add_partner
+    const template = app.templates.partners_delete_partner
     return Vue.component('DeletePartner', {
         render: template.render,
         staticRenderFns: template.staticRenderFns,

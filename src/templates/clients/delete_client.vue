@@ -11,7 +11,7 @@
         </div>
       </section>
       <footer class="modal-card-foot">
-        <a class="button is-danger" @click="$store.dispatch('clients/deleteClient')">Confirm</a>
+        <a class="button is-primary" @click="$store.dispatch('clients/deleteClient')">Confirm</a>
         <router-link class="button" :to="{name: 'list_clients'}">Cancel</router-link>
       </footer>
     </div>
