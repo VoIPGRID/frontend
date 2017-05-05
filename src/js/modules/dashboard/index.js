@@ -1,15 +1,11 @@
 'use strict'
 
-const actions = require('./actions')
-const mutations = require('./mutations')
-
 
 class DashboardModule {
 
     constructor(app) {
-        this.actions = actions(app)
-        this.mutations = mutations(app)
-
+        this.actions = require('./actions')(app)
+        this.mutations = require('./mutations')(app)
         this.state = {
             modules: [
                 {name: 'VoIP-account', 'icon': 'vg-icon-phoneaccount'},
@@ -52,7 +48,7 @@ class DashboardModule {
         app.router.addRoutes([{
             path: '/',
             name: 'dashboard_home',
-            component: require('./components/home')(app, this),
+            component: require('./components/home')(app),
         }])
     }
 }

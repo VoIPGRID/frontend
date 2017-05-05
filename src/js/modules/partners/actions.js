@@ -9,7 +9,6 @@ module.exports = function(app) {
         },
         readPartners: (store) => {
             app.api.get('partners/').then((res) => {
-                console.log(res.data)
                 store.commit('PARTNERS_CHANGED', res.data)
             })
         },

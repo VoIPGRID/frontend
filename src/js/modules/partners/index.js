@@ -1,13 +1,5 @@
 'use strict'
 
-const actions = require('./actions')
-const mutations = require('./mutations')
-
-const AddPartnerComponent = require('./components/add_partner')
-const DeletePartnerComponent = require('./components/delete_partner')
-const EditPartnerComponent = require('./components/edit_partner')
-const ListPartnersComponent = require('./components/list_partners')
-
 
 /**
  * This module handles partner moderation.
@@ -15,14 +7,8 @@ const ListPartnersComponent = require('./components/list_partners')
 class PartnerModule {
 
     constructor(app) {
-        this.actions = actions(app)
-        this.mutations = mutations(app)
-
-        const addPartnerComponent = new AddPartnerComponent(app)
-        const deletePartnerComponent = new DeletePartnerComponent(app)
-        const editPartnerComponent = new EditPartnerComponent(app)
-        const listPartnersComponent = new ListPartnersComponent(app)
-
+        this.actions = require('./actions')(app)
+        this.mutations = require('./mutations')(app)
         this.state = {
             partners: [],
             partner: {},
@@ -31,12 +17,12 @@ class PartnerModule {
         app.router.addRoutes([{
             path: '/partners',
             name: 'list_partners',
-            component: listPartnersComponent.component,
+            component: require('./components/list_partners')(app),
             children: [
                 {
                     path: ':partner_id/delete',
                     name: 'delete_partner',
-                    component: deletePartnerComponent.component,
+                    component: require('./components/delete_partner')(app),
                 },
             ],
         }])
@@ -44,13 +30,13 @@ class PartnerModule {
         app.router.addRoutes([{
             path: '/partners/add',
             name: 'add_partner',
-            component: addPartnerComponent.component,
+            component: require('./components/add_partner')(app),
         }])
 
         app.router.addRoutes([{
             path: '/partners/:partner_id/edit',
             name: 'edit_partner',
-            component: editPartnerComponent.component,
+            component: require('./components/edit_partner')(app),
         }])
     }
 }

@@ -2,7 +2,6 @@
     .module {
         text-align: center;
 
-
         &:hover:not([disabled]) {
             background: $primary;
             cursor: pointer;

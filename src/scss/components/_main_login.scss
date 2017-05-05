@@ -1,0 +1,16 @@
+.login-component {
+    .modal-card-head {
+        background: #fff;
+        border-bottom: 0;
+
+        .login-header-logo {
+            height: 30px;
+        }
+    }
+
+    .modal-card-foot {
+        display: block;
+        background: #fff;
+        border-top: 0;
+    }
+}

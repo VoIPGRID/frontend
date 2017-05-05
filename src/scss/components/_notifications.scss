@@ -1,0 +1,14 @@
+.notifications {
+    @include tablet {
+        max-width: 320px;
+    }
+    position: fixed;
+    top: 50px;
+    right: 0;
+    z-index: 19;
+    min-width: 240px;
+
+    .notification {
+        margin: 20px;
+    }
+}

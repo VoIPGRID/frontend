@@ -4,7 +4,7 @@
         <nav class="nav has-shadow">
             <div class="container">
                 <div class="nav-left">
-                    <a class="nav-item logo">
+                    <a class="nav-item nav__logo">
                         <img src="/img/logo.png" alt="VoIPGRID logo">
                     </a>
                     <router-link class="nav-item is-tab is-hidden-mobile" to="/" exact>Dashboard</router-link>
@@ -42,6 +42,6 @@
         </div>
     </div>
     <div v-else>
-        <login></login>
+        <MainLogin></MainLogin>
     </div>
 </div>

@@ -1,4 +1,6 @@
-@import "variables";
+@import "vg-icons/sass/vg-icons";
+
+$vg-icons-path: "fonts" !default;
 
 .vg-icon {
     font-family: voipgrid-icons;
@@ -10,8 +12,3 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-
-@import "vg-icons/sass/vg-icons";
-
-@import "font-awesome/scss/font-awesome";
-@import "bulma/bulma";

@@ -4,8 +4,8 @@ const globalActions = require('./lib/actions')
 const globalMutations = require('./lib/mutations')
 const Helpers = require('./lib/helpers')
 const Logger = require('./lib/logger')
-const Store = require('./lib/store')
 const Notifications = require('./lib/notifications')
+
 
 class App {
     /**
@@ -15,33 +15,25 @@ class App {
         // Assign the template global to the app context.
         this.templates = templates
 
-        this._modules = [
-            {name: 'clients', Module: require('./modules/clients')},
-            {name: 'dashboard', Module: require('./modules/dashboard')},
-            {name: 'main', Module: require('./modules/main')},
-            {name: 'partners', Module: require('./modules/partners')},
-        ]
-
+        Vue.use(Helpers)
         Vue.use(VueRouter)
         Vue.use(VeeValidate, {
             enableAutoClasses: true,
-            errorBagName: 'errors', // change if property conflicts.
+            errorBagName: 'errors',
             fieldsBagName: 'fields',
             delay: 0,
             locale: 'en',
             classNames: {
-                touched: 'touched', // the control has been blurred
-                untouched: 'untouched', // the control hasn't been blurred
-                valid: 'valid', // model is valid
-                invalid: 'invalid', // model is invalid
-                pristine: 'pristine', // control has not been interacted with
-                dirty: 'dirty', // control has been interacted with
+                touched: 'touched',
+                untouched: 'untouched',
+                valid: 'valid',
+                invalid: 'invalid',
+                pristine: 'pristine',
+                dirty: 'dirty',
             },
         })
 
-        Vue.use(Helpers)
         this.utils = require('./lib/utils')
-
 
         this.router = new VueRouter({
             mode: 'history',
@@ -52,22 +44,21 @@ class App {
         // for our API.
         this.api = axios.create({
             baseURL: 'http://localhost/api/v2/',
-            timeout: 1000,
+            timeout: 3000,
             headers: {'X-CSRFToken': __state.csrf},
         })
 
         this.logger = new Logger(this)
-        this.store = new Store(this)
 
         this.modules = this.loadModules()
-        this.vuex = this.initStore()
+        this.vuex = this.setupStore()
 
         // Initialize Notifications component.
         Vue.use(Notifications, this.vuex)
 
         this.vuex.commit('main/AUTHENTICATE', __state.authenticated)
 
-        // Start up virtual DOM.
+        // Start up virtual DOM renderer.
         this.vdom = new Vue({
             router: this.router,
             store: this.vuex,
@@ -83,7 +74,14 @@ class App {
      */
     loadModules() {
         let modules = {}
-        for (let {name, Module} of this._modules) {
+        let _modules = [
+            {name: 'clients', Module: require('./modules/clients')},
+            {name: 'dashboard', Module: require('./modules/dashboard')},
+            {name: 'main', Module: require('./modules/main')},
+            {name: 'partners', Module: require('./modules/partners')},
+        ]
+
+        for (let {name, Module} of _modules) {
             modules[name] = new Module(this)
         }
         return modules
@@ -95,10 +93,9 @@ class App {
      * their own namespace in the Vuex store. Also add global actions
      * and mutations for generic state.
      */
-    initStore() {
+    setupStore() {
         let vuexModules = {}
-
-        for (let {name} of this._modules) {
+        for (let name of Object.keys(this.modules)) {
             let {actions, mutations, state} = this.modules[name]
             if (actions || mutations || state) {
                 vuexModules[name] = {

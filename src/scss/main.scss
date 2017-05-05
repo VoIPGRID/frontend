@@ -1,0 +1,15 @@
+@import "bulma/sass/utilities/variables";
+@import "bulma/sass/utilities/mixins";
+
+@import "modules/all";
+@import "components/all";
+@import "partials/all";
+
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .3s;
+}
+
+.fade-enter, .fade-leave-to {
+    opacity: 0;
+}

@@ -1,16 +1,11 @@
 'use strict'
 
-const actions = require('./actions')
-const LoginComponent = require('./components/login')
-const mutations = require('./mutations')
-
 
 class MainModule {
 
     constructor(app) {
-        this.actions = actions(app)
-        this.mutations = mutations(app)
-
+        this.actions = require('./actions')(app)
+        this.mutations = require('./mutations')(app)
         this.state = {
             authenticated: false,
             credentials: {
@@ -25,12 +20,11 @@ class MainModule {
             },
         }
 
-        const loginComponent = new LoginComponent(app)
         app.router.addRoutes([{
             path: '/login',
             alias: '/logout',
             name: 'main_login',
-            component: loginComponent.component,
+            component: require('./components/login')(app),
         }])
     }
 }

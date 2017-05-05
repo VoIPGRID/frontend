@@ -59,6 +59,7 @@ gulp.task('assets', 'Move assets to the build directory.', () => {
 
 
 gulp.task('build', 'Metatask that builds everything.', [
+    'assets',
     'js-app',
     'js-vendor',
     'templates',
@@ -147,13 +148,13 @@ gulp.task('js-vendor', 'Process all vendor Javascript.', (done) => {
 
 
 /**
- * Generate one css file out of all app styles.scss files and it's imports.
+ * Generate application CSS.
  */
 gulp.task('scss', 'Find all scss files from the apps directory, concat them and save as one css file.', () => {
-    return gulp.src('./src/scss/styles.scss')
+    return gulp.src('./src/scss/main.scss')
     .pipe(sass({includePaths: NODE_PATH}))
     .on('error', notify.onError('Error: <%= error.message %>'))
-    .pipe(concat('styles.css'))
+    .pipe(concat('main.css'))
     .pipe(ifElse(deployMode, () => cleanCSS({
         advanced: true,
     })))
@@ -164,7 +165,7 @@ gulp.task('scss', 'Find all scss files from the apps directory, concat them and 
 
 
 /**
- * Generate one css file out of all app styles.scss files and it's imports.
+ * Generate vendor-specific CSS.
  */
 gulp.task('scss-vendor', 'Find all scss files from the apps directory, concat them and save as one css file.', () => {
     return gulp.src('./src/scss/vendor.scss')
@@ -211,9 +212,13 @@ gulp.task('watch', 'Start a development server and watch for changes.', () => {
     gulp.watch(path.join(__dirname, 'src', 'js', 'vendor.js'), ['js-vendor'])
     gulp.watch(path.join(__dirname, 'src', 'templates', '**', '*.vue'), ['templates'])
     gulp.watch(path.join(__dirname, 'src', 'templates', 'index.html'), ['assets'])
-    gulp.watch(path.join(__dirname, 'src', 'scss', 'vendor.scss'), ['scss-vendor'])
     gulp.watch([
         path.join(__dirname, 'src', 'scss', '**', '*.scss'),
         `!${path.join(__dirname, 'src', 'scss', 'vendor.scss')}`,
+        `!${path.join(__dirname, 'src', 'scss', 'vendor', '*.scss')}`,
     ], ['scss'])
+    gulp.watch([
+        path.join(__dirname, 'src', 'scss', 'vendor.scss'),
+        path.join(__dirname, 'src', 'scss', 'vendor', '*.scss'),
+    ], ['scss-vendor'])
 })
