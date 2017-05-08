@@ -1,6 +1,3 @@
-'use strict'
-
-
 module.exports = (app) => {
     const template = app.templates.clients_list_clients
     return Vue.component('ListClients', {

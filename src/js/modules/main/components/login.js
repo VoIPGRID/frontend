@@ -1,6 +1,3 @@
-'use strict'
-
-
 module.exports = (app) => {
     const template = app.templates.main_login
     return Vue.component('MainLogin', {

@@ -1,5 +1,3 @@
-'use strict'
-
 module.exports = function(app) {
     return {
         emptyClient: (store) => {
@@ -12,7 +10,7 @@ module.exports = function(app) {
         },
         readClients: (store) => {
             app.api.get('clients/').then((res) => {
-                store.commit('CLIENTS_CHANGED', res.data)
+                store.commit('CLIENTS_CHANGED', res.data.results)
             })
         },
         upsertClient: (store) => {

@@ -1,6 +1,3 @@
-'use strict'
-
-
 /**
  * This module handles partner management.
  */

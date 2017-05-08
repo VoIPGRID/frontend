@@ -1,6 +1,3 @@
-'use strict'
-
-
 module.exports = (app) => {
     const template = app.templates.dashboard_home
     return Vue.component('DashboardHome', {

@@ -1,5 +1,3 @@
-'use strict'
-
 module.exports = (app) => {
     const template = app.templates.partners_list_partners
     return Vue.component('ListPartners', {
@@ -9,8 +7,5 @@ module.exports = (app) => {
             partners: state => state.partners.partners,
             current_partner: state => state.partners.current_partner,
         }),
-        mounted: function() {
-            app.vuex.dispatch('partners/readPartners')
-        },
     })
 }

@@ -1,5 +1,3 @@
-'use strict'
-
 let idCounter = 0
 /**
  * Global Vuex actions.

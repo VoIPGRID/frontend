@@ -1,6 +1,3 @@
-'use strict'
-
-
 /**
  * This module handles client management.
  */

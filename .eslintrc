@@ -4,7 +4,7 @@
         "classes":true,
         "spread":true
     },
-    "parser": "espree",
+    "parser": "babel-eslint",
     "env": {
         "amd": false,
         "browser": true,

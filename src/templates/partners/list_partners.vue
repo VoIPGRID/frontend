@@ -14,7 +14,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="partner in partners">
+            <tr v-for="partner in partners.results">
                 <td>
                     {{partner.name}}
                 </td>
@@ -34,4 +34,11 @@
             </tr>
         </tbody>
     </table>
+    <paginator
+        :count=partners.count
+        :next=partners.next
+        :previous=partners.previous
+        resource_action="partners/readPartners"
+        resource_url="/partners">
+    </paginator>
 </div>

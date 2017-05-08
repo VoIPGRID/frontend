@@ -1,18 +1,14 @@
-'use strict'
-
 /**
  * A simple notification component that uses the Vuex
  * store to maintain state.
  */
 module.exports = function install(Vue, store) {
-    Vue.prototype.$notify = (options = {}) => {};
-    Vue.prototype.$error = (text, options = {}) => {};
-    Vue.prototype.$warn = (text, options = {}) => {};
-    Vue.prototype.$success = (text, options = {}) => {};
+    const templateNotification = templates.components_notification
+    const templateNotifications = templates.components_notifications
 
     Vue.component('notification', {
-        render: templates.lib_notification.render,
-        staticRenderFns: templates.lib_notification.staticRenderFns,
+        render: templateNotification.render,
+        staticRenderFns: templateNotification.staticRenderFns,
         props: ['notification'],
         methods: {
             closeNotification(notification) {
@@ -25,7 +21,7 @@ module.exports = function install(Vue, store) {
         computed: {
             notifications: () => store.state.notifications,
         },
-        render: templates.lib_notifications.render,
-        staticRenderFns: templates.lib_notifications.staticRenderFns,
+        render: templateNotifications.render,
+        staticRenderFns: templateNotifications.staticRenderFns,
     })
 }

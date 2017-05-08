@@ -1,11 +1,9 @@
-'use strict'
-
 const globalActions = require('./lib/actions')
 const globalMutations = require('./lib/mutations')
 const Helpers = require('./lib/helpers')
 const Logger = require('./lib/logger')
-const Notifications = require('./lib/notifications')
-
+const Notifications = require('./components/notifications')
+const Paginator = require('./components/paginator')
 
 /**
  * The VoIPGRID frontend V2 application class.
@@ -19,6 +17,7 @@ class App {
         this.templates = templates
         this.logger = new Logger(this)
         this.utils = require('./lib/utils')
+
 
         Vue.use(Helpers)
         Vue.use(VueRouter)
@@ -37,6 +36,8 @@ class App {
                 dirty: 'dirty',
             },
         })
+
+        Vue.component('paginator', Paginator)
 
         this.router = new VueRouter({
             mode: 'history',

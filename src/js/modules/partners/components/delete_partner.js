@@ -1,6 +1,3 @@
-'use strict'
-
-
 module.exports = (app) => {
     const template = app.templates.partners_delete_partner
     return Vue.component('DeletePartner', {

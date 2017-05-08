@@ -1,5 +1,3 @@
-'use strict'
-
 module.exports = function(app) {
     return {
         emptyPartner: (store) => {
@@ -10,9 +8,13 @@ module.exports = function(app) {
                 store.commit('PARTNER_CHANGED', res.data)
             })
         },
-        readPartners: (store) => {
-            app.api.get('partners/').then((res) => {
-                store.commit('PARTNERS_CHANGED', res.data)
+        readPartners: (store, data) => {
+            return new Promise((resolve, reject) => {
+                const uri = `${data.resource_url}?${app.utils.toQueryString(data.params)}`
+                app.api.get(uri).then((res) => {
+                    store.commit('PARTNERS_CHANGED', res.data)
+                    resolve(res.data)
+                })
             })
         },
         upsertPartner: (store) => {

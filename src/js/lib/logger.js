@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * This logger is a thin wrapper around the native console.
  * Use blacklisting and sourcemaps to get to the original

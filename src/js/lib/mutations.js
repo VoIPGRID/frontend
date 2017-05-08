@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Global Vuex mutations. Make sure you don't intervere state
  * with module state names.

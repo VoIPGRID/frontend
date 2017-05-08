@@ -1,6 +1,3 @@
-'use strict'
-
-
 class DashboardModule {
 
     constructor(app) {
