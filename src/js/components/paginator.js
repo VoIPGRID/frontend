@@ -77,6 +77,7 @@ module.exports = (function() {
                         _navPages.push(i)
                     }
                 }
+
                 // Add a link to the first page when it's out of scope.
                 if (_navPages[0] !== 1) {
                     this.backwardFirst = 1

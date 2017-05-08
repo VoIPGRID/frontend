@@ -1,5 +1,3 @@
-'use strict';
-
 const extend = require('util')._extend
 const path = require('path')
 
@@ -11,11 +9,13 @@ const buffer = require('vinyl-buffer')
 const cleanCSS = require('gulp-clean-css')
 const concat = require('gulp-concat')
 const connect = require('connect')
-const envify = require('envify/custom')
+const del = require('del')
+const envify = require('gulp-envify')
 
 const ghPages = require('gulp-gh-pages')
 const gulp = require('gulp-help')(require('gulp'), {})
 const gutil = require('gulp-util')
+const gzip = require('gulp-gzip')
 const http = require('http')
 const livereload = require('gulp-livereload')
 const ifElse = require('gulp-if-else')
@@ -39,6 +39,7 @@ const NODE_PATH = process.env.NODE_PATH || path.join(__dirname, 'node_modules')
 const deployMode = argv.production ? argv.production : (process.env.NODE_ENV === 'production')
 const withDocs = argv['with-docs'] ? argv['with-docs'] : false
 
+const gzipConfig = {append: true, gzipOptions: {level: 9}}
 let watcher
 let sizeOptions = {showTotal: true, showFiles: true}
 
@@ -66,6 +67,15 @@ gulp.task('build', 'Metatask that builds everything.', [
     'scss',
     'scss-vendor',
 ])
+
+
+gulp.task('clean-builddir', `Warning! This deletes all files in '${BUILD_DIR}'`, function() {
+    return del([
+        path.join(BUILD_DIR, '**'),
+    ], {
+        force: true,
+    })
+})
 
 
 /**
@@ -109,13 +119,23 @@ gulp.task('js-app', 'Process all application Javascript.', (done) => {
     .pipe(ifElse(!deployMode, () => {
         return sourcemaps.init({loadMaps: true})
     }))
-
+    .pipe(ifElse(deployMode, () => {
+        // Convert to es5 as long there is no es6 version of uglifyjs.
+        return babel({compact: true, presets: ['es2015', 'es2016', 'es2017']})
+    }))
+    .pipe(envify({NODE_ENV: NODE_ENV}))
+    .pipe(ifElse(deployMode, () => uglify()))
+    .on('error', notify.onError('Error: <%= error.toString() %>'))
     .on('end', () => {
+        if (!deployMode) del(path.join(BUILD_DIR, 'app.js.gz'), {force: true})
         if (watcher) livereload.changed('app.js')
         done()
     })
     .pipe(gulp.dest(BUILD_DIR))
-    .pipe(size(extend({title: 'js'}, sizeOptions)))
+    .pipe(ifElse(deployMode, () => gzip(gzipConfig)))
+    .pipe(ifElse(deployMode, () => gulp.dest(BUILD_DIR)))
+    .pipe(size(extend({title: 'js-app'}, sizeOptions)))
+    .pipe(size(extend({title: 'js-app[gzip]'}, sizeOptions)))
 })
 
 
@@ -126,25 +146,23 @@ gulp.task('js-vendor', 'Process all vendor Javascript.', (done) => {
         entries: path.join(__dirname, 'src', 'js', 'vendor.js'),
         packageCache: {},
     })
-    b.transform('envify', {global: true, _: 'purge', NODE_ENV: NODE_ENV})
     b.bundle()
     .on('error', notify.onError('Error: <%= error.message %>'))
     .pipe(source('vendor.js'))
     .pipe(buffer())
-    .pipe(ifElse(deployMode, () => {
-        // Convert to es5 as long there is no es6 version of uglifyjs.
-        return babel({compact: true, presets: ['es2015']})
-    }))
-    .pipe(ifElse(deployMode, uglify))
-    .on('error', notify.onError('Error: <%= error.message %>'))
+    .pipe(envify({NODE_ENV: NODE_ENV}))
+    .pipe(ifElse(deployMode, () => uglify()))
     .on('end', () => {
+        if (!deployMode) del(path.join(BUILD_DIR, 'vendor.js.gz'), {force: true})
         if (watcher) livereload.changed('index.js')
         done()
     })
     .pipe(gulp.dest(BUILD_DIR))
-    .pipe(size(extend({title: 'js'}, sizeOptions)))
+    .pipe(size(extend({title: 'js-vendor'}, sizeOptions)))
+    .pipe(ifElse(deployMode, () => gzip(gzipConfig)))
+    .pipe(ifElse(deployMode, () => gulp.dest(BUILD_DIR)))
+    .pipe(size(extend({title: 'js-vendor[gzip]'}, sizeOptions)))
 })
-
 
 
 /**
@@ -155,11 +173,15 @@ gulp.task('scss', 'Find all scss files from the apps directory, concat them and 
     .pipe(sass({includePaths: NODE_PATH}))
     .on('error', notify.onError('Error: <%= error.message %>'))
     .pipe(concat('main.css'))
-    .pipe(ifElse(deployMode, () => cleanCSS({
-        advanced: true,
-    })))
+    .pipe(ifElse(deployMode, () => cleanCSS({advanced: true})))
+    .on('end', () => {
+        if (!deployMode) del(path.join(BUILD_DIR, 'main.css.gz'), {force: true})
+    })
     .pipe(gulp.dest(BUILD_DIR))
     .pipe(size(extend({title: 'scss'}, sizeOptions)))
+    .pipe(ifElse(deployMode, () => gzip(gzipConfig)))
+    .pipe(ifElse(deployMode, () => gulp.dest(BUILD_DIR)))
+    .pipe(size(extend({title: 'scss[gzip]'}, sizeOptions)))
     .pipe(ifElse(watcher, livereload))
 })
 
@@ -172,11 +194,15 @@ gulp.task('scss-vendor', 'Find all scss files from the apps directory, concat th
     .pipe(sass({includePaths: NODE_PATH}))
     .on('error', notify.onError('Error: <%= error.message %>'))
     .pipe(concat('vendor.css'))
-    .pipe(ifElse(deployMode, () => cleanCSS({
-        advanced: true,
-    })))
+    .pipe(ifElse(deployMode, () => cleanCSS({advanced: true})))
+    .on('end', () => {
+        if (!deployMode) del(path.join(BUILD_DIR, 'vendor.css.gz'), {force: true})
+    })
     .pipe(gulp.dest(BUILD_DIR))
-    .pipe(size(extend({title: 'scss'}, sizeOptions)))
+    .pipe(size(extend({title: 'scss-vendor'}, sizeOptions)))
+    .pipe(ifElse(deployMode, () => gzip(gzipConfig)))
+    .pipe(ifElse(deployMode, () => gulp.dest(BUILD_DIR)))
+    .pipe(size(extend({title: 'scss-vendor [gzip]'}, sizeOptions)))
     .pipe(ifElse(watcher, livereload))
 })
 
@@ -188,8 +214,15 @@ gulp.task('templates', 'Builds all Vue templates.', () => {
         prefixStart: 'templates',
     }))
     .on('error', notify.onError('Error: <%= error.message %>'))
-    .pipe(size(extend({title: 'templates'}, sizeOptions)))
+    .pipe(ifElse(deployMode, () => uglify()))
+    .on('end', () => {
+        if (!deployMode) del(path.join(BUILD_DIR, 'templates.js.gz'), {force: true})
+    })
     .pipe(gulp.dest(BUILD_DIR))
+    .pipe(size(extend({title: 'templates'}, sizeOptions)))
+    .pipe(ifElse(deployMode, () => gzip(gzipConfig)))
+    .pipe(ifElse(deployMode, () => gulp.dest(BUILD_DIR)))
+    .pipe(size(extend({title: 'templates [gzip]'}, sizeOptions)))
     .pipe(ifElse(watcher, livereload))
 })
 
