@@ -55,6 +55,12 @@ class App {
         this.modules = this.loadModules()
         this.vuex = this.setupStore()
 
+        this.history = []
+        // Keep track of the last route for cancel actions and the like.
+        this.router.afterEach((to, from) => {
+            this.history.push(to)
+        })
+
         // Initialize Notifications component.
         Vue.use(Notifications, this.vuex)
 

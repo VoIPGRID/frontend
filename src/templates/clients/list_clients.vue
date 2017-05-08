@@ -14,7 +14,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="client in clients">
+            <tr v-for="client in clients.results">
                 <td>
                     {{client.name}}
                 </td>
@@ -34,4 +34,11 @@
             </tr>
         </tbody>
     </table>
+    <paginator
+        :count=clients.count
+        :next=clients.next
+        :previous=clients.previous
+        resource_action="clients/readClients"
+        resource_url="/clients">
+    </paginator>
 </div>

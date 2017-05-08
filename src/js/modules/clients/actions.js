@@ -8,9 +8,13 @@ module.exports = function(app) {
                 store.commit('CLIENT_CHANGED', res.data)
             })
         },
-        readClients: (store) => {
-            app.api.get('clients/').then((res) => {
-                store.commit('CLIENTS_CHANGED', res.data.results)
+        readClients: (store, data) => {
+            return new Promise((resolve, reject) => {
+                const uri = `${data.resource_url}?${app.utils.toQueryString(data.params)}`
+                app.api.get(uri).then((res) => {
+                    store.commit('CLIENTS_CHANGED', res.data)
+                    resolve(res.data)
+                })
             })
         },
         upsertClient: (store) => {

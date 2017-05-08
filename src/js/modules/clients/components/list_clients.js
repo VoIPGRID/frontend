@@ -7,8 +7,5 @@ module.exports = (app) => {
             clients: state => state.clients.clients,
             current_client: state => state.clients.current_client,
         }),
-        mounted: function() {
-            app.vuex.dispatch('clients/readClients')
-        },
     })
 }

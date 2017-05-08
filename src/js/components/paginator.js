@@ -14,30 +14,40 @@ module.exports = (function() {
             }
         },
         methods: {
-            async fetchData(data) {
+            /**
+             * Fetches a resource based on a page query string or a page number.
+             */
+            async fetchData(data, pushRoute = true) {
                 if (!data) return
+                let currentPage
                 if (typeof data === 'string') {
                     let _uri = data.split('?')
                     if (_uri.length === 2) {
-                        this.currentPage = parseInt(app.utils.parseParams(_uri[1]).page)
+                        currentPage = parseInt(app.utils.parseParams(_uri[1]).page)
                     } else {
-                        this.currentPage = 1
+                        currentPage = 1
                     }
                 } else {
-                    this.currentPage = data
+                    currentPage = data
                 }
-                this.updateNavPages()
                 let _data = await this.$store.dispatch(this.resource_action, {
                     resource_url: this.resource_url,
                     params: {
-                        page: this.currentPage,
+                        page: currentPage,
                     },
                 })
+
+                if (pushRoute) {
+                    const route = this.$router.resolve(this.resource_url).route
+                    this.$router.push({ name: route.name, query: { page: currentPage }})
+                }
+
+                this.currentPage = currentPage
                 let pageCount = Math.ceil(_data.count / this.pageSize)
                 if (pageCount !== this.pageCount) {
                     this.pageCount = pageCount
                 }
-
+                this.updateNavPages()
             },
             updateNavPages() {
                 let start = this.currentPage
@@ -62,11 +72,27 @@ module.exports = (function() {
                         _navPages.push(i)
                     }
                 }
+
+                // Add a link to the first page when it's out of scope.
+                if (_navPages[0] !== 1) {
+                    this.backwardFirst = 1
+                } else {
+                    this.backwardFirst = null
+                }
+                // Add a link the the last page when it's out of scope.
+                if (_navPages[_navPages.length - 1] !== this.pageCount) {
+                    this.forwardLast = this.pageCount
+                } else {
+                    this.forwardLast = null
+                }
+
                 this.navPages = _navPages
             },
         },
         created: function() {
-            this.fetchData(1)
+            this.route = this.$router.resolve(location.href).route
+            const page = parseInt(this.route.query.page) || 1
+            this.fetchData(page, false)
         },
     }
 })()
