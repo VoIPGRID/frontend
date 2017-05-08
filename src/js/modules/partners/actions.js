@@ -22,12 +22,12 @@ module.exports = function(app) {
             if (partner.id) {
                 app.api.put(`partners/${partner.id}/`, partner).then((res) => {
                     store.dispatch('notify', {message: `Partner ${partner.name} succesfully updated`}, {root: true})
-                    app.router.push({name: 'list_partners'})
+                    app.router.push(app.utils.lastRoute('list_partners'))
                 })
             } else {
                 app.api.post('partners/', partner).then((res) => {
                     store.dispatch('notify', {message: `Partner ${partner.name} succesfully created`}, {root: true})
-                    app.router.push({name: 'list_partners'})
+                    app.router.push(app.utils.lastRoute('list_partners'))
                 })
             }
         },

@@ -14,7 +14,7 @@
             <button class="button is-primary" :disabled="!formIsValid" @click="$store.dispatch('partners/upsertPartner')">Save changes</button>
         </p>
         <p class="control">
-            <router-link class="button" to="/partners/">Cancel</router-link>
+            <router-link class="button" :to="$helpers.lastRoute('list_partners')">Cancel</router-link>
         </p>
     </div>
 </div>

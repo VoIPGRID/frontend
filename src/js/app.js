@@ -16,10 +16,9 @@ class App {
         // Assign the template global to the app context.
         this.templates = templates
         this.logger = new Logger(this)
-        this.utils = require('./lib/utils')
+        this.utils = require('./lib/utils')(this)
 
-
-        Vue.use(Helpers)
+        Vue.use(Helpers, this)
         Vue.use(VueRouter)
         Vue.use(VeeValidate, {
             enableAutoClasses: true,

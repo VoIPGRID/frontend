@@ -42,37 +42,41 @@ module.exports = (function() {
                     this.$router.push({ name: route.name, query: { page: currentPage }})
                 }
 
-                this.currentPage = currentPage
-                let pageCount = Math.ceil(_data.count / this.pageSize)
-                if (pageCount !== this.pageCount) {
-                    this.pageCount = pageCount
-                }
-                this.updateNavPages()
+                this.updatePagination(currentPage, _data)
             },
-            updateNavPages() {
-                let start = this.currentPage
+            updatePagination(currentPage, data) {
+                let pageCount = Math.ceil(data.count / this.pageSize)
                 let _navPages = []
-
-                if (this.currentPage > Math.floor(this.showNavPages / 2)) {
-                    // Render two pages before currentPage.
+                const middleNav = Math.floor(this.showNavPages / 2)
+                const isTippingPoint = currentPage > middleNav
+                const pagesInNavRange = pageCount < this.showNavPages
+                // Tipping point where to account for in-between.
+                if (isTippingPoint && !pagesInNavRange) {
+                    // Render halve of the pages before currentPage.
                     let range = Math.floor(this.showNavPages / 2)
-
-                    for (let i = start - range; i < start; i++) {
+                    for (let i = currentPage - range; i < currentPage; i++) {
                         if (i > 0) {
                             _navPages.push(i)
                         }
                     }
-                    for (let i = start; i <= start + range; i++) {
-                        if (i > 0 && i <= this.pageCount) {
+                    // And the other halve after currentPage.
+                    for (let i = currentPage; i <= currentPage + range; i++) {
+                        if (i > 0 && i <= pageCount) {
                             _navPages.push(i)
                         }
                     }
                 } else {
-                    for (let i = 1; i <= this.showNavPages; i++) {
+                    // Just render until pageCount or showNavPages max.
+                    let _r
+                    if (pageCount > this.showNavPages) {
+                        _r = this.showNavPages
+                    } else {
+                        _r = pageCount
+                    }
+                    for (let i = 1; i <= _r; i++) {
                         _navPages.push(i)
                     }
                 }
-
                 // Add a link to the first page when it's out of scope.
                 if (_navPages[0] !== 1) {
                     this.backwardFirst = 1
@@ -80,10 +84,16 @@ module.exports = (function() {
                     this.backwardFirst = null
                 }
                 // Add a link the the last page when it's out of scope.
-                if (_navPages[_navPages.length - 1] !== this.pageCount) {
-                    this.forwardLast = this.pageCount
+                if (_navPages[_navPages.length - 1] !== pageCount) {
+                    this.forwardLast = pageCount
                 } else {
                     this.forwardLast = null
+                }
+
+                this.currentPage = currentPage
+
+                if (pageCount !== this.pageCount) {
+                    this.pageCount = pageCount
                 }
 
                 this.navPages = _navPages

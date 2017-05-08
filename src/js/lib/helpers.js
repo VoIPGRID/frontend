@@ -1,10 +1,8 @@
-const utils = require('./utils')
-
-module.exports = function install(Vue, store) {
+module.exports = function install(Vue, app) {
     Object.defineProperties(Vue.prototype, {
         $helpers: {
             get() {
-                return utils
+                return app.utils
             },
         },
     });
