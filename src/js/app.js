@@ -5,8 +5,9 @@ const Logger = require('./lib/logger')
 const Notifications = require('./components/notifications')
 const Paginator = require('./components/paginator')
 
+
 /**
- * The VoIPGRID frontend V2 application class.
+ * The VoIPGRID frontend V2 application.
  */
 class App {
     /**

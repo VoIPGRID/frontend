@@ -44,9 +44,9 @@ let sizeConfig = {showTotal: true, showFiles: true}
 if (PRODUCTION) gutil.log('(!) Gulp optimized for production')
 
 
-gulp.task('assets', 'Move assets to the build directory.', () => {
+gulp.task('assets', `Copy required assets to '${BUILD_DIR}'`, () => {
     return gulp.src('./src/img/**', {base: './src'})
-    .pipe(addsrc('./src/fonts/**', {base: './src/'}))
+    .pipe(addsrc('./src/fonts/**', {base: './src'}))
     .pipe(addsrc(path.join(NODE_PATH, 'font-awesome', 'fonts', '**'), {base: path.join(NODE_PATH, 'font-awesome')}))
     .pipe(addsrc(path.join(NODE_PATH, 'vg-icons', 'fonts', '**'), {base: path.join(NODE_PATH, 'vg-icons')}))
     .pipe(addsrc('./src/templates/index.html', {base: './src/templates'}))
@@ -56,7 +56,7 @@ gulp.task('assets', 'Move assets to the build directory.', () => {
 })
 
 
-gulp.task('build', 'Metatask that builds everything.', [
+gulp.task('build', 'Build application', [
     'assets',
     'js-app',
     'js-vendor',
@@ -66,7 +66,7 @@ gulp.task('build', 'Metatask that builds everything.', [
 ])
 
 
-gulp.task('clean-builddir', `Warning! This deletes all files in '${BUILD_DIR}'`, function() {
+gulp.task('clean-builddir', `Delete build directory '${BUILD_DIR}'`, function() {
     return del([
         path.join(BUILD_DIR, '**'),
     ], {
@@ -75,32 +75,25 @@ gulp.task('clean-builddir', `Warning! This deletes all files in '${BUILD_DIR}'`,
 })
 
 
-/**
- * Update the hosted github pages from the current docs build directory.
- */
-gulp.task('deploy-docs', 'Build docs and push to the github pages branch.', function() {
+gulp.task('deploy-docs', 'Push docs to github pages', function() {
     return gulp.src('./docs/build/**/*').pipe(ghPages())
 })
 
 
-gulp.task('docs', 'Generate documentation.', (done) => {
+gulp.task('docs', 'Generate documentation', (done) => {
     let completed = () => {
-        if (isWatching) {
-            livereload.changed('headless.js')
-        }
+        if (isWatching) livereload.changed('headless.js')
     }
-
-    let config = require('./.jsdoc.json')
     return gulp.src([
         'README.md',
         '!./src/js/lib/thirdparty/**/*.js',
         './src/js/**/*.js',
     ], {read: false})
-    .pipe(jsdoc(config, completed))
+    .pipe(jsdoc(require('./.jsdoc.json'), completed))
 })
 
 
-gulp.task('js-app', 'Process all application Javascript.', (done) => {
+gulp.task('js-app', 'Generate app.js', (done) => {
     if (!bundlers.app) {
         bundlers.app = browserify({
             cache: {},
@@ -115,15 +108,12 @@ gulp.task('js-app', 'Process all application Javascript.', (done) => {
     .pipe(source('app.js'))
     .pipe(buffer())
     .pipe(ifElse(!PRODUCTION, () => sourcemaps.init({loadMaps: true})))
-    .pipe(ifElse(PRODUCTION, () => {
-        // Convert to es5 as long there is no es6 version of uglifyjs.
-        return babel({compact: true, presets: ['es2015', 'es2016', 'es2017']})
-    }))
+    .pipe(ifElse(PRODUCTION, () => babel({compact: true, presets: ['es2015', 'es2016', 'es2017']})))
     .pipe(envify({NODE_ENV: NODE_ENV}))
     .pipe(ifElse(PRODUCTION, () => uglify()))
     .on('error', notify.onError('Error: <%= error.toString() %>'))
     .on('end', () => {
-        if (!PRODUCTION) del(path.join(BUILD_DIR, 'app.js.gz'), {force: true})
+        if (!PRODUCTION) del(path.join(BUILD_DIR, '*.js.gz'), {force: true})
         if (isWatching) livereload.changed('app.js')
         done()
     })
@@ -137,7 +127,7 @@ gulp.task('js-app', 'Process all application Javascript.', (done) => {
 })
 
 
-gulp.task('js-vendor', 'Process all vendor Javascript.', (done) => {
+gulp.task('js-vendor', 'Generate vendor.js', (done) => {
     if (!bundlers.vendor) {
         bundlers.vendor = browserify({
             cache: {},
@@ -155,7 +145,7 @@ gulp.task('js-vendor', 'Process all vendor Javascript.', (done) => {
     .pipe(envify({NODE_ENV: NODE_ENV}))
     .pipe(ifElse(PRODUCTION, () => uglify()))
     .on('end', () => {
-        if (!PRODUCTION) del(path.join(BUILD_DIR, 'vendor.js.gz'), {force: true})
+        if (!PRODUCTION) del(path.join(BUILD_DIR, '*.js.gz'), {force: true})
         if (isWatching) livereload.changed('index.js')
         done()
     })
@@ -168,10 +158,7 @@ gulp.task('js-vendor', 'Process all vendor Javascript.', (done) => {
 })
 
 
-/**
- * Generate application CSS.
- */
-gulp.task('scss', 'Generate application css.', (done) => {
+gulp.task('scss', 'Generate main.css', (done) => {
     gulp.src('./src/scss/main.scss')
     .pipe(sass({
         includePaths: NODE_PATH,
@@ -183,7 +170,7 @@ gulp.task('scss', 'Generate application css.', (done) => {
     .pipe(concat('main.css'))
     .pipe(ifElse(PRODUCTION, () => cleanCSS({advanced: true, level: 0})))
     .on('end', () => {
-        if (!PRODUCTION) del(path.join(BUILD_DIR, 'main.css.gz'), {force: true})
+        if (!PRODUCTION) del(path.join(BUILD_DIR, '*.css.gz'), {force: true})
         if (isWatching) livereload.changed('main.css')
         done()
     })
@@ -195,10 +182,7 @@ gulp.task('scss', 'Generate application css.', (done) => {
 })
 
 
-/**
- * Generate vendor-specific CSS.
- */
-gulp.task('scss-vendor', 'Find all scss files from the apps directory, concat them and save as one css file.', (done) => {
+gulp.task('scss-vendor', 'Generate vendor.css', (done) => {
     gulp.src('./src/scss/vendor.scss')
     .pipe(sass({
         includePaths: NODE_PATH,
@@ -210,7 +194,7 @@ gulp.task('scss-vendor', 'Find all scss files from the apps directory, concat th
     .pipe(concat('vendor.css'))
     .pipe(ifElse(PRODUCTION, () => cleanCSS({advanced: true, level: 2})))
     .on('end', () => {
-        if (!PRODUCTION) del(path.join(BUILD_DIR, 'vendor.css.gz'), {force: true})
+        if (!PRODUCTION) del(path.join(BUILD_DIR, '*.css.gz'), {force: true})
         if (isWatching) livereload.changed('vendor.css')
         done()
     })
@@ -222,7 +206,7 @@ gulp.task('scss-vendor', 'Find all scss files from the apps directory, concat th
 })
 
 
-gulp.task('templates', 'Builds all Vue templates.', () => {
+gulp.task('templates', 'Build Vue templates', () => {
     gulp.src('./src/templates/**/*.vue')
     .pipe(vue('templates.js', {
         prefixStart: 'templates',
@@ -242,7 +226,7 @@ gulp.task('templates', 'Builds all Vue templates.', () => {
 })
 
 
-gulp.task('watch', 'Start a development server and watch for changes.', () => {
+gulp.task('watch', 'Watch for changes using livereload', () => {
     isWatching = true
     livereload.listen({silent: false})
     const app = connect()
