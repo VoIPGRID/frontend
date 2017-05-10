@@ -185,7 +185,7 @@
         "spaced-line-comment": [0, "always"],
         "strict": [2, "global"],
         "use-isnan": 2,
-        "valid-jsdoc": 0,
+        "valid-jsdoc": 1,
         "valid-typeof": 2,
         "vars-on-top": 0,
         "wrap-iife": 0,

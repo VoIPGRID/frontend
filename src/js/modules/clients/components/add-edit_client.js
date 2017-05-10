@@ -1,8 +1,8 @@
 module.exports = (app) => {
     const template = app.templates.clients_add_edit_client
     return Vue.component('AddEditClient', {
-        render: template.render,
-        staticRenderFns: template.staticRenderFns,
+        render: template.r,
+        staticRenderFns: template.s,
         computed: Object.assign(Vuex.mapState({
             client: state => state.clients.client,
         }), {

@@ -10,6 +10,7 @@ const Paginator = require('./components/paginator')
  */
 class App {
     /**
+     * @param {Object} initialState - The state passed from the backend.
      * @param {Object} templates - The compiled Vue templates to start with.
      */
     constructor(initialState, templates) {
@@ -57,7 +58,10 @@ class App {
         this.vdom = new Vue({
             router: this.router,
             store: this.vuex,
-            render: create => create(this.templates.main_main),
+            render: create => create({
+                render: this.templates.main_main.r,
+                staticRenderFns: this.templates.main_main.s,
+            }),
             methods: Vuex.mapActions(['notify']),
         }).$mount('#app')
     }

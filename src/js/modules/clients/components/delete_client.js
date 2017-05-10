@@ -1,8 +1,8 @@
 module.exports = (app) => {
     const template = app.templates.clients_delete_client
     return Vue.component('DeleteClient', {
-        render: template.render,
-        staticRenderFns: template.staticRenderFns,
+        render: template.r,
+        staticRenderFns: template.s,
         computed: Vuex.mapState({
             client: state => state.clients.client,
         }),

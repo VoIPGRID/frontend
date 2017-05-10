@@ -1,8 +1,8 @@
 module.exports = (app) => {
     const template = app.templates.partners_add_edit_partner
     return Vue.component('AddEditPartner', {
-        render: template.render,
-        staticRenderFns: template.staticRenderFns,
+        render: template.r,
+        staticRenderFns: template.s,
         computed: Object.assign(Vuex.mapState({
             partner: state => state.partners.partner,
         }), {

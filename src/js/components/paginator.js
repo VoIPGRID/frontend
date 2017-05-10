@@ -1,8 +1,8 @@
 module.exports = (function() {
     const template = templates.components_paginator
     return {
-        render: template.render,
-        staticRenderFns: template.staticRenderFns,
+        render: template.r,
+        staticRenderFns: template.s,
         props: ['count', 'next', 'previous', 'resource_action', 'resource_url'],
         data: function() {
             return {

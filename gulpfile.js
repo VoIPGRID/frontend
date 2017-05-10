@@ -171,16 +171,17 @@ gulp.task('js-vendor', 'Process all vendor Javascript.', (done) => {
 /**
  * Generate application CSS.
  */
-gulp.task('scss', 'Find all scss files from the apps directory, concat them and save as one css file.', (done) => {
+gulp.task('scss', 'Generate application css.', (done) => {
     gulp.src('./src/scss/main.scss')
     .pipe(sass({
         includePaths: NODE_PATH,
         sourceMap: !PRODUCTION,
+        sourceMapContents: !PRODUCTION,
         sourceMapEmbed: !PRODUCTION,
     }))
     .on('error', notify.onError('Error: <%= error.message %>'))
     .pipe(concat('main.css'))
-    .pipe(ifElse(PRODUCTION, () => cleanCSS({advanced: true, level: 2})))
+    .pipe(ifElse(PRODUCTION, () => cleanCSS({advanced: true, level: 0})))
     .on('end', () => {
         if (!PRODUCTION) del(path.join(BUILD_DIR, 'main.css.gz'), {force: true})
         if (isWatching) livereload.changed('main.css')
@@ -202,6 +203,7 @@ gulp.task('scss-vendor', 'Find all scss files from the apps directory, concat th
     .pipe(sass({
         includePaths: NODE_PATH,
         sourceMap: !PRODUCTION,
+        sourceMapContents: !PRODUCTION,
         sourceMapEmbed: !PRODUCTION,
     }))
     .on('error', notify.onError('Error: <%= error.message %>'))
@@ -223,8 +225,8 @@ gulp.task('scss-vendor', 'Find all scss files from the apps directory, concat th
 gulp.task('templates', 'Builds all Vue templates.', () => {
     gulp.src('./src/templates/**/*.vue')
     .pipe(vue('templates.js', {
-        namespace: 'window.templates',
         prefixStart: 'templates',
+        commonjs: false,
     }))
     .on('error', notify.onError('Error: <%= error.message %>'))
     .pipe(ifElse(PRODUCTION, () => uglify()))

@@ -1,8 +1,8 @@
 module.exports = (app) => {
     const template = app.templates.partners_delete_partner
     return Vue.component('DeletePartner', {
-        render: template.render,
-        staticRenderFns: template.staticRenderFns,
+        render: template.r,
+        staticRenderFns: template.s,
         computed: Vuex.mapState({
             partner: state => state.partners.partner,
         }),
