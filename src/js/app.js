@@ -12,35 +12,31 @@ class App {
     /**
      * @param {Object} templates - The compiled Vue templates to start with.
      */
-    constructor(templates) {
+    constructor(initialState, templates) {
         // Assign the template global to the app context.
         this.templates = templates
-        this.logger = new Logger(this)
         this.utils = require('./lib/utils')(this)
+        this.logger = new Logger(this)
+        // Show a meaningful message to the user when the API is down.
+        if (!initialState) {
+            this.logger.error('No API backend')
+            return
+        }
 
         Vue.use(Helpers, this)
         Vue.use(VueRouter)
-        Vue.use(VeeValidate, {
-            enableAutoClasses: true,
-            errorBagName: 'errors',
-            fieldsBagName: 'fields',
-            delay: 0,
-            locale: 'en',
-            classNames: {
-                touched: 'touched',
-                untouched: 'untouched',
-                valid: 'valid',
-                invalid: 'invalid',
-                pristine: 'pristine',
-                dirty: 'dirty',
-            },
-        })
 
         Vue.component('paginator', Paginator)
 
+        // Holds an array of visited routes.
+        this.history = []
         this.router = new VueRouter({
             mode: 'history',
             linkActiveClass: 'is-active',
+        })
+        // Keep track of the last route for cancel actions and the like.
+        this.router.afterEach((to, from) => {
+            this.history.push(to)
         })
 
         // Add the Django csrf token in the header and set the base URL
@@ -48,22 +44,14 @@ class App {
         this.api = axios.create({
             baseURL: 'http://localhost/api/v2/',
             timeout: 3000,
-            headers: {'X-CSRFToken': __state.csrf},
+            headers: {'X-CSRFToken': initialState.csrf},
         })
 
         this.modules = this.loadModules()
         this.vuex = this.setupStore()
-
-        this.history = []
-        // Keep track of the last route for cancel actions and the like.
-        this.router.afterEach((to, from) => {
-            this.history.push(to)
-        })
-
         // Initialize Notifications component.
         Vue.use(Notifications, this.vuex)
-
-        this.vuex.commit('main/AUTHENTICATE', __state.authenticated)
+        this.vuex.commit('main/AUTHENTICATE', initialState.authenticated)
 
         // Start up virtual DOM renderer.
         this.vdom = new Vue({
@@ -72,7 +60,6 @@ class App {
             render: create => create(this.templates.main_main),
             methods: Vuex.mapActions(['notify']),
         }).$mount('#app')
-
     }
 
 
@@ -125,4 +112,4 @@ class App {
     }
 }
 
-window.app = new App(window.templates)
+window.app = new App(global.__state, window.templates)

@@ -7,9 +7,7 @@ module.exports = (app) => {
             client: state => state.clients.client,
         }), {
             formIsValid: function() {
-                return Object.keys(this.fields).every(field => {
-                    return !this.fields[field].invalid
-                })
+                return this.$validator.errorBag.errors.length === 0
             },
         }),
         mounted: function() {

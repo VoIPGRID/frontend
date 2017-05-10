@@ -39,7 +39,7 @@
     "gulp": "^3.9.1",
     "gulp-add-src": "^0.2.0",
     "gulp-babel": "^6.1.2",
-    "gulp-clean-css": "^3.0.4",
+    "gulp-clean-css": "^3.2.0",
     "gulp-concat": "^2.6.1",
     "gulp-gh-pages": "^0.5.4",
     "gulp-gzip": "^1.4.0",
@@ -51,7 +51,7 @@
     "gulp-replace": "^0.5.4",
     "gulp-sass": "^3.1.0",
     "gulp-size": "^2.1.0",
-    "gulp-sourcemaps": "^2.5.0",
+    "gulp-sourcemaps": "^2.6.0",
     "gulp-uglify": "^2.1.2",
     "gulp-zip": "^4.0.0",
     "jsdoc-rtd": "^1.0.3",
@@ -72,6 +72,7 @@
     "vue-paginate": "^3.4.0",
     "vue-router": "^2.4.0",
     "vuejs-paginate": "^0.9.0",
+    "vuelidate": "^0.4.3",
     "vuex": "^2.2.1"
   }
 }

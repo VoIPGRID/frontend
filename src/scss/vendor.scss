@@ -1,3 +1,24 @@
 @import "modules/color";
 
-@import "vendor/all";
+@import "bulma/sass/utilities/all";
+@import "bulma/sass/base/all";
+@import "bulma/sass/components/all";
+@import "bulma/sass/elements/all";
+@import "bulma/sass/grid/all";
+@import "bulma/sass/layout/all";
+
+@import "font-awesome/scss/font-awesome";
+@import "vg-icons/sass/vg-icons";
+
+$vg-icons-path: "fonts" !default;
+
+.vg-icon {
+    font-family: voipgrid-icons;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
