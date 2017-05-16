@@ -23,7 +23,7 @@ const size = require('gulp-size')
 const source = require('vinyl-source-stream')
 const sourcemaps = require('gulp-sourcemaps')
 const uglify = require('gulp-uglify')
-const vue = require('gulp-vue')
+const vue = require('gulp-vuejs')
 const watchify = require('watchify')
 
 const BUILD_DIR = process.env.BUILD_DIR || '/srv/http/data/frontend'
