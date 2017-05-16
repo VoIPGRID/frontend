@@ -2,15 +2,15 @@
     <router-view></router-view>
     <div class="field is-grouped">
         <p class="control">
-            <router-link class="button is-primary" to="/clients/add/">Add Client</router-link>
+            <router-link class="button is-primary" to="/clients/add/">{{$t('Add Client')}}</router-link>
         </p>
     </div>
     <table class="table">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th class="col-sm-2">Actions</th>
+                <th>{{$t('Name')}}</th>
+                <th>{{$t('Description')}}</th>
+                <th class="col-sm-2">{{$t('Actions')}}</th>
             </tr>
         </thead>
         <tbody>

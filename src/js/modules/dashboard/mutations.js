@@ -5,5 +5,9 @@ module.exports = function(app) {
      */
     let mutations = {}
 
+    mutations.MODULES_CHANGED = function(state, modules) {
+        state.modules = modules
+    }
+
     return mutations
 }

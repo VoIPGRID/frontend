@@ -7,10 +7,13 @@
 @import "bulma/sass/grid/all";
 @import "bulma/sass/layout/all";
 
+$fa-font-path: "/public/fonts/";
 @import "font-awesome/scss/font-awesome";
+
+$vg-icons-path: "/public/fonts";
 @import "vg-icons/sass/vg-icons";
 
-$vg-icons-path: "fonts" !default;
+
 
 .vg-icon {
     font-family: voipgrid-icons;

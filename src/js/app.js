@@ -29,12 +29,12 @@ class App {
         Vue.use(VueRouter)
         Vue.use(Vuelidate.default)
 
-        this.initI18n()
-
         Vue.component('paginator', paginator(templates.components_paginator))
         // Holds an array of visited routes.
         this.history = []
+        // Remove the base as soon as the new frontend goes primetime.
         this.router = new VueRouter({
+            base: '/v2/',
             mode: 'history',
             linkActiveClass: 'is-active',
         })
@@ -54,12 +54,13 @@ class App {
 
         this.modules = this.loadModules()
         this.vuex = this.setupStore()
+        this.initI18n()
         // Initialize Notifications component.
         Vue.use(Notifications, this.vuex)
         this.vuex.commit('main/AUTHENTICATE', initialState.authenticated)
 
         // Start up virtual DOM renderer.
-        this.vdom = new Vue({
+        this.vue = new Vue({
             i18n: this.i18n,
             router: this.router,
             store: this.vuex,
@@ -93,12 +94,14 @@ class App {
 
 
     initI18n() {
-        Vue.use(VueTranslated)
-        this.i18n = new I18n.I18n({
-            locale: 'nl-NL',
-            messages: require('./i18n/messages/nl-NL'),
-            formats: require('./i18n/formats/en-US'),
-        })
+        Vue.use(vuexI18n.plugin, this.vuex)
+        if (global.translations && __state.language in translations) {
+            Vue.i18n.add(__state.language, translations.nl)
+            Vue.i18n.set(__state.language)
+            this.logger.info(`Set language to ${__state.language}`)
+        } else {
+            this.logger.warn(`No translations found for ${__state.language}`)
+        }
     }
 
 

@@ -14,8 +14,11 @@ module.exports = function(app) {
     actions.deletePartner = (store) => {
         const partner = store.state.partner
         app.api.delete(`partners/${partner.id}/`).then((res) => {
+            let $t = Vue.i18n.translate
             store.commit('PARTNER_DELETED', partner)
-            store.dispatch('notify', {message: `Partner ${partner.name} succesfully deleted`}, {root: true})
+            store.dispatch('notify', {
+                message: $t('Partner {name} succesfully deleted', {name: partner.name}),
+            }, {root: true})
             app.router.push({name: 'list_partners'})
         })
     }
@@ -63,14 +66,19 @@ module.exports = function(app) {
      */
     actions.upsertPartner = (store) => {
         const partner = store.state.partner
+        let $t = Vue.i18n.translate
         if (partner.id) {
             app.api.put(`partners/${partner.id}/`, partner).then((res) => {
-                store.dispatch('notify', {message: `Partner ${partner.name} succesfully updated`}, {root: true})
+                store.dispatch('notify', {
+                    message: $t('Partner {name} succesfully updated', {name: partner.name}),
+                }, {root: true})
                 app.router.push(app.utils.lastRoute('list_partners'))
             })
         } else {
             app.api.post('partners/', partner).then((res) => {
-                store.dispatch('notify', {message: `Partner ${partner.name} succesfully created`}, {root: true})
+                store.dispatch('notify', {
+                    message: $t('Partner {name} succesfully created', {name: partner.name}),
+                }, {root: true})
                 app.router.push(app.utils.lastRoute('list_partners'))
             })
         }

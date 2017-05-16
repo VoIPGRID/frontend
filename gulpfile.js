@@ -121,6 +121,15 @@ gulp.task('js-app', 'Generate app.js', (done) => {
 })
 
 
+gulp.task('js-translations', 'Generate translations', (done) => {
+    return gulp.src('./src/js/i18n/*.js', {base: './src/js/'})
+    .pipe(ifElse(PRODUCTION, () => uglify()))
+    .pipe(gulp.dest(BUILD_DIR))
+    .pipe(size(extend({title: 'js-translations'}, sizeConfig)))
+    .pipe(ifElse(isWatching, livereload))
+})
+
+
 gulp.task('js-vendor', 'Generate vendor.js', (done) => {
     if (!bundlers.vendor) {
         bundlers.vendor = browserify({
@@ -226,6 +235,7 @@ gulp.task('watch', 'Watch for changes using livereload', () => {
     gulp.watch([
         path.join(__dirname, 'src', 'js', '**', '*.js'),
         `!${path.join(__dirname, 'src', 'js', 'vendor.js')}`,
+        `!${path.join(__dirname, 'src', 'js', 'i18n', '*.js')}`,
     ], () => {
         gulp.start('js-app')
         if (WITHDOCS) gulp.start('docs')
@@ -253,6 +263,7 @@ gulp.task('watch', 'Watch for changes using livereload', () => {
         ], ['docs'])
     }
 
+    gulp.watch(path.join(__dirname, 'src', 'js', 'i18n', '*.js'), ['js-translations'])
     gulp.watch(path.join(__dirname, 'src', 'js', 'vendor.js'), ['js-vendor'])
     gulp.watch(path.join(__dirname, 'src', 'templates', '**', '*.vue'), ['templates'])
     gulp.watch(path.join(__dirname, 'src', 'templates', 'index.html'), ['assets'])

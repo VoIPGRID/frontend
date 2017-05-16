@@ -1,6 +1,6 @@
 <nav class="pagination">
-    <a class="pagination-previous" :disabled="!previous" @click=fetchData(previous)>Previous</a>
-    <a class="pagination-next" :disabled="!next" @click=fetchData(next)>Next page</a>
+    <a class="pagination-previous" :disabled="!previous" @click=fetchData(previous)>{{$t('Previous')}}</a>
+    <a class="pagination-next" :disabled="!next" @click=fetchData(next)>{{$t('Next')}}</a>
     <ul class="pagination-list">
         <template v-if=backwardFirst>
             <li @click=fetchData(backwardFirst)>

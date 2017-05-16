@@ -19,8 +19,9 @@
         "axios": true,
         "csrf": true,
         "Vuelidate": true,
-        "VueTranslated": true,
+        "vuexI18n": true,
         "I18n": true,
+        "translations": true,
         "__state": true
     },
     "plugins": [

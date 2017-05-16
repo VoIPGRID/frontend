@@ -32,7 +32,7 @@ module.exports = function(app) {
      * @param {Object} partner - The new partners state without partner.
      */
     mutations.PARTNER_DELETED = (state, partner) => {
-        state.partners = state.partners.filter((i) => i.id !== partner.id)
+        state.partners.results = state.partners.results.filter((i) => i.id !== partner.id)
     }
 
     /**

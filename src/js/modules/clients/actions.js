@@ -14,8 +14,11 @@ module.exports = function(app) {
     actions.deleteClient = (store) => {
         const client = store.state.client
         app.api.delete(`clients/${client.id}/`).then((res) => {
+            let $t = Vue.i18n.translate
             store.commit('CLIENT_DELETED', client)
-            store.dispatch('notify', {message: `Client ${client.name} succesfully deleted`}, {root: true})
+            store.dispatch('notify', {
+                message: $t('Client {name} succesfully deleted', {name: client.name}),
+            }, {root: true})
             app.router.push({name: 'list_clients'})
         })
     }
@@ -63,14 +66,19 @@ module.exports = function(app) {
      */
     actions.upsertClient = (store) => {
         const client = store.state.client
+        let $t = Vue.i18n.translate
         if (client.id) {
             app.api.put(`clients/${client.id}/`, client).then((res) => {
-                store.dispatch('notify', {message: `Client ${client.name} succesfully updated`}, {root: true})
+                store.dispatch('notify', {
+                    message: $t('Client {name} succesfully updated', {name: client.name}),
+                }, {root: true})
                 app.router.push(app.utils.lastRoute('list_clients'))
             })
         } else {
             app.api.post('clients/', client).then((res) => {
-                store.dispatch('notify', {message: `Client ${client.name} succesfully created`}, {root: true})
+                store.dispatch('notify', {
+                    message: $t('Client {name} succesfully created', {name: client.name}),
+                }, {root: true})
                 app.router.push(app.utils.lastRoute('list_clients'))
             })
         }

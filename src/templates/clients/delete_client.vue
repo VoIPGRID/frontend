@@ -2,17 +2,17 @@
   <div class="modal-background"></div>
   <div class="modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">Warning! delete client <i>{{client.name}}</i>?</p>
+        <p class="modal-card-title">{{$t('Remove')}} {{$t('client')}} <i>{{client.name}}</i>?</p>
         <router-link :to="{name: 'list_clients'}"><button class="delete"></button></router-link>
       </header>
       <section class="modal-card-body">
         <div class="content">
-            <p>You're about to remove client <i>{{client.name}}</i>. Are you sure?</p>
+            <p>{{$t('Warning')}}! {{$t('Proceed with removing')}} {{$t('client')}} <i>{{client.name}}</i>?</p>
         </div>
       </section>
       <footer class="modal-card-foot">
-        <a class="button is-primary" @click="$store.dispatch('clients/deleteClient')">Confirm</a>
-        <router-link class="button" :to="{name: 'list_clients'}">Cancel</router-link>
+        <a class="button is-primary" @click="$store.dispatch('clients/deleteClient')">{{$t('Confirm')}}</a>
+        <router-link class="button" :to="{name: 'list_clients'}">{{$t('Cancel')}}</router-link>
       </footer>
     </div>
 </div>
