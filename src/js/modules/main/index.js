@@ -1,4 +1,12 @@
-class MainModule {
+/**
+ * @module main
+ */
+
+/**
+ * The main app handles generic functionality that doesn't fall
+ * in a distinct category.
+ */
+class MainApp {
 
     constructor(app) {
         this.actions = require('./actions')(app)
@@ -27,4 +35,4 @@ class MainModule {
 }
 
 
-module.exports = MainModule
+module.exports = MainApp

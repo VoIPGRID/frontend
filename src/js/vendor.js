@@ -10,3 +10,6 @@ if (process.env.NODE_ENV === 'production') {
 global.Vuex = require('vuex')
 global.VueRouter = require('vue-router')
 global.Vuelidate = require('vuelidate')
+global.Vuelidate.validators = require('vuelidate/lib/validators')
+global.VueTranslated = require('vue-translated')
+global.I18n = require('translated')

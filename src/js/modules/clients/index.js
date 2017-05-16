@@ -1,8 +1,16 @@
 /**
- * This module handles client management.
+ * @module clients
  */
-class ClientsModule {
 
+/**
+ * Handles VoIPGRID client management.
+ * @memberof module:clients
+ */
+class ClientsApp {
+    /**
+     * Intialize the client module.
+     * @param {App} app - The application object.
+     */
     constructor(app) {
         this.actions = require('./actions')(app)
         this.mutations = require('./mutations')(app)
@@ -40,4 +48,4 @@ class ClientsModule {
     }
 }
 
-module.exports = ClientsModule
+module.exports = ClientsApp

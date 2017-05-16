@@ -3,7 +3,7 @@ const globalMutations = require('./lib/mutations')
 const Helpers = require('./lib/helpers')
 const Logger = require('./lib/logger')
 const Notifications = require('./components/notifications')
-const Paginator = require('./components/paginator')
+const paginator = require('./components/paginator')
 
 
 /**
@@ -17,8 +17,8 @@ class App {
     constructor(initialState, templates) {
         // Assign the template global to the app context.
         this.templates = templates
-        this.utils = require('./lib/utils')(this)
         this.logger = new Logger(this)
+
         // Show a meaningful message to the user when the API is down.
         if (!initialState) {
             this.logger.error('No API backend')
@@ -27,9 +27,11 @@ class App {
 
         Vue.use(Helpers, this)
         Vue.use(VueRouter)
+        Vue.use(Vuelidate.default)
 
-        Vue.component('paginator', Paginator)
+        this.initI18n()
 
+        Vue.component('paginator', paginator(templates.components_paginator))
         // Holds an array of visited routes.
         this.history = []
         this.router = new VueRouter({
@@ -43,6 +45,7 @@ class App {
 
         // Add the Django csrf token in the header and set the base URL
         // to VoIPGRID api V2.
+        /** @memberof App */
         this.api = axios.create({
             baseURL: 'http://localhost/api/v2/',
             timeout: 3000,
@@ -57,6 +60,7 @@ class App {
 
         // Start up virtual DOM renderer.
         this.vdom = new Vue({
+            i18n: this.i18n,
             router: this.router,
             store: this.vuex,
             render: create => create({
@@ -70,6 +74,7 @@ class App {
 
     /**
      * Initialize all modules.
+     * @returns {Object} modules - The module instances.
      */
     loadModules() {
         let modules = {}
@@ -87,10 +92,21 @@ class App {
     }
 
 
+    initI18n() {
+        Vue.use(VueTranslated)
+        this.i18n = new I18n.I18n({
+            locale: 'nl-NL',
+            messages: require('./i18n/messages/nl-NL'),
+            formats: require('./i18n/formats/en-US'),
+        })
+    }
+
+
     /**
      * Combines all actions and mutations from modules and add them to
      * their own namespace in the Vuex store. Also add global actions
      * and mutations for generic state.
+     * @returns {Vuex.Store} - The Vuex instance.
      */
     setupStore() {
         let vuexModules = {}
@@ -117,4 +133,5 @@ class App {
     }
 }
 
+/** @global */
 window.app = new App(global.__state, window.templates)

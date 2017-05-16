@@ -1,5 +1,7 @@
 module.exports = (app) => {
     const template = app.templates.clients_add_edit_client
+    const validators = Vuelidate.validators
+
     return Vue.component('AddEditClient', {
         render: template.r,
         staticRenderFns: template.s,
@@ -7,7 +9,7 @@ module.exports = (app) => {
             client: state => state.clients.client,
         }), {
             formIsValid: function() {
-                return this.$validator.errorBag.errors.length === 0
+                return !this.$v.$invalid
             },
         }),
         mounted: function() {
@@ -17,6 +19,14 @@ module.exports = (app) => {
             } else {
                 app.vuex.dispatch('clients/emptyClient')
             }
+        },
+        validations: {
+            client: {
+                name: {
+                    required: validators.required,
+                    minLength: validators.minLength(3),
+                },
+            },
         },
     })
 }

@@ -1,5 +1,11 @@
-class DashboardModule {
-
+/**
+ * The Dashboard makes it easy for the user to navigate
+ * around the many functionalities of the VoIPGRID platform.
+ */
+class DashboardApp {
+    /**
+     * @param {App} app - The application object.
+     */
     constructor(app) {
         this.actions = require('./actions')(app)
         this.mutations = require('./mutations')(app)
@@ -51,4 +57,4 @@ class DashboardModule {
 }
 
 
-module.exports = DashboardModule
+module.exports = DashboardApp

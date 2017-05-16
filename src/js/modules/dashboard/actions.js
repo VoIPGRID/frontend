@@ -1,5 +1,9 @@
 module.exports = function(app) {
-    return {
+    /**
+     * @memberof module:dashboard
+     * @namespace
+     */
+    let actions = {}
 
-    }
+    return actions
 }

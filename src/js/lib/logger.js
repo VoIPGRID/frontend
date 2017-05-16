@@ -1,10 +1,12 @@
 /**
- * This logger is a thin wrapper around the native console.
- * Use blacklisting and sourcemaps to get to the original
- * error.
+ * A thin wrapper around the native console that makes it possible to set
+ * loglevels. Use source blacklisting and sourcemaps to get to the
+ * original error.
  */
 class Logger {
-
+    /**
+     * @param {App} app - The application object.
+     */
     constructor(app) {
         this.levels = {error: 0, warn: 1, info: 2, verbose: 3, debug: 4}
         this.setLevel('info')

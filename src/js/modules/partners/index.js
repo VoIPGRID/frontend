@@ -1,7 +1,9 @@
+/** @module partners */
+
 /**
  * This module handles partner management.
  */
-class PartnerModule {
+class PartnersApp {
 
     constructor(app) {
         this.actions = require('./actions')(app)
@@ -40,4 +42,4 @@ class PartnerModule {
     }
 }
 
-module.exports = PartnerModule
+module.exports = PartnersApp

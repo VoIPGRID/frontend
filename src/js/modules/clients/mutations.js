@@ -1,25 +1,48 @@
 module.exports = function(app) {
-    return {
-        /**
-         * Set the clients variable state that is used for the client's
-         * list view.
-         * @param {Vuex.State} state - The client module's state.
-         * @param {Array} clients - The updated array of clients from the API.
-         */
-        CLIENT_CHANGED: (state, client) => {
-            state.client = client
-        },
-        CLIENT_EMPTIED: (state) => {
-            state.partner = {}
-        },
-        /**
-         * Remove the client from the store's clients.
-         */
-        CLIENT_DELETED: (state, client) => {
-            state.clients = state.clients.filter((i) => i.id !== client.id)
-        },
-        CLIENTS_CHANGED: (state, clients) => {
-            state.clients = clients
-        },
+    /**
+     * @memberof module:clients
+     * @namespace
+     */
+    let mutations = {}
+
+    /**
+     * Editing client is changed.
+     * @param {Observer} state - The client module scoped state.
+     * @param {Object} client - The new client state.
+     */
+    mutations.CLIENT_CHANGED = function(state, client) {
+        state.client = client
     }
+
+    /**
+     * Editing client is emptied.
+     * @param {Observer} state - The client module scoped state.
+     * @param {Object} client - The new emptied client state.
+     */
+    mutations.CLIENT_EMPTIED = (state) => {
+        state.client = {
+            name: '',
+            description: '',
+        }
+    }
+
+    /**
+     * Remove client from the clients list.
+     * @param {Observer} state - The client module scoped state.
+     * @param {Object} client - The new clients state without client.
+     */
+    mutations.CLIENT_DELETED = (state, client) => {
+        state.clients.results = state.clients.results.filter((i) => i.id !== client.id)
+    }
+
+    /**
+     * Change the current clients list.
+     * @param {Observer} state - The client module scoped state.
+     * @param {Object} clients - The client object to set state to.
+     */
+    mutations.CLIENTS_CHANGED = (state, clients) => {
+        state.clients = clients
+    }
+
+    return mutations
 }

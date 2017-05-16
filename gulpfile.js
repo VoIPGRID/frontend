@@ -6,23 +6,19 @@ const argv = require('yargs').argv
 const babel = require('gulp-babel')
 const browserify = require('browserify')
 const buffer = require('vinyl-buffer')
+const childExec = require('child_process').exec
 const cleanCSS = require('gulp-clean-css')
 const concat = require('gulp-concat')
-const connect = require('connect')
 const del = require('del')
 const envify = require('gulp-envify')
 const ghPages = require('gulp-gh-pages')
 const gulp = require('gulp-help')(require('gulp'), {})
 const gutil = require('gulp-util')
 const gzip = require('gulp-gzip')
-const http = require('http')
 const livereload = require('gulp-livereload')
 const ifElse = require('gulp-if-else')
-const jsdoc = require('gulp-jsdoc3')
-const mount = require('connect-mount')
 const notify = require('gulp-notify')
 const sass = require('gulp-sass')
-const serveStatic = require('serve-static')
 const size = require('gulp-size')
 const source = require('vinyl-source-stream')
 const sourcemaps = require('gulp-sourcemaps')
@@ -35,6 +31,7 @@ const NODE_ENV = process.env.NODE_ENV || 'development'
 const NODE_PATH = process.env.NODE_PATH || path.join(__dirname, 'node_modules')
 const PRODUCTION = argv.production ? argv.production : (process.env.NODE_ENV === 'production')
 const WITHDOCS = argv['with-docs'] ? argv['with-docs'] : false
+const WATCHLINKED = argv['watch-linked'] ? argv['watch-linked'] : false
 
 let bundlers = {app: null, vendor: null}
 let isWatching
@@ -81,15 +78,12 @@ gulp.task('deploy-docs', 'Push docs to github pages', function() {
 
 
 gulp.task('docs', 'Generate documentation', (done) => {
-    let completed = () => {
-        if (isWatching) livereload.changed('headless.js')
-    }
-    return gulp.src([
-        'README.md',
-        '!./src/js/lib/thirdparty/**/*.js',
-        './src/js/**/*.js',
-    ], {read: false})
-    .pipe(jsdoc(require('./.jsdoc.json'), completed))
+    let execCommand = `node ${NODE_PATH}/jsdoc/jsdoc.js ./src/js -R ./README.md -c ./.jsdoc.json -d ${BUILD_DIR}/docs`
+    childExec(execCommand, undefined, (err, stdout, stderr) => {
+        if (stdout) gutil.log(stdout)
+        if (isWatching) livereload.changed('rtd.js')
+        done()
+    })
 })
 
 
@@ -114,7 +108,8 @@ gulp.task('js-app', 'Generate app.js', (done) => {
     .on('error', notify.onError('Error: <%= error.toString() %>'))
     .on('end', () => {
         if (!PRODUCTION) del(path.join(BUILD_DIR, '*.js.gz'), {force: true})
-        if (isWatching) livereload.changed('app.js')
+        // Let the docs task handle livereload when they are part of the build.
+        if (isWatching && !WITHDOCS) livereload.changed('app.js')
         done()
     })
     .pipe(ifElse(!PRODUCTION, () => sourcemaps.write('./')))
@@ -122,7 +117,6 @@ gulp.task('js-app', 'Generate app.js', (done) => {
     .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
     .pipe(ifElse(PRODUCTION, () => gulp.dest(BUILD_DIR)))
     .pipe(size(extend({title: 'js-app'}, sizeConfig)))
-    .pipe(size(extend({title: 'js-app[gzip]'}, sizeConfig)))
     .pipe(ifElse(PRODUCTION, () => size(extend({title: 'js-app[gzip]'}, sizeConfig))))
 })
 
@@ -146,7 +140,7 @@ gulp.task('js-vendor', 'Generate vendor.js', (done) => {
     .pipe(ifElse(PRODUCTION, () => uglify()))
     .on('end', () => {
         if (!PRODUCTION) del(path.join(BUILD_DIR, '*.js.gz'), {force: true})
-        if (isWatching) livereload.changed('index.js')
+        if (isWatching) livereload.changed('rtd.js')
         done()
     })
     .pipe(ifElse(!PRODUCTION, () => sourcemaps.write('./')))
@@ -221,7 +215,7 @@ gulp.task('templates', 'Build Vue templates', () => {
     .pipe(size(extend({title: 'templates'}, sizeConfig)))
     .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
     .pipe(ifElse(PRODUCTION, () => gulp.dest(BUILD_DIR)))
-    .pipe(size(extend({title: 'templates [gzip]'}, sizeConfig)))
+    .pipe(ifElse(PRODUCTION, () => size(extend({title: 'templates[gzip]'}, sizeConfig))))
     .pipe(ifElse(isWatching, livereload))
 })
 
@@ -229,10 +223,6 @@ gulp.task('templates', 'Build Vue templates', () => {
 gulp.task('watch', 'Watch for changes using livereload', () => {
     isWatching = true
     livereload.listen({silent: false})
-    const app = connect()
-    app.use(serveStatic(path.join(__dirname, 'build')))
-    app.use(mount('/docs', serveStatic(path.join(__dirname, 'docs', 'build'))))
-    http.createServer(app).listen(8999)
     gulp.watch([
         path.join(__dirname, 'src', 'js', '**', '*.js'),
         `!${path.join(__dirname, 'src', 'js', 'vendor.js')}`,
@@ -240,6 +230,28 @@ gulp.task('watch', 'Watch for changes using livereload', () => {
         gulp.start('js-app')
         if (WITHDOCS) gulp.start('docs')
     })
+
+    if (WITHDOCS) {
+        gutil.log('Watching documentation')
+        gulp.watch([
+            path.join(__dirname, '.jsdoc.json'),
+            path.join(__dirname, 'README.md'),
+            path.join(__dirname, 'docs', 'manuals', '**', '*.md'),
+        ], () => {
+            gulp.start('docs')
+        })
+    }
+
+    // Also watches related linked modules to make development on them easier.
+    if (WATCHLINKED) {
+        gutil.log('Watching linked development packages')
+        gulp.watch([
+            path.join(NODE_PATH, 'jsdoc-rtd', 'static', 'styles', '*.css'),
+            path.join(NODE_PATH, 'jsdoc-rtd', 'static', 'js', '*.js'),
+            path.join(NODE_PATH, 'jsdoc-rtd', 'publish.js'),
+            path.join(NODE_PATH, 'jsdoc-rtd', 'tmpl', '**', '*.tmpl'),
+        ], ['docs'])
+    }
 
     gulp.watch(path.join(__dirname, 'src', 'js', 'vendor.js'), ['js-vendor'])
     gulp.watch(path.join(__dirname, 'src', 'templates', '**', '*.vue'), ['templates'])
