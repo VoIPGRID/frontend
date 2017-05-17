@@ -1,6 +1,6 @@
 <div>
     <notifications></notifications>
-    <div v-if="$store.state.main.authenticated">
+    <div v-if="$store.state.user.authenticated">
         <nav class="nav has-shadow">
             <div class="container">
                 <div class="nav-left">
@@ -29,8 +29,8 @@
                         {{$t('Profile')}}
                     </a>
 
-                    <a v-if="$store.state.main.authenticated" class="nav-item is-tab" @click="$store.dispatch('main/logout')">{{$t('Logout')}}</a>
-                    <router-link v-if="!$store.state.main.authenticated" class="nav-item is-tab" to="/login">{{$t('Login')}}</router-link>
+                    <a v-if="$store.state.user.authenticated" class="nav-item is-tab" @click="$store.dispatch('user/logout')">{{$t('Logout')}}</a>
+                    <router-link v-if="!$store.state.user.authenticated" class="nav-item is-tab" to="/login">{{$t('Login')}}</router-link>
                 </div>
             </div>
         </nav>
@@ -42,6 +42,6 @@
         </div>
     </div>
     <div v-else>
-        <MainLogin></MainLogin>
+        <UserLogin></UserLogin>
     </div>
 </div>

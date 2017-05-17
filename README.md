@@ -1,7 +1,8 @@
 # About
-VoIPGRID webapp is a single-page web application built on top of Vue.js,
-Vue-router and Vuex. The main mantras of the project are:
+VoIPGRID webapp prototype 1 is a single-page web application built on top of Vue.js
+and friends. The main mantras of the project are:
 * Light-weight
+* Fast build flow
 * DOM-agnostic (SSR & testing)
 * Well documented
 

@@ -6,7 +6,6 @@
  * @class
  */
 function Paginator(template) {
-
     /**
      * The default component context.
      * @returns {Object} - Properties of the paginator component.
@@ -15,8 +14,8 @@ function Paginator(template) {
         return {
             currentPage: 1,
             pageSize: 10,
-            navPages: [],
-            showNavPages: 7,
+            renderPages: [],
+            relativePageSize: 6,
             lastPage: 1,
         }
     }
@@ -65,48 +64,66 @@ function Paginator(template) {
      */
     function updatePagination(currentPage, context) {
         let pageCount = Math.ceil(context.count / this.pageSize)
-        let _navPages = []
-        const middleNav = Math.floor(this.showNavPages / 2)
-        const isTippingPoint = currentPage > middleNav
-        const pagesInNavRange = pageCount < this.showNavPages
+        let renderPages = []
+        const middleNav = Math.floor(this.relativePageSize / 2)
+        // Start showing pages relative to current page when the current
+        // page exceeds the middle page.
+        const showrelativePageSize = currentPage > middleNav
+        const pagesInNavRange = pageCount < this.relativePageSize
         // Tipping point where to account for in-between.
-        if (isTippingPoint && !pagesInNavRange) {
+        if (showrelativePageSize && !pagesInNavRange) {
             // Render halve of the pages before currentPage.
             for (let i = currentPage - middleNav; i < currentPage; i++) {
                 if (i > 0) {
-                    _navPages.push(i)
+                    renderPages.push(i)
                 }
             }
             // And the other halve after currentPage.
             for (let i = currentPage; i <= currentPage + middleNav; i++) {
                 if (i > 0 && i <= pageCount) {
-                    _navPages.push(i)
+                    renderPages.push(i)
                 }
             }
         } else {
-            // Just render until pageCount or showNavPages max.
+            // Just render until pageCount or relativePageSize max.
             let _r
-            if (pageCount > this.showNavPages) {
-                _r = this.showNavPages
+            if (pageCount > this.relativePageSize) {
+                _r = this.relativePageSize
             } else {
                 _r = pageCount
             }
-            for (let i = 1; i <= _r; i++) {
-                _navPages.push(i)
-            }
+            for (let i = 1; i <= _r; i++) renderPages.push(i)
         }
 
-        // Add a link to the first page when it's out of scope.
-        if (_navPages[0] !== 1) {
-            this.backwardFirst = 1
+        // Handle first page logic.
+        const firstPage = renderPages[0]
+        if (firstPage === 2) {
+            // Add first to render pages when the first relative page is 2,
+            // instead of ellipsing it.
+            renderPages.unshift(1)
+            this.ellipsisFirst = null
+        } else if (firstPage > 2) {
+            // Add first page with an ellipsis between, in case it's not
+            // a direct neighbour of page two.
+            this.ellipsisFirst = 1
         } else {
-            this.backwardFirst = null
+            // Hide the ellipsis page.
+            this.ellipsisFirst = null
         }
-        // Add a link the the last page when it's out of scope.
-        if (_navPages[_navPages.length - 1] !== pageCount) {
-            this.forwardLast = pageCount
+
+        // Handle last page logic.
+        const lastPage = renderPages[renderPages.length - 1]
+        if (lastPage === (pageCount - 1)) {
+            // Add last page to the relative pages when the last rendered
+            // relative page is a direct neighbour of the last page in total.
+            renderPages.push(pageCount)
+            this.ellipsisLast = null
+        } else if (lastPage <= (pageCount - 2)) {
+            // Add last page as an ellipsis link when the last rendered
+            // relative page is more than 1 page away.
+            this.ellipsisLast = pageCount
         } else {
-            this.forwardLast = null
+            this.ellipsisLast = null
         }
 
         this.currentPage = currentPage
@@ -115,7 +132,7 @@ function Paginator(template) {
             this.pageCount = pageCount
         }
 
-        this.navPages = _navPages
+        this.renderPages = renderPages
     }
 
 

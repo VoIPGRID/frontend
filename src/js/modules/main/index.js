@@ -7,17 +7,13 @@
  * in a distinct category.
  */
 class MainApp {
-
+    /**
+     * @param {App} app - The application object.
+     */
     constructor(app) {
         this.actions = require('./actions')(app)
         this.mutations = require('./mutations')(app)
-        this.state = {
-            authenticated: false,
-            credentials: {
-                email: 'spindle@voipgrid.nl',
-                password: 'password123',
-            },
-        }
+        this.state = {}
 
         this.methods = {
             notify(notification) {
@@ -25,12 +21,7 @@ class MainApp {
             },
         }
 
-        app.router.addRoutes([{
-            path: '/login',
-            alias: '/logout',
-            name: 'main_login',
-            component: require('./components/login')(app),
-        }])
+
     }
 }
 

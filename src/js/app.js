@@ -57,7 +57,7 @@ class App {
         this.initI18n()
         // Initialize Notifications component.
         Vue.use(Notifications, this.vuex)
-        this.vuex.commit('main/AUTHENTICATE', initialState.authenticated)
+        this.vuex.commit('user/AUTHENTICATE', initialState.authenticated)
 
         // Start up virtual DOM renderer.
         this.vue = new Vue({
@@ -84,6 +84,7 @@ class App {
             {name: 'dashboard', Module: require('./modules/dashboard')},
             {name: 'main', Module: require('./modules/main')},
             {name: 'partners', Module: require('./modules/partners')},
+            {name: 'user', Module: require('./modules/user')},
         ]
 
         for (let {name, Module} of _modules) {
