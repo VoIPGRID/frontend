@@ -9,7 +9,7 @@ module.exports = function(app) {
      * Delete a partner to the API, commit the deleted partner to the partners
      * property of the store and commit a notification. Route to the last route
      * afterwards.
-     * @param {Vuex} store - The partner scoped Vuex store.
+     * @param {Vuex} store - The Vuex store.
      */
     actions.deletePartner = (store) => {
         const partner = store.state.partner
@@ -25,7 +25,7 @@ module.exports = function(app) {
 
     /**
      * Clear the currently selected partner.
-     * @param {Vuex} store - The partner scoped Vuex store.
+     * @param {Vuex} store - The Vuex store.
      */
     actions.emptyPartner = (store) => {
         store.commit('PARTNER_EMPTIED')
@@ -33,7 +33,7 @@ module.exports = function(app) {
 
     /**
      * Read partner from the API and commit the change to the store.
-     * @param {Vuex} store - The partner scoped Vuex store.
+     * @param {Vuex} store - The Vuex store.
      * @param {String} partnerId - ID of the partner to read from the API.
      */
     actions.readPartner = (store, partnerId) => {
@@ -45,7 +45,7 @@ module.exports = function(app) {
     /**
      * Read partners from the API and commit the change to the store.
      * Used by the paginator component.
-     * @param {Vuex} store - The partner scoped Vuex store.
+     * @param {Vuex} store - The Vuex store.
      * @param {Object} data - Context passed from the Paginator component.
      * @returns {Promise} - Resolves when API data is committed to the store.
      */
@@ -62,7 +62,7 @@ module.exports = function(app) {
     /**
      * Update or insert a partner to the API, commit a notification to the store
      * and route back to the last route afterwards.
-     * @param {Vuex} store - The partner scoped Vuex store.
+     * @param {Vuex} store - The Vuex store.
      */
     actions.upsertPartner = (store) => {
         const partner = store.state.partner

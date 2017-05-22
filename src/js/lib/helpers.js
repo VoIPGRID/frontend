@@ -106,6 +106,28 @@ class Helpers {
             query: route.route.query,
         }
     }
+
+    /**
+     * Inject a script in the HEAD of the page. Useful to load
+     * new translations.
+     * @param {String} src - The source of the script.
+     * @param {Function} cb - Function to call when the script is loaded.
+     */
+    injectScript(src, cb) {
+        let script = document.createElement('script')
+        script.type = 'text/javascript'
+
+        script.onload = function() {
+            // Cleanup onload handler.
+            script.onload = null
+            cb()
+        }
+
+        // Add the script to the DOM.
+        document.getElementsByTagName('head')[0].appendChild(script)
+        // Set the `src` to begin transport.
+        script.src = src
+    }
 }
 
 

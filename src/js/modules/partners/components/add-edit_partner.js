@@ -1,7 +1,7 @@
 module.exports = (app) => {
 
     const template = app.templates.partners_add_edit_partner
-    const validators = Vuelidate.validators
+    const v = Vuelidate.validators
     /**
      * @memberof module:partners
      * @namespace
@@ -27,8 +27,11 @@ module.exports = (app) => {
         validations: {
             partner: {
                 name: {
-                    required: validators.required,
-                    minLength: validators.minLength(3),
+                    required: v.required,
+                    minLength: v.minLength(3),
+                },
+                foreign_code: {
+                    maxLength: v.maxLength(3),
                 },
             },
         },

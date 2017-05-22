@@ -1,7 +1,7 @@
 <div>
     <notifications></notifications>
     <div v-if="$store.state.user.authenticated">
-        <nav class="nav has-shadow">
+        <nav class="main-nav nav has-shadow">
             <div class="container">
                 <div class="nav-left">
                     <a class="nav-item nav__logo">
@@ -22,13 +22,7 @@
                     <router-link class="nav-item is-tab is-hidden-tablet" to="/" exact>{{$t('Dashboard')}}</router-link>
                     <router-link class="nav-item is-tab is-hidden-tablet" to="/partners">{{$t('Partners')}}</router-link>
                     <router-link class="nav-item is-tab is-hidden-tablet" to="/clients">{{$t('Clients')}}</router-link>
-
-                    <a class="nav-item is-tab">
-                        <figure class="image is-16x16" style="margin-right: 8px;">
-                        </figure>
-                        {{$t('Profile')}}
-                    </a>
-
+                    <router-link class="nav-item profile is-tab" to="/profile"><i class="fa fa-user-circle"></i>{{$t('Profile')}}</router-link>
                     <a v-if="$store.state.user.authenticated" class="nav-item is-tab" @click="$store.dispatch('user/logout')">{{$t('Logout')}}</a>
                     <router-link v-if="!$store.state.user.authenticated" class="nav-item is-tab" to="/login">{{$t('Login')}}</router-link>
                 </div>

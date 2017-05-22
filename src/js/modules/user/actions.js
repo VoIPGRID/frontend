@@ -5,8 +5,14 @@ module.exports = function(app) {
      */
     let actions = {}
 
-    actions.login = ({state, commit}) => {
-        app.api.post('login/', state.credentials).then((res) => {
+    /**
+     * Log the user in to a new session, commit
+     * the authentication switch to the store and update
+     * Axios with the new CSRF token.
+     * @param {Vuex} store - The Vuex store.
+     */
+    actions.login = (store) => {
+        app.api.post('login/', store.state.credentials).then((res) => {
             if (res.data) {
                 window.csrf = res.data.csrf
                 app.api = axios.create({
@@ -14,19 +20,49 @@ module.exports = function(app) {
                     timeout: 1000,
                     headers: {'X-CSRFToken': csrf},
                 })
-                commit('AUTHENTICATE', true)
+                store.commit('AUTHENTICATE', true)
                 app.router.replace('/')
             }
         })
     }
 
-    actions.logout = ({state, commit}) => {
+    /**
+     * Log the user out of the current session and commit
+     * the authentication switch to the store.
+     * @param {Vuex} store - The Vuex store.
+     */
+    actions.logout = (store) => {
         app.api.post('logout/').then((res) => {
             if (res.data) {
-                commit('AUTHENTICATE', false)
+                store.commit('AUTHENTICATE', false)
                 app.router.push({name: 'user_login'})
             }
         })
+    }
+
+    /**
+     * Set the language in the backend and directly switch to
+     * the new language in the frontend by updating the Vuex locale.
+     * Retrieve the language file first, when the language is not yet
+     * available.
+     * @param {Vuex} store - The Vuex store.
+     * @param {String} language - The language code to set.
+     */
+    actions.setLanguage = (store, language) => {
+        if (!global.translations || translations[language]) {
+            app.utils.injectScript(`/public/i18n/${language}.js`, () => {
+                // Add the translations to the Vuex store.
+                Vue.i18n.add(language, translations[language])
+                app.api.get(`language/${language}`).then((res) => {
+                    store.commit('SET_LOCALE', {locale: language}, {root: true})
+                })
+            })
+        } else {
+            app.api.get(`language/${language}`).then((res) => {
+                store.commit('SET_LOCALE', {locale: language}, {root: true})
+            })
+        }
+
     }
 
     return actions

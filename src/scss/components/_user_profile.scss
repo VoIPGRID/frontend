@@ -1,0 +1,11 @@
+.user-profile-component {
+    .language-picker {
+        font-weight: bold;
+        font-style: italic;
+        float: left;
+        padding-right: 1rem;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}

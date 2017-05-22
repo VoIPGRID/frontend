@@ -1,4 +1,4 @@
-<div class="modal is-active login-component">
+<div class="user-login-component modal is-active">
     <div class="modal-background"></div>
     <div class="modal-card">
         <header class="modal-card-head">

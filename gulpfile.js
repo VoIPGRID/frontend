@@ -11,19 +11,21 @@ const cleanCSS = require('gulp-clean-css')
 const concat = require('gulp-concat')
 const del = require('del')
 const envify = require('gulp-envify')
+const fuet = require('gulp-fuet')
 const ghPages = require('gulp-gh-pages')
 const gulp = require('gulp-help')(require('gulp'), {})
 const gutil = require('gulp-util')
 const gzip = require('gulp-gzip')
 const livereload = require('gulp-livereload')
 const ifElse = require('gulp-if-else')
+const insert = require('gulp-insert')
 const notify = require('gulp-notify')
 const sass = require('gulp-sass')
 const size = require('gulp-size')
 const source = require('vinyl-source-stream')
 const sourcemaps = require('gulp-sourcemaps')
 const uglify = require('gulp-uglify')
-const vue = require('gulp-vuejs')
+
 const watchify = require('watchify')
 
 const BUILD_DIR = process.env.BUILD_DIR || '/srv/http/data/frontend'
@@ -46,7 +48,7 @@ gulp.task('assets', `Copy required assets to '${BUILD_DIR}'`, () => {
     .pipe(addsrc('./src/fonts/**', {base: './src'}))
     .pipe(addsrc(path.join(NODE_PATH, 'font-awesome', 'fonts', '**'), {base: path.join(NODE_PATH, 'font-awesome')}))
     .pipe(addsrc(path.join(NODE_PATH, 'vg-icons', 'fonts', '**'), {base: path.join(NODE_PATH, 'vg-icons')}))
-    .pipe(addsrc('./src/templates/index.html', {base: './src/templates'}))
+    .pipe(addsrc('./src/vue/index.html', {base: './src/vue'}))
     .pipe(gulp.dest(BUILD_DIR))
     .pipe(size(extend({title: 'assets'}, sizeConfig)))
     .pipe(ifElse(isWatching, livereload))
@@ -57,6 +59,7 @@ gulp.task('build', 'Build application', [
     'assets',
     'js-app',
     'js-vendor',
+    'js-translations',
     'templates',
     'scss',
     'scss-vendor',
@@ -149,7 +152,7 @@ gulp.task('js-vendor', 'Generate vendor.js', (done) => {
     .pipe(ifElse(PRODUCTION, () => uglify()))
     .on('end', () => {
         if (!PRODUCTION) del(path.join(BUILD_DIR, '*.js.gz'), {force: true})
-        if (isWatching) livereload.changed('rtd.js')
+        if (isWatching) livereload.changed('vendor.js')
         done()
     })
     .pipe(ifElse(!PRODUCTION, () => sourcemaps.write('./')))
@@ -210,9 +213,9 @@ gulp.task('scss-vendor', 'Generate vendor.css', (done) => {
 
 
 gulp.task('templates', 'Build Vue templates', () => {
-    gulp.src('./src/templates/**/*.vue')
-    .pipe(vue('templates.js', {
-        prefixStart: 'templates',
+    gulp.src('./src/vue/**/*.vue')
+    .pipe(fuet({
+        pathfilter: ['src', 'vue'],
         commonjs: false,
     }))
     .on('error', notify.onError('Error: <%= error.message %>'))
@@ -220,6 +223,8 @@ gulp.task('templates', 'Build Vue templates', () => {
     .on('end', () => {
         if (!PRODUCTION) del(path.join(BUILD_DIR, 'templates.js.gz'), {force: true})
     })
+    .pipe(concat('templates.js'))
+    .pipe(insert.prepend('window.templates={};'))
     .pipe(gulp.dest(BUILD_DIR))
     .pipe(size(extend({title: 'templates'}, sizeConfig)))
     .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
@@ -261,12 +266,19 @@ gulp.task('watch', 'Watch for changes using livereload', () => {
             path.join(NODE_PATH, 'jsdoc-rtd', 'publish.js'),
             path.join(NODE_PATH, 'jsdoc-rtd', 'tmpl', '**', '*.tmpl'),
         ], ['docs'])
+        gulp.watch([
+            path.join(NODE_PATH, 'vue-paginator-simple', 'src', 'js', '*.js'),
+            path.join(NODE_PATH, 'vue-tabcordion', 'src', 'js', '*.js'),
+        ], ['js-vendor'])
+        gulp.watch([
+            path.join(NODE_PATH, 'vue-tabcordion', 'src', 'scss', 'styles.scss'),
+        ], ['scss-vendor'])
     }
 
     gulp.watch(path.join(__dirname, 'src', 'js', 'i18n', '*.js'), ['js-translations'])
     gulp.watch(path.join(__dirname, 'src', 'js', 'vendor.js'), ['js-vendor'])
-    gulp.watch(path.join(__dirname, 'src', 'templates', '**', '*.vue'), ['templates'])
-    gulp.watch(path.join(__dirname, 'src', 'templates', 'index.html'), ['assets'])
+    gulp.watch(path.join(__dirname, 'src', 'vue', '**', '*.vue'), ['templates'])
+    gulp.watch(path.join(__dirname, 'src', 'vue', 'index.html'), ['assets'])
     gulp.watch([
         path.join(__dirname, 'src', 'scss', '**', '*.scss'),
         `!${path.join(__dirname, 'src', 'scss', 'vendor.scss')}`,

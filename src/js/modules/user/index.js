@@ -27,6 +27,12 @@ class UserApp {
             name: 'user_login',
             component: require('./components/login')(app),
         }])
+
+        app.router.addRoutes([{
+            path: '/profile',
+            name: 'user_profile',
+            component: require('./components/profile')(app),
+        }])
     }
 }
 

@@ -12,3 +12,10 @@ global.VueRouter = require('vue-router')
 global.Vuelidate = require('vuelidate')
 global.Vuelidate.validators = require('vuelidate/lib/validators')
 global.vuexI18n = require('vuex-i18n')
+
+const {Tabs, Tab} = require('vue-tabcordion')
+Vue.component('Tab', Tab)
+Vue.component('Tabs', Tabs)
+
+const {Paginator} = require('vue-paginator2')
+Vue.component('paginator', Paginator)

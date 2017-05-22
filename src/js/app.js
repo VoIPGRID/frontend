@@ -3,7 +3,6 @@ const globalMutations = require('./lib/mutations')
 const Helpers = require('./lib/helpers')
 const Logger = require('./lib/logger')
 const Notifications = require('./components/notifications')
-const paginator = require('./components/paginator')
 
 
 /**
@@ -29,7 +28,6 @@ class App {
         Vue.use(VueRouter)
         Vue.use(Vuelidate.default)
 
-        Vue.component('paginator', paginator(templates.components_paginator))
         // Holds an array of visited routes.
         this.history = []
         // Remove the base as soon as the new frontend goes primetime.
@@ -101,7 +99,9 @@ class App {
             Vue.i18n.set(__state.language)
             this.logger.info(`Set language to ${__state.language}`)
         } else {
-            this.logger.warn(`No translations found for ${__state.language}`)
+            // Warn about a missing language when it's a different one than
+            // the default.
+            if (__state.language !== 'en') this.logger.warn(`No translations found for ${__state.language}`)
         }
     }
 
