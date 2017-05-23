@@ -72,6 +72,7 @@
     "vue": "^2.3.0",
     "vue-paginator2": "^1.0.2",
     "vue-router": "^2.4.0",
+    "vue-shout": "^1.0.1",
     "vue-tabcordion": "^1.0.1",
     "vuelidate": "^0.4.3",
     "vuex": "^2.2.1",

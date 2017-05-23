@@ -1,5 +1,5 @@
 <div>
-    <notifications></notifications>
+    <Shouts></Shouts>
     <div v-if="$store.state.user.authenticated">
         <nav class="main-nav nav has-shadow">
             <div class="container">

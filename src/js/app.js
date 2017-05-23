@@ -2,7 +2,6 @@ const globalActions = require('./lib/actions')
 const globalMutations = require('./lib/mutations')
 const Helpers = require('./lib/helpers')
 const Logger = require('./lib/logger')
-const Notifications = require('./components/notifications')
 
 
 /**
@@ -53,8 +52,7 @@ class App {
         this.modules = this.loadModules()
         this.vuex = this.setupStore()
         this.initI18n()
-        // Initialize Notifications component.
-        Vue.use(Notifications, this.vuex)
+
         this.vuex.commit('user/AUTHENTICATE', initialState.authenticated)
 
         // Start up virtual DOM renderer.
@@ -130,9 +128,7 @@ class App {
             modules: vuexModules,
             actions: globalActions(this),
             mutations: globalMutations(this),
-            state: {
-                notifications: [],
-            },
+            state: Object.assign({}, _Vuex.state),
         })
     }
 }

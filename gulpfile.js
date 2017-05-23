@@ -32,8 +32,8 @@ const BUILD_DIR = process.env.BUILD_DIR || '/srv/http/data/frontend'
 const NODE_ENV = process.env.NODE_ENV || 'development'
 const NODE_PATH = process.env.NODE_PATH || path.join(__dirname, 'node_modules')
 const PRODUCTION = argv.production ? argv.production : (process.env.NODE_ENV === 'production')
-const WITHDOCS = argv['with-docs'] ? argv['with-docs'] : false
-const WATCHLINKED = argv['watch-linked'] ? argv['watch-linked'] : false
+const WITHDOCS = argv.docs ? argv.docs : false
+const WATCHLINKED = argv.linked ? argv.linked : false
 
 let bundlers = {app: null, vendor: null}
 let isWatching
@@ -268,9 +268,11 @@ gulp.task('watch', 'Watch for changes using livereload', () => {
         ], ['docs'])
         gulp.watch([
             path.join(NODE_PATH, 'vue-paginator-simple', 'src', 'js', '*.js'),
+            path.join(NODE_PATH, 'vue-shout', 'src', 'js', '*.js'),
             path.join(NODE_PATH, 'vue-tabcordion', 'src', 'js', '*.js'),
         ], ['js-vendor'])
         gulp.watch([
+            path.join(NODE_PATH, 'vue-shout', 'src', 'scss', 'styles.scss'),
             path.join(NODE_PATH, 'vue-tabcordion', 'src', 'scss', 'styles.scss'),
         ], ['scss-vendor'])
     }

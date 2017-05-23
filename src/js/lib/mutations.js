@@ -5,25 +5,7 @@ module.exports = function(app) {
      * @memberof module:app
      * @namespace
      */
-    let mutations = {}
-
-    /**
-     * Editing client is changed.
-     * @param {Observer} state - The globally scoped state.
-     * @param {Object} notification - Notification to add to store.
-     */
-    mutations.ADD_NOTIFICATION = (state, notification) => {
-        state.notifications.push(notification)
-    }
-
-    /**
-     * Remove notification from the store.
-     * @param {Observer} state - The globally scoped state.
-     * @param {Object} notification - Notification to remove from store.
-     */
-    mutations.REMOVE_NOTIFICATION = (state, notification) => {
-        state.notifications = state.notifications.filter((i) => i.id !== notification.id)
-    }
+    let mutations = Object.assign({}, _Vuex.mutations)
 
     return mutations
 }

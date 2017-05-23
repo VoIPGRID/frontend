@@ -22,7 +22,8 @@
         "vuexI18n": true,
         "I18n": true,
         "translations": true,
-        "__state": true
+        "__state": true,
+        "_Vuex"
     },
     "plugins": [
 

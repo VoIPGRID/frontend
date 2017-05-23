@@ -14,8 +14,15 @@ global.Vuelidate.validators = require('vuelidate/lib/validators')
 global.vuexI18n = require('vuex-i18n')
 
 const {Tabs, Tab} = require('vue-tabcordion')
+const {Paginator} = require('vue-paginator2')
+const {Shout, Shouts, vuex} = require('vue-shout')
+
+// Actions and mutations from components are mixed in
+// the application's global Vuex store.
+global._Vuex = vuex
+
+Vue.component('paginator', Paginator)
+Vue.component('Shout', Shout)
+Vue.component('Shouts', Shouts)
 Vue.component('Tab', Tab)
 Vue.component('Tabs', Tabs)
-
-const {Paginator} = require('vue-paginator2')
-Vue.component('paginator', Paginator)
