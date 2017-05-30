@@ -23,23 +23,29 @@ module.exports = function(app) {
         })
     }
 
-    /**
-     * Clear the currently selected partner.
-     * @param {Vuex} store - The Vuex store.
-     */
-    actions.emptyPartner = (store) => {
-        store.commit('PARTNER_EMPTIED')
-    }
 
     /**
      * Read partner from the API and commit the change to the store.
      * @param {Vuex} store - The Vuex store.
      * @param {String} partnerId - ID of the partner to read from the API.
      */
-    actions.readPartner = (store, partnerId) => {
-        app.api.get(`partners/${partnerId}/`).then((res) => {
-            store.commit('PARTNER_CHANGED', res.data)
-        })
+    actions.readPartner = async (store, partnerId) => {
+        if (partnerId) {
+            let [owners, partner] = await Promise.all([
+                app.api.get(`partners/${partnerId}/owners`),
+                app.api.get(`partners/${partnerId}/`),
+            ])
+
+            partner.data.owners = owners.data.results
+            store.commit('PARTNER_CHANGED', partner.data)
+        } else {
+            // Clear the currently selected partner and use the partner id
+            // of the user to determine which owners may be used.
+
+            let {data: {results}} = await app.api.get(`partners/${__state.partner}/owners`)
+            store.commit('PARTNER_EMPTIED', {owners: results})
+        }
+
     }
 
     /**
@@ -65,7 +71,10 @@ module.exports = function(app) {
      * @param {Vuex} store - The Vuex store.
      */
     actions.upsertPartner = (store) => {
-        const partner = store.state.partner
+        // Format the data that we are about to send to the API first.
+        const partner = JSON.parse(JSON.stringify(store.state.partner))
+        delete partner.owners
+
         let $t = Vue.i18n.translate
         if (partner.id) {
             app.api.put(`partners/${partner.id}/`, partner).then((res) => {

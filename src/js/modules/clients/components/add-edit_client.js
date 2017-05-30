@@ -1,6 +1,6 @@
 module.exports = (app) => {
     const template = app.templates.clients_add_edit_client
-    const validators = Vuelidate.validators
+    const v = Vuelidate.validators
 
     return Vue.component('AddEditClient', {
         render: template.r,
@@ -23,8 +23,8 @@ module.exports = (app) => {
         validations: {
             client: {
                 name: {
-                    required: validators.required,
-                    minLength: validators.minLength(3),
+                    required: v.required,
+                    minLength: v.minLength(3),
                 },
             },
         },

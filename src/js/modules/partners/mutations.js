@@ -17,12 +17,20 @@ module.exports = function(app) {
     /**
      * Editing partner is emptied.
      * @param {Observer} state - The partner module scoped state.
-     * @param {Object} partner - The new emptied partner state.
+     * @param {Object} partnerInitial - The new emptied partner state.
      */
-    mutations.PARTNER_EMPTIED = (state) => {
-        state.partner = {
+    mutations.PARTNER_EMPTIED = (state, partnerInitial) => {
+        let partner = {
             name: '',
             description: '',
+            text: '',
+        }
+        if (partnerInitial) {
+            // console.log(partnerInitial)
+            for (let key of Object.keys(partnerInitial)) {
+                partner[key] = partnerInitial[key]
+            }
+            state.partner = partner
         }
     }
 

@@ -1,0 +1,36 @@
+// To hide the checkbox itself.
+input[type=checkbox] {
+    display:none;
+
+    // unchecked icon.
+    & + label {
+
+        &:before {
+            font-family: FontAwesome;
+            display: inline-block;
+            content: "\f096";
+            font-size: 1.2rem;
+            width: 1rem;
+            padding-top: 3px;
+        }
+    }
+
+    &:disabled + label {
+        color: #999;
+    }
+}
+
+// checked icon.
+input[type=checkbox]:checked + label:before {
+    content: "\f046";
+}
+
+input[type=checkbox] + label {
+    line-height: 1.5rem;
+    @include unselectable;
+}
+
+input[type=color] {
+    height: 3rem;
+    width: 4rem;
+}

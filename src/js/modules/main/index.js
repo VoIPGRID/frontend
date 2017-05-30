@@ -14,14 +14,6 @@ class MainApp {
         this.actions = require('./actions')(app)
         this.mutations = require('./mutations')(app)
         this.state = {}
-
-        this.methods = {
-            notify(notification) {
-                this.vuex.actions.notify(notification)
-            },
-        }
-
-
     }
 }
 
