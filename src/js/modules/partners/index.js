@@ -9,8 +9,10 @@ class PartnersApp {
         this.actions = require('./actions')(app)
         this.mutations = require('./mutations')(app)
         this.state = {
-            partners: [],
+            countries: [],
+            owners: [],
             partner: {},
+            partners: [],
         }
 
         app.router.addRoutes([{

@@ -35,6 +35,8 @@ module.exports = (app) => {
             },
         },
         computed: Object.assign(Vuex.mapState({
+            countries: state => state.partners.countries,
+            owners: state => state.partners.owners,
             partner: state => state.partners.partner,
         }), {
             branding: function() {

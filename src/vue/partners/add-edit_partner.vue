@@ -7,39 +7,24 @@
                 <span class="select">
                     <select id="owner" class="select" name="owner" type="text" :placeholder="$t('Owner')" v-model="partner.owner">
                         <option value="" disabled>Select an owner...</option>
-                        <option v-for="option in partner.owners" v-bind:value="option.id">
+                        <option v-for="option in owners" v-bind:value="option.id">
                         {{ option.name }}
                         </option>
                     </select>
                 </span>
             </div>
 
-            <div class="field">
-                <label class="label" for="name">{{$t('Name')}}</label>
-                <input id="name" name="name" type="text" :placeholder="$t('Name')"
-                v-model.trim="partner.name" :class="{'input': true, 'is-danger': $v.partner.name.$error}"
-                @input="$v.partner.name.$touch()"
-                />
-                <span class="help is-danger" v-if="$v.partner.name.$error && $v.partner.name.$dirty">
-                Field is required and must be at least 3 characters
-                </span>
-            </div>
+            <Field type="text" :label="$t('Name')" :model.sync="partner.name" name="name"
+                :placeholder="$t('Name')" :validation="$v.partner.name">
+            </Field>
 
-            <div class="field">
-                <label class="label" for="description">{{$t('Description')}}</label>
-                <textarea id="description" class="textarea" v-model="partner.description" :placeholder="$t('Description')"/>
-            </div>
+            <Field type="textarea" :label="$t('Description')" :model.sync="partner.description" name="description"
+                :placeholder="$t('Name')" :validation="$v.partner.description">
+            </Field>
 
-            <div class="field">
-                <label class="label" for="foreign_code">{{$t('Foreign code')}}</label>
-                <input id="foreign_code" name="foreign_code" type="text" :placeholder="$t('Foreign code')"
-                v-model.trim="partner.foreign_code" :class="{'input': true, 'is-danger': $v.partner.foreign_code.$error}"
-                @input="$v.partner.foreign_code.$touch()"
-                />
-                <span class="help is-danger" v-if="$v.partner.foreign_code.$error && $v.partner.foreign_code.$dirty">
-                Field is required and must be at least 16 characters
-                </span>
-            </div>
+            <Field type="text" :label="$t('Foreign code')" :model.sync="partner.foreign_code" name="foreign_code"
+                :placeholder="$t('Foreign code')" :validation="$v.partner.foreign_code">
+            </Field>
 
             <div class="field">
                 <p class="control">
@@ -147,11 +132,11 @@
 
         <Tab id="preferences" :title="$t('Preferences')">
             <div class="field">
-                <label class="label" for="owner">{{$t('Country')}}</label>
-                <span class="select">
-                    <select id="owner" class="select" name="owner" type="text" :placeholder="$t('Owner')" v-model="partner.owner">
+                <label class="label" for="country">{{$t('Country')}}</label>
+                <span class="select" v-if="partner.profile">
+                    <select id="country" class="select" name="country" type="text" v-model="partner.profile.country.code">
                         <option value="" disabled>Select an owner...</option>
-                        <option v-for="option in partner.owners" v-bind:value="option.id">
+                        <option v-for="option in countries" v-bind:value="option.code">
                         {{ option.name }}
                         </option>
                     </select>

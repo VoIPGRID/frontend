@@ -6,6 +6,26 @@ module.exports = function(app) {
     let mutations = {}
 
     /**
+     * Country list is changed.
+     * @param {Observer} state - The partner module scoped state.
+     * @param {Array} countries - Updated countries array.
+     */
+    mutations.PARTNER_COUNTRIES_CHANGED = (state, countries) => {
+        state.countries = countries
+    }
+
+
+    /**
+     * Owner list is changed.
+     * @param {Observer} state - The partner module scoped state.
+     * @param {Array} owners - Updated owners array.
+     */
+    mutations.PARTNER_OWNERS_CHANGED = (state, owners) => {
+        state.owners = owners
+    }
+
+
+    /**
      * Editing partner is changed.
      * @param {Observer} state - The partner module scoped state.
      * @param {Object} partner - The new partner state.

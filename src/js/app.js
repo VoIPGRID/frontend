@@ -40,7 +40,7 @@ class App {
             this.history.push(to)
         })
 
-        // Add the Django csrf token in the header and set the base URL
+        // Add the Django CSRF token in the header and set the base URL
         // to VoIPGRID api V2.
         /** @memberof App */
         this.api = axios.create({
@@ -54,6 +54,15 @@ class App {
         this.initI18n()
 
         this.vuex.commit('user/AUTHENTICATE', initialState.authenticated)
+
+        // Add a response interceptor
+        this.api.interceptors.response.use(function(response) {
+            return response
+        }, (error) => {
+            this.router.push({path: '/oops'})
+            // We got an API error. Show the default oops page.
+            return Promise.reject(error)
+        })
 
         // Start up virtual DOM renderer.
         this.vue = new Vue({

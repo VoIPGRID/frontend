@@ -19,6 +19,11 @@ class UserApp {
                 email: '',
                 password: '',
             },
+            partner: {
+                profile: {
+
+                },
+            },
         }
 
         app.router.addRoutes([{
