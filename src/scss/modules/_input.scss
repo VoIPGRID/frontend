@@ -4,14 +4,16 @@ input[type=checkbox] {
 
     // unchecked icon.
     & + label {
+        vertical-align: center;
 
         &:before {
             font-family: FontAwesome;
-            display: inline-block;
+            display: block;
+            float: left;
             content: "\f096";
             font-size: 1.2rem;
-            width: 1rem;
-            padding-top: 3px;
+            width: 1.5rem;
+            margin-top: 0.05rem;
         }
     }
 
