@@ -12,6 +12,12 @@ module.exports = (app) => {
         render: template.r,
         staticRenderFns: template.s,
         methods: {
+            /**
+             * This would have been easier when there was a model
+             * flag that indicates custom branding or not. Currently,
+             * the indication to use custom branding or not is the absence
+             * of color information for the branding fields.
+             */
             toggleBranding: function() {
                 if (this.branding) {
                     // Switch branding off by emptying all fields.
@@ -35,9 +41,13 @@ module.exports = (app) => {
             },
         },
         computed: Object.assign(Vuex.mapState({
+            audioLanguages: state => state.partners.audioLanguages,
             countries: state => state.partners.countries,
+            currencies: state => state.partners.currencies,
             owners: state => state.partners.owners,
             partner: state => state.partners.partner,
+            systemLanguages: state => state.partners.systemLanguages,
+            timezones: state => state.partners.timezones,
         }), {
             branding: function() {
                 if (this.partner.text && this.partner.brand && this.partner.navlink &&
@@ -62,8 +72,25 @@ module.exports = (app) => {
                     required: v.required,
                     minLength: v.minLength(3),
                 },
+                description: {
+                    maxLength: v.maxLength(63),
+                },
                 foreign_code: {
                     maxLength: v.maxLength(16),
+                },
+                email_address: {
+                    email: v.email,
+                },
+                no_reply_email_address: {
+                    email: v.email,
+                },
+                wiki_base_url: {
+                    url: v.url,
+                },
+                billingprofile: {
+                    billing_email: {
+                        email: v.email,
+                    },
                 },
             },
         },

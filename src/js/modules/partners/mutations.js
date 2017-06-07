@@ -6,12 +6,42 @@ module.exports = function(app) {
     let mutations = {}
 
     /**
+     * Editing partner is changed.
+     * @param {Observer} state - The partner module scoped state.
+     * @param {Object} partner - The new partner state.
+     */
+    mutations.PARTNER_CHANGED = (state, partner) => {
+        state.partner = partner
+    }
+
+
+    /**
+     * Editing partner is changed.
+     * @param {Observer} state - The partner module scoped state.
+     * @param {Object} languages - All supported audio languages.
+     */
+    mutations.PARTNER_AUDIO_LANGUAGES_CHANGED = (state, languages) => {
+        state.audioLanguages = languages
+    }
+
+
+    /**
      * Country list is changed.
      * @param {Observer} state - The partner module scoped state.
      * @param {Array} countries - Updated countries array.
      */
     mutations.PARTNER_COUNTRIES_CHANGED = (state, countries) => {
         state.countries = countries
+    }
+
+
+    /**
+     * Country list is changed.
+     * @param {Observer} state - The partner module scoped state.
+     * @param {Array} currencies - Updated currencies array.
+     */
+    mutations.PARTNER_CURRENCIES_CHANGED = (state, currencies) => {
+        state.currencies = currencies
     }
 
 
@@ -28,11 +58,22 @@ module.exports = function(app) {
     /**
      * Editing partner is changed.
      * @param {Observer} state - The partner module scoped state.
-     * @param {Object} partner - The new partner state.
+     * @param {Object} languages - All supported audio languages.
      */
-    mutations.PARTNER_CHANGED = (state, partner) => {
-        state.partner = partner
+    mutations.PARTNER_SYSTEM_LANGUAGES_CHANGED = (state, languages) => {
+        state.systemLanguages = languages
     }
+
+
+    /**
+     * Timezones list is changed.
+     * @param {Observer} state - The partner module scoped state.
+     * @param {Array} timezones - Updated owners array.
+     */
+    mutations.PARTNER_TIMEZONES_CHANGED = (state, timezones) => {
+        state.timezones = timezones
+    }
+
 
     /**
      * Editing partner is emptied.

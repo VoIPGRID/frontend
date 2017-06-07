@@ -10,8 +10,12 @@ class PartnersApp {
         this.mutations = require('./mutations')(app)
         this.state = {
             countries: [],
+            currencies: [],
             owners: [],
-            partner: {},
+            partner: {
+                profile: {},
+                billingprofile: {},
+            },
             partners: [],
         }
 

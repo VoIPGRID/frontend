@@ -31,15 +31,23 @@ module.exports = function(app) {
      */
     actions.readPartner = async (store, partnerId) => {
         if (partnerId) {
-            let [countries, owners, partner] = await Promise.all([
-                app.api.get('partners/countries'),
-                app.api.get(`partners/${partnerId}/owners`),
+            let [audio, countries, currencies, owners, partner, system, timezones] = await Promise.all([
+                app.api.get('partners/audio_languages/'),
+                app.api.get('partners/countries/'),
+                app.api.get('partners/currencies/'),
+                app.api.get(`partners/${partnerId}/owners/`),
                 app.api.get(`partners/${partnerId}/`),
+                app.api.get('partners/system_languages/'),
+                app.api.get('partners/timezones/'),
             ])
 
-            store.commit('PARTNER_CHANGED', partner.data)
-            store.commit('PARTNER_OWNERS_CHANGED', owners.data.results)
+            store.commit('PARTNER_AUDIO_LANGUAGES_CHANGED', audio.data)
             store.commit('PARTNER_COUNTRIES_CHANGED', countries.data)
+            store.commit('PARTNER_CURRENCIES_CHANGED', currencies.data)
+            store.commit('PARTNER_OWNERS_CHANGED', owners.data.results)
+            store.commit('PARTNER_CHANGED', partner.data)
+            store.commit('PARTNER_SYSTEM_LANGUAGES_CHANGED', system.data)
+            store.commit('PARTNER_TIMEZONES_CHANGED', timezones.data)
         } else {
             // Clear the currently selected partner and use the partner id
             // of the user to determine which owners may be used.
@@ -75,6 +83,8 @@ module.exports = function(app) {
     actions.upsertPartner = (store) => {
         // Format the data that we are about to send to the API first.
         const partner = JSON.parse(JSON.stringify(store.state.partner))
+        partner.owner = parseInt(partner.owner)
+
         let $t = Vue.i18n.translate
         if (partner.id) {
             app.api.put(`partners/${partner.id}/`, partner).then((res) => {

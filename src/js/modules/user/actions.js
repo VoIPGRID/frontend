@@ -49,7 +49,7 @@ module.exports = function(app) {
      * @param {String} language - The language code to set.
      */
     actions.setLanguage = (store, language) => {
-        if (!global.translations || translations[language]) {
+        if ((!global.translations || translations[language]) && language !== 'en') {
             app.utils.injectScript(`/public/i18n/${language}.js`, () => {
                 // Add the translations to the Vuex store.
                 Vue.i18n.add(language, translations[language])
