@@ -14,9 +14,19 @@ class ClientsApp {
     constructor(app) {
         this.actions = require('./actions')(app)
         this.mutations = require('./mutations')(app)
+
         this.state = {
+            audioLanguages: [],
+            countries: [],
+            currencies: [],
+            owners: [],
+            client: {
+                profile: {},
+                billingprofile: {},
+            },
             clients: [],
-            client: {},
+            systemLanguages: [],
+            timezones: [],
         }
 
         app.router.addRoutes([{

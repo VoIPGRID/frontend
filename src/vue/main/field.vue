@@ -10,7 +10,7 @@
 </div>
 
 <div class="field" v-else-if="type === 'text'">
-    <label class="label" :for="name">{{label}}</label>
+    <label :class="{'required': vRequired(), 'label': true}" :for="name">{{label}}</label>
     <input type="text" v-bind:class="{'is-danger': vInvalid(), 'input': true}"
         v-on:input="vChange($event.target.value)" v-bind:value="vmodel"
         :id="name" :name="name" :placeholder="placeholder"/>
@@ -19,14 +19,14 @@
 </div>
 
 <div class="field" v-else-if="type === 'textarea'">
-    <label class="label" :for="name">{{label}}</label>
+    <label :class="{'required': vRequired(), 'label': true}" :for="name">{{label}}</label>
     <textarea class="textarea" v-on:input="vChange($event.target.value)" v-bind:value="vmodel"
          :id="name" :name="name" :placeholder="placeholder"/>
     <span class="help is-danger" v-html="validationMessage" v-if="vInvalid()"></span>
 </div>
 
 <div class="field" v-else-if="type === 'select'">
-    <label class="label" :for="name">{{label}}</label>
+    <label :class="{'required': vRequired(), 'label': true}" :for="name">{{label}}</label>
     <span class="select">
         <select class="select" type="text" v-on:change="vChange($event.target.value)" :id="name" :name="name">
             <option value="" v-if="placeholder">{{placeholder}}</option>

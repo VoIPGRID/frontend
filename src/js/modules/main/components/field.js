@@ -52,14 +52,6 @@ module.exports = (app) => {
         },
         methods: {
             /**
-             * Validation flag being used to conditionally render
-             * validation-helper styling.
-             */
-            vInvalid: function() {
-                if (!this.validation) return false
-                return (this.validation.$error && this.validation.$dirty)
-            },
-            /**
              * Handles executing a referenced click function from
              * a parent component.
              */
@@ -78,6 +70,18 @@ module.exports = (app) => {
                 }
                 this.$emit('update:model', value)
                 if (this.validation) this.validation.$touch()
+            },
+            /**
+             * Validation flag being used to conditionally render
+             * validation-helper styling.
+             */
+            vInvalid: function() {
+                if (!this.validation) return false
+                return (this.validation.$error && this.validation.$dirty)
+            },
+            vRequired: function() {
+                if (!this.validation) return false
+                return this.validation.required
             },
         },
         props: {

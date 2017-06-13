@@ -115,7 +115,7 @@
         <Tab id="billing" :title="$t('Billing Preferences')">
             <Field name="currency" namefield="code" type="select" :label="$t('Currency')"
                 :model.sync="partner.billingprofile.currency" :options="currencies"
-                :placeholder="$t('Select a currency...')"/>
+                :placeholder="$t('Select a currency...')" :validation="$v.partner.billingprofile.currency"/>
 
             <Field name="billing_email" type="text" v-if="partner.billingprofile"
                 :label="$t('Email address for billing')" :model.sync="partner.billingprofile.billing_email"

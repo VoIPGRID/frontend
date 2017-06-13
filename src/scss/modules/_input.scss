@@ -36,3 +36,10 @@ input[type=color] {
     height: 3rem;
     width: 4rem;
 }
+
+.label.required {
+    &::after {
+        content: " *";
+        color: $primary;
+    }
+}

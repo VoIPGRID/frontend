@@ -30,32 +30,49 @@ module.exports = function(app) {
      * @param {String} partnerId - ID of the partner to read from the API.
      */
     actions.readPartner = async (store, partnerId) => {
-        if (partnerId) {
-            let [audio, countries, currencies, owners, partner, system, timezones] = await Promise.all([
-                app.api.get('partners/audio_languages/'),
-                app.api.get('partners/countries/'),
-                app.api.get('partners/currencies/'),
-                app.api.get(`partners/${partnerId}/owners/`),
-                app.api.get(`partners/${partnerId}/`),
-                app.api.get('partners/system_languages/'),
-                app.api.get('partners/timezones/'),
-            ])
+        let [audio, countries, currencies, owners, system, timezones] = await Promise.all([
+            app.api.get('partners/audio_languages/'),
+            app.api.get('partners/countries/'),
+            app.api.get('partners/currencies/'),
+            app.api.get('partners/owners/'),
+            app.api.get('partners/system_languages/'),
+            app.api.get('partners/timezones/'),
+        ])
+        store.commit('PARTNER_OPTIONS_CHANGED', {
+            audioLanguages: audio.data,
+            countries: countries.data,
+            currencies: currencies.data,
+            owners: owners.data.results,
+            systemLanguages: system.data,
+            timezones: timezones.data,
+        })
 
-            store.commit('PARTNER_AUDIO_LANGUAGES_CHANGED', audio.data)
-            store.commit('PARTNER_COUNTRIES_CHANGED', countries.data)
-            store.commit('PARTNER_CURRENCIES_CHANGED', currencies.data)
-            store.commit('PARTNER_OWNERS_CHANGED', owners.data.results)
+        if (partnerId) {
+            let partner = await app.api.get(`partners/${partnerId}/`)
             store.commit('PARTNER_CHANGED', partner.data)
-            store.commit('PARTNER_SYSTEM_LANGUAGES_CHANGED', system.data)
-            store.commit('PARTNER_TIMEZONES_CHANGED', timezones.data)
         } else {
             // Clear the currently selected partner and use the partner id
             // of the user to determine which owners may be used.
-
-            let {data: {results}} = await app.api.get(`partners/${__state.partner}/owners`)
-            store.commit('PARTNER_EMPTIED', {owners: results})
+            store.commit('PARTNER_CHANGED', {
+                name: '',
+                description: '',
+                domain: '',
+                email_address: '',
+                foreign_code: '',
+                may_have_children: false,
+                no_reply_email_address: '',
+                registration_domain: '',
+                text: '',
+                brand: '',
+                navlink: '',
+                navlink_active: '',
+                spot: '',
+                btn_text: '',
+                wiki_base_url: '',
+                profile: {},
+                billingprofile: {},
+            })
         }
-
     }
 
     /**

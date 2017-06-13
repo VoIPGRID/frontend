@@ -91,6 +91,9 @@ module.exports = (app) => {
                     billing_email: {
                         email: v.email,
                     },
+                    currency: {
+                        required: v.required,
+                    },
                 },
             },
         },
