@@ -12,9 +12,6 @@ module.exports = (app) => {
             vmodel: function() {
                 return this.model
             },
-            myValidation: function() {
-                return this.validation
-            },
             /**
              * Generates validation error messages.
              */
@@ -63,25 +60,34 @@ module.exports = (app) => {
              * Emits the child component's state back to it's
              * defining parent. The value is captured using `:model.sync`.
              */
-            vChange: function(value) {
-                // This is a checkbox.
+            vChange: function(e, value) {
+                // Toggles value of a checkbox.
                 if (value === true || value === false) {
                     value = !value
                 }
+                // A multiselect.
+                if (e.target.multiple) {
+                    let selectedOptions = Array.prototype.filter.apply(e.target.options, [(i) => i.selected])
+                    // Note that the value is parsed to a Number. Selected
+                    // state fails without casting to the proper type.
+                    value = selectedOptions.map((o) => parseInt(o.value))
+                }
                 this.$emit('update:model', value)
                 if (this.validation) this.validation.$touch()
+                return false
             },
             /**
              * Validation flag being used to conditionally render
              * validation-helper styling.
              */
             vInvalid: function() {
-                if (!this.validation) return false
-                return (this.validation.$error && this.validation.$dirty)
+                if (!this.validation || !this.validation.$dirty) return false
+                return this.validation.$error
             },
             vRequired: function() {
+                // No validation at all.
                 if (!this.validation) return false
-                return this.validation.required
+                return this.validation.$params.required
             },
         },
         props: {

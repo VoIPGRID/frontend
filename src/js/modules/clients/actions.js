@@ -37,26 +37,52 @@ module.exports = function(app) {
      * @param {String} clientId - ID of the client to read from the API.
      */
     actions.readClient = async (store, clientId) => {
-        if (clientId) {
-            let [audio, countries, currencies, owners, partner, system, timezones] = await Promise.all([
-                app.api.get('clients/audio_languages/'),
-                app.api.get('clients/countries/'),
-                app.api.get('clients/currencies/'),
-                app.api.get(`clients/${clientId}/owners/`),
-                app.api.get(`clients/${clientId}/`),
-                app.api.get('clients/system_languages/'),
-                app.api.get('clients/timezones/'),
-            ])
+        let [anonymizeAfter, audio, blockedCallPermissions, countries, currencies, owners, system, timezones] = await Promise.all([
+            app.api.get('clients/anonymize_after/'),
+            app.api.get('clients/audio_languages/'),
+            app.api.get('clients/blocked_call_permissions/'),
+            app.api.get('clients/countries/'),
+            app.api.get('clients/currencies/'),
+            app.api.get('clients/owners/'),
+            app.api.get('clients/system_languages/'),
+            app.api.get('clients/timezones/'),
+        ])
 
-            store.commit('CLIENT_AUDIO_LANGUAGES_CHANGED', audio.data)
-            store.commit('CLIENT_COUNTRIES_CHANGED', countries.data)
-            store.commit('CLIENT_CURRENCIES_CHANGED', currencies.data)
-            store.commit('CLIENT_OWNERS_CHANGED', owners.data.results)
-            store.commit('CLIENT_CHANGED', partner.data)
-            store.commit('CLIENT_SYSTEM_LANGUAGES_CHANGED', system.data)
-            store.commit('CLIENT_TIMEZONES_CHANGED', timezones.data)
+        store.commit('CLIENT_OPTIONS_CHANGED', {
+            anonymizeAfter: anonymizeAfter.data,
+            audioLanguages: audio.data,
+            blockedCallPermissions: blockedCallPermissions.data,
+            countries: countries.data,
+            currencies: currencies.data,
+            owners: owners.data.results,
+            systemLanguages: system.data,
+            timezones: timezones.data,
+        })
+
+        if (clientId) {
+            let client = await app.api.get(`clients/${clientId}/`)
+            store.commit('CLIENT_CHANGED', client.data)
         } else {
-            store.commit('CLIENT_EMPTIED')
+            store.commit('CLIENT_CHANGED', {
+                billingprofile: {
+                    currency: '',
+                    billing_email: '',
+                    exclude_from_export: false,
+                },
+                blocked_call_permissions: [],
+                description: '',
+                foreign_code: '',
+                name: '',
+                profile: {
+                    audio_language: '',
+                    country: {
+                        code: '',
+                    },
+                    system_language: '',
+                    timezone: '',
+                },
+
+            })
         }
     }
 

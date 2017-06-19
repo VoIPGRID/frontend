@@ -16,18 +16,24 @@ class ClientsApp {
         this.mutations = require('./mutations')(app)
 
         this.state = {
+            anonymizeAfter: [],
             audioLanguages: [],
+            blockedCallPermissions: [],
             countries: [],
             currencies: [],
-            owners: [],
             client: {
-                profile: {},
+                profile: {
+                    country: {},
+                },
                 billingprofile: {},
             },
             clients: [],
+            owners: [],
             systemLanguages: [],
             timezones: [],
         }
+
+        const AddEditClientComponent = require('./components/add-edit_client')(app)
 
         app.router.addRoutes([{
             path: '/clients',
@@ -42,7 +48,7 @@ class ClientsApp {
             ],
         }])
 
-        const AddEditClientComponent = require('./components/add-edit_client')(app)
+
 
         app.router.addRoutes([{
             path: '/clients/add',

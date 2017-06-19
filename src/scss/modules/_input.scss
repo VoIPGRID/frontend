@@ -1,45 +1,80 @@
 // To hide the checkbox itself.
-input[type=checkbox] {
-    display:none;
+input {
+    &[type=checkbox] {
+        display:none;
 
-    // unchecked icon.
-    & + label {
-        vertical-align: center;
+        // checked icon.
+        &:checked + label:before {
+            content: "\f046";
+        }
 
-        &:before {
-            font-family: FontAwesome;
-            display: block;
-            float: left;
-            content: "\f096";
-            font-size: 1.2rem;
-            width: 1.5rem;
-            margin-top: 0.05rem;
+        // unchecked icon.
+        & + label {
+            line-height: 1.5rem;
+            @include unselectable;
+            vertical-align: center;
+
+            &:before {
+                font-family: FontAwesome;
+                display: block;
+                float: left;
+                content: "\f096";
+                font-size: 1.2rem;
+                width: 1.5rem;
+                margin-top: 0.05rem;
+            }
+        }
+
+        &:disabled + label {
+            color: #999;
         }
     }
 
-    &:disabled + label {
-        color: #999;
+    &[type=color] {
+        height: 3rem;
+        width: 4rem;
     }
 }
 
-// checked icon.
-input[type=checkbox]:checked + label:before {
-    content: "\f046";
-}
-
-input[type=checkbox] + label {
-    line-height: 1.5rem;
-    @include unselectable;
-}
-
-input[type=color] {
-    height: 3rem;
-    width: 4rem;
-}
 
 .label.required {
     &::after {
         content: " *";
         color: $primary;
     }
+}
+
+select {
+    &:active,
+    &:hover {
+        border-color: $primary;
+        outline-color: $primary;
+    }
+
+    option:checked, option:hover {
+        color: white;
+        background: $primary;
+    }
+
+    &[multiple].multi-select {
+        all: initial;
+        font: inherit;
+        overflow-y: auto;
+        border-radius: 3px;
+        padding-bottom: 0.5em;
+        padding-left: 0.625em;
+        padding-top: 0.5em;
+        background-color: white;
+        border: 1px solid #dbdbdb;
+        color: #363636;
+        cursor: pointer;
+        display: block;
+        outline: none;
+        padding-right: 2.5em;
+    }
+}
+
+::selection {
+    background: $primary;
+    color: #fff;
 }

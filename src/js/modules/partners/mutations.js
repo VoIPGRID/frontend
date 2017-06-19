@@ -31,12 +31,7 @@ module.exports = function(app) {
      * @param {Object} options - The form's context options.
      */
     mutations.PARTNER_OPTIONS_CHANGED = (state, options) => {
-        state.audioLanguages = options.audioLanguages
-        state.countries = options.countries
-        state.currencies = options.currencies
-        state.owners = options.owners
-        state.systemLanguages = options.systemLanguages
-        state.timezones = options.timezones
+        Object.assign(state, options)
     }
 
 

@@ -39,6 +39,9 @@ module.exports = (app) => {
                     }
                 }
             },
+            formIsValid: function() {
+                return !this.$v.$invalid
+            },
         },
         computed: Object.assign(Vuex.mapState({
             audioLanguages: state => state.partners.audioLanguages,
@@ -46,6 +49,7 @@ module.exports = (app) => {
             currencies: state => state.partners.currencies,
             owners: state => state.partners.owners,
             partner: state => state.partners.partner,
+            priceplanDiscounts: state => state.partners.priceplanDiscounts,
             systemLanguages: state => state.partners.systemLanguages,
             timezones: state => state.partners.timezones,
         }), {
@@ -57,9 +61,6 @@ module.exports = (app) => {
                 }
                 return false
             },
-            formIsValid: function() {
-                return !this.$v.$invalid
-            },
         }),
         mounted: function() {
             // Reset branding cache on page reload.
@@ -68,32 +69,51 @@ module.exports = (app) => {
         },
         validations: {
             partner: {
-                name: {
-                    required: v.required,
-                    minLength: v.minLength(3),
-                },
-                description: {
-                    maxLength: v.maxLength(63),
-                },
-                foreign_code: {
-                    maxLength: v.maxLength(16),
-                },
-                email_address: {
-                    email: v.email,
-                },
-                no_reply_email_address: {
-                    email: v.email,
-                },
-                wiki_base_url: {
-                    url: v.url,
-                },
                 billingprofile: {
+                    auto_export: {
+                        required: v.required,
+                    },
                     billing_email: {
                         email: v.email,
                     },
                     currency: {
                         required: v.required,
                     },
+                },
+                description: {
+                    maxLength: v.maxLength(63),
+                },
+                email_address: {
+                    email: v.email,
+                },
+                foreign_code: {
+                    maxLength: v.maxLength(16),
+                },
+                name: {
+                    minLength: v.minLength(3),
+                    required: v.required,
+                },
+                no_reply_email_address: {
+                    email: v.email,
+                },
+                profile: {
+                    audio_language: {
+                        required: v.required,
+                    },
+                    country: {
+                        code: {
+                            required: v.required,
+                        },
+                    },
+                    system_language: {
+                        required: v.required,
+                    },
+                    timezone: {
+                        required: v.required,
+                    },
+                },
+                wiki_base_url: {
+                    url: v.url,
                 },
             },
         },

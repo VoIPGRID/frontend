@@ -30,11 +30,12 @@ module.exports = function(app) {
      * @param {String} partnerId - ID of the partner to read from the API.
      */
     actions.readPartner = async (store, partnerId) => {
-        let [audio, countries, currencies, owners, system, timezones] = await Promise.all([
+        let [audio, countries, currencies, owners, priceplanDiscounts, system, timezones] = await Promise.all([
             app.api.get('partners/audio_languages/'),
             app.api.get('partners/countries/'),
             app.api.get('partners/currencies/'),
             app.api.get('partners/owners/'),
+            app.api.get('partners/priceplan_discounts/'),
             app.api.get('partners/system_languages/'),
             app.api.get('partners/timezones/'),
         ])
@@ -43,6 +44,7 @@ module.exports = function(app) {
             countries: countries.data,
             currencies: currencies.data,
             owners: owners.data.results,
+            priceplanDiscounts: priceplanDiscounts.data,
             systemLanguages: system.data,
             timezones: timezones.data,
         })
@@ -51,26 +53,40 @@ module.exports = function(app) {
             let partner = await app.api.get(`partners/${partnerId}/`)
             store.commit('PARTNER_CHANGED', partner.data)
         } else {
-            // Clear the currently selected partner and use the partner id
-            // of the user to determine which owners may be used.
+            // Need to commit all fields to the store, because reactivity
+            // only works when Vuex is aware of all fields.
             store.commit('PARTNER_CHANGED', {
-                name: '',
+                billingprofile: {
+                    auto_export: false,
+                    billing_email: '',
+                    currency: '',
+                    exclude_from_export: false,
+                    totalize_partner_cdrs: false,
+                    use_twinfield: false,
+                },
+                brand: '',
+                btn_text: '',
                 description: '',
                 domain: '',
                 email_address: '',
                 foreign_code: '',
                 may_have_children: false,
-                no_reply_email_address: '',
-                registration_domain: '',
-                text: '',
-                brand: '',
                 navlink: '',
                 navlink_active: '',
+                name: '',
+                no_reply_email_address: '',
+                profile: {
+                    audio_language: '',
+                    country: {
+                        code: '',
+                    },
+                    system_language: '',
+                    timezone: '',
+                },
+                registration_domain: '',
                 spot: '',
-                btn_text: '',
+                text: '',
                 wiki_base_url: '',
-                profile: {},
-                billingprofile: {},
             })
         }
     }

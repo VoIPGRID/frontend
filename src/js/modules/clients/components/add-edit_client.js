@@ -6,7 +6,9 @@ module.exports = (app) => {
         render: template.r,
         staticRenderFns: template.s,
         computed: Object.assign(Vuex.mapState({
+            anonymizeAfter: state => state.clients.anonymizeAfter,
             audioLanguages: state => state.clients.audioLanguages,
+            blockedCallPermissions: state => state.clients.blockedCallPermissions,
             countries: state => state.clients.countries,
             currencies: state => state.clients.currencies,
             owners: state => state.clients.owners,
@@ -23,9 +25,13 @@ module.exports = (app) => {
         },
         validations: {
             client: {
-                name: {
-                    required: v.required,
-                    minLength: v.minLength(3),
+                billingprofile: {
+                    billing_email: {
+                        email: v.email,
+                    },
+                    currency: {
+                        required: v.required,
+                    },
                 },
                 description: {
                     maxLength: v.maxLength(63),
@@ -33,9 +39,24 @@ module.exports = (app) => {
                 foreign_code: {
                     maxLength: v.maxLength(16),
                 },
-                billingprofile: {
-                    billing_email: {
-                        email: v.email,
+                name: {
+                    minLength: v.minLength(3),
+                    required: v.required,
+                },
+                profile: {
+                    audio_language: {
+                        required: v.required,
+                    },
+                    country: {
+                        code: {
+                            required: v.required,
+                        },
+                    },
+                    system_language: {
+                        required: v.required,
+                    },
+                    timezone: {
+                        required: v.required,
                     },
                 },
             },

@@ -14,17 +14,6 @@ module.exports = function(app) {
         state.client = client
     }
 
-    /**
-     * Editing client is emptied.
-     * @param {Observer} state - The client module scoped state.
-     * @param {Object} client - The new emptied client state.
-     */
-    mutations.CLIENT_EMPTIED = (state) => {
-        state.client = {
-            name: '',
-            description: '',
-        }
-    }
 
     /**
      * Remove client from the clients list.
@@ -34,6 +23,17 @@ module.exports = function(app) {
     mutations.CLIENT_DELETED = (state, client) => {
         state.clients.results = state.clients.results.filter((i) => i.id !== client.id)
     }
+
+
+    /**
+     * Editing client is changed.
+     * @param {Observer} state - The client module scoped state.
+     * @param {Object} options - The form's context options.
+     */
+    mutations.CLIENT_OPTIONS_CHANGED = (state, options) => {
+        Object.assign(state, options)
+    }
+
 
     /**
      * Change the current clients list.
