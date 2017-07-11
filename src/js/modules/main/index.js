@@ -14,7 +14,11 @@ class MainApp {
         Vue.component('Field', require('./components/field')(app))
         this.actions = require('./actions')(app)
         this.mutations = require('./mutations')(app)
-        this.state = {}
+        this.state = {
+            // Mostly used to trigger additional validation rules,
+            // after server validation.
+            apiValidation: false,
+        }
 
         app.router.addRoutes([{
             path: '/oops',

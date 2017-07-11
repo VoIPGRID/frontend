@@ -12,10 +12,10 @@ module.exports = function(app) {
      * @param {Vuex} store - The Vuex store.
      */
     actions.login = (store) => {
-        app.api.post('login/', store.state.credentials).then((res) => {
+        app.api.client.post('login/', store.state.credentials).then((res) => {
             if (res.data) {
                 window.csrf = res.data.csrf
-                app.api = axios.create({
+                app.api.client = axios.create({
                     baseURL: 'http://localhost/api/v2/',
                     timeout: 1000,
                     headers: {'X-CSRFToken': csrf},
@@ -32,12 +32,21 @@ module.exports = function(app) {
      * @param {Vuex} store - The Vuex store.
      */
     actions.logout = (store) => {
-        app.api.post('logout/').then((res) => {
+        app.api.client.post('logout/').then((res) => {
             if (res.data) {
                 store.commit('AUTHENTICATE', false)
                 app.router.push({name: 'user_login'})
             }
         })
+    }
+
+    actions.readProfile = async (store) => {
+        let user = await app.api.client.get('profile/')
+        // Make sure to provide all keys in order for reactivity to work.
+        user.data.old_password = ''
+        user.data.password = ''
+        user.data.password_confirm = ''
+        store.commit('FILL_USER_PROFILE', user.data)
     }
 
     /**
@@ -53,16 +62,31 @@ module.exports = function(app) {
             app.utils.injectScript(`/public/i18n/${language}.js`, () => {
                 // Add the translations to the Vuex store.
                 Vue.i18n.add(language, translations[language])
-                app.api.get(`language/${language}`).then((res) => {
+                app.api.client.get(`language/${language}`).then((res) => {
                     store.commit('SET_LOCALE', {locale: language}, {root: true})
                 })
             })
         } else {
-            app.api.get(`language/${language}`).then((res) => {
+            app.api.client.get(`language/${language}`).then((res) => {
                 store.commit('SET_LOCALE', {locale: language}, {root: true})
             })
         }
+    }
 
+    actions.updateProfile = (store, validator) => {
+        let $t = Vue.i18n.translate
+        const user = JSON.parse(JSON.stringify(store.state.user))
+
+        app.api.client.put('profile/', user).then((res) => {
+            if (res.status === 200) {
+                this.app.vuex.commit('main/API_VALIDATION', false)
+                store.dispatch('notify', {message: $t('Profile succesfully updated', {name: user.name})}, {root: true})
+                app.vuex.dispatch('user/readProfile')
+            } else {
+                // Trigger serverside validation.
+                validator.$touch()
+            }
+        })
     }
 
     return actions

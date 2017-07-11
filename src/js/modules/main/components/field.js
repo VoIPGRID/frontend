@@ -35,15 +35,24 @@ module.exports = (app) => {
                     )
                 }
                 if (this.validation.email === false) {
-                    errorMessages.push(this.$t(
-                        'Field must be a valid email address.')
-                    )
+                    errorMessages.push(this.$t('Field must be a valid email address.'))
                 }
                 if (this.validation.url === false) {
-                    errorMessages.push(this.$t(
-                        'Field must be a valid url.')
-                    )
+                    errorMessages.push(this.$t('Field must be a valid url.'))
                 }
+                if (this.validation.incorrect_password === false) {
+                    errorMessages.push(this.$t('Incorrect password.'))
+                }
+                if (this.validation.sameAs === false) {
+                    errorMessages.push(this.$t('Field "{fieldName}" must have the same value.', {
+                        fieldName: this.validation.$params.sameAs.eq,
+                    }))
+                }
+
+                if (this.validation.requiredIf === false) {
+                    errorMessages.push(this.$t('Field is required.'))
+                }
+
                 return errorMessages.join('</br>')
             },
         },
@@ -81,8 +90,8 @@ module.exports = (app) => {
              * validation-helper styling.
              */
             vInvalid: function() {
-                if (!this.validation || !this.validation.$dirty) return false
-                return this.validation.$error
+                if (!this.validation) return false
+                return this.validation.$invalid
             },
             vRequired: function() {
                 // No validation at all.

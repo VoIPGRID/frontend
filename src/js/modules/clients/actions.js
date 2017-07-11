@@ -13,7 +13,7 @@ module.exports = function(app) {
      */
     actions.deleteClient = (store) => {
         const client = store.state.client
-        app.api.delete(`clients/${client.id}/`).then((res) => {
+        app.api.client.delete(`clients/${client.id}/`).then((res) => {
             let $t = Vue.i18n.translate
             store.commit('CLIENT_DELETED', client)
             store.dispatch('notify', {
@@ -37,15 +37,17 @@ module.exports = function(app) {
      * @param {String} clientId - ID of the client to read from the API.
      */
     actions.readClient = async (store, clientId) => {
-        let [anonymizeAfter, audio, blockedCallPermissions, countries, currencies, owners, system, timezones] = await Promise.all([
-            app.api.get('clients/anonymize_after/'),
-            app.api.get('clients/audio_languages/'),
-            app.api.get('clients/blocked_call_permissions/'),
-            app.api.get('clients/countries/'),
-            app.api.get('clients/currencies/'),
-            app.api.get('clients/owners/'),
-            app.api.get('clients/system_languages/'),
-            app.api.get('clients/timezones/'),
+        let [anonymizeAfter, audio, blockedCallPermissions, countries,
+             currencies, owners, system, timezones,
+        ] = await Promise.all([
+            app.api.client.get('clients/anonymize_after/'),
+            app.api.client.get('clients/audio_languages/'),
+            app.api.client.get('clients/blocked_call_permissions/'),
+            app.api.client.get('clients/countries/'),
+            app.api.client.get('clients/currencies/'),
+            app.api.client.get('clients/owners/'),
+            app.api.client.get('clients/system_languages/'),
+            app.api.client.get('clients/timezones/'),
         ])
 
         store.commit('CLIENT_OPTIONS_CHANGED', {
@@ -60,7 +62,7 @@ module.exports = function(app) {
         })
 
         if (clientId) {
-            let client = await app.api.get(`clients/${clientId}/`)
+            let client = await app.api.client.get(`clients/${clientId}/`)
             store.commit('CLIENT_CHANGED', client.data)
         } else {
             store.commit('CLIENT_CHANGED', {
@@ -96,7 +98,7 @@ module.exports = function(app) {
     actions.readClients = (store, data) => {
         return new Promise((resolve, reject) => {
             const uri = `${data.resource_url}?${app.utils.stringifySearch(data.params)}`
-            app.api.get(uri).then((res) => {
+            app.api.client.get(uri).then((res) => {
                 store.commit('CLIENTS_CHANGED', res.data)
                 resolve(res.data)
             })
@@ -112,14 +114,14 @@ module.exports = function(app) {
         const client = store.state.client
         let $t = Vue.i18n.translate
         if (client.id) {
-            app.api.put(`clients/${client.id}/`, client).then((res) => {
+            app.api.client.put(`clients/${client.id}/`, client).then((res) => {
                 store.dispatch('notify', {
                     message: $t('Client {name} succesfully updated', {name: client.name}),
                 }, {root: true})
                 app.router.push(app.utils.lastRoute('list_clients'))
             })
         } else {
-            app.api.post('clients/', client).then((res) => {
+            app.api.client.post('clients/', client).then((res) => {
                 store.dispatch('notify', {
                     message: $t('Client {name} succesfully created', {name: client.name}),
                 }, {root: true})

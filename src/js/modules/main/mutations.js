@@ -5,5 +5,9 @@ module.exports = function(app) {
      */
     let mutations = {}
 
+    mutations.API_VALIDATION = (state, enabled) => {
+        state.apiValidation = enabled
+    }
+
     return mutations
 }

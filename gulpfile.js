@@ -83,6 +83,7 @@ gulp.task('deploy-docs', 'Push docs to github pages', function() {
 gulp.task('docs', 'Generate documentation', (done) => {
     let execCommand = `node ${NODE_PATH}/jsdoc/jsdoc.js ./src/js -R ./README.md -c ./.jsdoc.json -d ${BUILD_DIR}/docs`
     childExec(execCommand, undefined, (err, stdout, stderr) => {
+        if (stderr) gutil.log(stderr)
         if (stdout) gutil.log(stdout)
         if (isWatching) livereload.changed('rtd.js')
         done()

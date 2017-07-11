@@ -20,5 +20,9 @@ module.exports = function(app) {
         state.credentials.password = ''
     }
 
+    mutations.FILL_USER_PROFILE = (state, user) => {
+        state.user = user
+    }
+
     return mutations
 }

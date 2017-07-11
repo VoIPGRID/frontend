@@ -13,7 +13,7 @@ module.exports = function(app) {
      */
     actions.deletePartner = (store) => {
         const partner = store.state.partner
-        app.api.delete(`partners/${partner.id}/`).then((res) => {
+        app.api.client.delete(`partners/${partner.id}/`).then((res) => {
             let $t = Vue.i18n.translate
             store.commit('PARTNER_DELETED', partner)
             store.dispatch('notify', {
@@ -31,13 +31,13 @@ module.exports = function(app) {
      */
     actions.readPartner = async (store, partnerId) => {
         let [audio, countries, currencies, owners, priceplanDiscounts, system, timezones] = await Promise.all([
-            app.api.get('partners/audio_languages/'),
-            app.api.get('partners/countries/'),
-            app.api.get('partners/currencies/'),
-            app.api.get('partners/owners/'),
-            app.api.get('partners/priceplan_discounts/'),
-            app.api.get('partners/system_languages/'),
-            app.api.get('partners/timezones/'),
+            app.api.client.get('partners/audio_languages/'),
+            app.api.client.get('partners/countries/'),
+            app.api.client.get('partners/currencies/'),
+            app.api.client.get('partners/owners/'),
+            app.api.client.get('partners/priceplan_discounts/'),
+            app.api.client.get('partners/system_languages/'),
+            app.api.client.get('partners/timezones/'),
         ])
         store.commit('PARTNER_OPTIONS_CHANGED', {
             audioLanguages: audio.data,
@@ -50,7 +50,7 @@ module.exports = function(app) {
         })
 
         if (partnerId) {
-            let partner = await app.api.get(`partners/${partnerId}/`)
+            let partner = await app.api.client.get(`partners/${partnerId}/`)
             store.commit('PARTNER_CHANGED', partner.data)
         } else {
             // Need to commit all fields to the store, because reactivity
@@ -101,7 +101,7 @@ module.exports = function(app) {
     actions.readPartners = (store, data) => {
         return new Promise((resolve, reject) => {
             const uri = `${data.resource_url}?${app.utils.stringifySearch(data.params)}`
-            app.api.get(uri).then((res) => {
+            app.api.client.get(uri).then((res) => {
                 store.commit('PARTNERS_CHANGED', res.data)
                 resolve(res.data)
             })
@@ -120,14 +120,14 @@ module.exports = function(app) {
 
         let $t = Vue.i18n.translate
         if (partner.id) {
-            app.api.put(`partners/${partner.id}/`, partner).then((res) => {
+            app.api.client.put(`partners/${partner.id}/`, partner).then((res) => {
                 store.dispatch('notify', {
                     message: $t('Partner {name} succesfully updated', {name: partner.name}),
                 }, {root: true})
                 app.router.push(app.utils.lastRoute('list_partners'))
             })
         } else {
-            app.api.post('partners/', partner).then((res) => {
+            app.api.client.post('partners/', partner).then((res) => {
                 store.dispatch('notify', {
                     message: $t('Partner {name} succesfully created', {name: partner.name}),
                 }, {root: true})

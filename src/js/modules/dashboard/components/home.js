@@ -11,7 +11,7 @@ module.exports = (app) => {
             let $t = Vue.i18n.translate
             if (!modules) {
                 modules = [
-                    {name: $t('VoIP account'), 'icon': 'vg-icon-phoneaccount'},
+                    {name: $t('VoIP account'), 'icon': 'vg-icon-phoneaccount', disabled: true},
                     {name: $t('Phone number'), 'icon': 'vg-icon-phone-dial-buttons', disabled: true},
                     {name: $t('Users'), 'icon': 'vg-icon-user', disabled: true},
                     {name: $t('Callgroup'), 'icon': 'vg-icon-callgroup', disabled: true},

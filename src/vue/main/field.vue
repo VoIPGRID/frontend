@@ -18,6 +18,15 @@
     <span class="help is-danger" v-if="vInvalid()" v-html="validationMessage"></span>
 </div>
 
+<div class="field" v-else-if="type === 'password'">
+    <label :class="{'required': vRequired(), 'label': true}" :for="name">{{label}}</label>
+    <input type="password" v-bind:class="{'is-danger': vInvalid(), 'input': true}"
+        v-on:input="vChange($event, $event.target.value)" v-bind:value="vmodel"
+        :id="name" :name="name" :placeholder="placeholder" :disabled="disabled"/>
+    <em class="help" v-if="help">{{help}}</em>
+    <span class="help is-danger" v-if="vInvalid()" v-html="validationMessage"></span>
+</div>
+
 <div class="field" v-else-if="type === 'textarea'">
     <label :class="{'required': vRequired(), 'label': true}" :for="name">{{label}}</label>
     <textarea class="textarea" v-on:input="vChange($event, $event.target.value)" v-bind:value="vmodel"

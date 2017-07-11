@@ -5,6 +5,10 @@
 @import "components/all";
 @import "partials/all";
 
+html {
+    overflow-y: auto;
+}
+
 .fade-enter-active, .fade-leave-active {
     transition: opacity .3s;
 }

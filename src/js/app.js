@@ -1,3 +1,4 @@
+const Api = require('./lib/api')
 const globalActions = require('./lib/actions')
 const globalMutations = require('./lib/mutations')
 const Helpers = require('./lib/helpers')
@@ -24,45 +25,16 @@ class App {
         }
 
         Vue.use(Helpers, this)
-        Vue.use(VueRouter)
+        this.setupRouter()
         Vue.use(Vuelidate.default)
 
-        // Holds an array of visited routes.
-        this.history = []
-        // Remove the base as soon as the new frontend goes primetime.
-        this.router = new VueRouter({
-            base: '/v2/',
-            mode: 'history',
-            linkActiveClass: 'is-active',
-        })
-        // Keep track of the last route for cancel actions and the like.
-        this.router.afterEach((to, from) => {
-            this.history.push(to)
-        })
-
-        // Add the Django CSRF token in the header and set the base URL
-        // to VoIPGRID api V2.
-        /** @memberof App */
-        this.api = axios.create({
-            baseURL: 'http://localhost/api/v2/',
-            timeout: 3000,
-            headers: {'X-CSRFToken': initialState.csrf},
-        })
+        this.api = new Api(this, initialState)
 
         this.modules = this.loadModules()
         this.vuex = this.setupStore()
         this.initI18n()
 
         this.vuex.commit('user/AUTHENTICATE', initialState.authenticated)
-
-        // Add a response interceptor
-        this.api.interceptors.response.use(function(response) {
-            return response
-        }, (error) => {
-            this.router.push({path: '/oops'})
-            // We got an API error. Show the default oops page.
-            return Promise.reject(error)
-        })
 
         // Start up virtual DOM renderer.
         this.vue = new Vue({
@@ -110,6 +82,25 @@ class App {
             // the default.
             if (__state.language !== 'en') this.logger.warn(`No translations found for ${__state.language}`)
         }
+        // Add a simple reference to the translation module.
+        this.$t = Vue.i18n.translate
+    }
+
+
+    setupRouter() {
+        // Holds an array of visited routes.
+        this.history = []
+        Vue.use(VueRouter)
+        // TODO: Clear the base url as soon as we ditched the hybrid situation.
+        this.router = new VueRouter({
+            base: '/v2/',
+            mode: 'history',
+            linkActiveClass: 'is-active',
+        })
+        // Keep track of the last route for cancel actions and the like.
+        this.router.afterEach((to, from) => {
+            this.history.push(to)
+        })
     }
 
 

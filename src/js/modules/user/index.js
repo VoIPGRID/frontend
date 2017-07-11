@@ -19,10 +19,8 @@ class UserApp {
                 email: '',
                 password: '',
             },
-            partner: {
-                profile: {
-
-                },
+            user: {
+                profile: {},
             },
         }
 
