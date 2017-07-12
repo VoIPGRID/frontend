@@ -34,19 +34,26 @@ class App {
         this.vuex = this.setupStore()
         this.initI18n()
 
-        this.vuex.commit('user/AUTHENTICATE', initialState.authenticated)
-
         // Start up virtual DOM renderer.
         this.vue = new Vue({
             i18n: this.i18n,
             router: this.router,
             store: this.vuex,
-            render: create => create({
+            render: createElement => createElement({
                 render: this.templates.main_main.r,
                 staticRenderFns: this.templates.main_main.s,
+                computed: Vuex.mapState({
+                    user: state => state.user,
+                }),
             }),
             methods: Vuex.mapActions(['notify']),
         }).$mount('#app')
+
+        if (initialState.authenticated) {
+            this.vuex.commit('user/SET_USER', initialState)
+        }
+
+        this.vuex.commit('user/AUTHENTICATE', initialState.authenticated)
     }
 
 

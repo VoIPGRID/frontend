@@ -35,7 +35,7 @@
     "browserify": "^14.1.0",
     "del": "^2.2.2",
     "envify": "^4.0.0",
-    "eslint": "^3.19.0",
+    "eslint": "^4.2.0",
     "gulp": "^3.9.1",
     "gulp-add-src": "^0.2.0",
     "gulp-babel": "^6.1.2",

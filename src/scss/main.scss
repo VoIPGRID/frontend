@@ -5,8 +5,9 @@
 @import "components/all";
 @import "partials/all";
 
-html {
-    overflow-y: auto;
+body {
+    overflow-y: hidden;
+    margin-bottom: 50px;
 }
 
 .fade-enter-active, .fade-leave-active {

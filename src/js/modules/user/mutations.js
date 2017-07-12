@@ -20,6 +20,12 @@ module.exports = function(app) {
         state.credentials.password = ''
     }
 
+    mutations.SET_USER = (state, userState) => {
+        state.superuser = userState.superuser
+        if (userState.partner) state.partner = userState.partner
+        else if (userState.client) state.client = userState.client
+    }
+
     mutations.FILL_USER_PROFILE = (state, user) => {
         state.user = user
     }

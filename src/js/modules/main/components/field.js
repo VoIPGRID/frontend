@@ -65,6 +65,10 @@ module.exports = (app) => {
                 if (!this.click) return
                 this.click(e)
             },
+            onChange: function(e) {
+                if (!this.change) return
+                this.change(e)
+            },
             /**
              * Emits the child component's state back to it's
              * defining parent. The value is captured using `:model.sync`.
@@ -91,6 +95,12 @@ module.exports = (app) => {
              */
             vInvalid: function() {
                 if (!this.validation) return false
+                // RequiredIf validation is conditional already. Don't let it
+                // be untriggered by the dirty flag.
+                if (!('requiredIf' in this.validation)) {
+                    if (!this.validation.$dirty) return false
+                }
+
                 return this.validation.$invalid
             },
             vRequired: function() {
@@ -101,6 +111,7 @@ module.exports = (app) => {
         },
         props: {
             click: Function,
+            change: Function,
             disabled: Boolean,
             idfield: {
                 default: 'id',

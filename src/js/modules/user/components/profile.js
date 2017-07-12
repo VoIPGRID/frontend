@@ -11,6 +11,13 @@ module.exports = (app) => {
                 return !this.$v.$invalid
             },
         }),
+        methods: {
+            setLanguage(e) {
+                let oldLanguage = this.user.profile.language
+                if (oldLanguage === 'en') this.$store.dispatch('user/setLanguage', 'nl')
+                else this.$store.dispatch('user/setLanguage', 'en')
+            }
+        },
         mounted: function() {
             app.vuex.dispatch('user/readProfile')
         },

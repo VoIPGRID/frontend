@@ -1,4 +1,4 @@
-<div class="user-user.profile-component">
+<div class="content user-user.profile-component">
 
     <h2 class="title">{{$t('Personal')}}</h2><hr/>
 
@@ -35,11 +35,11 @@
 
     <h2 class="title">{{$t('Preferences')}}</h2><hr/>
 
-    <div class="field">
-        <label class="label" for="name">{{$t('Language')}}</label>
-        <div class="language-picker" @click="$store.dispatch('user/setLanguage', 'en')">{{$t('English')}}</div>
-        <div class="language-picker" @click="$store.dispatch('user/setLanguage', 'nl')">{{$t('Dutch')}}</div>
-    </div><br/>
+    <Field name="language" type="select"
+        :label="$t('Preferred language')"
+        :model.sync="user.profile.language"
+        :change="setLanguage"
+        :options="[{id: 'en', name: 'English'}, {id: 'nl', name: 'Dutch'}]"/>
 
     <div class="field is-grouped margin-top-1">
         <p class="control">
