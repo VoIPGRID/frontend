@@ -44,6 +44,7 @@ class App {
                 staticRenderFns: this.templates.main_main.s,
                 computed: Vuex.mapState({
                     user: state => state.user,
+                    selectedPartner: state => state.user.selectedPartner,
                 }),
             }),
             methods: Vuex.mapActions(['notify']),

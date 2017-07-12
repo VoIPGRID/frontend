@@ -26,6 +26,7 @@ module.exports = function(app) {
         })
     }
 
+
     /**
      * Log the user out of the current session and commit
      * the authentication switch to the store.
@@ -34,13 +35,13 @@ module.exports = function(app) {
     actions.logout = (store) => {
         app.api.client.post('logout/').then((res) => {
             if (res.data) {
-                store.commit('AUTHENTICATE', false)
+                store.commit('AUTHENTICATE', false);
                 app.router.push({name: 'user_login'})
             }
         })
     }
 
-    actions.readProfile = async (store) => {
+    actions.readProfile = async(store) => {
         let user = await app.api.client.get('profile/')
         // Make sure to provide all keys in order for reactivity to work.
         user.data.old_password = ''
@@ -71,6 +72,11 @@ module.exports = function(app) {
                 store.commit('SET_LOCALE', {locale: language}, {root: true})
             })
         }
+    }
+
+    actions.setPartnerContext = async(store, partnerId) => {
+        let partner = await app.api.client.get(`partners/${partnerId}/`)
+        app.vuex.commit('user/SET_PARTNER_CONTEXT', partner.data)
     }
 
     actions.updateProfile = (store, validator) => {

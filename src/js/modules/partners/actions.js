@@ -29,7 +29,7 @@ module.exports = function(app) {
      * @param {Vuex} store - The Vuex store.
      * @param {String} partnerId - ID of the partner to read from the API.
      */
-    actions.readPartner = async (store, partnerId) => {
+    actions.readPartner = async(store, partnerId) => {
         let [audio, countries, currencies, owners, priceplanDiscounts, system, timezones] = await Promise.all([
             app.api.client.get('partners/audio_languages/'),
             app.api.client.get('partners/countries/'),

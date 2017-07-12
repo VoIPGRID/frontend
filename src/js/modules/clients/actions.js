@@ -36,7 +36,7 @@ module.exports = function(app) {
      * @param {Vuex} store - The client scoped Vuex store.
      * @param {String} clientId - ID of the client to read from the API.
      */
-    actions.readClient = async (store, clientId) => {
+    actions.readClient = async(store, clientId) => {
         let [anonymizeAfter, audio, blockedCallPermissions, countries,
              currencies, owners, system, timezones,
         ] = await Promise.all([
@@ -98,6 +98,7 @@ module.exports = function(app) {
     actions.readClients = (store, data) => {
         return new Promise((resolve, reject) => {
             const uri = `${data.resource_url}?${app.utils.stringifySearch(data.params)}`
+            console.log(uri)
             app.api.client.get(uri).then((res) => {
                 store.commit('CLIENTS_CHANGED', res.data)
                 resolve(res.data)

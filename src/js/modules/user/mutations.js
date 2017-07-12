@@ -26,6 +26,10 @@ module.exports = function(app) {
         else if (userState.client) state.client = userState.client
     }
 
+    mutations.SET_PARTNER_CONTEXT = (state, selectedPartner) => {
+        state.selectedPartner = selectedPartner
+    }
+
     mutations.FILL_USER_PROFILE = (state, user) => {
         state.user = user
     }

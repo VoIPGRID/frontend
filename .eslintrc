@@ -1,9 +1,11 @@
 {
     "parser": "espree",
     "parserOptions": {
-        "ecmaVersion": 7,
-        "sourceType": "module",
-        "ecmaFeatures": {}
+        "ecmaFeatures": {
+            "modules": true
+        },
+        "ecmaVersion": 8,
+        "sourceType": "module"
     },
     "env": {
         "amd": false,

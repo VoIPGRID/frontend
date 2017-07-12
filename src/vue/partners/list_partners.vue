@@ -16,9 +16,9 @@
         <tbody>
             <tr v-for="partner in partners.results">
                 <td>
-                    {{partner.name}}
+                    <a @click="selectPartnerContext($event, partner.id)">{{partner.name}}</a>
                 </td>
-                <td>{{ partner.description }}</td>
+                <td>{{partner.description}}</td>
                 <td>
                     <router-link :to="{name: 'edit_partner', params: {partner_id: partner.id}}">
                         <span class="icon">

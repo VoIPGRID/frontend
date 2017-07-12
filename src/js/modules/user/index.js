@@ -22,6 +22,7 @@ class UserApp {
             user: {
                 profile: {},
             },
+            selectedPartner: null,
         }
 
         app.router.addRoutes([{
