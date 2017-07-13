@@ -6,7 +6,7 @@
             <Field name="owner" type="select"
                 :label="$t('Owner')" :model.sync="client.owner"
                 :help="$t('This allows for reseller-style relationships. Unset for the system owner.')"
-                :options="owners"
+                :options="root.owners"
                 :placeholder="$t('Select an owner...')"/>
 
             <Field name="name" type="text"
@@ -37,7 +37,7 @@
             <Field name="anonymize_after" type="select"
                 :label="$t('Anonymize after')"
                 :model.sync="client.anonymize_after"
-                :options="anonymizeAfter"/>
+                :options="root.anonymizeAfter"/>
 
             <Field name="allow_1xx_extensions" type="checkbox"
                 :help="$t('WARNING! Allowing the use of extensions in the 1xx range will make external service ' +
@@ -55,7 +55,7 @@
             <Field name="blocked_call_permissions" type="multiselect" :label="$t('Blocked call permissions')"
                 :help="$t('Call permissions that cannot be set in the account forms.')"
                 :model.sync="client.blocked_call_permissions"
-                :options="blockedCallPermissions"
+                :options="root.blockedCallPermissions"
                 :placeholder="$t('Disable call permissions...')"/>
 
             <Field name="server" type="select" :label="$t('Server')" :disabled="true"
@@ -69,7 +69,7 @@
                 'be the default in other forms.')"
                 :label="$t('Country')"
                 :model.sync="client.profile.country.code"
-                :options="countries"
+                :options="root.countries"
                 :placeholder="$t('Select an owner...')"
                 :validation="$v.client.profile.country.code"/>
 
@@ -78,7 +78,7 @@
                 'played in modules.')"
                 :label="$t('Audio language')"
                 :model.sync="client.profile.audio_language"
-                :options="audioLanguages"
+                :options="root.audioLanguages"
                 :placeholder="$t('Select an audio language...')"
                 :validation="$v.client.profile.audio_language"/>
 
@@ -87,13 +87,13 @@
                 '(invoices, exports, interface).')"
                 :label="$t('System language')"
                 :model.sync="client.profile.system_language"
-                :options="systemLanguages"
+                :options="root.systemLanguages"
                 :placeholder="$t('Select a system language...')"
                 :validation="$v.client.profile.system_language"/>
 
             <Field name="timezone" type="select" :label="$t('Timezone')"
                 :model.sync="client.profile.timezone"
-                :options="timezones"
+                :options="root.timezones"
                 :placeholder="$t('Select a timezone...')"
                 :validation="$v.client.profile.timezone"/>
         </Tab>
@@ -102,7 +102,7 @@
             <Field name="currency" namefield="code" type="select"
                 :label="$t('Currency')"
                 :model.sync="client.billingprofile.currency"
-                :options="currencies"
+                :options="root.currencies"
                 :placeholder="$t('Select a currency...')"
                 :validation="$v.client.billingprofile.currency"/>
 
@@ -121,9 +121,7 @@
 
     <div class="field is-grouped margin-top-1">
         <p class="control">
-            <button class="button is-primary"
-                :disabled="!formIsValid"
-                @click="$store.dispatch('clients/upsertClient')">
+            <button class="button is-primary" :disabled="!formIsValid" @click="upsertClient(client)">
                 {{$t('Save changes')}}
             </button>
         </p>

@@ -3,6 +3,7 @@ const globalActions = require('./lib/actions')
 const globalMutations = require('./lib/mutations')
 const Helpers = require('./lib/helpers')
 const Logger = require('./lib/logger')
+const globalStore = require('./lib/store')
 
 
 /**
@@ -10,51 +11,60 @@ const Logger = require('./lib/logger')
  */
 class App {
     /**
-     * @param {Object} initialState - The state passed from the backend.
+     * @param {Object} state - The state passed from the backend.
      * @param {Object} templates - The compiled Vue templates to start with.
      */
-    constructor(initialState, templates) {
+    constructor(state, templates) {
         // Assign the template global to the app context.
         this.templates = templates
         this.logger = new Logger(this)
 
         // Show a meaningful message to the user when the API is down.
-        if (!initialState) {
+        if (!state) {
             this.logger.error('No API backend')
             return
         }
 
         Vue.use(Helpers, this)
         this.setupRouter()
+
         Vue.use(Vuelidate.default)
 
-        this.api = new Api(this, initialState)
+        this.api = new Api(this, state)
 
+        state.selectedPartner = null
+        // Keeping the reference to the global store here.
+        this.store = globalStore(state)
         this.modules = this.loadModules()
-        this.vuex = this.setupStore()
         this.initI18n()
 
         // Start up virtual DOM renderer.
         this.vue = new Vue({
             i18n: this.i18n,
             router: this.router,
-            store: this.vuex,
+            data: () => {
+                return {
+                    store: this.store,
+                }
+            },
             render: createElement => createElement({
                 render: this.templates.main_main.r,
                 staticRenderFns: this.templates.main_main.s,
-                computed: Vuex.mapState({
-                    user: state => state.user,
-                    selectedPartner: state => state.user.selectedPartner,
-                }),
+                store: ['user', 'shouts'],
+                // computed: Vuex.mapState({
+                //     user: state => state.user,
+                //     selectedPartner: state => state.user.selectedPartner,
+                // }),
             }),
-            methods: Vuex.mapActions(['notify']),
+            // methods: Vuex.mapActions(['notify']),
         }).$mount('#app')
 
-        if (initialState.authenticated) {
-            this.vuex.commit('user/SET_USER', initialState)
-        }
 
-        this.vuex.commit('user/AUTHENTICATE', initialState.authenticated)
+        // if (initialState.authenticated) {
+        //     this.vuex.commit('user/SET_USER', initialState)
+        // }
+
+        // this.vuex.commit('user/AUTHENTICATE', initialState.authenticated)
     }
 
 
@@ -80,7 +90,9 @@ class App {
 
 
     initI18n() {
-        Vue.use(vuexI18n.plugin, this.vuex)
+        // Create a I18n stash store and pass it to the I18n plugin.
+        const i18nStore = new I18nStore(this.store)
+        Vue.use(i18n, i18nStore)
         if (global.translations && __state.language in translations) {
             Vue.i18n.add(__state.language, translations.nl)
             Vue.i18n.set(__state.language)

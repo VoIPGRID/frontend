@@ -3,14 +3,15 @@ module.exports = (app) => {
     const v = Vuelidate.validators
 
     return Vue.component('UserProfile', {
-        computed: Object.assign(Vuex.mapState({
-            apiValidation: state => state.main.apiValidation,
-            user: state => state.user.user,
-        }), {
+        // computed: Object.assign(Vuex.mapState({
+        //     apiValidation: state => state.main.apiValidation,
+        //     user: state => state.user.user,
+        // }), {
+        computed: {
             formIsValid: function() {
                 return !this.$v.$invalid
             },
-        }),
+        },
         methods: {
             setLanguage(e) {
                 let oldLanguage = this.user.profile.language
@@ -18,9 +19,9 @@ module.exports = (app) => {
                 else this.$store.dispatch('user/setLanguage', 'en')
             }
         },
-        mounted: function() {
-            app.vuex.dispatch('user/readProfile')
-        },
+        // mounted: function() {
+        //     app.vuex.dispatch('user/readProfile')
+        // },
         render: template.r,
         staticRenderFns: template.s,
         validations: function() {

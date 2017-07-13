@@ -1,5 +1,5 @@
 <div class="container-app" v-if="user.authenticated">
-    <Shouts></Shouts>
+    <Shouts :shouts="shouts"></Shouts>
     <nav class="main-nav nav has-shadow">
         <div class="container">
             <div class="nav-left">
@@ -38,7 +38,6 @@
 
     <div class="columns container main-container">
         <div class="column">
-            <Breadcrumbs></Breadcrumbs>
             <router-view></router-view>
         </div>
     </div>

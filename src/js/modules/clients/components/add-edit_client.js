@@ -1,27 +1,22 @@
-module.exports = (app) => {
+module.exports = (app, actions) => {
     const template = app.templates.clients_add_edit_client
     const v = Vuelidate.validators
 
     return Vue.component('AddEditClient', {
         render: template.r,
         staticRenderFns: template.s,
-        computed: Object.assign(Vuex.mapState({
-            anonymizeAfter: state => state.clients.anonymizeAfter,
-            audioLanguages: state => state.clients.audioLanguages,
-            blockedCallPermissions: state => state.clients.blockedCallPermissions,
-            countries: state => state.clients.countries,
-            currencies: state => state.clients.currencies,
-            owners: state => state.clients.owners,
-            client: state => state.clients.client,
-            systemLanguages: state => state.clients.systemLanguages,
-            timezones: state => state.clients.timezones,
-        }), {
+        store: {
+            root: 'clients',
+            client: 'clients.client',
+        },
+        methods: {
             formIsValid: function() {
                 return !this.$v.$invalid
             },
-        }),
+            upsertClient: actions.upsertClient,
+        },
         mounted: function() {
-            app.vuex.dispatch('clients/readClient', app.router.currentRoute.params.client_id)
+            actions.readClient(this.$store.clients, app.router.currentRoute.params.client_id)
         },
         validations: {
             client: {

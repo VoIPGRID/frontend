@@ -21,8 +21,8 @@
         "axios": true,
         "csrf": true,
         "Vuelidate": true,
-        "vuexI18n": true,
-        "I18n": true,
+        "i18n": true,
+        "I18nStore": true,
         "translations": true,
         "__state": true,
         "_Vuex"

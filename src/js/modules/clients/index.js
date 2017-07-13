@@ -1,3 +1,4 @@
+const Module = require('../../lib/module')
 /**
  * @module clients
  */
@@ -6,49 +7,30 @@
  * Handles VoIPGRID client management.
  * @memberof module:clients
  */
-class ClientsApp {
+class ClientsModule extends Module {
     /**
      * Intialize the client module.
      * @param {App} app - The application object.
      */
     constructor(app) {
-        this.actions = require('./actions')(app)
-        this.mutations = require('./mutations')(app)
+        super(app)
+        this.app.store.clients = this.getObservables()
+        this.actions = require('./actions')(app, this)
 
-        this.state = {
-            anonymizeAfter: [],
-            audioLanguages: [],
-            blockedCallPermissions: [],
-            countries: [],
-            currencies: [],
-            client: {
-                profile: {
-                    country: {},
-                },
-                billingprofile: {},
-            },
-            clients: [],
-            owners: [],
-            systemLanguages: [],
-            timezones: [],
-        }
-
-        const AddEditClientComponent = require('./components/add-edit_client')(app)
+        const AddEditClientComponent = require('./components/add-edit_client')(app, this.actions)
 
         app.router.addRoutes([{
             path: '/clients',
             name: 'list_clients',
-            component: require('./components/list_clients')(app),
+            component: require('./components/list_clients')(app, this.actions),
             children: [
                 {
                     path: ':client_id/delete',
                     name: 'delete_client',
-                    component: require('./components/delete_client')(app),
+                    component: require('./components/delete_client')(app, this.actions),
                 },
             ],
         }])
-
-
 
         app.router.addRoutes([{
             path: '/clients/add',
@@ -62,6 +44,40 @@ class ClientsApp {
             component: AddEditClientComponent,
         }])
     }
+
+
+    getObservables() {
+        return {
+            anonymizeAfter: [],
+            audioLanguages: [],
+            blockedCallPermissions: [],
+            countries: [],
+            currencies: [],
+            client: {
+                billingprofile: {
+                    currency: '',
+                    billing_email: '',
+                    exclude_from_export: false,
+                },
+                blocked_call_permissions: [],
+                description: '',
+                foreign_code: '',
+                name: '',
+                profile: {
+                    audio_language: '',
+                    country: {
+                        code: '',
+                    },
+                    system_language: '',
+                    timezone: '',
+                },
+            },
+            clients: [],
+            owners: [],
+            systemLanguages: [],
+            timezones: [],
+        }
+    }
 }
 
-module.exports = ClientsApp
+module.exports = ClientsModule

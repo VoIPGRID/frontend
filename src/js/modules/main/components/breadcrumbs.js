@@ -6,8 +6,9 @@ module.exports = (app) => {
     return {
         render: template.r,
         staticRenderFns: template.s,
-        computed: Vuex.mapState({
-            user: state => state.user,
-        }),
+        store: ['user'],
+        // computed: Vuex.mapState({
+        //     user: state => state.user,
+        // }),
     }
 }

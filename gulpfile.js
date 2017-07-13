@@ -268,7 +268,8 @@ gulp.task('watch', 'Watch for changes using livereload', () => {
             path.join(NODE_PATH, 'jsdoc-rtd', 'tmpl', '**', '*.tmpl'),
         ], ['docs'])
         gulp.watch([
-            path.join(NODE_PATH, 'vue-paginator-simple', 'src', 'js', '*.js'),
+            path.join(NODE_PATH, 'vuex-i18n-stash', 'src', '*.js'),
+            path.join(NODE_PATH, 'vue-paginator2', 'src', 'js', '*.js'),
             path.join(NODE_PATH, 'vue-shout', 'src', 'js', '*.js'),
             path.join(NODE_PATH, 'vue-tabcordion', 'src', 'js', '*.js'),
         ], ['js-vendor'])

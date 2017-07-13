@@ -69,12 +69,14 @@
     "font-awesome": "^4.7.0",
     "vg-icons": "git+https://github.com/voipgrid/vg-icons#master",
     "vue": "^2.3.0",
+    "vue-i18n": "^7.0.5",
     "vue-paginator2": "^1.0.2",
     "vue-router": "^2.4.0",
     "vue-shout": "^1.0.4",
+    "vue-stash": "^2.0.1-beta",
     "vue-tabcordion": "^1.0.1",
     "vuelidate": "^0.4.3",
     "vuex": "^2.2.1",
-    "vuex-i18n": "^1.3.4"
+    "vuex-i18n-stash": "git+https://github.com/jvanveen/vuex-i18n-stash.git#master"
   }
 }

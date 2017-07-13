@@ -1,19 +1,20 @@
-module.exports = (app) => {
+module.exports = (app, actions) => {
     const template = app.templates.partners_list_partners
     return Vue.component('ListPartners', {
-        render: template.r,
-        staticRenderFns: template.s,
         methods: {
             /**
              * Set the context for the currently selected partner.
+             * @param {Observable} partner - The partner object.
              */
-            selectPartnerContext: function(e, pk) {
-                app.vuex.dispatch('user/setPartnerContext', pk)
+            selectPartnerContext: function(partner) {
+                this.$store.user.selectedPartner = partner
             },
+            readPartners: actions.readPartners,
         },
-        computed: Vuex.mapState({
-            partners: state => state.partners.partners,
-            current_partner: state => state.partners.current_partner,
-        }),
+        render: template.r,
+        staticRenderFns: template.s,
+        store: {
+            partners: 'partners.partners',
+        },
     })
 }

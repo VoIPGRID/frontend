@@ -3,11 +3,11 @@ module.exports = (app) => {
     return Vue.component('DeleteClient', {
         render: template.r,
         staticRenderFns: template.s,
-        computed: Vuex.mapState({
-            client: state => state.clients.client,
-        }),
+        // computed: Vuex.mapState({
+        //     client: state => state.clients.client,
+        // }),
         mounted: function() {
-            app.vuex.dispatch('clients/readClient', app.router.currentRoute.params.client_id)
+            // app.vuex.dispatch('clients/readClient', app.router.currentRoute.params.client_id)
         },
     })
 }

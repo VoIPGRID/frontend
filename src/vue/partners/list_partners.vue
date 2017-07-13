@@ -14,9 +14,9 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="partner in partners.results">
+            <tr v-for="partner in partners">
                 <td>
-                    <a @click="selectPartnerContext($event, partner.id)">{{partner.name}}</a>
+                    <a @click="selectPartnerContext(partner)">{{partner.name}}</a>
                 </td>
                 <td>{{partner.description}}</td>
                 <td>
@@ -38,7 +38,7 @@
         :count=partners.count
         :next=partners.next
         :previous=partners.previous
-        resource_action="partners/readPartners"
+        :resource_action=readPartners
         resource_url="/partners">
     </paginator>
 </div>

@@ -1,4 +1,4 @@
-module.exports = (app) => {
+module.exports = (app, actions) => {
     const template = app.templates.partners_add_edit_partner
     const v = Vuelidate.validators
 
@@ -11,13 +11,17 @@ module.exports = (app) => {
     return Vue.component('AddEditPartner', {
         render: template.r,
         staticRenderFns: template.s,
+        store: {
+            root: 'partners',
+            partner: 'partners.partner',
+        },
         methods: {
-            /**
-             * This would have been easier when there was a model
-             * flag that indicates custom branding or not. Currently,
-             * the indication to use custom branding or not is the absence
-             * of color information for the branding fields.
-             */
+            /*
+            * This would have been easier when there was a model
+            * flag that indicates custom branding or not. Currently,
+            * the indication to use custom branding or not is the absence
+            * of color information for the branding fields.
+            */
             toggleBranding: function() {
                 if (this.branding) {
                     // Switch branding off by emptying all fields.
@@ -42,17 +46,9 @@ module.exports = (app) => {
             formIsValid: function() {
                 return !this.$v.$invalid
             },
+            upsertPartner: actions.upsertPartner,
         },
-        computed: Object.assign(Vuex.mapState({
-            audioLanguages: state => state.partners.audioLanguages,
-            countries: state => state.partners.countries,
-            currencies: state => state.partners.currencies,
-            owners: state => state.partners.owners,
-            partner: state => state.partners.partner,
-            priceplanDiscounts: state => state.partners.priceplanDiscounts,
-            systemLanguages: state => state.partners.systemLanguages,
-            timezones: state => state.partners.timezones,
-        }), {
+        computed: {
             branding: function() {
                 if (this.partner.text && this.partner.brand && this.partner.navlink &&
                     this.partner.navlink_active && this.partner.spot && this.partner.btn_text
@@ -61,11 +57,11 @@ module.exports = (app) => {
                 }
                 return false
             },
-        }),
+        },
         mounted: function() {
             // Reset branding cache on page reload.
             brandingCache = {}
-            app.vuex.dispatch('partners/readPartner', app.router.currentRoute.params.partner_id)
+            actions.readPartner(this.$store.partners, app.router.currentRoute.params.partner_id)
         },
         validations: {
             partner: {

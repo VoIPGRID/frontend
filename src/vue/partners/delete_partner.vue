@@ -11,7 +11,7 @@
         </div>
       </section>
       <footer class="modal-card-foot">
-        <a class="button is-primary" @click="$store.dispatch('partners/deletePartner')">{{$t('Confirm')}}</a>
+        <a class="button is-primary" @click="deletePartner(partner)">{{$t('Confirm')}}</a>
         <router-link class="button" :to="{name: 'list_partners'}">{{$t('Cancel')}}</router-link>
       </footer>
     </div>

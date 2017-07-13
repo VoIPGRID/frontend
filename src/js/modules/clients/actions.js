@@ -1,4 +1,4 @@
-module.exports = function(app) {
+module.exports = function(app, _module) {
     /**
      * @memberof module:clients
      * @namespace
@@ -6,37 +6,33 @@ module.exports = function(app) {
     let actions = {}
 
     /**
-     * Delete a client to the API, commit the deleted client to the clients
-     * property of the store and commit a notification. Route to the last route
-     * afterwards.
-     * @param {Vuex} store - The client scoped Vuex store.
+     * Delete a client to the API, update the store and add a notification.
+     * Route to the last route afterwards.
+     * @param {Observable} client - The client store object.
      */
-    actions.deleteClient = (store) => {
-        const client = store.state.client
+    actions.deletePartner = function(client) {
         app.api.client.delete(`clients/${client.id}/`).then((res) => {
             let $t = Vue.i18n.translate
-            store.commit('CLIENT_DELETED', client)
-            store.dispatch('notify', {
-                message: $t('Client {name} succesfully deleted', {name: client.name}),
-            }, {root: true})
+            this.$store.clients.clients = this.$store.clients.clients.filter((i) => i.id !== client.id)
+            this.$store.shouts.push({message: $t('Client {name} succesfully deleted', {name: client.name})})
             app.router.push({name: 'list_clients'})
         })
     }
 
-    /**
-     * Clear the currently selected client.
-     * @param {Vuex} store - The client scoped Vuex store.
-     */
-    actions.emptyClient = (store) => {
-        store.commit('CLIENT_EMPTIED')
-    }
 
     /**
-     * Read client from the API and commit the change to the store.
-     * @param {Vuex} store - The client scoped Vuex store.
+     * Read client from the API and update the client store object.
+     * @param {Observable} root - The module's reactive root object.
      * @param {String} clientId - ID of the client to read from the API.
      */
-    actions.readClient = async(store, clientId) => {
+    actions.readClient = async(root, clientId) => {
+        if (clientId) {
+            let client = await app.api.client.get(`clients/${clientId}/`)
+            Object.assign(root.client, client.data)
+        } else {
+            Object.assign(root.client, _module.getObservables().client)
+        }
+
         let [anonymizeAfter, audio, blockedCallPermissions, countries,
              currencies, owners, system, timezones,
         ] = await Promise.all([
@@ -50,7 +46,7 @@ module.exports = function(app) {
             app.api.client.get('clients/timezones/'),
         ])
 
-        store.commit('CLIENT_OPTIONS_CHANGED', {
+        Object.assign(root, {
             anonymizeAfter: anonymizeAfter.data,
             audioLanguages: audio.data,
             blockedCallPermissions: blockedCallPermissions.data,
@@ -60,72 +56,38 @@ module.exports = function(app) {
             systemLanguages: system.data,
             timezones: timezones.data,
         })
-
-        if (clientId) {
-            let client = await app.api.client.get(`clients/${clientId}/`)
-            store.commit('CLIENT_CHANGED', client.data)
-        } else {
-            store.commit('CLIENT_CHANGED', {
-                billingprofile: {
-                    currency: '',
-                    billing_email: '',
-                    exclude_from_export: false,
-                },
-                blocked_call_permissions: [],
-                description: '',
-                foreign_code: '',
-                name: '',
-                profile: {
-                    audio_language: '',
-                    country: {
-                        code: '',
-                    },
-                    system_language: '',
-                    timezone: '',
-                },
-
-            })
-        }
     }
 
+
     /**
-     * Read clients from the API and commit the change to the store.
-     * Used by the paginator component.
-     * @param {Vuex} store - The client scoped Vuex store.
+     * Read clients from the API. Used by the paginator component.
      * @param {Object} data - Context passed from the Paginator component.
-     * @returns {Promise} - Resolves when API data is committed to the store.
+     * @returns {Object} - Returns the client object from the API endpoint.
      */
-    actions.readClients = (store, data) => {
-        return new Promise((resolve, reject) => {
-            const uri = `${data.resource_url}?${app.utils.stringifySearch(data.params)}`
-            console.log(uri)
-            app.api.client.get(uri).then((res) => {
-                store.commit('CLIENTS_CHANGED', res.data)
-                resolve(res.data)
-            })
-        })
+    actions.readClients = async function(data) {
+        let clients = await app.api.client.get(`${data.resourceUrl}?${app.utils.stringifySearch(data.params)}`)
+        this.clients = clients.data.results
+        return clients.data
     }
 
+
     /**
-     * Update or insert a client to the API, commit a notification to the store
-     * and route back to the last route afterwards.
-     * @param {Vuex} store - The client scoped Vuex store.
-     */
-    actions.upsertClient = (store) => {
-        const client = store.state.client
+    * Delete a partner to the API, update the store and add a notification.
+    * Route to the last route afterwards.
+    * @param {Observable} client - The client object.
+    */
+    actions.upsertClient = function(client) {
+        // Format the data that we are about to send to the API first.
         let $t = Vue.i18n.translate
+        let payload = JSON.parse(JSON.stringify(client))
         if (client.id) {
-            app.api.client.put(`clients/${client.id}/`, client).then((res) => {
-                store.dispatch('notify', {
-                    message: $t('Client {name} succesfully updated', {name: client.name}),
-                }, {root: true})
+            app.api.client.put(`clients/${client.id}/`, payload).then((res) => {
+                this.$store.shouts.push({message: $t('Client {name} succesfully updated', {name: client.name})})
                 app.router.push(app.utils.lastRoute('list_clients'))
             })
         } else {
-            app.api.client.post('clients/', client).then((res) => {
-                store.dispatch('notify', {
-                    message: $t('Client {name} succesfully created', {name: client.name}),
-                }, {root: true})
+            app.api.client.post('clients/', payload).then((res) => {
+                this.$store.shouts.push({message: $t('Client {name} succesfully created', {name: client.name})})
                 app.router.push(app.utils.lastRoute('list_clients'))
             })
         }

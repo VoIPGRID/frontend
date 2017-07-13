@@ -13,14 +13,14 @@ class MainApp {
     constructor(app) {
         Vue.component('Field', require('./components/field')(app))
         Vue.component('Breadcrumbs', require('./components/breadcrumbs')(app))
-        this.actions = require('./actions')(app)
-        this.mutations = require('./mutations')(app)
-        this.state = {
-            // Mostly used to trigger additional validation rules,
-            // after server validation.
-            apiValidation: false,
-            user: {},
-        }
+        // this.actions = require('./actions')(app)
+        // this.mutations = require('./mutations')(app)
+        // this.state = {
+        //     // Mostly used to trigger additional validation rules,
+        //     // after server validation.
+        //     apiValidation: false,
+        //     user: {},
+        // }
 
         app.router.addRoutes([{
             path: '/oops',

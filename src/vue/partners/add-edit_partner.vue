@@ -7,7 +7,7 @@
                 :help="$t('This allows for reseller-style relationships. Unset for the system owner.')"
                 :label="$t('Owner')"
                 :model.sync="partner.owner"
-                :options="owners"
+                :options="root.owners"
                 :placeholder="$t('Select an owner...')"/>
 
             <Field name="name" type="text"
@@ -131,7 +131,7 @@
                 :help="$t('Select the country you operate from. When possible this country will ' +
                 'be the default in other forms.')" :label="$t('Country')"
                 :model.sync="partner.profile.country.code"
-                :options="countries"
+                :options="root.countries"
                 :placeholder="$t('Select a country...')"
                 :validation="$v.partner.profile.country.code"/>
 
@@ -139,7 +139,7 @@
                 :help="$t('Select the language/voice that is used as default for messages ' +
                 'played in modules.')" :label="$t('Audio language')"
                 :model.sync="partner.profile.audio_language"
-                :options="audioLanguages"
+                :options="root.audioLanguages"
                 :placeholder="$t('Select an audio language...')"
                 :validation="$v.partner.profile.audio_language"/>
 
@@ -147,14 +147,14 @@
                 :help="$t('Select the language that is used as default for printed text ' +
                 '(invoices, exports, interface).')" :label="$t('System language')"
                 :model.sync="partner.profile.system_language"
-                :options="systemLanguages"
+                :options="root.systemLanguages"
                 :placeholder="$t('Select a system language...')"
                 :validation="$v.partner.profile.system_language"/>
 
             <Field name="timezone" type="select" v-if="partner.profile"
                 :label="$t('Timezone')"
                 :model.sync="partner.profile.timezone"
-                :options="timezones"
+                :options="root.timezones"
                 :placeholder="$t('Select a timezone...')"
                 :validation="$v.partner.profile.timezone"/>
         </Tab>
@@ -163,7 +163,7 @@
             <Field name="currency" namefield="code" type="select"
                 :label="$t('Currency')"
                 :model.sync="partner.billingprofile.currency"
-                :options="currencies"
+                :options="root.currencies"
                 :placeholder="$t('Select a currency...')"
                 :validation="$v.partner.billingprofile.currency"/>
 
@@ -198,16 +198,14 @@
                 :help="$t('The discount status used for priceplan generation.')"
                 :label="$t('Priceplan discount status')"
                 :model.sync="partner.billingprofile.priceplan_discount_status"
-                :options="priceplanDiscounts"
+                :options="root.priceplanDiscounts"
                 :placeholder="$t('Select a discount...')"/>
         </Tab>
     </Tabs>
 
     <div class="field is-grouped margin-top-1">
         <p class="control">
-            <button class="button is-primary"
-                :disabled="!formIsValid()"
-                @click="$store.dispatch('partners/upsertPartner')">
+            <button class="button is-primary" :disabled="!formIsValid()" @click="upsertPartner(partner)">
                 {{$t('Save changes')}}
             </button>
         </p>

@@ -1,16 +1,13 @@
 module.exports = (app) => {
     const template = app.templates.dashboard_home
-    let modules
+
     return Vue.component('DashboardHome', {
         render: template.r,
         staticRenderFns: template.s,
-        computed: Vuex.mapState({
-            modules: state => state.dashboard.modules,
-        }),
-        mounted: function() {
-            let $t = Vue.i18n.translate
-            if (!modules) {
-                modules = [
+        data: function() {
+            const $t = Vue.i18n.translate
+            return {
+                modules: [
                     {name: $t('VoIP account'), 'icon': 'vg-icon-phoneaccount', disabled: true},
                     {name: $t('Phone number'), 'icon': 'vg-icon-phone-dial-buttons', disabled: true},
                     {name: $t('Users'), 'icon': 'vg-icon-user', disabled: true},
@@ -45,11 +42,8 @@ module.exports = (app) => {
                     {name: $t('CRM'), 'icon': 'vg-icon-crm-popup', disabled: true},
 
                     {name: $t('Dialplan'), 'icon': 'vg-icon-ivr', disabled: true},
-                ]
+                ],
             }
-
-            // This is a bit silly, but we need a store before we can translate.
-            this.$store.dispatch('dashboard/fillModules', modules)
-        }
+        },
     })
 }

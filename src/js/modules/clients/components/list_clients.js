@@ -1,11 +1,13 @@
-module.exports = (app) => {
+module.exports = (app, actions) => {
     const template = app.templates.clients_list_clients
     return Vue.component('ListClients', {
+        methods: {
+            readClients: actions.readClients,
+        },
         render: template.r,
         staticRenderFns: template.s,
-        computed: Vuex.mapState({
-            clients: state => state.clients.clients,
-            current_client: state => state.clients.current_client,
-        }),
+        store: {
+            clients: 'clients.clients',
+        },
     })
 }
