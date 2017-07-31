@@ -90,7 +90,7 @@ module.exports = function(app) {
                     password: '',
                     password_confirm: '',
                 })
-                this.$store.shouts.push({message: $t('Profile succesfully updated')})
+                app.vue.$shout({message: $t('Profile succesfully updated')})
             } else {
                 // Trigger serverside validation.
                 validator.$touch()

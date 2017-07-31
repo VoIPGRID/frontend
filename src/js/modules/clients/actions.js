@@ -14,7 +14,7 @@ module.exports = function(app, _module) {
         app.api.client.delete(`clients/${client.id}/`).then((res) => {
             let $t = Vue.i18n.translate
             this.$store.clients.clients = this.$store.clients.clients.filter((i) => i.id !== client.id)
-            this.$store.shouts.push({message: $t('Client {name} succesfully deleted', {name: client.name})})
+            app.vue.$shout({message: $t('Client {name} succesfully deleted', {name: client.name})})
             app.router.push({name: 'list_clients'})
         })
     }
@@ -82,12 +82,12 @@ module.exports = function(app, _module) {
         let payload = JSON.parse(JSON.stringify(client))
         if (client.id) {
             app.api.client.put(`clients/${client.id}/`, payload).then((res) => {
-                this.$store.shouts.push({message: $t('Client {name} succesfully updated', {name: client.name})})
+                app.vue.$shout({message: $t('Client {name} succesfully updated', {name: client.name})})
                 app.router.push(app.utils.lastRoute('list_clients'))
             })
         } else {
             app.api.client.post('clients/', payload).then((res) => {
-                this.$store.shouts.push({message: $t('Client {name} succesfully created', {name: client.name})})
+                app.vue.$shout({message: $t('Client {name} succesfully created', {name: client.name})})
                 app.router.push(app.utils.lastRoute('list_clients'))
             })
         }
