@@ -3,12 +3,6 @@ module.exports = (app, actions) => {
     const v = Vuelidate.validators
 
     return Vue.component('AddEditClient', {
-        render: template.r,
-        staticRenderFns: template.s,
-        store: {
-            root: 'clients',
-            client: 'clients.client',
-        },
         methods: {
             formIsValid: function() {
                 return !this.$v.$invalid
@@ -17,6 +11,12 @@ module.exports = (app, actions) => {
         },
         mounted: function() {
             actions.readClient(this.$store.clients, app.router.currentRoute.params.client_id)
+        },
+        render: template.r,
+        staticRenderFns: template.s,
+        store: {
+            root: 'clients',
+            client: 'clients.client',
         },
         validations: {
             client: {

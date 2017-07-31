@@ -1,27 +1,31 @@
-module.exports = (app) => {
+module.exports = (app, actions) => {
     const template = app.templates.user_profile
     const v = Vuelidate.validators
 
     return Vue.component('UserProfile', {
-        // computed: Object.assign(Vuex.mapState({
-        //     apiValidation: state => state.main.apiValidation,
-        //     user: state => state.user.user,
-        // }), {
+        store: {
+            apiValidation: 'main.apiValidation',
+            user: 'user.user',
+        },
         computed: {
             formIsValid: function() {
                 return !this.$v.$invalid
             },
         },
         methods: {
+             /*
+             * Wrapper function for the select event that changes language.
+             */
             setLanguage(e) {
                 let oldLanguage = this.user.profile.language
-                if (oldLanguage === 'en') this.$store.dispatch('user/setLanguage', 'nl')
-                else this.$store.dispatch('user/setLanguage', 'en')
-            }
+                if (oldLanguage === 'en') actions.setLanguage('nl')
+                else actions.setLanguage('en')
+            },
+            updateProfile: actions.updateProfile,
         },
-        // mounted: function() {
-        //     app.vuex.dispatch('user/readProfile')
-        // },
+        mounted: function() {
+            actions.readProfile(this.$store.user)
+        },
         render: template.r,
         staticRenderFns: template.s,
         validations: function() {

@@ -30,7 +30,7 @@
 
                 <router-link v-if="user.partner" class="nav-item is-tab is-hidden-tablet" to="/clients">{{$t('Clients')}}</router-link>
                 <router-link class="nav-item profile is-tab" to="/profile"><i class="fa fa-user-circle"></i>{{$t('Profile')}}</router-link>
-                <a v-if="user.authenticated" class="nav-item is-tab" @click="$store.dispatch('user/logout')">{{$t('Logout')}}</a>
+                <a v-if="user.authenticated" class="nav-item is-tab" @click="logout">{{$t('Logout')}}</a>
                 <router-link v-if="!user.authenticated" class="nav-item is-tab" to="/login">{{$t('Login')}}</router-link>
             </div>
         </div>

@@ -1,16 +1,16 @@
 module.exports = function(app, _module) {
     /**
-     * @memberof module:partners
-     * @namespace
-     */
+    * @memberof module:partners
+    * @namespace
+    */
     let actions = {}
 
 
     /**
-     * Delete a partner to the API, update the store and add a notification.
-     * Route to the last route afterwards.
-     * @param {Observable} partner - The partner store object.
-     */
+    * Delete a partner to the API, update the store and add a notification.
+    * Route to the last route afterwards.
+    * @param {Observable} partner - The partner store object.
+    */
     actions.deletePartner = function(partner) {
         app.api.client.delete(`partners/${partner.id}/`).then((res) => {
             let $t = Vue.i18n.translate
@@ -22,10 +22,10 @@ module.exports = function(app, _module) {
 
 
     /**
-     * Read partner from the API and update the partner store object.
-     * @param {Observable} root - The module's reactive root object.
-     * @param {String} partnerId - ID of the partner to read from the API.
-     */
+    * Read partner from the API and update the partner store object.
+    * @param {Observable} root - The module's reactive root object.
+    * @param {String} partnerId - ID of the partner to read from the API.
+    */
     actions.readPartner = async function(root, partnerId) {
         if (partnerId) {
             let partner = await app.api.client.get(`partners/${partnerId}/`)
@@ -57,11 +57,10 @@ module.exports = function(app, _module) {
 
 
     /**
-     * Read partners from the API and commit the change to the store.
-     * Used by the paginator component.
-     * @param {Object} data - Context passed from the Paginator component.
-     * @returns {Object} - Returns the partner object from the API endpoint.
-     */
+    * Read partners from the API. Used by the paginator component.
+    * @param {Object} data - Context passed from the Paginator component.
+    * @returns {Object} - Returns the partner object from the API endpoint.
+    */
     actions.readPartners = async function(data) {
         const uri = `${data.resourceUrl}?${app.utils.stringifySearch(data.params)}`
         let partners = await app.api.client.get(uri)
@@ -71,10 +70,10 @@ module.exports = function(app, _module) {
 
 
     /**
-     * Update or insert a partner to the API, commit a notification to the store
-     * and route back to the last route afterwards.
-     * @param {Observable} partner - The partner object.
-     */
+    * Delete a partner to the API, update the store and add a notification.
+    * Route to the last route afterwards.
+    * @param {Observable} partner - The partner object.
+    */
     actions.upsertPartner = function(partner) {
         // Format the data that we are about to send to the API first.
         let $t = Vue.i18n.translate

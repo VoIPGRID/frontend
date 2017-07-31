@@ -45,7 +45,7 @@
         <p class="control">
             <button class="button is-primary"
                 :disabled="!formIsValid"
-                @click="$store.dispatch('user/updateProfile', $v)">
+                @click="updateProfile(user, $v)">
                 {{$t('Save changes')}}
             </button>
         </p>

@@ -1,3 +1,4 @@
+const Module = require('../../lib/module')
 /**
  * @module user
  */
@@ -5,39 +6,41 @@
  /**
   * The user app handles profile-related functionality.
   */
-class UserApp {
+class UserModule extends Module {
     /**
      * @param {App} app - The application object.
      */
     constructor(app) {
-        // this.actions = require('./actions')(app)
-        // this.mutations = require('./mutations')(app)
-
-        this.state = {
-            authenticated: false,
-            credentials: {
-                email: '',
-                password: '',
-            },
-            user: {
-                profile: {},
-            },
-            selectedPartner: null,
-        }
+        super(app)
+        this.app.store.user = this.getObservables()
+        this.actions = require('./actions')(app, this)
 
         app.router.addRoutes([{
             path: '/login',
             alias: '/logout',
             name: 'user_login',
-            component: require('./components/login')(app),
+            component: require('./components/login')(app, this.actions),
         }])
 
         app.router.addRoutes([{
             path: '/profile',
             name: 'user_profile',
-            component: require('./components/profile')(app),
+            component: require('./components/profile')(app, this.actions),
         }])
+    }
+
+
+    getObservables() {
+        return Object.assign(JSON.parse(JSON.stringify(__state)), {
+            user: {
+                profile: {},
+            },
+            credentials: {
+                email: '',
+                password: '',
+            },
+        })
     }
 }
 
-module.exports = UserApp
+module.exports = UserModule

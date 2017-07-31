@@ -28,7 +28,7 @@
             </div>
         </section>
         <footer class="modal-card-foot has-text-right">
-            <button class="is-pulled-right button is-primary" @click="$store.dispatch('user/login')">Login</button>
+            <button class="is-pulled-right button is-primary" @click="login(root, credentials)">Login</button>
         </footer>
     </div>
 </div>

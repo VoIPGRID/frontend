@@ -1,15 +1,15 @@
 class Api {
 
-    constructor(app, initialState) {
+    constructor(app) {
         this.app = app
 
         // Add the Django CSRF token in the header and set the base URL
         // to VoIPGRID api V2.
         /** @memberof App */
         this.client = axios.create({
-            baseURL: 'http://localhost/api/v2/',
+            baseURL: '/api/v2/',
             timeout: 3000,
-            headers: {'X-CSRFToken': initialState.csrf},
+            headers: {'X-CSRFToken': app.__state.csrf},
         })
 
         // Add a response interceptor that serves the default error page,
@@ -33,15 +33,15 @@ class Api {
                     if (error.field !== 'None') {
                         fieldErrors.push(error)
                     } else {
-                        this.app.vuex.dispatch('notify', {message: this.app.$t(error.message)}, {root: true})
+                        this.app.store.shouts.push({message: this.app.$t(error.message)})
                     }
                 }
-                this.app.vuex.commit('main/API_VALIDATION', fieldErrors)
+                this.app.store.main.apiValidation = fieldErrors
             }
 
             if (err.response.data.non_field_errors) {
                 for (let nonFieldError of err.response.data.non_field_errors) {
-                    this.app.vuex.dispatch('notify', {message: this.app.$t(nonFieldError)}, {root: true})
+                    this.app.store.shouts.push({message: this.app.$t(nonFieldError)})
                 }
             }
 

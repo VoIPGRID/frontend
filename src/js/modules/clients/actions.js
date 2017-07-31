@@ -10,7 +10,7 @@ module.exports = function(app, _module) {
      * Route to the last route afterwards.
      * @param {Observable} client - The client store object.
      */
-    actions.deletePartner = function(client) {
+    actions.deleteClient = function(client) {
         app.api.client.delete(`clients/${client.id}/`).then((res) => {
             let $t = Vue.i18n.translate
             this.$store.clients.clients = this.$store.clients.clients.filter((i) => i.id !== client.id)

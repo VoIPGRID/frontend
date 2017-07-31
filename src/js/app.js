@@ -1,6 +1,4 @@
 const Api = require('./lib/api')
-const globalActions = require('./lib/actions')
-const globalMutations = require('./lib/mutations')
 const Helpers = require('./lib/helpers')
 const Logger = require('./lib/logger')
 const globalStore = require('./lib/store')
@@ -16,6 +14,7 @@ class App {
      */
     constructor(state, templates) {
         // Assign the template global to the app context.
+        this.__state = state
         this.templates = templates
         this.logger = new Logger(this)
 
@@ -30,41 +29,15 @@ class App {
 
         Vue.use(Vuelidate.default)
 
-        this.api = new Api(this, state)
+        this.api = new Api(this)
 
         state.selectedPartner = null
         // Keeping the reference to the global store here.
         this.store = globalStore(state)
-        this.modules = this.loadModules()
         this.initI18n()
 
-        // Start up virtual DOM renderer.
-        this.vue = new Vue({
-            i18n: this.i18n,
-            router: this.router,
-            data: () => {
-                return {
-                    store: this.store,
-                }
-            },
-            render: createElement => createElement({
-                render: this.templates.main_main.r,
-                staticRenderFns: this.templates.main_main.s,
-                store: ['user', 'shouts'],
-                // computed: Vuex.mapState({
-                //     user: state => state.user,
-                //     selectedPartner: state => state.user.selectedPartner,
-                // }),
-            }),
-            // methods: Vuex.mapActions(['notify']),
-        }).$mount('#app')
-
-
-        // if (initialState.authenticated) {
-        //     this.vuex.commit('user/SET_USER', initialState)
-        // }
-
-        // this.vuex.commit('user/AUTHENTICATE', initialState.authenticated)
+        this.modules = this.loadModules()
+        this.modules.main.mountVdom()
     }
 
 
