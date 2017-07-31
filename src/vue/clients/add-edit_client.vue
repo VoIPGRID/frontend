@@ -121,7 +121,7 @@
 
     <div class="field is-grouped margin-top-1">
         <p class="control">
-            <button class="button is-primary" :disabled="!formIsValid" @click="upsertClient(client)">
+            <button class="button is-primary" :disabled="$v.$invalid" @click="upsertClient(client)">
                 {{$t('Save changes')}}
             </button>
         </p>

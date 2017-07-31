@@ -7,11 +7,6 @@ module.exports = (app, actions) => {
             apiValidation: 'main.apiValidation',
             user: 'user.user',
         },
-        computed: {
-            formIsValid: function() {
-                return !this.$v.$invalid
-            },
-        },
         methods: {
              /*
              * Wrapper function for the select event that changes language.

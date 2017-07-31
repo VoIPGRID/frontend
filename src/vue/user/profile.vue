@@ -45,7 +45,7 @@
     <div class="field is-grouped margin-top-1">
         <p class="control">
             <button class="button is-primary"
-                :disabled="!formIsValid"
+                :disabled="$v.$invalid"
                 @click="updateProfile(user, $v)">
                 {{$t('Save changes')}}
             </button>

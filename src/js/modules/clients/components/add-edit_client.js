@@ -4,9 +4,6 @@ module.exports = (app, actions) => {
 
     return Vue.component('AddEditClient', {
         methods: {
-            formIsValid: function() {
-                return !this.$v.$invalid
-            },
             upsertClient: actions.upsertClient,
         },
         mounted: function() {

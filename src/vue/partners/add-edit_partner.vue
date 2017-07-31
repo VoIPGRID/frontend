@@ -205,7 +205,7 @@
 
     <div class="field is-grouped margin-top-1">
         <p class="control">
-            <button class="button is-primary" :disabled="!formIsValid()" @click="upsertPartner(partner)">
+            <button class="button is-primary" :disabled="$v.$invalid" @click="upsertPartner(partner)">
                 {{$t('Save changes')}}
             </button>
         </p>

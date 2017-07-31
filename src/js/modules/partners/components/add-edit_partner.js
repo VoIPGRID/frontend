@@ -43,9 +43,6 @@ module.exports = (app, actions) => {
                     }
                 }
             },
-            formIsValid: function() {
-                return !this.$v.$invalid
-            },
             upsertPartner: actions.upsertPartner,
         },
         computed: {

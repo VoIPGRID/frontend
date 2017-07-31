@@ -1,4 +1,4 @@
-<div class="user-login-component modal is-active">
+<div class="user-login-component modal is-active" tabindex="-1" v-on:keyup.enter="login(root, credentials)">
     <div class="modal-background"></div>
     <div class="modal-card">
         <header class="modal-card-head">
