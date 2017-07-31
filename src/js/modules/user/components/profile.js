@@ -43,25 +43,24 @@ module.exports = (app, actions) => {
                         minLength: v.minLength(6),
                     },
                     password: {
+                        // A new password is only required when the
+                        // old password is filled.
                         minLength: v.minLength(6),
-                        // New password is required when old password
-                        // is filled.
-                        requiredIf: v.requiredIf((data) => {
-                            const _required = Boolean(data.old_password && (data.old_password.length > 0))
-                            return _required
+                        requiredIf: v.requiredIf(() => {
+                            return (this.user.old_password && this.user.old_password.length > 0)
                         }),
                     },
                     password_confirm: {
                         minLength: v.minLength(6),
                         requiredIf: v.requiredIf((data) => {
-                            const _required = Boolean(data.old_password && (data.old_password.length > 0))
-                            return _required
+                            return (this.user.old_password && this.user.old_password.length > 0)
                         }),
                         sameAs: v.sameAs('password'),
                     },
                 },
             }
-
+            // The `apiValidation` is a reactive property that extends the
+            // validation object based on API requested validation.
             if (this.apiValidation) {
                 Object.assign(validations.user, app.api.mapValidation(this.apiValidation))
             }

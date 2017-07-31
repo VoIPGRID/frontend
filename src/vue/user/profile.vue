@@ -13,7 +13,8 @@
 
     <Field name="last_name" type="text"
         :label="$t('Last name')"
-        :model.sync="user.profile.last_name"/>
+        :model.sync="user.profile.last_name"
+        :validation="$v.user.profile.last_name"/>
 
     <h2 class="title">{{$t('Password')}}</h2><hr/>
 

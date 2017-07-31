@@ -1,26 +1,31 @@
+const Module = require('../../lib/module')
 /**
  * The Dashboard makes it easy for the user to navigate
  * around the many functionalities of the VoIPGRID platform.
  */
-class DashboardApp {
+class DashboardModule extends Module {
     /**
      * @param {App} app - The application object.
      */
     constructor(app) {
+        super(app)
+        this.app.store.dashboard = this.getObservables()
         this.actions = require('./actions')(app)
-        this.mutations = require('./mutations')(app)
-        // let $t = Vue.i18n.translate
-        this.state = {
-            modules: [],
-        }
 
         app.router.addRoutes([{
             path: '/',
             name: 'dashboard_home',
-            component: require('./components/home')(app),
+            component: require('./components/home')(app, this.actions),
         }])
+    }
+
+
+    getObservables() {
+        return {
+            modules: [],
+        }
     }
 }
 
 
-module.exports = DashboardApp
+module.exports = DashboardModule

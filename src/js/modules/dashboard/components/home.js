@@ -2,8 +2,6 @@ module.exports = (app) => {
     const template = app.templates.dashboard_home
 
     return Vue.component('DashboardHome', {
-        render: template.r,
-        staticRenderFns: template.s,
         data: function() {
             const $t = Vue.i18n.translate
             return {
@@ -45,5 +43,7 @@ module.exports = (app) => {
                 ],
             }
         },
+        render: template.r,
+        staticRenderFns: template.s,
     })
 }

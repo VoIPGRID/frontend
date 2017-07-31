@@ -45,9 +45,6 @@ module.exports = function(app) {
     actions.readProfile = async function(root) {
         let user = await app.api.client.get('profile/')
         // Make sure to provide all keys in order for reactivity to work.
-        user.data.old_password = ''
-        user.data.password = ''
-        user.data.password_confirm = ''
         Object.assign(root.user, user.data)
     }
 
@@ -87,6 +84,12 @@ module.exports = function(app) {
         app.api.client.put('profile/', user).then((res) => {
             if (res.status === 200) {
                 app.store.main.apiValidation = false
+                // Unset the password fields after a succesful update.
+                Object.assign(user, {
+                    old_password: '',
+                    password: '',
+                    password_confirm: '',
+                })
                 this.$store.shouts.push({message: $t('Profile succesfully updated')})
             } else {
                 // Trigger serverside validation.

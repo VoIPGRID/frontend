@@ -34,6 +34,9 @@ class UserModule extends Module {
         return Object.assign(JSON.parse(JSON.stringify(__state)), {
             user: {
                 profile: {},
+                old_password: '',
+                password: '',
+                password_confirm: '',
             },
             credentials: {
                 email: '',

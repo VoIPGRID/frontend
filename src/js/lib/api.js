@@ -53,12 +53,12 @@ class Api {
 
     /**
      * Maps API (field) error codes to Vuelidate validation errors.
+     * API errors are only shown once. When the field changes, it will
+     * be valid again for that particular validation, because the value
+     * can't be validated until the server is requested again.
      */
     mapValidation(validation) {
         const v = Vuelidate.validators
-        // Used to show the validation message only once,
-        // because the value can't be validated until the server
-        // is requested again.
         this.fieldCache = {}
         let _v = {}
         for (const error of validation) {
@@ -67,21 +67,8 @@ class Api {
                     required: v.required,
                 }
             }
-            // Incorrect password.
-            if (error.code === '5001') {
-                _v[error.field] = {
-                    incorrect_password: (value, component) => {
-                        if (!this.fieldCache.incorrect_password) {
-                            this.fieldCache.incorrect_password = value
-                            return value === true
-                        } else {
-                            return true
-                        }
-                    },
-                }
-            }
-            // Old password doesn't equal new password.
-            if (error.code === '5002') {
+            // Incorrect password or old password doesn't equal new one.
+            if ((error.code === '5001') || (error.code === '5002')) {
                 _v[error.field] = {
                     incorrect_password: (value, component) => {
                         if (!this.fieldCache.incorrect_password) {
