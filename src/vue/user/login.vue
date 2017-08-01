@@ -5,7 +5,7 @@
             <img class="login-header-logo" src="/public/img/logo.png" alt="VoIPGRID logo">
         </header>
         <section class="modal-card-body">
-            <div class="content">
+            <div>
                 <div class="field">
                     <label class="label">{{$t('Email address')}}</label>
                     <p class="control has-icons-left">

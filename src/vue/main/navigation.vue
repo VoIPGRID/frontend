@@ -29,27 +29,65 @@
         </li>
     </ul>
 
-    <ul>
-        <li v-if="user.selectedClient">
+    <ul v-if="user.selectedPartner && !user.selectedClient">
+        <li>
             <router-link to="/" exact>
-                <i class="item-icon fa fa-pie-chart"></i>
+                <i class="item-icon fa fa-address-book"></i>
+                <span class="item-text">{{$t('Users')}}</span>
+            </router-link>
+        </li>
+
+        <li class="disabled">
+            <router-link to="/" exact>
+                <i class="item-icon fa fa-comments"></i>
+                <span class="item-text">{{$t('Calls')}}</span>
+            </router-link>
+        </li>
+
+    </ul>
+    <ul v-else-if="user.selectedClient">
+        <li class="disabled">
+            <router-link to="/administration" exact>
+                <i class="item-icon fa fa-money"></i>
+                <span class="item-text">{{$t('Administration')}}</span>
+            </router-link>
+        </li>
+
+        <li>
+            <router-link to="/users" exact>
+                <i class="item-icon fa fa-address-book"></i>
+                <span class="item-text">{{$t('Users')}}</span>
+            </router-link>
+        </li>
+
+        <li class="disabled">
+            <router-link to="/calls" exact>
+                <i class="item-icon fa fa-comments"></i>
+                <span class="item-text">{{$t('Calls')}}</span>
+            </router-link>
+        </li>
+
+        <li class="disabled">
+            <router-link to="/dashboard" exact>
+                <i class="item-icon fa vg-icon vg-icon-ivr"></i>
                 <span class="item-text">{{$t('Dashboard')}}</span>
             </router-link>
         </li>
 
-        <li v-if="user.selectedClient">
+        <li class="disabled">
+            <router-link to="/dialplan" exact>
+                <i class="item-icon fa fa-retweet"></i>
+                <span class="item-text">{{$t('Dialplan')}}</span>
+            </router-link>
+        </li>
+
+        <li class="disabled">
             <router-link to="/statistics" exact>
-                <i class="item-icon fa fa-area-chart"></i>
+                <i class="item-icon fa fa-signal"></i>
                 <span class="item-text">{{$t('Statistics')}}</span>
             </router-link>
         </li>
 
-        <li v-if="user.selectedClient">
-            <router-link to="/administration" exact>
-                <i class="item-icon fa fa-reorder"></i>
-                <span class="item-text">{{$t('Administration')}}</span>
-            </router-link>
-        </li>
 
     </ul>
 </nav>
