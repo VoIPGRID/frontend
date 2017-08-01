@@ -9,11 +9,15 @@ module.exports = (app, actions) => {
      * @namespace
      */
     return Vue.component('AddEditPartner', {
-        render: template.r,
-        staticRenderFns: template.s,
-        store: {
-            root: 'partners',
-            partner: 'partners.partner',
+        computed: {
+            branding: function() {
+                if (this.partner.text && this.partner.brand && this.partner.navlink &&
+                    this.partner.navlink_active && this.partner.spot && this.partner.btn_text
+                ) {
+                    return true
+                }
+                return false
+            },
         },
         methods: {
             /*
@@ -45,20 +49,16 @@ module.exports = (app, actions) => {
             },
             upsertPartner: actions.upsertPartner,
         },
-        computed: {
-            branding: function() {
-                if (this.partner.text && this.partner.brand && this.partner.navlink &&
-                    this.partner.navlink_active && this.partner.spot && this.partner.btn_text
-                ) {
-                    return true
-                }
-                return false
-            },
-        },
         mounted: function() {
             // Reset branding cache on page reload.
             brandingCache = {}
             actions.readPartner(this.$store.partners, app.router.currentRoute.params.partner_id)
+        },
+        render: template.r,
+        staticRenderFns: template.s,
+        store: {
+            root: 'partners',
+            partner: 'partners.partner',
         },
         validations: {
             partner: {

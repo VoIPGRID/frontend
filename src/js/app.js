@@ -20,7 +20,7 @@ class App {
 
         // Show a meaningful message to the user when the API is down.
         if (!state) {
-            this.logger.error('No API backend')
+            this.logger.error('Received no state. No API backend?')
             return
         }
 
@@ -32,33 +32,32 @@ class App {
         this.api = new Api(this)
 
         state.selectedPartner = null
+        state.selectedClient = null
         // Keeping the reference to the global store here.
         this.store = globalStore(state)
         this.initI18n()
 
-        this.modules = this.loadModules()
+        this.loadModules()
         this.modules.main.mountVdom()
     }
 
 
     /**
      * Initialize all modules.
-     * @returns {Object} modules - The module instances.
      */
     loadModules() {
-        let modules = {}
+        this.modules = {}
         let _modules = [
             {name: 'clients', Module: require('./modules/clients')},
             {name: 'dashboard', Module: require('./modules/dashboard')},
-            {name: 'main', Module: require('./modules/main')},
             {name: 'partners', Module: require('./modules/partners')},
             {name: 'user', Module: require('./modules/user')},
+            {name: 'main', Module: require('./modules/main')},
         ]
 
         for (let {name, Module} of _modules) {
-            modules[name] = new Module(this)
+            this.modules[name] = new Module(this)
         }
-        return modules
     }
 
 

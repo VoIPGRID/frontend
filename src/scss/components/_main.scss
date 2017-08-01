@@ -1,8 +1,28 @@
-.main-nav {
-    .nav-item.profile {
-        i {
-            margin-right: 0.5rem;
-            margin-top: -2px;
-        }
+* {
+    box-sizing: border-box;
+}
+
+.wrapper {
+    display: flex;
+    height: 100vh;
+}
+
+section {
+    flex: 1 1 auto;
+    overflow: auto;
+
+    .content {
+          padding: 20px;
+          overflow: auto;
+
+          @media (max-width: 600px) {
+              padding: 5px;
+          }
+
+          ul {
+              list-style: none;
+              padding: 0;
+              margin: 0;
+          }
     }
 }

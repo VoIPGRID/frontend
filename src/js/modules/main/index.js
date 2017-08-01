@@ -13,11 +13,15 @@ class MainModule extends Module {
      */
     constructor(app) {
         super(app)
-        Vue.component('Field', require('./components/field')(app))
-        Vue.component('Breadcrumbs', require('./components/breadcrumbs')(app))
+
+        this.actions = require('./actions')(app, this)
+
+        Vue.component('Field', require('./components/field')(app, this.actions))
+        Vue.component('Navigation', require('./components/navigation')(app, this.actions))
+        Vue.component('ContentHeader', require('./components/content_header')(app, this.actions))
 
         this.app.store.main = this.getObservables()
-        this.actions = require('./actions')(app, this)
+
 
         app.router.addRoutes([{
             path: '/oops',
@@ -40,9 +44,6 @@ class MainModule extends Module {
                 render: this.app.templates.main_main.r,
                 staticRenderFns: this.app.templates.main_main.s,
                 store: ['user', 'shouts'],
-                methods: {
-                    logout: this.app.modules.user.actions.logout,
-                },
             }),
             router: this.app.router,
         }).$mount('#app')

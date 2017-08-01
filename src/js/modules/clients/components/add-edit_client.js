@@ -2,7 +2,7 @@ module.exports = (app, actions) => {
     const template = app.templates.clients_add_edit_client
     const v = Vuelidate.validators
 
-    return Vue.component('AddEditClient', {
+    return {
         methods: {
             upsertClient: actions.upsertClient,
         },
@@ -53,5 +53,5 @@ module.exports = (app, actions) => {
                 },
             },
         },
-    })
+    }
 }

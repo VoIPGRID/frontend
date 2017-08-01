@@ -65,7 +65,7 @@
   },
   "dependencies": {
     "axios": "^0.16.1",
-    "bulma": "^0.4.1",
+    "bulma": "^0.5.0",
     "font-awesome": "^4.7.0",
     "vg-icons": "git+https://github.com/voipgrid/vg-icons#master",
     "vue": "^2.3.0",
@@ -76,7 +76,6 @@
     "vue-stash": "^2.0.1-beta",
     "vue-tabcordion": "^1.0.1",
     "vuelidate": "^0.4.3",
-    "vuex": "^2.2.1",
     "vuex-i18n-stash": "git+https://github.com/jvanveen/vuex-i18n-stash.git#master"
   }
 }

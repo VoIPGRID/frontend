@@ -1,5 +1,5 @@
 <div>
-    <Tabs class="container">
+    <Tabs>
         <Tab id="partner" :title="$t('Partner')">
             <h2 class="title">{{$t('General')}}</h2><hr/>
 
@@ -201,16 +201,18 @@
                 :options="root.priceplanDiscounts"
                 :placeholder="$t('Select a discount...')"/>
         </Tab>
+
+        <div class="field is-grouped margin-top-1">
+            <p class="control">
+                <button class="button is-primary" :disabled="$v.$invalid" @click="upsertPartner(partner)">
+                    {{$t('Save changes')}}
+                </button>
+            </p>
+            <p class="control">
+                <router-link class="button" :to="$helpers.lastRoute('list_partners')">{{$t('Cancel')}}</router-link>
+            </p>
+        </div>
     </Tabs>
 
-    <div class="field is-grouped margin-top-1">
-        <p class="control">
-            <button class="button is-primary" :disabled="$v.$invalid" @click="upsertPartner(partner)">
-                {{$t('Save changes')}}
-            </button>
-        </p>
-        <p class="control">
-            <router-link class="button" :to="$helpers.lastRoute('list_partners')">{{$t('Cancel')}}</router-link>
-        </p>
-    </div>
+
 </div>

@@ -5,7 +5,7 @@
             <router-link class="button is-primary" to="/clients/add/">{{$t('Add Client')}}</router-link>
         </p>
     </div>
-    <table class="table">
+    <table class="table is-fullwidth is-striped">
         <thead>
             <tr>
                 <th>{{$t('Name')}}</th>
@@ -16,7 +16,7 @@
         <tbody>
             <tr v-for="client in clients">
                 <td>
-                    {{client.name}}
+                    <a @click="selectClientContext(client)">{{client.name}}</a>
                 </td>
                 <td>{{ client.description }}</td>
                 <td>
@@ -31,6 +31,9 @@
                         </span>
                     </router-link>
                 </td>
+            </tr>
+            <tr v-if="clients.length === 0">
+                <td colspan="3">{{$t('No clients yet')}}</td>
             </tr>
         </tbody>
     </table>

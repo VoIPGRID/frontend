@@ -1,6 +1,6 @@
 module.exports = (app, actions) => {
     const template = app.templates.clients_delete_client
-    return Vue.component('DeleteClient', {
+    return {
         methods: {
             deleteClient: actions.deleteClient,
         },
@@ -12,5 +12,5 @@ module.exports = (app, actions) => {
         store: {
             client: 'clients.client',
         },
-    })
+    }
 }

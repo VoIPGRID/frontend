@@ -1,5 +1,5 @@
 <div>
-    <Tabs class="container">
+    <Tabs>
         <Tab id="client" :title="$t('Client')">
             <h2 class="title">{{$t('General')}}</h2><hr/>
 

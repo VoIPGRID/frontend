@@ -65,6 +65,11 @@ module.exports = function(app, _module) {
      * @returns {Object} - Returns the client object from the API endpoint.
      */
     actions.readClients = async function(data) {
+        // Filter the selection based on the currently selected partner.
+        if (app.store.user.selectedPartner) {
+            data.params.partner = app.store.user.selectedPartner.id
+        }
+
         let clients = await app.api.client.get(`${data.resourceUrl}?${app.utils.stringifySearch(data.params)}`)
         this.clients = clients.data.results
         return clients.data
