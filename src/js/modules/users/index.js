@@ -25,23 +25,51 @@ class UsersModule extends Module {
         app.router.addRoutes([{
             path: '/profile',
             name: 'user_profile',
-            component: require('./components/profile')(app, this.actions),
+            component: Vue.component('UserProfile', require('./components/profile')(app, this.actions)),
+        }])
+
+        app.router.addRoutes([{
+            path: '/clients/:client_id/users',
+            name: 'list_users',
+            component: Vue.component('ListUsers', require('./components/list_users')(app, this.actions)),
+            children: [
+                {
+                    path: ':user_id/delete',
+                    name: 'delete_user',
+                    component: Vue.component('DeleteUser', require('./components/delete_user')(app, this.actions)),
+                },
+            ],
+        }])
+
+        const AddEditUser = Vue.component('AddEditUser', require('./components/add-edit_user')(app, this.actions))
+
+        app.router.addRoutes([{
+            path: '/clients/:client_id/users/add',
+            name: 'add_user',
+            component: AddEditUser,
+        }])
+
+        app.router.addRoutes([{
+            path: '/clients/:client_id/users/:user_id/edit',
+            name: 'edit_user',
+            component: AddEditUser,
         }])
     }
 
 
     getObservables() {
         let _state = {
+            credentials: {
+                email: '',
+                password: '',
+            },
             user: {
                 profile: {},
                 old_password: '',
                 password: '',
                 password_confirm: '',
             },
-            credentials: {
-                email: '',
-                password: '',
-            },
+            users: [],
         }
 
         Object.assign(_state.user, JSON.parse(JSON.stringify(this.app.__state)))

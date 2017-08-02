@@ -29,8 +29,7 @@ module.exports = function(app) {
 
 
     /**
-     * Log the user out of the current session and commit
-     * the authentication switch to the store.
+     * Log the user out of the current session.
      */
     actions.logout = function() {
         app.api.client.post('logout/').then((res) => {
@@ -46,6 +45,13 @@ module.exports = function(app) {
         let userData = await app.api.client.get('profile/')
         // Make sure to provide all keys in order for reactivity to work.
         Object.assign(user, userData.data)
+    }
+
+
+    actions.readUsers = async function(data) {
+        const uri = `${data.resourceUrl}?${app.utils.stringifySearch(data.params)}`
+        let users = await app.api.client.get(uri)
+        this.users = users.data.results
     }
 
 
@@ -89,6 +95,28 @@ module.exports = function(app) {
                 validator.$touch()
             }
         })
+    }
+
+
+    /**
+    * Update a client or partner user.
+    * @param {Observable} user - The observable user object.
+    */
+    actions.upsertUser = function(user) {
+        // Format the data that we are about to send to the API first.
+        let $t = Vue.i18n.translate
+        let payload = JSON.parse(JSON.stringify(client))
+        if (client.id) {
+            app.api.client.put(`clients/${client.id}/`, payload).then((res) => {
+                app.vue.$shout({message: $t('Client {name} succesfully updated', {name: client.name})})
+                app.router.push(app.utils.lastRoute('list_clients'))
+            })
+        } else {
+            app.api.client.post('clients/', payload).then((res) => {
+                app.vue.$shout({message: $t('Client {name} succesfully created', {name: client.name})})
+                app.router.push(app.utils.lastRoute('list_clients'))
+            })
+        }
     }
 
     return actions

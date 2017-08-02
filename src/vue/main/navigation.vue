@@ -17,11 +17,12 @@
         </li>
 
         <li>
-            <router-link v-if="user.selectedClient" to="/clients">
+            <router-link v-if="user.selectedClient" to="/clients" exact>
                 <i class="item-level-up item-icon fa fa-level-up" @click="deselectClient"></i>
                 <i class="item-icon fa fa-group"></i>
                 <span class="item-text">{{user.selectedClient.name}}</span>
             </router-link>
+
             <router-link v-else-if="user.selectedPartner" to="/clients">
                 <i class="item-icon fa fa-group"></i>
                 <span class="item-text">{{$t('Clients')}}</span>
@@ -54,7 +55,7 @@
         </li>
 
         <li>
-            <router-link to="/users" exact>
+            <router-link :to="{name: 'list_users', params: {client_id: user.selectedClient.id}}" exact>
                 <i class="item-icon fa fa-address-book"></i>
                 <span class="item-text">{{$t('Users')}}</span>
             </router-link>
