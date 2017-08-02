@@ -22,7 +22,6 @@ class MainModule extends Module {
 
         this.app.store.main = this.getObservables()
 
-
         app.router.addRoutes([{
             path: '/oops',
             name: 'oops',
@@ -43,7 +42,10 @@ class MainModule extends Module {
             render: createElement => createElement({
                 render: this.app.templates.main_main.r,
                 staticRenderFns: this.app.templates.main_main.s,
-                store: ['user', 'shouts'],
+                store: {
+                    shouts: 'shouts',
+                    user: 'users.user',
+                },
             }),
             router: this.app.router,
         }).$mount('#app')

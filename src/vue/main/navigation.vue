@@ -67,8 +67,8 @@
             </router-link>
         </li>
 
-        <li class="disabled">
-            <router-link to="/dashboard" exact>
+        <li>
+            <router-link to="/" exact>
                 <i class="item-icon fa vg-icon vg-icon-ivr"></i>
                 <span class="item-text">{{$t('Dashboard')}}</span>
             </router-link>

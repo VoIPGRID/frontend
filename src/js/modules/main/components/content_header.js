@@ -3,10 +3,12 @@ module.exports = (app, actions) => {
 
     return {
         methods: {
-            logout: app.modules.user.actions.logout,
+            logout: app.modules.users.actions.logout,
         },
         render: template.r,
         staticRenderFns: template.s,
-        store: ['user'],
+        store: {
+            user: 'users.user',
+        },
     }
 }

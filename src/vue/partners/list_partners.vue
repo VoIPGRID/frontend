@@ -1,6 +1,6 @@
 <div>
     <router-view></router-view>
-    <div class="field is-grouped">
+    <div class="table-options field is-grouped is-pulled-right">
         <p class="control">
             <router-link class="button is-primary" to="/partners/add/">{{$t('Add Partner')}}</router-link>
         </p>

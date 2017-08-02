@@ -6,13 +6,13 @@ const Module = require('../../lib/module')
  /**
   * The user app handles profile-related functionality.
   */
-class UserModule extends Module {
+class UsersModule extends Module {
     /**
      * @param {App} app - The application object.
      */
     constructor(app) {
         super(app)
-        this.app.store.user = this.getObservables()
+        this.app.store.users = this.getObservables()
         this.actions = require('./actions')(app, this)
 
         app.router.addRoutes([{
@@ -31,7 +31,7 @@ class UserModule extends Module {
 
 
     getObservables() {
-        return Object.assign(JSON.parse(JSON.stringify(__state)), {
+        let _state = {
             user: {
                 profile: {},
                 old_password: '',
@@ -42,8 +42,11 @@ class UserModule extends Module {
                 email: '',
                 password: '',
             },
-        })
+        }
+
+        Object.assign(_state.user, JSON.parse(JSON.stringify(this.app.__state)))
+        return _state
     }
 }
 
-module.exports = UserModule
+module.exports = UsersModule

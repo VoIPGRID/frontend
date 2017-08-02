@@ -8,8 +8,8 @@ module.exports = (app, actions) => {
              * @param {Observable} partner - The partner object.
              */
             selectPartnerContext: function(partner) {
-                this.$store.user.selectedClient = null
-                this.$store.user.selectedPartner = partner
+                this.$store.users.user.selectedClient = null
+                this.$store.users.user.selectedPartner = partner
             },
         },
         render: template.r,

@@ -21,7 +21,7 @@ module.exports = function(app) {
                     timeout: 1000,
                     headers: {'X-CSRFToken': csrf},
                 })
-                Object.assign(root, res.data)
+                Object.assign(root.user, res.data)
                 app.router.replace('/')
             }
         })
@@ -35,25 +35,24 @@ module.exports = function(app) {
     actions.logout = function() {
         app.api.client.post('logout/').then((res) => {
             if (res.data) {
-                app.store.user.authenticated = false
+                app.store.users.user.authenticated = false
                 app.router.push({name: 'user_login'})
             }
         })
     }
 
 
-    actions.readProfile = async function(root) {
-        let user = await app.api.client.get('profile/')
+    actions.readProfile = async function(user) {
+        let userData = await app.api.client.get('profile/')
         // Make sure to provide all keys in order for reactivity to work.
-        Object.assign(root.user, user.data)
+        Object.assign(user, userData.data)
     }
 
 
     /**
      * Set the language in the backend and directly switch to
-     * the new language in the frontend by updating the Vuex locale.
-     * Retrieve the language file first, when the language is not yet
-     * available.
+     * the new language in the frontend. Retrieve the language file first,
+     * when the language is not yet available.
      * @param {String} language - The language code to set.
      */
     actions.setLanguage = function(language) {
@@ -70,12 +69,6 @@ module.exports = function(app) {
                 app.store.i18n.locale = language
             })
         }
-    }
-
-
-    actions.setPartnerContext = async function(store, partnerId) {
-        let partner = await app.api.client.get(`partners/${partnerId}/`)
-        app.vuex.commit('user/SET_PARTNER_CONTEXT', partner.data)
     }
 
 

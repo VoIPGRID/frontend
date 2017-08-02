@@ -1,5 +1,5 @@
 module.exports = (app, actions) => {
-    const template = app.templates.user_login
+    const template = app.templates.users_login
 
     return Vue.component('UserLogin', {
         methods: {
@@ -8,9 +8,10 @@ module.exports = (app, actions) => {
         render: template.r,
         staticRenderFns: template.s,
         store: {
-            authenticated: 'user.authenticated',
-            credentials: 'user.credentials',
-            root: 'user',
+            authenticated: 'users.user.authenticated',
+            credentials: 'users.credentials',
+            user: 'users.user',
+            root: 'users',
         },
     })
 }

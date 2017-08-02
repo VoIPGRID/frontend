@@ -4,7 +4,7 @@ module.exports = (app, actions) => {
         methods: {
             readClients: actions.readClients,
             selectClientContext: function(client) {
-                this.$store.user.selectedClient = client
+                this.$store.users.user.selectedClient = client
             },
         },
         render: template.r,

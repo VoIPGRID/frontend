@@ -1,11 +1,11 @@
 module.exports = (app, actions) => {
-    const template = app.templates.user_profile
+    const template = app.templates.users_profile
     const v = Vuelidate.validators
 
     return Vue.component('UserProfile', {
         store: {
             apiValidation: 'main.apiValidation',
-            user: 'user.user',
+            user: 'users.user',
         },
         methods: {
              /*
@@ -19,7 +19,7 @@ module.exports = (app, actions) => {
             updateProfile: actions.updateProfile,
         },
         mounted: function() {
-            actions.readProfile(this.$store.user)
+            actions.readProfile(this.$store.users.user)
         },
         render: template.r,
         staticRenderFns: template.s,

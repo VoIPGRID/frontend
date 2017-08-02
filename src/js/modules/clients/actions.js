@@ -66,8 +66,8 @@ module.exports = function(app, _module) {
      */
     actions.readClients = async function(data) {
         // Filter the selection based on the currently selected partner.
-        if (app.store.user.selectedPartner) {
-            data.params.partner = app.store.user.selectedPartner.id
+        if (app.store.users.user.selectedPartner) {
+            data.params.partner = app.store.users.user.selectedPartner.id
         }
 
         let clients = await app.api.client.get(`${data.resourceUrl}?${app.utils.stringifySearch(data.params)}`)
