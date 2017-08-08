@@ -1,14 +1,41 @@
-module.exports = function(app) {
+module.exports = function(app, _module) {
     /**
      * @memberof module:user
      * @namespace
      */
     let actions = {}
 
+    let $t = Vue.i18n.translate
+
     /**
-     * Log the user in to a new session, commit
-     * the authentication switch to the store and update
-     * Axios with the new CSRF token.
+    * Delete a user, update the store and add a notification.
+    * Route to the last route afterwards.
+    * @param {Observable} user - The user store object.
+    */
+    actions.deleteUser = async function(user) {
+        const clientId = app.router.currentRoute.params.client_id
+        const partnerId = app.router.currentRoute.params.partner_id
+
+        let backRoute
+        let url
+        if (clientId) {
+            url = `clients/${clientId}/users/${user.id}`
+            backRoute = {name: 'list_client_users', params: {client_id: clientId}}
+        } else {
+            backRoute = {name: 'list_partner_users', params: {partner_id: partnerId}}
+            url = `/partners/${partnerId}/users/${user.id}`
+        }
+
+        const res = await app.api.client.delete(url)
+        this.$store.users.users = this.$store.users.users.filter((i) => i.id !== user.id)
+        app.vue.$shout({message: $t('User {name} succesfully deleted', {name: user.email})})
+        app.router.push(backRoute)
+    }
+
+
+    /**
+     * Sign the user in to a new session, set the authentication flag
+     * and update Axios with the new CSRF token.
      * @param {Observable} root - The module's reactive root object.
      * @param {Object} credentials - The credentials to login with.
      */
@@ -18,8 +45,8 @@ module.exports = function(app) {
                 window.csrf = res.data.csrf
                 app.api.client = axios.create({
                     baseURL: 'http://localhost/api/v2/',
-                    timeout: 1000,
                     headers: {'X-CSRFToken': csrf},
+                    timeout: 1000,
                 })
                 Object.assign(root.user, res.data)
                 app.router.replace('/')
@@ -41,10 +68,22 @@ module.exports = function(app) {
     }
 
 
-    actions.readProfile = async function(user) {
-        let userData = await app.api.client.get('profile/')
-        // Make sure to provide all keys in order for reactivity to work.
-        Object.assign(user, userData.data)
+    /**
+     * Read user context from the API and update the user store object.
+     * @param {String} userId - ID of the user to read from the API.
+     * @returns {Object} - The observable properties.
+     */
+    actions.readUser = async function(userId) {
+        if (userId) {
+            const clientId = app.router.currentRoute.params.client_id
+            const partnerId = app.router.currentRoute.params.partner_id
+            let user
+            if (clientId) user = await app.api.client.get(`clients/${clientId}/users/${userId}/`)
+            else user = await app.api.client.get(`/partners/${partnerId}/users/${userId}/`)
+            return Object.assign(_module.getObservables().currentUser, user.data)
+        } else {
+            return _module.getObservables().currentUser
+        }
     }
 
 
@@ -59,9 +98,19 @@ module.exports = function(app) {
      * Set the language in the backend and directly switch to
      * the new language in the frontend. Retrieve the language file first,
      * when the language is not yet available.
-     * @param {String} language - The language code to set.
+     * @param {String} e - The change event.
      */
-    actions.setLanguage = function(language) {
+    actions.setLanguage = function(e) {
+        // Set the language when user edits it's own information. Other users
+        // being edited will just have a modified language field.
+        if (this.user.id !== app.store.users.user.id) return
+
+        let language
+        let oldLanguage = this.user.profile.language
+
+        if (oldLanguage === 'en') language = 'nl'
+        else language = 'en'
+
         if ((!global.translations || translations[language]) && language !== 'en') {
             app.utils.injectScript(`/public/i18n/${language}.js`, () => {
                 // Add the translations to the Vuex store.
@@ -75,12 +124,24 @@ module.exports = function(app) {
                 app.store.i18n.locale = language
             })
         }
+        this.user.profile.language = language
     }
 
 
-    actions.updateProfile = function(user, validator) {
-        let $t = Vue.i18n.translate
-        app.api.client.put('profile/', user).then((res) => {
+    /**
+    * Update a client or partner user.
+    * @param {Observable} user - The observable user object.
+    * @param {Observable} validator - The observable Vuelidate validator.
+    */
+    actions.updateUser = function(user, validator) {
+        let url
+        const clientId = app.router.currentRoute.params.client_id
+        const partnerId = app.router.currentRoute.params.partner_id
+
+        if (clientId) url = `/clients/${clientId}/users/${user.id}/`
+        else url = `/partners/${partnerId}/users/${user.id}/`
+
+        app.api.client.put(url, user).then((res) => {
             if (res.status === 200) {
                 app.store.main.apiValidation = false
                 // Unset the password fields after a succesful update.
@@ -89,7 +150,14 @@ module.exports = function(app) {
                     password: '',
                     password_confirm: '',
                 })
-                app.vue.$shout({message: $t('Profile succesfully updated')})
+
+                // User's own profile. Don't redirect to the last/list view.
+                if (user.id === app.store.users.user.id) {
+                    app.vue.$shout({message: $t('Profile succesfully updated')})
+                } else {
+                    app.vue.$shout({message: $t('User succesfully updated')})
+                    app.router.push(app.utils.lastRoute('list_clients'))
+                }
             } else {
                 // Trigger serverside validation.
                 validator.$touch()
@@ -97,27 +165,6 @@ module.exports = function(app) {
         })
     }
 
-
-    /**
-    * Update a client or partner user.
-    * @param {Observable} user - The observable user object.
-    */
-    actions.upsertUser = function(user) {
-        // Format the data that we are about to send to the API first.
-        let $t = Vue.i18n.translate
-        let payload = JSON.parse(JSON.stringify(client))
-        if (client.id) {
-            app.api.client.put(`clients/${client.id}/`, payload).then((res) => {
-                app.vue.$shout({message: $t('Client {name} succesfully updated', {name: client.name})})
-                app.router.push(app.utils.lastRoute('list_clients'))
-            })
-        } else {
-            app.api.client.post('clients/', payload).then((res) => {
-                app.vue.$shout({message: $t('Client {name} succesfully created', {name: client.name})})
-                app.router.push(app.utils.lastRoute('list_clients'))
-            })
-        }
-    }
 
     return actions
 }

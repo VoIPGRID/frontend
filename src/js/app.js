@@ -48,11 +48,11 @@ class App {
     loadModules() {
         this.modules = {}
         let _modules = [
-            {name: 'clients', Module: require('./modules/clients')},
-            {name: 'dashboard', Module: require('./modules/dashboard')},
-            {name: 'partners', Module: require('./modules/partners')},
-            {name: 'users', Module: require('./modules/users')},
-            {name: 'main', Module: require('./modules/main')},
+            {Module: require('./modules/clients'), name: 'clients'},
+            {Module: require('./modules/dashboard'), name: 'dashboard'},
+            {Module: require('./modules/partners'), name: 'partners'},
+            {Module: require('./modules/users'), name: 'users'},
+            {Module: require('./modules/main'), name: 'main'},
         ]
 
         for (let {name, Module} of _modules) {
@@ -86,8 +86,8 @@ class App {
         // TODO: Clear the base url as soon as we ditched the hybrid situation.
         this.router = new VueRouter({
             base: '/v2/',
-            mode: 'history',
             linkActiveClass: 'is-active',
+            mode: 'history',
         })
         // Keep track of the last route for cancel actions and the like.
         this.router.afterEach((to, from) => {
@@ -95,6 +95,7 @@ class App {
         })
     }
 }
+
 
 /** @global */
 window.app = new App(global.__state, window.templates)

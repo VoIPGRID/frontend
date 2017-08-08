@@ -16,43 +16,58 @@ class UsersModule extends Module {
         this.actions = require('./actions')(app, this)
 
         app.router.addRoutes([{
-            path: '/login',
             alias: '/logout',
-            name: 'user_login',
             component: require('./components/login')(app, this.actions),
+            name: 'user_login',
+            path: '/login',
         }])
 
-        app.router.addRoutes([{
-            path: '/profile',
-            name: 'user_profile',
-            component: Vue.component('UserProfile', require('./components/profile')(app, this.actions)),
-        }])
-
-        app.router.addRoutes([{
-            path: '/clients/:client_id/users',
-            name: 'list_users',
-            component: Vue.component('ListUsers', require('./components/list_users')(app, this.actions)),
-            children: [
-                {
-                    path: ':user_id/delete',
-                    name: 'delete_user',
-                    component: Vue.component('DeleteUser', require('./components/delete_user')(app, this.actions)),
-                },
-            ],
-        }])
-
+        // The same components are shared for partner and client users. Only
+        // the routings defer.
         const AddEditUser = Vue.component('AddEditUser', require('./components/add-edit_user')(app, this.actions))
-
         app.router.addRoutes([{
-            path: '/clients/:client_id/users/add',
-            name: 'add_user',
             component: AddEditUser,
+            name: 'add_client_user',
+            path: '/clients/:client_id/users/add',
+        }])
+        app.router.addRoutes([{
+            component: AddEditUser,
+            name: 'add_partner_user',
+            path: '/partners/:partner_id/users/add',
         }])
 
+
         app.router.addRoutes([{
-            path: '/clients/:client_id/users/:user_id/edit',
-            name: 'edit_user',
             component: AddEditUser,
+            name: 'edit_client_user',
+            path: '/clients/:client_id/users/:user_id/edit',
+        }])
+        app.router.addRoutes([{
+            component: AddEditUser,
+            name: 'edit_partner_user',
+            path: '/partners/:partner_id/users/:user_id/edit',
+        }])
+
+
+        app.router.addRoutes([{
+            children: [{
+                component: Vue.component('DeleteUser', require('./components/delete_user')(app, this.actions)),
+                name: 'delete_client_user',
+                path: ':user_id/delete',
+            }],
+            component: Vue.component('ListUsers', require('./components/list_users')(app, this.actions)),
+            name: 'list_client_users',
+            path: '/clients/:client_id/users',
+        }])
+        app.router.addRoutes([{
+            children: [{
+                component: Vue.component('DeleteUser', require('./components/delete_user')(app, this.actions)),
+                name: 'delete_partner_user',
+                path: ':user_id/delete',
+            }],
+            component: Vue.component('ListUsers', require('./components/list_users')(app, this.actions)),
+            name: 'list_partner_users',
+            path: '/partners/:partner_id/users',
         }])
     }
 
@@ -60,14 +75,24 @@ class UsersModule extends Module {
     getObservables() {
         let _state = {
             credentials: {
-                email: '',
-                password: '',
+                email: null,
+                password: null,
             },
-            user: {
-                profile: {},
+            currentUser: {
+                email: null,
                 old_password: '',
                 password: '',
                 password_confirm: '',
+                profile: {},
+            },
+            user: {
+                authenticated: false,
+                client: null,
+                csrf: null,
+                id: null,
+                language: 'en',
+                partner: null,
+                superuser: false,
             },
             users: [],
         }

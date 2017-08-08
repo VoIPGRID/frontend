@@ -1,16 +1,18 @@
 module.exports = (app, actions) => {
     const template = app.templates.users_delete_user
+
     return {
-        methods: {
-            deleteClient: actions.deleteClient,
+        created: async function() {
+            let user = await actions.readUser.call(this, app.router.currentRoute.params.user_id)
+            this.user = user
         },
-        mounted: function() {
-            actions.readUser(this.$store.users, app.router.currentRoute.params.client_id)
+        methods: {
+            deleteUser: actions.deleteUser,
         },
         render: template.r,
         staticRenderFns: template.s,
         store: {
-            user: 'users.user',
+            user: 'users.currentUser',
         },
     }
 }

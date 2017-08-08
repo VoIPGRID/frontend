@@ -28,7 +28,7 @@
         "_Vuex"
     },
     "plugins": [
-
+        "sort-class-members"
     ],
     "rules": {
         "no-alert": 0,
@@ -179,6 +179,20 @@
         "require-yield": 0,
         "semi": 0,
         "semi-spacing": [2, {"before": false, "after": true}],
+        "sort-class-members/sort-class-members": [2, {
+        "order": [
+                "[static-properties]",
+                "[static-methods]",
+                "[properties]",
+                "[conventional-private-properties]",
+                "constructor",
+                "[methods]",
+                "[conventional-private-methods]",
+                "[everything-else]"
+            ],
+            "accessorPairPositioning": "getThenSet",
+        }],
+        "sort-keys": [2, "asc", {"natural": true}],
         "sort-vars": [2, {"ignoreCase": true}],
         "space-before-function-paren": [2, "never"],
         "space-in-brackets": [0, "never"],

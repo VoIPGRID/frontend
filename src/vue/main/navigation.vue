@@ -5,7 +5,7 @@
 
     <ul class="context-selector">
         <li>
-            <router-link v-if="user.selectedPartner" to="/partners">
+            <router-link v-if="user.selectedPartner" to="/partners" exact>
                 <i class="item-level-up item-icon fa fa-level-up" @click="deselectPartner"></i>
                 <i class="item-icon fa fa-handshake-o"></i>
                 <span class="item-text">{{user.selectedPartner.name}}</span>
@@ -32,7 +32,7 @@
 
     <ul v-if="user.selectedPartner && !user.selectedClient">
         <li>
-            <router-link to="/" exact>
+            <router-link :to="{name: 'list_partner_users', params: {partner_id: user.selectedPartner.id}}">
                 <i class="item-icon fa fa-address-book"></i>
                 <span class="item-text">{{$t('Users')}}</span>
             </router-link>
@@ -55,7 +55,7 @@
         </li>
 
         <li>
-            <router-link :to="{name: 'list_users', params: {client_id: user.selectedClient.id}}" exact>
+            <router-link :to="{name: 'list_client_users', params: {client_id: user.selectedClient.id}}">
                 <i class="item-icon fa fa-address-book"></i>
                 <span class="item-text">{{$t('Users')}}</span>
             </router-link>

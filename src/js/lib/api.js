@@ -8,8 +8,8 @@ class Api {
         /** @memberof App */
         this.client = axios.create({
             baseURL: '/api/v2/',
-            timeout: 3000,
             headers: {'X-CSRFToken': app.__state.csrf},
+            timeout: 3000,
         })
 
         // Add a response interceptor that serves the default error page,

@@ -3,55 +3,110 @@ module.exports = (app, actions) => {
     const v = Vuelidate.validators
 
     return {
-        methods: {
-            upsertClient: actions.upsertUser,
+        computed: {
+            clientOrPartner: function() {
+                if (this.clientId) return 'client'
+                return 'partner'
+            },
         },
-        mounted: function() {
-            actions.readUser(this.$store.users.user, app.router.currentRoute.params.client_id)
+        created: function() {
+            this.fetchData()
+        },
+        data: function() {
+            return {
+                clientId: null,
+                isProfile: null,
+                partnerId: null,
+                userId: null,
+            }
+        },
+        methods: {
+             /*
+             * Wrapper function for the select event that changes language.
+             */
+            fetchData: async function() {
+                let context = {
+                    clientId: parseInt(app.router.currentRoute.params.client_id),
+                    partnerId: parseInt(app.router.currentRoute.params.partner_id),
+                    userId: parseInt(app.router.currentRoute.params.user_id),
+                }
+
+                if (context.userId === app.store.users.user.id) {
+                    context.isProfile = true
+                } else {
+                    context.isProfile = false
+                }
+
+                context.user = await actions.readUser.call(this, context.userId)
+                Object.assign(this, context)
+            },
+            setLanguage: actions.setLanguage,
+            updateUser: actions.updateUser,
         },
         render: template.r,
         staticRenderFns: template.s,
         store: {
-            root: 'clients',
-            client: 'clients.client',
+            apiValidation: 'main.apiValidation',
+            root: 'users',
+            user: 'users.currentUser',
         },
-        validations: {
-            client: {
-                billingprofile: {
-                    billing_email: {
-                        email: v.email,
+        validations: function() {
+            let validations = {
+                user: {
+                    old_password: {
+                        minLength: v.minLength(6),
                     },
-                    currency: {
-                        required: v.required,
+                    password: {
+                        // A new password is only required when the
+                        // old password is filled.
+                        minLength: v.minLength(6),
+                        requiredIf: v.requiredIf(() => {
+                            return (this.user.old_password && this.user.old_password.length > 0)
+                        }),
                     },
-                },
-                description: {
-                    maxLength: v.maxLength(63),
-                },
-                foreign_code: {
-                    maxLength: v.maxLength(16),
-                },
-                name: {
-                    minLength: v.minLength(3),
-                    required: v.required,
-                },
-                profile: {
-                    audio_language: {
-                        required: v.required,
+                    password_confirm: {
+                        minLength: v.minLength(6),
+                        requiredIf: v.requiredIf((data) => {
+                            return (this.user.old_password && this.user.old_password.length > 0)
+                        }),
+                        sameAs: v.sameAs('password'),
                     },
-                    country: {
-                        code: {
+                    profile: {
+                        first_name: {
+                            maxLength: v.maxLength(30),
+                            required: v.required,
+                        },
+                        last_name: {
+                            maxLength: v.maxLength(30),
                             required: v.required,
                         },
                     },
-                    system_language: {
-                        required: v.required,
-                    },
-                    timezone: {
-                        required: v.required,
-                    },
                 },
-            },
+            }
+
+            if (!this.isProfile) {
+                validations.user.email = {
+                    email: v.email,
+                    required: v.required,
+                }
+            }
+
+            // Password is required for new users.
+            if (!this.userId) {
+                validations.user.password.required = v.required
+            }
+
+            // The `apiValidation` is a reactive property that extends the
+            // validation object based on API requested validation.
+            if (this.apiValidation) {
+                Object.assign(validations.user, app.api.mapValidation(this.apiValidation))
+            }
+
+            return validations
+        },
+        watch: {
+          // call again the method if the route changes
+          '$route': 'fetchData',
         },
     }
 }

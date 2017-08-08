@@ -3,7 +3,15 @@
         <router-link class="nav-item is-tab" to="/wiki">
             <i class="fa fa-question-circle"></i>
         </router-link>
-        <router-link class="nav-item is-tab" to="/profile">
+        <router-link v-if="user.client" class="nav-item is-tab"
+            :to="{name: 'edit_client_user', params: {client_id: user.client.id, user_id: user.id}}"
+        >
+            <i class="fa fa-user-circle"></i>
+        </router-link>
+
+        <router-link v-else class="nav-item is-tab"
+            :to="{name: 'edit_partner_user', params: {partner_id: user.partner.id, user_id: user.id}}"
+        >
             <i class="fa fa-user-circle"></i>
         </router-link>
         <a v-if="user.authenticated" class="nav-item is-tab" @click="logout">
