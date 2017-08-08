@@ -1,0 +1,86 @@
+@import "~bulma/sass/utilities/initial-variables.sass";
+
+$primary: #f15929;
+
+@import "~bulma/bulma.sass";
+@import "~react-select/dist/react-select.css";
+
+.header-logo {
+    width: 100px;
+}
+
+.is-required {
+     &:after {
+        margin-left: 5px;
+        color: $primary;
+        content: "*";
+    }
+}
+
+.margin-left-5 {
+    margin-left: 5px;
+}
+
+.margin-left-10 {
+    margin-left: 10px;
+}
+
+.margin-top-10 {
+    margin-top: 10px;
+}
+
+.list-header {
+    margin-bottom: 10px;
+}
+
+.table {
+    td {
+        vertical-align: middle;
+    }
+
+    .table-actions {
+        width: 10%;
+    }
+}
+
+.button {
+    border-bottom-width: 2px;
+
+    &.is-primary {
+        border-color: darken($primary, 20%);
+    }
+
+    &.is-link {
+        color: $primary;
+        text-decoration: none;
+        box-shadow: none;
+
+        &:hover,
+        &:active,
+        &:focus {
+            background: none;
+            color: $grey-darker;
+        }
+    }
+}
+
+.tabs {
+    display: initial;
+
+    .react-tabs__tab-panel {
+        padding: 30px;
+        border: 1px solid $border;
+        border-top: 0;
+        display: none;
+        min-height: 200px;
+        border-radius: 0 0 $radius $radius;
+
+        &.react-tabs__tab-panel--selected {
+            display: block;
+        }
+    }
+}
+
+.section {
+    padding: 2em 1.5em;
+}
