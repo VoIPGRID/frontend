@@ -6,11 +6,8 @@ module.exports = (app) => {
      * @namespace
      */
     return Vue.component('Oops', {
+        computed: {},
         render: template.r,
         staticRenderFns: template.s,
-        computed: {},
-        mounted: function() {
-
-        },
     })
 }

@@ -23,15 +23,16 @@ module.exports = function(app, _module) {
 
     /**
     * Read partner from the API and update the partner store object.
-    * @param {Observable} root - The module's reactive root object.
     * @param {String} partnerId - ID of the partner to read from the API.
+    * @returns {Object} - All data related to the partner form.
     */
-    actions.readPartner = async function(root, partnerId) {
+    actions.readPartner = async function(partnerId) {
+        let partner
         if (partnerId) {
-            let partner = await app.api.client.get(`partners/${partnerId}/`)
-            Object.assign(root.partner, partner.data)
+            let res = await app.api.client.get(`partners/${partnerId}/`)
+            partner = res.data
         } else {
-            Object.assign(root.partner, _module.getObservables().partner)
+            partner = _module.getObservables().partner
         }
 
         let [audio, countries, currencies, owners, priceplanDiscounts, system, timezones] = await Promise.all([
@@ -44,15 +45,16 @@ module.exports = function(app, _module) {
             app.api.client.get('partners/timezones/'),
         ])
 
-        Object.assign(root, {
+        return {
             audioLanguages: audio.data,
             countries: countries.data,
             currencies: currencies.data,
             owners: owners.data.results,
+            partner: partner,
             priceplanDiscounts: priceplanDiscounts.data,
             systemLanguages: system.data,
             timezones: timezones.data,
-        })
+        }
     }
 
 

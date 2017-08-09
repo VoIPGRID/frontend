@@ -8,7 +8,13 @@ class Logger {
      * @param {App} app - The application object.
      */
     constructor(app) {
-        this.levels = {error: 0, warn: 1, info: 2, verbose: 3, debug: 4}
+        this.levels = {
+            debug: 4,
+            error: 0,
+            info: 2,
+            verbose: 3,
+            warn: 1,
+        }
         this.setLevel('info')
     }
 

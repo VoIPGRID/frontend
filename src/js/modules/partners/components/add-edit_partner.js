@@ -19,7 +19,17 @@ module.exports = (app, actions) => {
                 return false
             },
         },
+        created: function() {
+            this.fetchData()
+        },
         methods: {
+            fetchData: async function() {
+                // Reset branding cache.
+                brandingCache = {}
+                const partnerId = app.router.currentRoute.params.partner_id
+                const partnerData = await actions.readPartner.call(this, partnerId)
+                Object.assign(this.$store.partners, partnerData)
+            },
             /*
             * This would have been easier when there was a model
             * flag that indicates custom branding or not. Currently,
@@ -49,16 +59,11 @@ module.exports = (app, actions) => {
             },
             upsertPartner: actions.upsertPartner,
         },
-        mounted: function() {
-            // Reset branding cache on page reload.
-            brandingCache = {}
-            actions.readPartner(this.$store.partners, app.router.currentRoute.params.partner_id)
-        },
         render: template.r,
         staticRenderFns: template.s,
         store: {
-            root: 'partners',
             partner: 'partners.partner',
+            root: 'partners',
         },
         validations: {
             partner: {
@@ -109,6 +114,9 @@ module.exports = (app, actions) => {
                     url: v.url,
                 },
             },
+        },
+        watch: {
+            $route: 'fetchData',
         },
     })
 }

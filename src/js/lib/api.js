@@ -56,6 +56,8 @@ class Api {
      * API errors are only shown once. When the field changes, it will
      * be valid again for that particular validation, because the value
      * can't be validated until the server is requested again.
+     * @param {Observable} validation - The Vuelidate validation to modify.
+     * @returns {Observable} - The updated observable validation object.
      */
     mapValidation(validation) {
         const v = Vuelidate.validators

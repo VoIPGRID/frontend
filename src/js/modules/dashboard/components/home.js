@@ -1,45 +1,46 @@
 module.exports = (app) => {
+    const $t = Vue.i18n.translate
     const template = app.templates.dashboard_home
 
     return Vue.component('DashboardHome', {
         data: function() {
-            const $t = Vue.i18n.translate
+
             return {
                 modules: [
-                    {name: $t('VoIP account'), 'icon': 'vg-icon-phoneaccount', disabled: true},
-                    {name: $t('Phone number'), 'icon': 'vg-icon-phone-dial-buttons', disabled: true},
-                    {name: $t('Users'), 'icon': 'vg-icon-user', disabled: true},
-                    {name: $t('Callgroup'), 'icon': 'vg-icon-callgroup', disabled: true},
-                    {name: $t('Fixed/Mobile'), 'icon': 'vg-icon-fixeddestination', disabled: true},
-                    {name: $t('Voicemail'), 'icon': 'vg-icon-voicemail', disabled: true},
+                    {disabled: true, icon: 'vg-icon-phoneaccount', name: $t('VoIP account')},
+                    {disabled: true, icon: 'vg-icon-phone-dial-buttons', name: $t('Phone number')},
+                    {disabled: true, icon: 'vg-icon-user', name: $t('Users')},
+                    {disabled: true, icon: 'vg-icon-callgroup', name: $t('Callgroup')},
+                    {disabled: true, icon: 'vg-icon-fixeddestination', name: $t('Fixed/Mobile')},
+                    {disabled: true, icon: 'vg-icon-voicemail', name: $t('Voicemail')},
 
-                    {name: $t('Openinghours'), 'icon': 'vg-icon-openinghours', disabled: true},
-                    {name: $t('Messages'), 'icon': 'vg-icon-recording', disabled: true},
-                    {name: $t('Music on hold'), 'icon': 'vg-icon-musiconhold', disabled: true},
+                    {disabled: true, icon: 'vg-icon-openinghours', name: $t('Openinghours')},
+                    {disabled: true, icon: 'vg-icon-recording', name: $t('Messages')},
+                    {disabled: true, icon: 'vg-icon-musiconhold', name: $t('Music on hold')},
 
-                    {name: $t('Fax inbound'), 'icon': 'vg-icon-fax', disabled: true},
-                    {name: $t('Fax outbound'), 'icon': 'vg-icon-outgoing-fax', disabled: true},
+                    {disabled: true, icon: 'vg-icon-fax', name: $t('Fax inbound')},
+                    {disabled: true, icon: 'vg-icon-outgoing-fax', name: $t('Fax outbound')},
 
-                    {name: $t('IVR'), 'icon': 'vg-icon-ivr', disabled: true},
-                    {name: $t('Queue'), 'icon': 'vg-icon-queue', disabled: true},
-                    {name: $t('Conference'), 'icon': 'vg-icon-conference', disabled: true},
-                    {name: $t('Pickup group'), 'icon': 'vg-icon-pick-up-group', disabled: true},
-                    {name: $t('Listen in'), 'icon': 'vg-icon-listen', disabled: true},
-                    {name: $t('Filter'), 'icon': 'vg-icon-filter', disabled: true},
-                    {name: $t('Area group'), 'icon': 'vg-icon-areagroup', disabled: true},
-                    {name: $t('Area routing'), 'icon': 'vg-icon-areacode', disabled: true},
-                    {name: $t('Call recording'), 'icon': 'vg-icon-call-record', disabled: true},
+                    {disabled: true, icon: 'vg-icon-ivr', name: $t('IVR')},
+                    {disabled: true, icon: 'vg-icon-queue', name: $t('Queue')},
+                    {disabled: true, icon: 'vg-icon-conference', name: $t('Conference')},
+                    {disabled: true, icon: 'vg-icon-pick-up-group', name: $t('Pickup group')},
+                    {disabled: true, icon: 'vg-icon-listen', name: $t('Listen in')},
+                    {disabled: true, icon: 'vg-icon-filter', name: $t('Filter')},
+                    {disabled: true, icon: 'vg-icon-areagroup', name: $t('Area group')},
+                    {disabled: true, icon: 'vg-icon-areacode', name: $t('Area routing')},
+                    {disabled: true, icon: 'vg-icon-call-record', name: $t('Call recording')},
 
-                    {name: $t('Sounds'), 'icon': 'vg-icon-sounds', disabled: true},
-                    {name: $t('VoIP trunk'), 'icon': 'vg-icon-trunkaccount', disabled: true},
-                    {name: $t('SIP analysis'), 'icon': 'vg-icon-sip-analysis', disabled: true},
+                    {disabled: true, icon: 'vg-icon-sounds', name: $t('Sounds')},
+                    {disabled: true, icon: 'vg-icon-trunkaccount', name: $t('VoIP trunk')},
+                    {disabled: true, icon: 'vg-icon-sip-analysis', name: $t('SIP analysis')},
 
-                    {name: $t('Call-me-now'), 'icon': 'vg-icon-call-person', disabled: true},
-                    {name: $t('Web hooks'), 'icon': 'vg-icon-http', disabled: true},
-                    {name: $t('Caller ID lookup'), 'icon': 'vg-icon-caller-id', disabled: true},
-                    {name: $t('CRM'), 'icon': 'vg-icon-crm-popup', disabled: true},
+                    {disabled: true, icon: 'vg-icon-call-person', name: $t('Call-me-now')},
+                    {disabled: true, icon: 'vg-icon-http', name: $t('Web hooks')},
+                    {disabled: true, icon: 'vg-icon-caller-id', name: $t('Caller ID lookup')},
+                    {disabled: true, icon: 'vg-icon-crm-popup', name: $t('CRM')},
 
-                    {name: $t('Dialplan'), 'icon': 'vg-icon-ivr', disabled: true},
+                    {disabled: true, icon: 'vg-icon-ivr', name: $t('Dialplan')},
                 ],
             }
         },

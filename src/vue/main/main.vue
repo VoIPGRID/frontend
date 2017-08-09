@@ -5,7 +5,6 @@
 
     <section>
         <ContentHeader></ContentHeader>
-
         <div class="content">
             <router-view></router-view>
         </div>

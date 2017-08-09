@@ -41,7 +41,7 @@
         :count=clients.count
         :next=clients.next
         :previous=clients.previous
-        :resource_action=readClients
+        :resource_action=fetchData
         resource_url="/clients">
     </paginator>
 </div>

@@ -21,9 +21,9 @@ module.exports = (app, actions) => {
             }
         },
         methods: {
-             /*
-             * Wrapper function for the select event that changes language.
-             */
+            /**
+            * Wrapper function for the select event that changes language.
+            */
             fetchData: async function() {
                 let context = {
                     clientId: parseInt(app.router.currentRoute.params.client_id),
@@ -41,7 +41,7 @@ module.exports = (app, actions) => {
                 Object.assign(this, context)
             },
             setLanguage: actions.setLanguage,
-            updateUser: actions.updateUser,
+            upsertUser: actions.upsertUser,
         },
         render: template.r,
         staticRenderFns: template.s,
@@ -57,18 +57,10 @@ module.exports = (app, actions) => {
                         minLength: v.minLength(6),
                     },
                     password: {
-                        // A new password is only required when the
-                        // old password is filled.
                         minLength: v.minLength(6),
-                        requiredIf: v.requiredIf(() => {
-                            return (this.user.old_password && this.user.old_password.length > 0)
-                        }),
                     },
                     password_confirm: {
                         minLength: v.minLength(6),
-                        requiredIf: v.requiredIf((data) => {
-                            return (this.user.old_password && this.user.old_password.length > 0)
-                        }),
                         sameAs: v.sameAs('password'),
                     },
                     profile: {
@@ -91,12 +83,32 @@ module.exports = (app, actions) => {
                 }
             }
 
-            // Password is required for new users.
+            // Validation specific for new users.
             if (!this.userId) {
+                // Password is required for new users.
                 validations.user.password.required = v.required
+                validations.user.password_confirm.required = v.required
+            } else {
+                // Validation specific for exsting users.
+
+                // The old password is required if the new password is filled.
+                validations.user.old_password.requiredIf = v.requiredIf(() => {
+                    return (this.user.password && this.user.password.length > 0)
+                })
+
+                // A new password is required if the old password is filled.
+                validations.user.password.requiredIf = v.requiredIf(() => {
+                    return (this.user.old_password && this.user.old_password.length > 0)
+                })
+
+                // Password confirmation is required when a new password is
+                // about to be filled.
+                validations.user.password_confirm.requiredIf = v.requiredIf((data) => {
+                    return (this.user.password && this.user.password.length > 0)
+                })
             }
 
-            // The `apiValidation` is a reactive property that extends the
+            // `apiValidation` is a reactive property that extends the
             // validation object based on API requested validation.
             if (this.apiValidation) {
                 Object.assign(validations.user, app.api.mapValidation(this.apiValidation))
@@ -105,8 +117,7 @@ module.exports = (app, actions) => {
             return validations
         },
         watch: {
-          // call again the method if the route changes
-          '$route': 'fetchData',
+            $route: 'fetchData',
         },
     }
 }

@@ -55,7 +55,7 @@ class Helpers {
                 k = decode(e[1])
                 v = decode(e[2])
                 if (params[k] !== undefined) {
-                    if (!$.isArray(params[k])) {
+                    if (!Array.isArray(params[k])) {
                         params[k] = [params[k]]
                     }
                     params[k].push(v)
@@ -77,10 +77,7 @@ class Helpers {
      * // page=1
      */
     stringifySearch(params) {
-        return Object
-        .keys(params)
-        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
-        .join('&')
+        return Object.keys(params).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`).join('&')
     }
 
 

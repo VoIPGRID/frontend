@@ -2,7 +2,7 @@ module.exports = (app, actions) => {
     const template = app.templates.clients_list_clients
     return {
         methods: {
-            readClients: actions.readClients,
+            fetchData: actions.readClients,
             selectClientContext: function(client) {
                 this.$store.users.user.selectedClient = client
             },

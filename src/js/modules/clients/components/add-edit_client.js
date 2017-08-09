@@ -4,9 +4,14 @@ module.exports = (app, actions) => {
 
     return {
         created: function() {
-            actions.readClient(this.$store.clients, app.router.currentRoute.params.client_id)
+            this.fetchData()
         },
         methods: {
+            fetchData: async function() {
+                const clientId = app.router.currentRoute.params.client_id
+                const clientData = await actions.readClient(clientId)
+                Object.assign(this.$store.clients, clientData)
+            },
             upsertClient: actions.upsertClient,
         },
         render: template.r,

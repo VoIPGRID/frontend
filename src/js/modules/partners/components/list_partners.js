@@ -2,7 +2,7 @@ module.exports = (app, actions) => {
     const template = app.templates.partners_list_partners
     return Vue.component('ListPartners', {
         methods: {
-            readPartners: actions.readPartners,
+            fetchData: actions.readPartners,
             /**
              * Set the context for the currently selected partner.
              * @param {Observable} partner - The partner object.

@@ -53,7 +53,7 @@
                 <p class="control">
                     <button class="button is-primary"
                         :disabled="$v.$invalid"
-                        @click="updateUser(user, $v)">
+                        @click="upsertUser(user, $v)">
                         {{$t('Save changes')}}
                     </button>
                 </p>

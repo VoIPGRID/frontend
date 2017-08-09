@@ -22,19 +22,21 @@ module.exports = function(app, _module) {
 
     /**
      * Read client from the API and update the client store object.
-     * @param {Observable} root - The module's reactive root object.
      * @param {String} clientId - ID of the client to read from the API.
+     * @returns {Object} - All data related to the client form.
      */
-    actions.readClient = async(root, clientId) => {
+    actions.readClient = async(clientId) => {
+        let client
         if (clientId) {
-            let client = await app.api.client.get(`clients/${clientId}/`)
-            Object.assign(root.client, client.data)
+            const res = await app.api.client.get(`clients/${clientId}/`)
+            client = res.data
         } else {
-            Object.assign(root.client, _module.getObservables().client)
+            client = _module.getObservables().client
         }
 
-        let [anonymizeAfter, audio, blockedCallPermissions, countries,
-             currencies, owners, system, timezones,
+        let [
+            anonymizeAfter, audio, blockedCallPermissions, countries,
+            currencies, owners, system, timezones,
         ] = await Promise.all([
             app.api.client.get('clients/anonymize_after/'),
             app.api.client.get('clients/audio_languages/'),
@@ -46,16 +48,17 @@ module.exports = function(app, _module) {
             app.api.client.get('clients/timezones/'),
         ])
 
-        Object.assign(root, {
+        return {
             anonymizeAfter: anonymizeAfter.data,
             audioLanguages: audio.data,
             blockedCallPermissions: blockedCallPermissions.data,
+            client: client,
             countries: countries.data,
             currencies: currencies.data,
             owners: owners.data.results,
             systemLanguages: system.data,
             timezones: timezones.data,
-        })
+        }
     }
 
 

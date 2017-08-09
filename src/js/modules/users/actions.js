@@ -27,9 +27,11 @@ module.exports = function(app, _module) {
         }
 
         const res = await app.api.client.delete(url)
-        this.$store.users.users = this.$store.users.users.filter((i) => i.id !== user.id)
-        app.vue.$shout({message: $t('User {name} succesfully deleted', {name: user.email})})
-        app.router.push(backRoute)
+        if (res.status === 204) {
+            this.$store.users.users = this.$store.users.users.filter((i) => i.id !== user.id)
+            app.vue.$shout({message: $t('User {name} succesfully deleted', {name: user.email})})
+            app.router.push(backRoute)
+        }
     }
 
 
@@ -133,7 +135,7 @@ module.exports = function(app, _module) {
     * @param {Observable} user - The observable user object.
     * @param {Observable} validator - The observable Vuelidate validator.
     */
-    actions.updateUser = function(user, validator) {
+    actions.upsertUser = function(user, validator) {
         let url
         const clientId = app.router.currentRoute.params.client_id
         const partnerId = app.router.currentRoute.params.partner_id

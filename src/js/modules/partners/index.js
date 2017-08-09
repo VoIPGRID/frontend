@@ -13,30 +13,31 @@ class PartnersModule extends Module {
         this.actions = require('./actions')(app, this)
 
         app.router.addRoutes([{
-            path: '/partners',
-            name: 'list_partners',
-            component: require('./components/list_partners')(app, this.actions),
             children: [
                 {
-                    path: ':partner_id/delete',
-                    name: 'delete_partner',
                     component: require('./components/delete_partner')(app, this.actions),
+                    name: 'delete_partner',
+                    path: ':partner_id/delete',
                 },
             ],
+            component: require('./components/list_partners')(app, this.actions),
+            name: 'list_partners',
+            path: '/partners',
+
         }])
 
         const AddEditPartnerComponent = require('./components/add-edit_partner')(app, this.actions)
 
         app.router.addRoutes([{
-            path: '/partners/add',
-            name: 'add_partner',
             component: AddEditPartnerComponent,
+            name: 'add_partner',
+            path: '/partners/add',
         }])
 
         app.router.addRoutes([{
-            path: '/partners/:partner_id/edit',
-            name: 'edit_partner',
             component: AddEditPartnerComponent,
+            name: 'edit_partner',
+            path: '/partners/:partner_id/edit',
         }])
     }
 
@@ -63,9 +64,9 @@ class PartnersModule extends Module {
                 email_address: '',
                 foreign_code: '',
                 may_have_children: false,
+                name: '',
                 navlink: '',
                 navlink_active: '',
-                name: '',
                 no_reply_email_address: '',
                 profile: {
                     audio_language: '',

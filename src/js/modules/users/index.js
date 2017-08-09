@@ -1,11 +1,11 @@
 const Module = require('../../lib/module')
 /**
- * @module user
- */
+* @module user
+*/
 
- /**
-  * The user app handles profile-related functionality.
-  */
+/**
+* The user app handles profile-related functionality.
+*/
 class UsersModule extends Module {
     /**
      * @param {App} app - The application object.
@@ -83,7 +83,9 @@ class UsersModule extends Module {
                 old_password: '',
                 password: '',
                 password_confirm: '',
-                profile: {},
+                profile: {
+                    last_name: '',
+                },
             },
             user: {
                 authenticated: false,

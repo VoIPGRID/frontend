@@ -22,7 +22,7 @@ module.exports = (app, actions) => {
             }
         },
         methods: {
-            readUsers: actions.readUsers,
+            fetchData: actions.readUsers,
         },
         render: template.r,
         staticRenderFns: template.s,

@@ -6,14 +6,10 @@ module.exports = (app) => {
      * @namespace
      */
     return {
-        render: template.r,
-        staticRenderFns: template.s,
         computed: {
-            vmodel: function() {
-                return this.model
-            },
             /**
-             * Generates validation error messages.
+             * Match a validation error with a (translated) error message.
+             * @returns {Array} - An array of translated error messages.
              */
             validationMessage: function() {
                 let errorMessages = []
@@ -55,77 +51,87 @@ module.exports = (app) => {
 
                 return errorMessages.join('</br>')
             },
+            vmodel: function() {
+                return this.model
+            },
         },
         methods: {
-            /**
-             * Handles executing a referenced click function from
-             * a parent component.
-             */
-            vClick: function(e) {
-                if (!this.click) return
-                this.click(e)
-            },
-            onChange: function(e) {
+            onChange: function(event) {
                 if (!this.change) return
-                this.change(e)
+                this.change(event)
             },
             /**
-             * Emits the child component's state back to it's
-             * defining parent. The value is captured using `:model.sync`.
-             */
-            vChange: function(e, value) {
+            * Emit the child component's state back to it's
+            * defining parent. The value is captured using `:model.sync`.
+            * @param {Event} event - The original change event from the input.
+            * @param {String} value - The value before the change happened.
+            */
+            vChange: function(event, value) {
                 // Toggles value of a checkbox.
                 if (value === true || value === false) {
                     value = !value
                 }
                 // A multiselect.
-                if (e.target.multiple) {
-                    let selectedOptions = Array.prototype.filter.apply(e.target.options, [(i) => i.selected])
+                if (event.target.multiple) {
+                    let selectedOptions = Array.prototype.filter.apply(event.target.options, [(i) => i.selected])
                     // Note that the value is parsed to a Number. Selected
                     // state fails without casting to the proper type.
                     value = selectedOptions.map((o) => parseInt(o.value))
                 }
                 this.$emit('update:model', value)
                 if (this.validation) this.validation.$touch()
-                return false
+            },
+            /**
+            * Handles executing a referenced click function from
+            * a parent component.
+            * @param {Event} event - The original change event from the input.
+            */
+            vClick: function(event) {
+                if (!this.click) return
+                this.click(event)
             },
             /**
              * Validation flag being used to conditionally render
              * validation-helper styling.
+             * @returns {Boolean} - Whether the field is valid or not.
              */
             vInvalid: function() {
                 if (!this.validation) return false
-                // RequiredIf validation is conditional already. Don't let it
-                // be untriggered by the dirty flag.
-                if (!('requiredIf' in this.validation)) {
-                    if (!this.validation.$dirty) return false
+                // Validation for `requiredIf` depends on the state of other
+                // fields. Therefor don't use the $dirty check on this field,
+                // but go straight for the $invalid state.
+                if ('requiredIf' in this.validation) {
+                    return this.validation.$invalid
                 }
 
-                return this.validation.$invalid
+                if (!this.validation.$dirty) return false
+                return true
             },
             vRequired: function() {
-                // No validation at all.
+                // Field has no validation at all.
                 if (!this.validation) return false
                 return this.validation.$params.required
             },
         },
         props: {
-            click: Function,
             change: Function,
+            click: Function,
             disabled: Boolean,
+            help: String,
             idfield: {
                 default: 'id',
             },
+            label: String,
+            model: '',
             namefield: {
                 default: 'name',
             },
-            help: String,
-            label: String,
-            model: '',
             options: Array,
             placeholder: String,
             type: String,
             validation: Object,
         },
+        render: template.r,
+        staticRenderFns: template.s,
     }
 }

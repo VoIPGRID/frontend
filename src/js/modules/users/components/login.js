@@ -10,8 +10,8 @@ module.exports = (app, actions) => {
         store: {
             authenticated: 'users.user.authenticated',
             credentials: 'users.credentials',
-            user: 'users.user',
             root: 'users',
+            user: 'users.user',
         },
     })
 }

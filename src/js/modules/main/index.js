@@ -23,9 +23,9 @@ class MainModule extends Module {
         this.app.store.main = this.getObservables()
 
         app.router.addRoutes([{
-            path: '/oops',
-            name: 'oops',
             component: require('./components/oops')(app),
+            name: 'oops',
+            path: '/oops',
         }])
     }
 

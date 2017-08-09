@@ -13,9 +13,9 @@ class DashboardModule extends Module {
         this.actions = require('./actions')(app)
 
         app.router.addRoutes([{
-            path: '/',
-            name: 'dashboard_home',
             component: require('./components/home')(app, this.actions),
+            name: 'dashboard_home',
+            path: '/',
         }])
     }
 

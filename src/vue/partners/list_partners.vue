@@ -38,7 +38,7 @@
         :count=partners.count
         :next=partners.next
         :previous=partners.previous
-        :resource_action=readPartners
+        :resource_action=fetchData
         resource_url="/partners">
     </paginator>
 </div>

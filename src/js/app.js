@@ -34,7 +34,7 @@ class App {
         userState.selectedPartner = null
         userState.selectedClient = null
         // Keeping the reference to the global store here.
-        this.store = globalStore(userState)
+        this.store = globalStore()
         this.initI18n()
 
         this.loadModules()

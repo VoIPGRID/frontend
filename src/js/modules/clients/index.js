@@ -4,7 +4,7 @@ const Module = require('../../lib/module')
  */
 
 /**
- * Handles VoIPGRID client management.
+ * Module for management of Clients.
  * @memberof module:clients
  */
 class ClientsModule extends Module {
@@ -20,28 +20,29 @@ class ClientsModule extends Module {
         const AddEditClientComponent = require('./components/add-edit_client')(app, this.actions)
 
         app.router.addRoutes([{
-            path: '/clients',
-            name: 'list_clients',
-            component: require('./components/list_clients')(app, this.actions),
             children: [
                 {
-                    path: ':client_id/delete',
-                    name: 'delete_client',
                     component: require('./components/delete_client')(app, this.actions),
+                    name: 'delete_client',
+                    path: ':client_id/delete',
                 },
             ],
+            component: require('./components/list_clients')(app, this.actions),
+            name: 'list_clients',
+            path: '/clients',
+
         }])
 
         app.router.addRoutes([{
-            path: '/clients/add',
+            component: AddEditClientComponent,
             name: 'add_client',
-            component: AddEditClientComponent,
+            path: '/clients/add',
         }])
 
         app.router.addRoutes([{
-            path: '/clients/:client_id/edit',
-            name: 'edit_client',
             component: AddEditClientComponent,
+            name: 'edit_client',
+            path: '/clients/:client_id/edit',
         }])
     }
 
@@ -51,12 +52,10 @@ class ClientsModule extends Module {
             anonymizeAfter: [],
             audioLanguages: [],
             blockedCallPermissions: [],
-            countries: [],
-            currencies: [],
             client: {
                 billingprofile: {
-                    currency: '',
                     billing_email: '',
+                    currency: '',
                     exclude_from_export: false,
                 },
                 blocked_call_permissions: [],
@@ -73,6 +72,8 @@ class ClientsModule extends Module {
                 },
             },
             clients: [],
+            countries: [],
+            currencies: [],
             owners: [],
             systemLanguages: [],
             timezones: [],

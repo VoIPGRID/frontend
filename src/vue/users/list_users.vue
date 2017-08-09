@@ -54,7 +54,7 @@
         :count="users.count"
         :next="users.next"
         :previous="users.previous"
-        :resource_action="readUsers"
+        :resource_action="fetchData"
         :resource_url="resourceUrl">
     </paginator>
 </div>
