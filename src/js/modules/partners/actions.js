@@ -29,7 +29,7 @@ module.exports = function(app, _module) {
     actions.readPartner = async function(partnerId) {
         let partner
         if (partnerId) {
-            let res = await app.api.client.get(`partners/${partnerId}/`)
+            const res = await app.api.client.get(`partners/${partnerId}/`)
             partner = res.data
         } else {
             partner = _module.getObservables().partner

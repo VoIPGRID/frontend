@@ -15,6 +15,7 @@ module.exports = (app, actions) => {
         data: function() {
             return {
                 clientId: null,
+                groups: [],
                 isProfile: null,
                 partnerId: null,
                 userId: null,
@@ -37,7 +38,7 @@ module.exports = (app, actions) => {
                     context.isProfile = false
                 }
 
-                context.user = await actions.readUser.call(this, context.userId)
+                Object.assign(context, await actions.readUser.call(this, context.userId))
                 Object.assign(this, context)
             },
             setLanguage: actions.setLanguage,

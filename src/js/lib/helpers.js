@@ -89,6 +89,7 @@ class Helpers {
      * @returns {Object} route - Name and query properties of the route.
      */
     lastRoute(defaultRoute) {
+        if (typeof defaultRoute === 'string') defaultRoute = {name: defaultRoute}
         if (this.app.history.length > 1) {
             const lastRoute = this.app.history[this.app.history.length - 2]
             return {
@@ -97,7 +98,7 @@ class Helpers {
             }
         }
         // Fall back to the default route.
-        let route = this.app.router.resolve({name: defaultRoute})
+        let route = this.app.router.resolve(defaultRoute)
         return {
             name: route.route.name,
             query: route.route.query,

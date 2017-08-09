@@ -41,8 +41,18 @@
                 :model.sync="user.password_confirm"
                 :validation="$v.user.password_confirm"/>
 
-            <h2 class="title">{{$t('Preferences')}}</h2><hr/>
+            <div class="field is-grouped margin-top-1">
+                <p class="control">
+                    <button class="button is-primary"
+                        :disabled="$v.$invalid"
+                        @click="upsertUser(user, $v)">
+                        {{$t('Save changes')}}
+                    </button>
+                </p>
+            </div>
+        </Tab>
 
+        <Tab id="telephony" :title="$t('Language settings')">
             <Field name="language" type="select"
                 :label="$t('Preferred language')"
                 :model.sync="user.profile.language"
@@ -59,14 +69,31 @@
                 </p>
             </div>
         </Tab>
-        <Tab id="telephony" :title="$t('Telephony settings')">
+
+        <Tab v-if="clientId" id="language" :title="$t('Telephony settings')">
 
         </Tab>
-        <Tab id="language" :title="$t('Telephony settings')">
 
-        </Tab>
         <Tab id="security" :title="$t('Security')">
+            <Field name="session_expiry" type="checkbox"
+                :label="$t('Log out after 10 minutes')"
+                :model.sync="user.session_expiry"/>
 
+            <Field name="groups" type="multiselect" :label="$t('Member of permission groups')"
+                :help="$t('Select at least one group.')"
+                :model.sync="user.groups"
+                :options="groups"
+                :placeholder="$t('Disable call permissions...')"/>
+
+            <div class="field is-grouped margin-top-1">
+                <p class="control">
+                    <button class="button is-primary"
+                        :disabled="$v.$invalid"
+                        @click="upsertUser(user, $v)">
+                        {{$t('Save changes')}}
+                    </button>
+                </p>
+            </div>
         </Tab>
     </Tabs>
 </div>

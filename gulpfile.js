@@ -38,20 +38,20 @@ const WATCHLINKED = argv.linked ? argv.linked : false
 let bundlers = {app: null, vendor: null}
 let isWatching
 let gzipConfig = {append: true, gzipOptions: {level: 9}}
-let sizeConfig = {showTotal: true, showFiles: true}
+let sizeConfig = {showFiles: true, showTotal: true}
 
 if (PRODUCTION) gutil.log('(!) Gulp optimized for production')
 
 
 gulp.task('assets', `Copy required assets to '${BUILD_DIR}'`, () => {
     return gulp.src('./src/img/**', {base: './src'})
-    .pipe(addsrc('./src/fonts/**', {base: './src'}))
-    .pipe(addsrc(path.join(NODE_PATH, 'font-awesome', 'fonts', '**'), {base: path.join(NODE_PATH, 'font-awesome')}))
-    .pipe(addsrc(path.join(NODE_PATH, 'vg-icons', 'fonts', '**'), {base: path.join(NODE_PATH, 'vg-icons')}))
-    .pipe(addsrc('./src/vue/index.html', {base: './src/vue'}))
-    .pipe(gulp.dest(BUILD_DIR))
-    .pipe(size(extend({title: 'assets'}, sizeConfig)))
-    .pipe(ifElse(isWatching, livereload))
+        .pipe(addsrc('./src/fonts/**', {base: './src'}))
+        .pipe(addsrc(path.join(NODE_PATH, 'font-awesome', 'fonts', '**'), {base: path.join(NODE_PATH, 'font-awesome')}))
+        .pipe(addsrc(path.join(NODE_PATH, 'vg-icons', 'fonts', '**'), {base: path.join(NODE_PATH, 'vg-icons')}))
+        .pipe(addsrc('./src/vue/index.html', {base: './src/vue'}))
+        .pipe(gulp.dest(BUILD_DIR))
+        .pipe(size(extend({title: 'assets'}, sizeConfig)))
+        .pipe(ifElse(isWatching, livereload))
 })
 
 
@@ -102,35 +102,35 @@ gulp.task('js-app', 'Generate app.js', (done) => {
         if (isWatching) bundlers.app.plugin(watchify)
     }
     bundlers.app.bundle()
-    .on('error', notify.onError('Error: <%= error.message %>'))
-    .pipe(source('app.js'))
-    .pipe(buffer())
-    .pipe(ifElse(!PRODUCTION, () => sourcemaps.init({loadMaps: true})))
-    .pipe(ifElse(PRODUCTION, () => babel({compact: true, presets: ['es2015', 'es2016', 'es2017']})))
-    .pipe(envify({NODE_ENV: NODE_ENV}))
-    .pipe(ifElse(PRODUCTION, () => uglify()))
-    .on('error', notify.onError('Error: <%= error.toString() %>'))
-    .on('end', () => {
-        if (!PRODUCTION) del(path.join(BUILD_DIR, '*.js.gz'), {force: true})
-        // Let the docs task handle livereload when they are part of the build.
-        if (isWatching && !WITHDOCS) livereload.changed('app.js')
-        done()
-    })
-    .pipe(ifElse(!PRODUCTION, () => sourcemaps.write('./')))
-    .pipe(gulp.dest(BUILD_DIR))
-    .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
-    .pipe(ifElse(PRODUCTION, () => gulp.dest(BUILD_DIR)))
-    .pipe(size(extend({title: 'js-app'}, sizeConfig)))
-    .pipe(ifElse(PRODUCTION, () => size(extend({title: 'js-app[gzip]'}, sizeConfig))))
+        .on('error', notify.onError('Error: <%= error.message %>'))
+        .pipe(source('app.js'))
+        .pipe(buffer())
+        .pipe(ifElse(!PRODUCTION, () => sourcemaps.init({loadMaps: true})))
+        .pipe(ifElse(PRODUCTION, () => babel({compact: true, presets: ['es2015', 'es2016', 'es2017']})))
+        .pipe(envify({NODE_ENV: NODE_ENV}))
+        .pipe(ifElse(PRODUCTION, () => uglify()))
+        .on('error', notify.onError('Error: <%= error.toString() %>'))
+        .on('end', () => {
+            if (!PRODUCTION) del(path.join(BUILD_DIR, '*.js.gz'), {force: true})
+            // Let the docs task handle livereload when it is part of the build.
+            if (isWatching && !WITHDOCS) livereload.changed('app.js')
+            done()
+        })
+        .pipe(ifElse(!PRODUCTION, () => sourcemaps.write('./')))
+        .pipe(gulp.dest(BUILD_DIR))
+        .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
+        .pipe(ifElse(PRODUCTION, () => gulp.dest(BUILD_DIR)))
+        .pipe(size(extend({title: 'js-app'}, sizeConfig)))
+        .pipe(ifElse(PRODUCTION, () => size(extend({title: 'js-app[gzip]'}, sizeConfig))))
 })
 
 
 gulp.task('js-translations', 'Generate translations', (done) => {
     return gulp.src('./src/js/i18n/*.js', {base: './src/js/'})
-    .pipe(ifElse(PRODUCTION, () => uglify()))
-    .pipe(gulp.dest(BUILD_DIR))
-    .pipe(size(extend({title: 'js-translations'}, sizeConfig)))
-    .pipe(ifElse(isWatching, livereload))
+        .pipe(ifElse(PRODUCTION, () => uglify()))
+        .pipe(gulp.dest(BUILD_DIR))
+        .pipe(size(extend({title: 'js-translations'}, sizeConfig)))
+        .pipe(ifElse(isWatching, livereload))
 })
 
 
@@ -145,93 +145,93 @@ gulp.task('js-vendor', 'Generate vendor.js', (done) => {
         if (isWatching) bundlers.vendor.plugin(watchify)
     }
     bundlers.vendor.bundle()
-    .on('error', notify.onError('Error: <%= error.message %>'))
-    .pipe(source('vendor.js'))
-    .pipe(buffer())
-    .pipe(ifElse(!PRODUCTION, () => sourcemaps.init({loadMaps: true})))
-    .pipe(envify({NODE_ENV: NODE_ENV}))
-    .pipe(ifElse(PRODUCTION, () => uglify()))
-    .on('end', () => {
-        if (!PRODUCTION) del(path.join(BUILD_DIR, '*.js.gz'), {force: true})
-        if (isWatching) livereload.changed('vendor.js')
-        done()
-    })
-    .pipe(ifElse(!PRODUCTION, () => sourcemaps.write('./')))
-    .pipe(gulp.dest(BUILD_DIR))
-    .pipe(size(extend({title: 'js-vendor'}, sizeConfig)))
-    .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
-    .pipe(ifElse(PRODUCTION, () => gulp.dest(BUILD_DIR)))
-    .pipe(ifElse(PRODUCTION, () => size(extend({title: 'js-vendor[gzip]'}, sizeConfig))))
+        .on('error', notify.onError('Error: <%= error.message %>'))
+        .pipe(source('vendor.js'))
+        .pipe(buffer())
+        .pipe(ifElse(!PRODUCTION, () => sourcemaps.init({loadMaps: true})))
+        .pipe(envify({NODE_ENV: NODE_ENV}))
+        .pipe(ifElse(PRODUCTION, () => uglify()))
+        .on('end', () => {
+            if (!PRODUCTION) del(path.join(BUILD_DIR, '*.js.gz'), {force: true})
+            if (isWatching) livereload.changed('vendor.js')
+            done()
+        })
+        .pipe(ifElse(!PRODUCTION, () => sourcemaps.write('./')))
+        .pipe(gulp.dest(BUILD_DIR))
+        .pipe(size(extend({title: 'js-vendor'}, sizeConfig)))
+        .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
+        .pipe(ifElse(PRODUCTION, () => gulp.dest(BUILD_DIR)))
+        .pipe(ifElse(PRODUCTION, () => size(extend({title: 'js-vendor[gzip]'}, sizeConfig))))
 })
 
 
 gulp.task('scss', 'Generate main.css', (done) => {
     gulp.src('./src/scss/main.scss')
-    .pipe(sass({
-        includePaths: NODE_PATH,
-        sourceMap: !PRODUCTION,
-        sourceMapContents: !PRODUCTION,
-        sourceMapEmbed: !PRODUCTION,
-    }))
-    .on('error', notify.onError('Error: <%= error.message %>'))
-    .pipe(concat('main.css'))
-    .pipe(ifElse(PRODUCTION, () => cleanCSS({advanced: true, level: 0})))
-    .on('end', () => {
-        if (!PRODUCTION) del(path.join(BUILD_DIR, '*.css.gz'), {force: true})
-        if (isWatching) livereload.changed('main.css')
-        done()
-    })
-    .pipe(gulp.dest(BUILD_DIR))
-    .pipe(size(extend({title: 'scss'}, sizeConfig)))
-    .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
-    .pipe(ifElse(PRODUCTION, () => gulp.dest(BUILD_DIR)))
-    .pipe(ifElse(PRODUCTION, () => size(extend({title: 'scss[gzip]'}, sizeConfig))))
+        .pipe(sass({
+            includePaths: NODE_PATH,
+            sourceMap: !PRODUCTION,
+            sourceMapContents: !PRODUCTION,
+            sourceMapEmbed: !PRODUCTION,
+        }))
+        .on('error', notify.onError('Error: <%= error.message %>'))
+        .pipe(concat('main.css'))
+        .pipe(ifElse(PRODUCTION, () => cleanCSS({advanced: true, level: 0})))
+        .on('end', () => {
+            if (!PRODUCTION) del(path.join(BUILD_DIR, '*.css.gz'), {force: true})
+            if (isWatching) livereload.changed('main.css')
+            done()
+        })
+        .pipe(gulp.dest(BUILD_DIR))
+        .pipe(size(extend({title: 'scss'}, sizeConfig)))
+        .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
+        .pipe(ifElse(PRODUCTION, () => gulp.dest(BUILD_DIR)))
+        .pipe(ifElse(PRODUCTION, () => size(extend({title: 'scss[gzip]'}, sizeConfig))))
 })
 
 
 gulp.task('scss-vendor', 'Generate vendor.css', (done) => {
     gulp.src('./src/scss/vendor.scss')
-    .pipe(sass({
-        includePaths: NODE_PATH,
-        sourceMap: !PRODUCTION,
-        sourceMapContents: !PRODUCTION,
-        sourceMapEmbed: !PRODUCTION,
-    }))
-    .on('error', notify.onError('Error: <%= error.message %>'))
-    .pipe(concat('vendor.css'))
-    .pipe(ifElse(PRODUCTION, () => cleanCSS({advanced: true, level: 2})))
-    .on('end', () => {
-        if (!PRODUCTION) del(path.join(BUILD_DIR, '*.css.gz'), {force: true})
-        if (isWatching) livereload.changed('vendor.css')
-        done()
-    })
-    .pipe(gulp.dest(BUILD_DIR))
-    .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
-    .pipe(ifElse(PRODUCTION, () => gulp.dest(BUILD_DIR)))
-    .pipe(ifElse(PRODUCTION, () => size(extend({title: 'scss-vendor[gzip]'}, sizeConfig))))
-    .pipe(ifElse(isWatching, livereload))
+        .pipe(sass({
+            includePaths: NODE_PATH,
+            sourceMap: !PRODUCTION,
+            sourceMapContents: !PRODUCTION,
+            sourceMapEmbed: !PRODUCTION,
+        }))
+        .on('error', notify.onError('Error: <%= error.message %>'))
+        .pipe(concat('vendor.css'))
+        .pipe(ifElse(PRODUCTION, () => cleanCSS({advanced: true, level: 2})))
+        .on('end', () => {
+            if (!PRODUCTION) del(path.join(BUILD_DIR, '*.css.gz'), {force: true})
+            if (isWatching) livereload.changed('vendor.css')
+            done()
+        })
+        .pipe(gulp.dest(BUILD_DIR))
+        .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
+        .pipe(ifElse(PRODUCTION, () => gulp.dest(BUILD_DIR)))
+        .pipe(ifElse(PRODUCTION, () => size(extend({title: 'scss-vendor[gzip]'}, sizeConfig))))
+        .pipe(ifElse(isWatching, livereload))
 })
 
 
 gulp.task('templates', 'Build Vue templates', () => {
     gulp.src('./src/vue/**/*.vue')
-    .pipe(fuet({
-        pathfilter: ['src', 'vue'],
-        commonjs: false,
-    }))
-    .on('error', notify.onError('Error: <%= error.message %>'))
-    .pipe(ifElse(PRODUCTION, () => uglify()))
-    .on('end', () => {
-        if (!PRODUCTION) del(path.join(BUILD_DIR, 'templates.js.gz'), {force: true})
-    })
-    .pipe(concat('templates.js'))
-    .pipe(insert.prepend('window.templates={};'))
-    .pipe(gulp.dest(BUILD_DIR))
-    .pipe(size(extend({title: 'templates'}, sizeConfig)))
-    .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
-    .pipe(ifElse(PRODUCTION, () => gulp.dest(BUILD_DIR)))
-    .pipe(ifElse(PRODUCTION, () => size(extend({title: 'templates[gzip]'}, sizeConfig))))
-    .pipe(ifElse(isWatching, livereload))
+        .pipe(fuet({
+            commonjs: false,
+            pathfilter: ['src', 'vue'],
+        }))
+        .on('error', notify.onError('Error: <%= error.message %>'))
+        .pipe(ifElse(PRODUCTION, () => uglify()))
+        .on('end', () => {
+            if (!PRODUCTION) del(path.join(BUILD_DIR, 'templates.js.gz'), {force: true})
+        })
+        .pipe(concat('templates.js'))
+        .pipe(insert.prepend('window.templates={};'))
+        .pipe(gulp.dest(BUILD_DIR))
+        .pipe(size(extend({title: 'templates'}, sizeConfig)))
+        .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
+        .pipe(ifElse(PRODUCTION, () => gulp.dest(BUILD_DIR)))
+        .pipe(ifElse(PRODUCTION, () => size(extend({title: 'templates[gzip]'}, sizeConfig))))
+        .pipe(ifElse(isWatching, livereload))
 })
 
 

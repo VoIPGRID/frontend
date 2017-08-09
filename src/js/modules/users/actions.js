@@ -76,15 +76,26 @@ module.exports = function(app, _module) {
      * @returns {Object} - The observable properties.
      */
     actions.readUser = async function(userId) {
+        let baseUrl, user
+        const clientId = app.router.currentRoute.params.client_id
+        const partnerId = app.router.currentRoute.params.partner_id
+        if (clientId) baseUrl = `clients/${clientId}/users`
+        else baseUrl = `/partners/${partnerId}/users`
+
         if (userId) {
-            const clientId = app.router.currentRoute.params.client_id
-            const partnerId = app.router.currentRoute.params.partner_id
-            let user
-            if (clientId) user = await app.api.client.get(`clients/${clientId}/users/${userId}/`)
-            else user = await app.api.client.get(`/partners/${partnerId}/users/${userId}/`)
-            return Object.assign(_module.getObservables().currentUser, user.data)
+            const res = await app.api.client.get(`${baseUrl}/${userId}`)
+            user = Object.assign(_module.getObservables().currentUser, res.data)
         } else {
-            return _module.getObservables().currentUser
+            user = _module.getObservables().currentUser
+        }
+
+        let [groups] = await Promise.all([
+            app.api.client.get(`${baseUrl}/groups`),
+        ])
+
+        return {
+            groups: groups.data,
+            user: user,
         }
     }
 
@@ -136,12 +147,18 @@ module.exports = function(app, _module) {
     * @param {Observable} validator - The observable Vuelidate validator.
     */
     actions.upsertUser = function(user, validator) {
-        let url
+        let backRoute, url
         const clientId = app.router.currentRoute.params.client_id
         const partnerId = app.router.currentRoute.params.partner_id
 
-        if (clientId) url = `/clients/${clientId}/users/${user.id}/`
-        else url = `/partners/${partnerId}/users/${user.id}/`
+        if (clientId) {
+            backRoute = {name: 'list_client_users', params: {client_id: clientId}}
+            url = `/clients/${clientId}/users/${user.id}/`
+        }
+        else {
+            backRoute = {name: 'list_partner_users', params: {partner_id: partnerId}}
+            url = `/partners/${partnerId}/users/${user.id}/`
+        }
 
         app.api.client.put(url, user).then((res) => {
             if (res.status === 200) {
@@ -158,7 +175,7 @@ module.exports = function(app, _module) {
                     app.vue.$shout({message: $t('Profile succesfully updated')})
                 } else {
                     app.vue.$shout({message: $t('User succesfully updated')})
-                    app.router.push(app.utils.lastRoute('list_clients'))
+                    app.router.push(app.utils.lastRoute(backRoute))
                 }
             } else {
                 // Trigger serverside validation.

@@ -80,6 +80,7 @@ class UsersModule extends Module {
             },
             currentUser: {
                 email: null,
+                groups: [],
                 old_password: '',
                 password: '',
                 password_confirm: '',
