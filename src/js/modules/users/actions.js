@@ -154,8 +154,7 @@ module.exports = function(app, _module) {
         if (clientId) {
             backRoute = {name: 'list_client_users', params: {client_id: clientId}}
             url = `/clients/${clientId}/users/${user.id}/`
-        }
-        else {
+        } else {
             backRoute = {name: 'list_partner_users', params: {partner_id: partnerId}}
             url = `/partners/${partnerId}/users/${user.id}/`
         }

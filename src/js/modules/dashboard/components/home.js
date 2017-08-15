@@ -3,8 +3,10 @@ module.exports = (app) => {
     const template = app.templates.dashboard_home
 
     return Vue.component('DashboardHome', {
-        data: function() {
+        create: function() {
 
+        },
+        data: function() {
             return {
                 modules: [
                     {disabled: true, icon: 'vg-icon-phoneaccount', name: $t('VoIP account')},

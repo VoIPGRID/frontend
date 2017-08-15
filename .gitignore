@@ -1,2 +1,4 @@
 node_modules
 docs/build
+src/js/lib/templates.js
+package-lock.json

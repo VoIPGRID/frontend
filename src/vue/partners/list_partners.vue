@@ -34,11 +34,11 @@
             </tr>
         </tbody>
     </table>
-    <paginator
+    <Paginator
         :count=partners.count
         :next=partners.next
         :previous=partners.previous
         :resource_action=fetchData
-        resource_url="/partners">
-    </paginator>
+        resource_url="/partners/">
+    </Paginator>
 </div>

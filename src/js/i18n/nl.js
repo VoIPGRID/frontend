@@ -1,7 +1,7 @@
 /*eslint max-len:0 */
 /*eslint quote-props: 0 */
-if (!window.translations) window.translations = {}
-window.translations.nl = {
+if (!global.translations) global.translations = {}
+global.translations.nl = {
     'A combined export will be created and emailed on the first day of every month.': 'Maakt automatisch op de eerste van de maand een gecombineerde export aan en mailt naar bovenstaand adres.',
     'A favicon for this partner.': 'Een favicon voor deze partner.',
     'A human readable identifier that the relation uses to identify you by.': 'Een korte beschrijving die de relatie gebruikt om jou te identificeren.',

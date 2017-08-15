@@ -13,7 +13,7 @@
                 :label="$t('Name')"
                 :help="$t('The relation name: a company name or a person name ' +
                 'in case of a private person.')"
-                :model.sync="client.name"
+                :model.sync= "client.name"
                 :placeholder="$t('Name')"
                 :validation="$v.client.name"/>
 

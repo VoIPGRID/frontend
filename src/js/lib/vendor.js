@@ -1,5 +1,6 @@
 global.axios = require('axios')
 global.Vue = require('vue/dist/vue.runtime')
+
 if (process.env.NODE_ENV === 'production') {
     Vue.config.productionTip = false
     Vue.config.devtools = false
@@ -8,6 +9,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 global.VueStash = require('vue-stash')
+// Leave this in, otherwise it breaks beforeCreate hooks with SSR.
+Vue.use(global.VueStash)
 global.VueRouter = require('vue-router')
 
 global.Vuelidate = require('vuelidate')
@@ -16,15 +19,13 @@ global.i18n = require('vuex-i18n-stash')
 global.I18nStore = require('vuex-i18n-stash/src/store-stash')
 
 const {Tabs, Tab} = require('vue-tabcordion')
-const Paginator = require('vue-paginator2')
+global.Paginator = require('vue-paginator2')
 
 const {Shout, Shouts, VueShout} = require('vue-shout')
+
 Vue.use(VueShout)
 
-// Actions and mutations from components are mixed in
-// the application's global Vuex store.
-
-Vue.component('paginator', Paginator)
+Vue.component('Paginator', global.Paginator)
 Vue.component('Shout', Shout)
 Vue.component('Shouts', Shouts)
 Vue.component('Tab', Tab)

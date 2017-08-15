@@ -19,7 +19,9 @@ const gzip = require('gulp-gzip')
 const livereload = require('gulp-livereload')
 const ifElse = require('gulp-if-else')
 const insert = require('gulp-insert')
+const nodemon = require('gulp-nodemon')
 const notify = require('gulp-notify')
+const rename = require('gulp-rename')
 const sass = require('gulp-sass')
 const size = require('gulp-size')
 const source = require('vinyl-source-stream')
@@ -30,8 +32,11 @@ const watchify = require('watchify')
 
 const BUILD_DIR = process.env.BUILD_DIR || '/srv/http/data/frontend'
 const NODE_ENV = process.env.NODE_ENV || 'development'
+const NODE_INSPECT = process.env.NODE_INSPECT ? ' --inspect' : ''
 const NODE_PATH = process.env.NODE_PATH || path.join(__dirname, 'node_modules')
 const PRODUCTION = argv.production ? argv.production : (process.env.NODE_ENV === 'production')
+const RUN_SSR = argv.ssr ? argv.ssr : false
+const SRCDIR = path.join(__dirname, 'src')
 const WITHDOCS = argv.docs ? argv.docs : false
 const WATCHLINKED = argv.linked ? argv.linked : false
 
@@ -66,7 +71,7 @@ gulp.task('build', 'Build application', [
 ])
 
 
-gulp.task('clean-builddir', `Delete build directory '${BUILD_DIR}'`, function() {
+gulp.task('build-clean', `Delete build directory '${BUILD_DIR}'`, function() {
     return del([
         path.join(BUILD_DIR, '**'),
     ], {
@@ -91,35 +96,36 @@ gulp.task('docs', 'Generate documentation', (done) => {
 })
 
 
-gulp.task('js-app', 'Generate app.js', (done) => {
+gulp.task('js-app', 'Generate app for the browser', (done) => {
     if (!bundlers.app) {
         bundlers.app = browserify({
             cache: {},
             debug: !PRODUCTION,
-            entries: path.join(__dirname, 'src', 'js', 'app.js'),
+            entries: path.join(__dirname, 'src', 'js', 'browser.js'),
             packageCache: {},
         })
         if (isWatching) bundlers.app.plugin(watchify)
     }
     bundlers.app.bundle()
         .on('error', notify.onError('Error: <%= error.message %>'))
-        .pipe(source('app.js'))
+        .pipe(source('browser.js'))
         .pipe(buffer())
+        .pipe(rename('app.js'))
         .pipe(ifElse(!PRODUCTION, () => sourcemaps.init({loadMaps: true})))
         .pipe(ifElse(PRODUCTION, () => babel({compact: true, presets: ['es2015', 'es2016', 'es2017']})))
         .pipe(envify({NODE_ENV: NODE_ENV}))
         .pipe(ifElse(PRODUCTION, () => uglify()))
         .on('error', notify.onError('Error: <%= error.toString() %>'))
         .on('end', () => {
-            if (!PRODUCTION) del(path.join(BUILD_DIR, '*.js.gz'), {force: true})
+            if (!PRODUCTION) del(path.join(BUILD_DIR, 'js', '*.js.gz'), {force: true})
             // Let the docs task handle livereload when it is part of the build.
             if (isWatching && !WITHDOCS) livereload.changed('app.js')
             done()
         })
         .pipe(ifElse(!PRODUCTION, () => sourcemaps.write('./')))
-        .pipe(gulp.dest(BUILD_DIR))
+        .pipe(gulp.dest(path.join(BUILD_DIR, 'js')))
         .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
-        .pipe(ifElse(PRODUCTION, () => gulp.dest(BUILD_DIR)))
+        .pipe(ifElse(PRODUCTION, () => gulp.dest(path.join(BUILD_DIR, 'js'))))
         .pipe(size(extend({title: 'js-app'}, sizeConfig)))
         .pipe(ifElse(PRODUCTION, () => size(extend({title: 'js-app[gzip]'}, sizeConfig))))
 })
@@ -128,7 +134,7 @@ gulp.task('js-app', 'Generate app.js', (done) => {
 gulp.task('js-translations', 'Generate translations', (done) => {
     return gulp.src('./src/js/i18n/*.js', {base: './src/js/'})
         .pipe(ifElse(PRODUCTION, () => uglify()))
-        .pipe(gulp.dest(BUILD_DIR))
+        .pipe(gulp.dest(path.join(BUILD_DIR, 'js')))
         .pipe(size(extend({title: 'js-translations'}, sizeConfig)))
         .pipe(ifElse(isWatching, livereload))
 })
@@ -139,7 +145,7 @@ gulp.task('js-vendor', 'Generate vendor.js', (done) => {
         bundlers.vendor = browserify({
             cache: {},
             debug: !PRODUCTION,
-            entries: path.join(__dirname, 'src', 'js', 'vendor.js'),
+            entries: path.join(__dirname, 'src', 'js', 'lib', 'vendor.js'),
             packageCache: {},
         })
         if (isWatching) bundlers.vendor.plugin(watchify)
@@ -152,15 +158,15 @@ gulp.task('js-vendor', 'Generate vendor.js', (done) => {
         .pipe(envify({NODE_ENV: NODE_ENV}))
         .pipe(ifElse(PRODUCTION, () => uglify()))
         .on('end', () => {
-            if (!PRODUCTION) del(path.join(BUILD_DIR, '*.js.gz'), {force: true})
+            if (!PRODUCTION) del(path.join(BUILD_DIR, 'js', 'lib', '*.js.gz'), {force: true})
             if (isWatching) livereload.changed('vendor.js')
             done()
         })
         .pipe(ifElse(!PRODUCTION, () => sourcemaps.write('./')))
-        .pipe(gulp.dest(BUILD_DIR))
+        .pipe(gulp.dest(path.join(BUILD_DIR, 'js', 'lib')))
         .pipe(size(extend({title: 'js-vendor'}, sizeConfig)))
         .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
-        .pipe(ifElse(PRODUCTION, () => gulp.dest(BUILD_DIR)))
+        .pipe(ifElse(PRODUCTION, () => gulp.dest(path.join(BUILD_DIR, 'js', 'lib'))))
         .pipe(ifElse(PRODUCTION, () => size(extend({title: 'js-vendor[gzip]'}, sizeConfig))))
 })
 
@@ -177,14 +183,14 @@ gulp.task('scss', 'Generate main.css', (done) => {
         .pipe(concat('main.css'))
         .pipe(ifElse(PRODUCTION, () => cleanCSS({advanced: true, level: 0})))
         .on('end', () => {
-            if (!PRODUCTION) del(path.join(BUILD_DIR, '*.css.gz'), {force: true})
+            if (!PRODUCTION) del(path.join(BUILD_DIR, 'css', '*.css.gz'), {force: true})
             if (isWatching) livereload.changed('main.css')
             done()
         })
-        .pipe(gulp.dest(BUILD_DIR))
+        .pipe(gulp.dest(path.join(BUILD_DIR, 'css')))
         .pipe(size(extend({title: 'scss'}, sizeConfig)))
         .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
-        .pipe(ifElse(PRODUCTION, () => gulp.dest(BUILD_DIR)))
+        .pipe(ifElse(PRODUCTION, () => gulp.dest(path.join(BUILD_DIR, 'css'))))
         .pipe(ifElse(PRODUCTION, () => size(extend({title: 'scss[gzip]'}, sizeConfig))))
 })
 
@@ -201,13 +207,13 @@ gulp.task('scss-vendor', 'Generate vendor.css', (done) => {
         .pipe(concat('vendor.css'))
         .pipe(ifElse(PRODUCTION, () => cleanCSS({advanced: true, level: 2})))
         .on('end', () => {
-            if (!PRODUCTION) del(path.join(BUILD_DIR, '*.css.gz'), {force: true})
+            if (!PRODUCTION) del(path.join(BUILD_DIR, 'css', '*.css.gz'), {force: true})
             if (isWatching) livereload.changed('vendor.css')
             done()
         })
-        .pipe(gulp.dest(BUILD_DIR))
+        .pipe(gulp.dest(path.join(BUILD_DIR, 'css')))
         .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
-        .pipe(ifElse(PRODUCTION, () => gulp.dest(BUILD_DIR)))
+        .pipe(ifElse(PRODUCTION, () => gulp.dest(path.join(BUILD_DIR, 'css'))))
         .pipe(ifElse(PRODUCTION, () => size(extend({title: 'scss-vendor[gzip]'}, sizeConfig))))
         .pipe(ifElse(isWatching, livereload))
 })
@@ -217,19 +223,22 @@ gulp.task('templates', 'Build Vue templates', () => {
     gulp.src('./src/vue/**/*.vue')
         .pipe(fuet({
             commonjs: false,
+            namespace: 'global.templates',
             pathfilter: ['src', 'vue'],
         }))
         .on('error', notify.onError('Error: <%= error.message %>'))
         .pipe(ifElse(PRODUCTION, () => uglify()))
         .on('end', () => {
-            if (!PRODUCTION) del(path.join(BUILD_DIR, 'templates.js.gz'), {force: true})
+            if (!PRODUCTION) del(path.join(BUILD_DIR, 'js', 'templates.js.gz'), {force: true})
         })
         .pipe(concat('templates.js'))
-        .pipe(insert.prepend('window.templates={};'))
-        .pipe(gulp.dest(BUILD_DIR))
+        .pipe(insert.prepend('global.templates={};'))
+        .pipe(gulp.dest(path.join(BUILD_DIR, 'js', 'lib')))
+        // Also write the templates to the src dir for ssr.
+        .pipe(gulp.dest(path.join(SRCDIR, 'js', 'lib')))
         .pipe(size(extend({title: 'templates'}, sizeConfig)))
         .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
-        .pipe(ifElse(PRODUCTION, () => gulp.dest(BUILD_DIR)))
+        .pipe(ifElse(PRODUCTION, () => gulp.dest(path.join(BUILD_DIR, 'js', 'lib'))))
         .pipe(ifElse(PRODUCTION, () => size(extend({title: 'templates[gzip]'}, sizeConfig))))
         .pipe(ifElse(isWatching, livereload))
 })
@@ -240,12 +249,40 @@ gulp.task('watch', 'Watch for changes using livereload', () => {
     livereload.listen({silent: false})
     gulp.watch([
         path.join(__dirname, 'src', 'js', '**', '*.js'),
-        `!${path.join(__dirname, 'src', 'js', 'vendor.js')}`,
+        `!${path.join(__dirname, 'src', 'js', 'server.js')}`,
+        `!${path.join(__dirname, 'src', 'js', 'lib', 'vendor.js')}`,
         `!${path.join(__dirname, 'src', 'js', 'i18n', '*.js')}`,
+        `!${path.join(__dirname, 'src', 'js', 'lib', 'templates.js')}`,
     ], () => {
         gulp.start('js-app')
         if (WITHDOCS) gulp.start('docs')
     })
+
+    if (RUN_SSR) {
+        const _nodemon = nodemon({
+            env: {NODE_ENV: NODE_ENV},
+            exec: `node${NODE_INSPECT}`,
+            ext: 'js',
+            ignore: [
+                'browser.js',
+                'docs',
+                'public/**',
+            ],
+            restartable: true,
+            script: 'src/js/server.js',
+        })
+
+        _nodemon.on('crash', function() {
+            console.error('Application has crashed!\n Trying to restart in 3 seconds...\n')
+            _nodemon.emit('restart', 3)
+        })
+
+        _nodemon.on('restart', () => {
+            livereload.changed('server.js')
+        })
+    }
+
+
 
     if (WITHDOCS) {
         gutil.log('Watching documentation')
@@ -280,7 +317,7 @@ gulp.task('watch', 'Watch for changes using livereload', () => {
     }
 
     gulp.watch(path.join(__dirname, 'src', 'js', 'i18n', '*.js'), ['js-translations'])
-    gulp.watch(path.join(__dirname, 'src', 'js', 'vendor.js'), ['js-vendor'])
+    gulp.watch(path.join(__dirname, 'src', 'js', 'lib', 'vendor.js'), ['js-vendor'])
     gulp.watch(path.join(__dirname, 'src', 'vue', '**', '*.vue'), ['templates'])
     gulp.watch(path.join(__dirname, 'src', 'vue', 'index.html'), ['assets'])
     gulp.watch([

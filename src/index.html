@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <link rel="icon" href="/public/img/favicon.ico" type="image/x-icon"/>
+        <link type="text/css" rel="stylesheet" href="/public/css/vendor.css">
+        <link type="text/css" rel="stylesheet" href="/public/css/main.css">
+        <script>window.global = window</script>
+        {% if translations %}
+        <script src="/public/js/i18n/{{translations}}.js"></script>
+        {% endif %}
+        <script>
+        window.__INITIAL_STATE__ = {{state|safe}}
+        <!--STORE-->
+        </script>
+        <script src="http://localhost/public/js/lib/vendor.js"></script>
+        <script src="/public/js/lib/templates.js"></script>
+    </head>
+    <body>
+        <div class="wrapper column" id="app"></div>
+    </body>
+    <script src="/public/js/app.js"></script>
+</html>

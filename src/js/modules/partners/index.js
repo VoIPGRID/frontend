@@ -9,7 +9,8 @@ class PartnersModule extends Module {
 
     constructor(app) {
         super(app)
-        this.app.store.partners = this.getObservables()
+        // Only set observables when they're not yet set from the initial store.
+        if (!this.app.store.partners) this.app.store.partners = this.getObservables()
         this.actions = require('./actions')(app, this)
 
         app.router.addRoutes([{

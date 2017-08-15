@@ -8,7 +8,10 @@ class Api {
         /** @memberof App */
         this.client = axios.create({
             baseURL: '/api/v2/',
-            headers: {'X-CSRFToken': app.__state.csrf},
+            headers: {
+                Accept: 'application/json',
+                'X-CSRFToken': app.__state.csrf,
+            },
             timeout: 3000,
         })
 

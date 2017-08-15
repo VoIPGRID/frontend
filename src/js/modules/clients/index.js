@@ -14,7 +14,7 @@ class ClientsModule extends Module {
      */
     constructor(app) {
         super(app)
-        this.app.store.clients = this.getObservables()
+        if (!this.app.store.clients) this.app.store.clients = this.getObservables()
         this.actions = require('./actions')(app, this)
 
         const AddEditClientComponent = require('./components/add-edit_client')(app, this.actions)
@@ -30,7 +30,6 @@ class ClientsModule extends Module {
             component: require('./components/list_clients')(app, this.actions),
             name: 'list_clients',
             path: '/clients',
-
         }])
 
         app.router.addRoutes([{

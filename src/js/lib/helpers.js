@@ -2,13 +2,10 @@
  * Generic helpers that are accessible on the app object
  * and in the context of each Vue component.
  */
-class Helpers {
-    /**
-     * @param {App} app - The application object.
-     */
-    constructor(app) {
-        this.app = app
-    }
+
+module.exports = function(app) {
+
+    let helpers = {}
     /**
      * Make smaller array chunks from a flat array.
      * @param {Array} items - The items array to chunk.
@@ -18,7 +15,7 @@ class Helpers {
      * chunk([1,2,3,4,5,6,7,8,9,0])
      * // [[1,2,3],[4,5,6],[7,8,9],[0]]
      */
-    chunk(items, chunkSize) {
+    helpers.chunk = function(items, chunkSize) {
         let R = []
         for (let i = 0, len = items.length; i < len; i += chunkSize) {
             R.push(items.slice(i, i + chunkSize))
@@ -37,7 +34,7 @@ class Helpers {
      * parseSearch(location.search)
      * // {page: "1"}
      */
-    parseSearch(query) {
+    helpers.parseSearch = function(query) {
         let e, k, v
         let re = /([^&=]+)=?([^&]*)/g
         let decode = function(str) {
@@ -76,7 +73,7 @@ class Helpers {
      * stringifySearch({page: "1"})
      * // page=1
      */
-    stringifySearch(params) {
+    helpers.stringifySearch = function(params) {
         return Object.keys(params).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`).join('&')
     }
 
@@ -88,17 +85,17 @@ class Helpers {
      * @param {String} defaultRoute - Name of the Vue-router route.
      * @returns {Object} route - Name and query properties of the route.
      */
-    lastRoute(defaultRoute) {
+    helpers.lastRoute = function(defaultRoute) {
         if (typeof defaultRoute === 'string') defaultRoute = {name: defaultRoute}
-        if (this.app.history.length > 1) {
-            const lastRoute = this.app.history[this.app.history.length - 2]
+        if (app.history.length > 1) {
+            const lastRoute = app.history[app.history.length - 2]
             return {
                 name: lastRoute.name,
                 query: lastRoute.query,
             }
         }
         // Fall back to the default route.
-        let route = this.app.router.resolve(defaultRoute)
+        let route = app.router.resolve(defaultRoute)
         return {
             name: route.route.name,
             query: route.route.query,
@@ -111,7 +108,7 @@ class Helpers {
      * @param {String} src - The source of the script.
      * @param {Function} cb - Function to call when the script is loaded.
      */
-    injectScript(src, cb) {
+    helpers.injectScript = function(src, cb) {
         let script = document.createElement('script')
         script.type = 'text/javascript'
 
@@ -126,17 +123,6 @@ class Helpers {
         // Set the `src` to begin transport.
         script.src = src
     }
-}
 
-
-module.exports = function install(Vue, app) {
-    /** @memberof App */
-    app.utils = new Helpers(app)
-    Object.defineProperties(Vue.prototype, {
-        $helpers: {
-            get() {
-                return app.utils
-            },
-        },
-    });
+    return helpers
 }

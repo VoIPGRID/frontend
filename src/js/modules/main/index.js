@@ -32,23 +32,29 @@ class MainModule extends Module {
 
     mountVdom() {
         // Start up virtual DOM renderer.
+
+        const mainComponent = Vue.component('Main', {
+            render: this.app.templates.main_main.r,
+            staticRenderFns: this.app.templates.main_main.s,
+            store: {
+                shouts: 'shouts',
+                user: 'users.user',
+            },
+        })
+
         this.app.vue = new Vue({
-            data: () => {
-                return {
-                    store: this.app.store,
-                }
+            data: {
+                store: this.app.store,
             },
             i18n: this.app.i18n,
-            render: createElement => createElement({
-                render: this.app.templates.main_main.r,
-                staticRenderFns: this.app.templates.main_main.s,
-                store: {
-                    shouts: 'shouts',
-                    user: 'users.user',
-                },
-            }),
+            render: h => h(mainComponent),
             router: this.app.router,
-        }).$mount('#app')
+        })
+
+        if (this.app.env.isBrowser) {
+            this.app.vue.$mount(document.querySelector('.wrapper'))
+        }
+
     }
 
 

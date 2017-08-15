@@ -67,6 +67,7 @@ module.exports = function(app, _module) {
         const uri = `${data.resourceUrl}?${app.utils.stringifySearch(data.params)}`
         let partners = await app.api.client.get(uri)
         this.partners = partners.data.results
+        // console.log(partners.data)
         return partners.data
     }
 

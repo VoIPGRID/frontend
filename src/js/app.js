@@ -1,5 +1,4 @@
 const Api = require('./lib/api')
-const Helpers = require('./lib/helpers')
 const Logger = require('./lib/logger')
 const globalStore = require('./lib/store')
 
@@ -9,32 +8,58 @@ const globalStore = require('./lib/store')
  */
 class App {
     /**
-     * @param {Object} userState - The user state as passed from the backend.
+     * @param {Object} initialState - The user state as passed from the backend.
      * @param {Object} templates - The compiled Vue templates to start with.
      */
-    constructor(userState, templates) {
+    constructor(initialState, templates) {
         // Assign the template global to the app context.
-        this.__state = userState
+        this.__state = initialState
         this.templates = templates
         this.logger = new Logger(this)
 
+        this.env = {
+            isBrowser: false,
+            isNode: false,
+            ssr: true,
+        }
+
+        if (global.navigator) this.env.isBrowser = true
+        else this.env.isNode = true
+
         // Show a meaningful message to the user when the API is down.
-        if (!userState) {
+        if (!initialState) {
             this.logger.error('Received no state. No API backend?')
             return
         }
+        this.utils = require('./lib/helpers')(this)
+        const _this = this
+        Vue.use((Vue) => {
+            /** @memberof App */
+            if (!Vue.prototype.hasOwnProperty('$helpers')) {
+                Object.defineProperties(Vue.prototype, {
+                    $helpers: {
+                        get() {
+                            return _this.utils
+                        },
+                    },
+                })
+            }
 
-        Vue.use(Helpers, this)
+        })
         this.setupRouter()
 
         Vue.use(Vuelidate.default)
 
         this.api = new Api(this)
 
-        userState.selectedPartner = null
-        userState.selectedClient = null
+        this.__state.selectedPartner = null
+        this.__state.selectedClient = null
         // Keeping the reference to the global store here.
-        this.store = globalStore()
+        if (!global.__INITIAL_STORE__) {
+            this.store = globalStore()
+        } else {
+            this.store = window.__INITIAL_STORE__
+        }
         this.initI18n()
 
         this.loadModules()
@@ -65,14 +90,14 @@ class App {
         // Create a I18n stash store and pass it to the I18n plugin.
         const i18nStore = new I18nStore(this.store)
         Vue.use(i18n, i18nStore)
-        if (global.translations && __state.language in translations) {
-            Vue.i18n.add(__state.language, translations.nl)
-            Vue.i18n.set(__state.language)
-            this.logger.info(`Set language to ${__state.language}`)
+        if (global.translations && this.__state.language in translations) {
+            Vue.i18n.add(this.__state.language, translations.nl)
+            Vue.i18n.set(this.__state.language)
+            this.logger.info(`Set language to ${this.__state.language}`)
         } else {
             // Warn about a missing language when it's a different one than
             // the default.
-            if (__state.language !== 'en') this.logger.warn(`No translations found for ${__state.language}`)
+            if (this.__state.language !== 'en') this.logger.warn(`No translations found for ${this.__state.language}`)
         }
         // Add a simple reference to the translation module.
         this.$t = Vue.i18n.translate
@@ -83,9 +108,14 @@ class App {
         // Holds an array of visited routes.
         this.history = []
         Vue.use(VueRouter)
-        // TODO: Clear the base url as soon as we ditched the hybrid situation.
+        let baseUrl = '/ssr/'
+        // Allow falling back to non-ssr.
+        if (global.location && global.location.pathname.includes('/v2/')) {
+            baseUrl = '/v2/'
+            this.env.ssr = false
+        }
         this.router = new VueRouter({
-            base: '/v2/',
+            base: baseUrl,
             linkActiveClass: 'is-active',
             mode: 'history',
         })
@@ -93,9 +123,54 @@ class App {
         this.router.afterEach((to, from) => {
             this.history.push(to)
         })
+
+        if (this.env.isBrowser) {
+            this.router.onReady(() => {
+                // Add router hook for handling asyncData. Doing it after
+                // initial route is resolved so that we don't double-fetch the
+                // data that we already have. Using `router.beforeResolve()`
+                // so that all async components are resolved.
+                if (!this.env.ssr) {
+                    const activated = this.router.getMatchedComponents(this.router.currentRoute)
+                    Promise.all(activated.map(c => {
+                        if (c.sealedOptions && c.sealedOptions.asyncData) {
+                            return c.sealedOptions.asyncData(this.store, this.router.currentRoute)
+                        } else if (c.asyncData) {
+                            return c.asyncData(this.store, this.router.currentRoute)
+                        }
+                    }))
+                }
+
+                this.router.beforeResolve((to, from, next) => {
+                    const matched = this.router.getMatchedComponents(to)
+                    const prevMatched = this.router.getMatchedComponents(from)
+
+                    // We only care about none-previously-rendered components,
+                    // so we compare them until the two matched lists differ.
+                    let diffed = false
+                    const activated = matched.filter((c, i) => {
+                        return diffed || (diffed = (prevMatched[i] !== c))
+                    })
+
+                    if (!activated.length) {
+                        return next()
+                    }
+
+                    // This is where we should trigger a loading indicator
+                    // if there is one.
+                    Promise.all(activated.map(c => {
+                        console.log("BLAA")
+                        if (c.sealedOptions && c.sealedOptions.asyncData) {
+                            return c.sealedOptions.asyncData(this.store, this.router.currentRoute)
+                        }
+                    })).then(() => {
+                        // Stop loading indicator.
+                        next()
+                    }).catch(next)
+                })
+            })
+        }
     }
 }
 
-
-/** @global */
-window.app = new App(global.__state, window.templates)
+module.exports = App

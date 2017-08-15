@@ -64,17 +64,26 @@
     "yargs": "^7.0.2"
   },
   "dependencies": {
-    "axios": "^0.16.1",
+    "@3846masa/axios-cookiejar-support": "^0.1.1",
+    "axios": "^0.16.2",
+    "bluebird": "^3.5.0",
     "bulma": "^0.5.0",
+    "connect-cookies": "0.0.0",
     "font-awesome": "^4.7.0",
+    "gulp-nodemon": "^2.2.1",
+    "request": "^2.81.0",
+    "serve-favicon": "^2.4.3",
+    "serve-static": "^1.12.4",
     "vg-icons": "git+https://github.com/voipgrid/vg-icons#master",
-    "vue": "^2.3.0",
+    "vue": "^2.4.2",
     "vue-i18n": "^7.0.5",
     "vue-paginator2": "^1.0.2",
     "vue-router": "^2.4.0",
+    "vue-server-renderer": "^2.4.2",
     "vue-shout": "^1.0.4",
     "vue-stash": "^2.0.1-beta",
     "vue-tabcordion": "^1.0.1",
+    "vue-template-compiler": "^2.4.2",
     "vuelidate": "^0.4.3",
     "vuex-i18n-stash": "git+https://github.com/jvanveen/vuex-i18n-stash.git#master"
   }

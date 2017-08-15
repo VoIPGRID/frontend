@@ -19,8 +19,8 @@ module.exports = (app, actions) => {
                 return false
             },
         },
-        created: function() {
-            this.fetchData()
+        created: async function() {
+            await this.fetchData()
         },
         methods: {
             fetchData: async function() {
