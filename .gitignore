@@ -27,3 +27,5 @@ db.json
 src/assets/vendor
 
 yarn.lock
+.tags
+.tags1
