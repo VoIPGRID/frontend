@@ -28,7 +28,7 @@
             </div>
         </section>
         <footer class="modal-card-foot has-text-right">
-            <button class="is-pulled-right button is-primary" @click="login(credentials, credentials)">Login</button>
+            <button class="is-pulled-right button is-primary" v-on:click="login(credentials, credentials)">Login</button>
         </footer>
     </div>
 </div>

@@ -32,7 +32,6 @@ class MainModule extends Module {
 
     mountVdom() {
         // Start up virtual DOM renderer.
-
         const mainComponent = Vue.component('Main', {
             render: this.app.templates.main_main.r,
             staticRenderFns: this.app.templates.main_main.s,
@@ -52,7 +51,7 @@ class MainModule extends Module {
         })
 
         if (this.app.env.isBrowser) {
-            this.app.vue.$mount(document.querySelector('.wrapper'))
+            this.app.vue.$mount(document.querySelector('#app'))
         }
 
     }

@@ -21,9 +21,6 @@
   "bugs": {
     "url": "https://github.com/VoIPGRID/voipgrid-frontend/issues"
   },
-  "browser": {
-    "vue": "vue/dist/vue.common.js"
-  },
   "homepage": "https://github.com/VoIPGRID/voipgrid-frontend#readme",
   "devDependencies": {
     "babel-cli": "^6.24.1",

@@ -88,7 +88,5 @@
                 <span class="item-text">{{$t('Statistics')}}</span>
             </router-link>
         </li>
-
-
     </ul>
 </nav>

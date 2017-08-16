@@ -97,7 +97,7 @@ readFileAsync(path.join('src', 'index.html'), 'utf8').then((indexHTML, err) => {
             createApp(req.url, initialState).then(({app}) => {
                 axios.defaults.headers['X-CSRFToken'] = clientCsrf
                 renderer.renderToString(app.vue, (_err, html) => {
-                    let _html = indexHTML.replace('<div class="wrapper column" id="app"></div>', html)
+                    let _html = indexHTML.replace('<div id="app"></div>', html)
                     // Must use the browser csrf from here on.
                     initialState.csrf = clientCsrf
                     _html = _html.replace('{{state|safe}}', JSON.stringify(initialState))
