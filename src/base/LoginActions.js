@@ -2,6 +2,8 @@ import axios from 'axios';
 import { API_ROOT } from 'src/constants';
 
 export const LOGIN_USER = 'LOGIN_USER';
+export const AUTH_FAILED = 'AUTH_FAILED';
+export const LOGOUT_USER = 'LOGOUT_USER';
 
 export async function loginUser(values) {
     let url = `${API_ROOT}/login/`;
@@ -17,6 +19,13 @@ export async function loginUser(values) {
 
     return {
         type: LOGIN_USER,
+        payload: result,
+    }
+}
+
+export function logoutUser(result) {
+    return {
+        type: LOGOUT_USER,
         payload: result,
     }
 }

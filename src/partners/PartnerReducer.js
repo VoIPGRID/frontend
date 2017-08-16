@@ -13,7 +13,7 @@ export default function(state = INITIAL_STATE, action) {
             };
         case GET_PARTNERS:
             return { ...state,
-                objects: action.payload.data
+                objects: action.payload.data.results
             };
         case CREATE_PARTNER:
             return { ...state };

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import ReduxPromise from 'redux-promise';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import reducers from 'base';
 import Login from 'base/Login';
@@ -13,25 +13,14 @@ import PartnerForm from 'partners/PartnerForm';
 import ClientList from 'clients/ClientList';
 import Navigation from 'base/Navigation';
 
+import PrivateRoute from 'base/PrivateRoute';
+
 import './assets/style/base.scss';
 import './assets/vendor/fontawesome/css/font-awesome-core.css';
 import './assets/vendor/fontawesome/css/font-awesome-regular.css';
 
 
 const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
-
-function PrivateRoute ({component: Component, authed, ...rest}) {
-  return (
-    <Route
-      {...rest}
-      render={(props) => authed === true
-        ? <Component {...props} />
-        : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
-    />
-  )
-}
-
-const authed = window.__INITIAL_STATE__.authenticated;
 
 ReactDOM.render(
     <Provider store={createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
@@ -46,9 +35,9 @@ ReactDOM.render(
                             <PrivateRoute path="/partners/create" component={PartnerForm} />
                             <PrivateRoute path="/partners/:id/edit" component={PartnerForm} />
                             <PrivateRoute path="/partners/:id" component={PartnerDetail} />
-                            <PrivateRoute path="/partners" authed={authed} component={PartnerList} />
-                            <PrivateRoute path="/clients/partner/:partnerId" component={ClientList} />
-                            <PrivateRoute path="/clients" authed={authed} component={ClientList} />
+                            <PrivateRoute path="/partners" component={PartnerList} />
+                            <PrivateRoute path="/clients/partner/:partnerId"  component={ClientList} />
+                            <PrivateRoute path="/clients" component={ClientList} />
                         </Switch>
                     </div>
                 </section>

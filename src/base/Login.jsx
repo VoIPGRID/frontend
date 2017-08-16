@@ -12,7 +12,8 @@ class Login extends Component {
 
         this.state = {
             'email': '',
-            'password': ''
+            'password': '',
+            'error': ''
         }
     }
 
@@ -31,11 +32,13 @@ class Login extends Component {
 
         const { status } = response.payload;
 
-        console.log(response)
-
         if (status === 200 || status === 201) {
-            window.__INITIAL_STATE__ = response.payload.data;
-            this.props.history.push('/partners');
+            if(response.payload.data.authenticated === false) {
+                this.setState({error: 'wrong_creds'});
+            } else {
+                window.__INITIAL_STATE__ = response.payload.data;
+                this.props.history.push('/partners');
+            }
         } else {
             console.log('Error');
         }
@@ -50,26 +53,35 @@ class Login extends Component {
     }
 
     render() {
+        const err = this.state.error;
         return (
-            <form onSubmit={this.handleSubmit}>
-                <div className="field">
-                    <label className="label">Email</label>
-                    <div className="control">
-                        <input className="input" type="email" value={this.state.email} onChange={this.handleEmailChange.bind(this)}/>
+            <div>
+                { err &&
+                    <div className="notification is-danger">
+                        <p>Please enter a correct email address and password. Note that both fields may be case-sensitive.</p>
                     </div>
-                </div>
+                }
+                <form onSubmit={this.handleSubmit}>
 
-                <div className="field">
-                    <label className="label">Password</label>
-                    <div className="control">
-                        <input className="input" type="password" value={this.state.password} onChange={this.handlePasswordChange.bind(this)} />
+                    <div className="field">
+                        <label className="label">Email</label>
+                        <div className="control">
+                            <input className="input" type="email" value={this.state.email} onChange={this.handleEmailChange.bind(this)}/>
+                        </div>
                     </div>
-                </div>
 
-                <div className="control">
-                  <input type="submit" className="button is-primary" value="Submit" />
-                </div>
-            </form>
+                    <div className="field">
+                        <label className="label">Password</label>
+                        <div className="control">
+                            <input className="input" type="password" value={this.state.password} onChange={this.handlePasswordChange.bind(this)} />
+                        </div>
+                    </div>
+
+                    <div className="control">
+                      <input type="submit" className="button is-primary" value="Submit" />
+                    </div>
+                </form>
+            </div>
         );
     }
 }

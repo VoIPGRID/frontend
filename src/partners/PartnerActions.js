@@ -7,13 +7,29 @@ export const GET_PARTNER = 'GET_PARTNER';
 export const UPDATE_PARTNER = 'UPDATE_PARTNER';
 export const DELETE_PARTNER = 'DELETE_PARTNER';
 
-export async function getPartners(searchString = '') {
-    const url = `${API_ROOT}/partners/?name_like=${searchString}`;
-    const request = await axios.get(url);
+import { AUTH_FAILED} from '../base/LoginActions';
 
-    return {
-        type: GET_PARTNERS,
-        payload: request,
+export async function getPartners(searchString = '') {
+    const url = `${API_ROOT}/partners/`;
+
+    try {
+        const request = await axios.create({
+            headers: {'X-CSRFToken': window.__INITIAL_STATE__.csrf},
+            timeout: 3000,
+            withCredentials: true,
+        });
+
+        const result = await request.get(url);
+
+        return {
+            type: GET_PARTNERS,
+            payload: result,
+        }
+    } catch(err) {
+        return {
+            type: AUTH_FAILED,
+            payload: err,
+        }
     }
 }
 
