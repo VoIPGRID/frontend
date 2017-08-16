@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
-import { getPartners, createPartner, getPartner, updatePartner } from './PartnerActions';
+import { getPartners, createPartner, getPartner, updatePartner, emptyPartner } from './PartnerActions';
 
 class PartnerForm extends Component {
     constructor(props) {
@@ -18,12 +18,16 @@ class PartnerForm extends Component {
         this._getPartnerOptions = this._getPartnerOptions.bind(this);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const { id } = this.props.match.params;
 
         if (id) {
-            this.props.getPartner(id);
+            await this.props.getPartner(id);
         }
+    }
+
+    componentWillUnmount() {
+        this.props.emptyPartner();
     }
 
     renderField(field) {
@@ -78,7 +82,13 @@ class PartnerForm extends Component {
                 <label className={labelClass}>{field.label}</label>
                 <div className="control">
                     {element}
+
+                    {
+                        field.helpText &&
+                            <p className="help">{field.helpText}</p>
+                    }
                 </div>
+
 
                 {touched && error &&
                     <p className="help is-danger">{error}</p>
@@ -129,11 +139,20 @@ class PartnerForm extends Component {
                         </TabList>
 
                         <TabPanel>
-                            <Field label="Owner" name="partner" type="select" required="true" component={this.renderField} loadOptions={this._getPartnerOptions} />
-                            <Field label="Name" name="name" type="text" required="true" component={this.renderField} />
+                            <Field label="Owner" name="owner" helpText="This allows for reseller-style relationships. Set to NULL for the system owner." type="select" required="true" component={this.renderField} loadOptions={this._getPartnerOptions} />
+                            <Field label="Name" name="name" helpText="The relation name: a company name or a person name in case of a private person." type="text" required="true" component={this.renderField} />
                             <Field label="Description" name="description" type="textarea" component={this.renderField} />
-                            <Field label="Foreign code" name="foreign_code" type="text" component={this.renderField} />
+                            <Field label="Foreign code" name="foreign_code" helpText="A human readable identifier that the relation uses to identify you by." type="text" component={this.renderField} />
                             <Field label="May have children" name="may_have_children" type="checkbox" component={this.renderField} />
+
+                            <h2 className="subtitle">Domains</h2>
+                            <Field label="Domain" name="domain" type="text" helpText="E.g. your.hostname" component={this.renderField} />
+                            <Field label="Email address" name="email_address" type="text" component={this.renderField} />
+                            <Field label="No-reply email address" name="no_reply_email_address" helpText="Address to be used for sending out notifications." type="text" component={this.renderField} />
+                            <Field label="Wiki base url" name="wiki_base_url" helpText="E.g. https://wiki.voipgrid.nl/index.php/" type="text" component={this.renderField} />
+                            <Field label="Registration domain" name="registration_domain" helpText="The domain name client phones use as proxy address. E.g. proxy_hostname" type="text" component={this.renderField} />
+
+                            <h2 className="subtitle">Branding</h2>
                         </TabPanel>
 
                         <TabPanel>
@@ -185,7 +204,8 @@ function mapDispatchToProps(dispatch) {
         getPartners,
         createPartner,
         getPartner,
-        updatePartner
+        updatePartner,
+        emptyPartner,
     }, dispatch);
 }
 

@@ -19,7 +19,7 @@ class ClientList extends Component {
             table = this.props.clients.map(client => {
                 return (
                     <tr key={client.id}>
-                        <td><Link to={`/clients/${client.id}/admin`}>{client.name}</Link></td>
+                        <td><Link to={`/clients/${client.id}`}>{client.name}</Link></td>
                         <td>{client.created}</td>
                         <td>{client.description}</td>
                         <td>{client.partner}</td>

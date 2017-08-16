@@ -8,18 +8,35 @@ export const GET_CLIENT = 'GET_CLIENT';
 export const UPDATE_CLIENT = 'UPDATE_CLIENT';
 export const DELETE_CLIENT = 'DELETE_CLIENT';
 
-export function getClients(partnerId = null) {
-    let url = `${API_ROOT}/clients/`;
+import { AUTH_FAILED} from '../base/LoginActions';
 
-    if (partnerId) {
-        url += `?partner=${partnerId}`;
+export async function getClients(partner = null) {
+    let url;
+
+    if (partner) {
+        url = `${API_ROOT}/clients/?partner=${partner}`;
+    } else {
+        url = `${API_ROOT}/clients/`;
     }
 
-    const request = axios.get(url);
+    try {
+        const request = await axios.create({
+            headers: {'X-CSRFToken': window.__INITIAL_STATE__.csrf},
+            timeout: 3000,
+            withCredentials: true,
+        });
 
-    return {
-        type: GET_CLIENTS,
-        payload: request,
+        const result = await request.get(url);
+
+        return {
+            type: GET_CLIENTS,
+            payload: result,
+        }
+    } catch(err) {
+        return {
+            type: AUTH_FAILED,
+            payload: err,
+        }
     }
 }
 
@@ -65,4 +82,3 @@ export function deleteClient(id) {
         payload: {id, request},
     }
 }
-

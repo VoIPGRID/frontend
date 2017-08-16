@@ -1,4 +1,4 @@
-import { GET_PARTNERS, CREATE_PARTNER, GET_PARTNER, UPDATE_PARTNER, DELETE_PARTNER } from './PartnerActions'
+import { GET_PARTNERS, CREATE_PARTNER, GET_PARTNER, UPDATE_PARTNER, DELETE_PARTNER, EMPTY_PARTNER } from './PartnerActions'
 
 const INITIAL_STATE = {
     current: null,
@@ -32,6 +32,10 @@ export default function(state = INITIAL_STATE, action) {
                 objects: state.objects.filter(partner => {
                     return partner.id !== action.payload.id
                 })
+            }
+        case EMPTY_PARTNER:
+            return { ...state,
+                current: null,
             }
         default:
             return state;
