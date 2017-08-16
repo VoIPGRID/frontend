@@ -12,6 +12,7 @@ axiosCookieJarSupport(axios)
 const App = require('./app')
 const cookies = require('connect-cookies')
 const connect = require('connect')
+const morgan = require('morgan')
 const serveIndex = require('serve-index')
 const serveStatic = require('serve-static')
 const favicon = require('serve-favicon')
@@ -52,7 +53,7 @@ function createApp(url, context) {
                 if (Component.sealedOptions && Component.sealedOptions.asyncData) {
                     return Component.sealedOptions.asyncData(app.store, app.router.currentRoute)
                 } else if (Component.asyncData) {
-                    Component.asyncData(app.store, app.router.currentRoute)
+                    return Component.asyncData(app.store, app.router.currentRoute)
                 }
             }))
 
@@ -67,17 +68,25 @@ function createApp(url, context) {
 
 readFileAsync(path.join('src', 'index.html'), 'utf8').then((indexHTML, err) => {
     const _connect = connect()
+    _connect.use(morgan('dev'))
     _connect.use(favicon(path.join(__dirname, '../', 'img', 'favicon.ico')))
     _connect.use('/public', serveStatic('/srv/http/data/frontend'))
     _connect.use('/public', serveIndex('/srv/http/data/frontend', {icons: false}))
     _connect.use(cookies())
     _connect.use((req, res, next) => {
         const cookieJar = new tough.CookieJar()
+        // Log the requesting user in to the proxy request.
         cookieJar.setCookieSync(`sessionid=${req.cookies.get('sessionid')}`, 'http://localhost/')
 
         const clientCsrf = req.cookies.get('csrftoken')
-        // Proxying requires copying the headers and passing the
-        // sessionid in a cookie.
+        // Allow a user to modify store properties, before the snapshot
+        // is rendered. This way, the snapshot can reproduce additional
+        // state that's set in a cookie.
+        let cookieStoreMixin = {}
+        if (req.cookies.get('__INITIAL_STORE__')) {
+            cookieStoreMixin = JSON.parse(decodeURIComponent(req.cookies.get('__INITIAL_STORE__')))
+        }
+
         axios.defaults.headers = req.headers
         axios.defaults.withCredentials = true
         axios.defaults.jar = cookieJar
@@ -100,9 +109,6 @@ readFileAsync(path.join('src', 'index.html'), 'utf8').then((indexHTML, err) => {
                 })
             })
         })
-
-
-
     })
 
     http.createServer(_connect).listen(3000)

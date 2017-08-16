@@ -73,7 +73,6 @@ module.exports = function(app, _module) {
             data.params.partner = app.store.users.user.selectedPartner.id
         }
         const url = `${data.resourceUrl}?${app.utils.stringifySearch(data.params)}`
-        console.log("READ FROM:", url)
         let clients = await app.api.client.get(url)
         this.clients = clients.data.results
         return clients.data

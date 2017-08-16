@@ -93,7 +93,6 @@ class App {
         if (global.translations && this.__state.language in translations) {
             Vue.i18n.add(this.__state.language, translations.nl)
             Vue.i18n.set(this.__state.language)
-            this.logger.info(`Set language to ${this.__state.language}`)
         } else {
             // Warn about a missing language when it's a different one than
             // the default.
@@ -159,9 +158,10 @@ class App {
                     // This is where we should trigger a loading indicator
                     // if there is one.
                     Promise.all(activated.map(c => {
-                        console.log("BLAA")
                         if (c.sealedOptions && c.sealedOptions.asyncData) {
                             return c.sealedOptions.asyncData(this.store, this.router.currentRoute)
+                        } else if (c.asyncData) {
+                            return c.asyncData(this.store, this.router.currentRoute)
                         }
                     })).then(() => {
                         // Stop loading indicator.

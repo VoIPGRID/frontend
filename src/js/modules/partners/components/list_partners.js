@@ -23,6 +23,11 @@ module.exports = (app, actions) => {
             selectPartnerContext: function(partner) {
                 this.$store.users.user.selectedClient = null
                 this.$store.users.user.selectedPartner = partner
+                this.$cookie.set('__INITIAL_STORE__', JSON.stringify({
+                    selectedPartner: {
+                        id: partner.id,
+                    },
+                }), 1)
             },
         },
         render: template.r,
