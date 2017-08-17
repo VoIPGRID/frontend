@@ -1,8 +1,9 @@
-import { GET_PARTNERS, CREATE_PARTNER, GET_PARTNER, UPDATE_PARTNER, DELETE_PARTNER, EMPTY_PARTNER } from './PartnerActions'
+import { GET_PARTNERS, CREATE_PARTNER, GET_PARTNER, UPDATE_PARTNER, DELETE_PARTNER, EMPTY_PARTNER, FORM_ERROR } from './PartnerActions'
 
 const INITIAL_STATE = {
     current: null,
     partners: [],
+    errors: null
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -15,6 +16,11 @@ export default function(state = INITIAL_STATE, action) {
             return { ...state,
                 objects: action.payload.data.results
             };
+        case FORM_ERROR:
+            return {
+                ...state,
+                errors: action.payload.data
+            }
         case CREATE_PARTNER:
             return { ...state };
         case UPDATE_PARTNER:

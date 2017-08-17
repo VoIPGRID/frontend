@@ -89,3 +89,20 @@ $primary: #f15929;
     max-width: 400px;
     margin-bottom: 1.5em;
 }
+
+.input[disabled] {
+    background-color: #eee;
+    border: 1px solid #dbdbdb;
+}
+
+label.label {
+    font-size: 13px;
+}
+
+input, textarea {
+    font-size: 14px !important;
+}
+
+.Select {
+    font-size: 14px !important;
+}
