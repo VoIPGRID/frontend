@@ -116,8 +116,8 @@ readFileAsync(path.join('src', 'index.html'), 'utf8').then((indexHTML, err) => {
 
 
     http.createServer(_connect).listen(3000, () => {
+        // Messages to nodemon that the application is ready to serve
+        // requests. Nodemon fires a livereload trigger after this.
         console.log('nodemon:start:child')
     })
-
-
 })

@@ -239,6 +239,10 @@ gulp.task('templates', 'Build Vue templates', () => {
         .on('error', notify.onError('Error: <%= error.message %>'))
         .pipe(ifElse(PRODUCTION, () => minifier()))
         .on('end', () => {
+            if (isWatching) {
+                if (RUN_SSR) _nodemon.emit('restart', 'vendor.js')
+                else livereload.changed('templates.js')
+            }
             if (!PRODUCTION) del(path.join(BUILD_DIR, 'js', 'templates.js.gz'), {force: true})
         })
         .pipe(concat('templates.js'))
@@ -251,7 +255,6 @@ gulp.task('templates', 'Build Vue templates', () => {
         .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
         .pipe(ifElse(PRODUCTION, () => gulp.dest(path.join(BUILD_DIR, 'js', 'lib'))))
         .pipe(ifElse(PRODUCTION, () => size(extend({title: 'templates[gzip]'}, sizeConfig))))
-        .pipe(ifElse(isWatching, livereload))
 })
 
 
