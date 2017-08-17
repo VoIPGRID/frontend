@@ -36,9 +36,7 @@
     </table>
     <Paginator
         :count=clients.count
-        :next=clients.next
-        :previous=clients.previous
-        :resource_action=fetchData
-        resource_url="/clients/">
+        :method=fetchData
+        path="/clients/">
     </Paginator>
 </div>

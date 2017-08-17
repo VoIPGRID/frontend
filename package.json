@@ -63,11 +63,10 @@
   "dependencies": {
     "@3846masa/axios-cookiejar-support": "^0.1.1",
     "axios": "^0.16.2",
-    "bluebird": "^3.5.0",
     "bulma": "^0.5.0",
     "connect-cookies": "0.0.0",
     "font-awesome": "^4.7.0",
-    "gulp-nodemon": "^2.2.1",
+    "gulp-nodemon": "git+https://github.com/jvanveen/gulp-nodemon.git#master",
     "js-cookie": "^2.1.4",
     "morgan": "^1.8.2",
     "request": "^2.81.0",
@@ -83,7 +82,7 @@
     "vue-stash": "^2.0.1-beta",
     "vue-tabcordion": "^1.0.1",
     "vue-template-compiler": "^2.4.2",
-    "vuelidate": "^0.4.3",
+    "vuelidate": "^0.5.0",
     "vuex-i18n-stash": "git+https://github.com/jvanveen/vuex-i18n-stash.git#master"
   }
 }

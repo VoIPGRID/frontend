@@ -14,6 +14,7 @@ class UsersModule extends Module {
         super(app)
         // Get the default store and augment.
         let defaultStore = this.getObservables()
+        // Augment from the existing store.
         Object.assign(defaultStore, this.app.store.users)
         this.app.store.users = defaultStore
 
@@ -75,22 +76,26 @@ class UsersModule extends Module {
         }])
     }
 
-
     getObservables() {
         return {
             credentials: {
                 email: null,
                 password: null,
             },
-            currentUser: {
+            user: {
                 email: null,
                 groups: [],
                 old_password: '',
                 password: '',
                 password_confirm: '',
                 profile: {
+                    description: '',
+                    first_name: '',
+                    language: '',
                     last_name: '',
+                    preposition: '',
                 },
+                session_expiry: null,
             },
             users: [],
         }

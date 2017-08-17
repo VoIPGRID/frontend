@@ -123,7 +123,7 @@
                         :label="$t('Button text')"
                         :model.sync="partner.btn_text"/>
                 </div>
-                </nav>
+            </nav>
         </Tab>
 
         <Tab id="preferences" :title="$t('Preferences')" v-if="partner.profile">

@@ -6,7 +6,7 @@ module.exports = (app, actions) => {
             let currentPage = parseInt(route.query.page) || 1
             let usersData = await actions.readUsers({
                 page: currentPage,
-                url: route.fullPath,
+                path: route.path,
             })
             store.users.users = usersData
             return usersData

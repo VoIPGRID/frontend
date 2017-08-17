@@ -110,7 +110,7 @@ module.exports = (app) => {
             vRequired: function() {
                 // Field has no validation at all.
                 if (!this.validation) return false
-                return this.validation.$params.required
+                return this.validation.required === false || this.validation.required === true
             },
         },
         props: {

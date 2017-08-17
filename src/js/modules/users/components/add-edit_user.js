@@ -49,7 +49,7 @@ module.exports = (app, actions) => {
         store: {
             apiValidation: 'main.apiValidation',
             root: 'users',
-            user: 'users.currentUser',
+            user: 'users.user',
         },
         validations: function() {
             let validations = {

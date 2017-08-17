@@ -44,6 +44,7 @@ const WATCHLINKED = argv.linked ? argv.linked : false
 let bundlers = {app: null, vendor: null}
 let isWatching
 let gzipConfig = {append: true, gzipOptions: {level: 9}}
+let _nodemon
 let sizeConfig = {showFiles: true, showTotal: true}
 
 if (PRODUCTION) gutil.log('(!) Gulp optimized for production')
@@ -119,8 +120,13 @@ gulp.task('js-app', 'Generate app for the browser', (done) => {
         .on('error', notify.onError('Error: <%= error.toString() %>'))
         .on('end', () => {
             if (!PRODUCTION) del(path.join(BUILD_DIR, 'js', '*.js.gz'), {force: true})
-            // Let the docs task handle livereload when it is part of the build.
-            if (isWatching && !WITHDOCS) livereload.changed('app.js')
+            if (isWatching) {
+                if (RUN_SSR) _nodemon.emit('restart', 'app.js')
+                // Let the docs task handle livereload when it
+                // is part of the build.
+                else if (!WITHDOCS) livereload.changed('app.js')
+            }
+
             done()
         })
         .pipe(ifElse(!PRODUCTION, () => sourcemaps.write('./')))
@@ -160,7 +166,10 @@ gulp.task('js-vendor', 'Generate vendor.js', (done) => {
         .pipe(ifElse(PRODUCTION, () => minifier()))
         .on('end', () => {
             if (!PRODUCTION) del(path.join(BUILD_DIR, 'js', 'lib', '*.js.gz'), {force: true})
-            if (isWatching) livereload.changed('vendor.js')
+            if (isWatching) {
+                if (RUN_SSR) _nodemon.emit('restart', 'vendor.js')
+                else livereload.changed('vendor.js')
+            }
             done()
         })
         .pipe(ifElse(!PRODUCTION, () => sourcemaps.write('./')))
@@ -235,7 +244,8 @@ gulp.task('templates', 'Build Vue templates', () => {
         .pipe(concat('templates.js'))
         .pipe(insert.prepend('global.templates={};'))
         .pipe(gulp.dest(path.join(BUILD_DIR, 'js', 'lib')))
-        // Also write the templates to the src dir for ssr.
+        // Also write the templates to the src directory to be
+        // used by the ssr instance.
         .pipe(gulp.dest(path.join(SRCDIR, 'js', 'lib')))
         .pipe(size(extend({title: 'templates'}, sizeConfig)))
         .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
@@ -260,26 +270,26 @@ gulp.task('watch', 'Watch for changes using livereload', () => {
     })
 
     if (RUN_SSR) {
-        const _nodemon = nodemon({
+        _nodemon = nodemon({
             env: {NODE_ENV: NODE_ENV},
             exec: `node${NODE_INSPECT}`,
             ext: 'js',
+            // Reloads are triggered manually from the appropriate tasks.
             ignore: [
-                'browser.js',
-                'docs',
-                'public/**',
+                '*.js',
             ],
             restartable: true,
             script: 'src/js/server.js',
         })
+
 
         _nodemon.on('crash', function() {
             console.error('Application has crashed!\n Trying to restart in 3 seconds...\n')
             _nodemon.emit('restart', 3)
         })
 
-        _nodemon.on('restart', () => {
-            livereload.changed('server.js')
+        _nodemon.on('start:child', function() {
+            livereload.changed('app.js')
         })
     }
 

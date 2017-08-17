@@ -9,6 +9,10 @@ module.exports = (app, actions) => {
      * @namespace
      */
     return Vue.component('AddEditPartner', {
+        asyncData: async function(store, router) {
+            let partnerData = await actions.readPartner()
+            Object.assign(store.partners, partnerData)
+        },
         computed: {
             branding: function() {
                 if (this.partner.text && this.partner.brand && this.partner.navlink &&
@@ -20,7 +24,8 @@ module.exports = (app, actions) => {
             },
         },
         created: async function() {
-            await this.fetchData()
+            this.partner = this.$store.partners.partner
+            // await this.fetchData()
         },
         methods: {
             fetchData: async function() {

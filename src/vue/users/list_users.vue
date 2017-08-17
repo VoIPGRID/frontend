@@ -50,11 +50,9 @@
             </tr>
         </tbody>
     </table>
-    <paginator
+    <Paginator
         :count="users.count"
-        :next="users.next"
-        :previous="users.previous"
-        :resource_action="fetchData"
-        :resource_url="resourceUrl">
-    </paginator>
+        :method="fetchData"
+        :path="resourceUrl">
+    </Paginator>
 </div>

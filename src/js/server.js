@@ -1,8 +1,6 @@
 /**
 * Entrypoint for SSR renderer.
 */
-global.Promise = require('bluebird')
-
 const axios = require('axios')
 const axiosCookieJarSupport = require('@3846masa/axios-cookiejar-support')
 const tough = require('tough-cookie')
@@ -116,7 +114,10 @@ readFileAsync(path.join('src', 'index.html'), 'utf8').then((indexHTML, err) => {
         })
     })
 
-    http.createServer(_connect).listen(3000)
+
+    http.createServer(_connect).listen(3000, () => {
+        console.log('nodemon:start:child')
+    })
 
 
 })

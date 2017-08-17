@@ -1,8 +1,8 @@
 module.exports = function(app, _module) {
     /**
-     * @memberof module:user
-     * @namespace
-     */
+    * @memberof module:user
+    * @namespace
+    */
     let actions = {}
 
     let $t = Vue.i18n.translate
@@ -36,11 +36,11 @@ module.exports = function(app, _module) {
 
 
     /**
-     * Sign the user in to a new session, set the authentication flag
-     * and update Axios with the new CSRF token.
-     * @param {Observable} root - The module's reactive root object.
-     * @param {Object} credentials - The credentials to login with.
-     */
+    * Sign the user in to a new session, set the authentication flag
+    * and update Axios with the new CSRF token.
+    * @param {Observable} root - The module's reactive root object.
+    * @param {Object} credentials - The credentials to login with.
+    */
     actions.login = function(root, credentials) {
         app.api.client.post('login/', credentials).then((res) => {
             if (res.data) {
@@ -58,8 +58,8 @@ module.exports = function(app, _module) {
 
 
     /**
-     * Log the user out of the current session.
-     */
+    * Log the user out of the current session.
+    */
     actions.logout = function() {
         app.api.client.post('logout/').then((res) => {
             if (res.data) {
@@ -71,10 +71,10 @@ module.exports = function(app, _module) {
 
 
     /**
-     * Read user context from the API and update the user store object.
-     * @param {String} userId - ID of the user to read from the API.
-     * @returns {Object} - The observable properties.
-     */
+    * Read user context from the API and update the user store object.
+    * @param {String} userId - ID of the user to read from the API.
+    * @returns {Object} - The observable properties.
+    */
     actions.readUser = async function(userId) {
         let baseUrl, user
         const clientId = app.router.currentRoute.params.client_id
@@ -84,9 +84,9 @@ module.exports = function(app, _module) {
 
         if (userId) {
             const res = await app.api.client.get(`${baseUrl}/${userId}`)
-            user = Object.assign(_module.getObservables().currentUser, res.data)
+            user = Object.assign(_module.getObservables().user, res.data)
         } else {
-            user = _module.getObservables().currentUser
+            user = _module.getObservables().user
         }
 
         let [groups] = await Promise.all([
@@ -100,9 +100,9 @@ module.exports = function(app, _module) {
     }
 
 
-    actions.readUsers = async function({page, url}) {
-        let users = await app.api.client.get(`${url}/?page=${page}`)
-        this.users = users.data.results
+    actions.readUsers = async function({page, path}) {
+        let users = await app.api.client.get(`${path}?page=${page}`)
+        this.users = users.data
         return users.data
     }
 
