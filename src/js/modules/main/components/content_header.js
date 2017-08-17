@@ -8,7 +8,7 @@ module.exports = (app, actions) => {
         render: template.r,
         staticRenderFns: template.s,
         store: {
-            user: 'users.user',
+            user: 'user',
         },
     }
 }

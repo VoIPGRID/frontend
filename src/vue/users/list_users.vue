@@ -20,7 +20,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="user in users">
+            <tr v-for="user in users.results">
                 <td>
                     <a>{{user.profile.first_name}} {{user.profile.last_name}}</a>
                 </td>

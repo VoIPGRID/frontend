@@ -90,13 +90,18 @@ readFileAsync(path.join('src', 'index.html'), 'utf8').then((indexHTML, err) => {
         axios.defaults.headers = req.headers
         axios.defaults.withCredentials = true
         axios.defaults.jar = cookieJar
+        // Get the initial user state from the Django API.
         axios.get('http://localhost/api/v2/state/').then((_res) => {
             const initialState = _res.data
             axios.defaults.withCredentials = true
             axios.defaults.jar = cookieJar
+            // Augment the initial state with the requester's cookie state.
+            Object.assign(initialState, cookieStoreMixin)
+
+            // Create an isomorphic app instance with the API's initial state.
             createApp(req.url, initialState).then(({app}) => {
                 axios.defaults.headers['X-CSRFToken'] = clientCsrf
-                renderer.renderToString(app.vue, (_err, html) => {
+                renderer.renderToString(app.vm, (_err, html) => {
                     let _html = indexHTML.replace('<div id="app"></div>', html)
                     // Must use the browser csrf from here on.
                     initialState.csrf = clientCsrf

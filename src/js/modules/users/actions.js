@@ -29,7 +29,7 @@ module.exports = function(app, _module) {
         const res = await app.api.client.delete(url)
         if (res.status === 204) {
             this.$store.users.users = this.$store.users.users.filter((i) => i.id !== user.id)
-            app.vue.$shout({message: $t('User {name} succesfully deleted', {name: user.email})})
+            app.vm.$shout({message: $t('User {name} succesfully deleted', {name: user.email})})
             app.router.push(backRoute)
         }
     }
@@ -63,7 +63,7 @@ module.exports = function(app, _module) {
     actions.logout = function() {
         app.api.client.post('logout/').then((res) => {
             if (res.data) {
-                app.store.users.user.authenticated = false
+                app.store.user.authenticated = false
                 app.router.push({name: 'user_login'})
             }
         })
@@ -100,10 +100,10 @@ module.exports = function(app, _module) {
     }
 
 
-    actions.readUsers = async function(data) {
-        const uri = `${data.resourceUrl}?${app.utils.stringifySearch(data.params)}`
-        let users = await app.api.client.get(uri)
+    actions.readUsers = async function({page, url}) {
+        let users = await app.api.client.get(`${url}/?page=${page}`)
         this.users = users.data.results
+        return users.data
     }
 
 
@@ -116,7 +116,7 @@ module.exports = function(app, _module) {
     actions.setLanguage = function(e) {
         // Set the language when user edits it's own information. Other users
         // being edited will just have a modified language field.
-        if (this.user.id !== app.store.users.user.id) return
+        if (this.user.id !== app.store.user.id) return
 
         let language
         let oldLanguage = this.user.profile.language
@@ -170,10 +170,10 @@ module.exports = function(app, _module) {
                 })
 
                 // User's own profile. Don't redirect to the last/list view.
-                if (user.id === app.store.users.user.id) {
-                    app.vue.$shout({message: $t('Profile succesfully updated')})
+                if (user.id === app.store.user.id) {
+                    app.vm.$shout({message: $t('Profile succesfully updated')})
                 } else {
-                    app.vue.$shout({message: $t('User succesfully updated')})
+                    app.vm.$shout({message: $t('User succesfully updated')})
                     app.router.push(app.utils.lastRoute(backRoute))
                 }
             } else {

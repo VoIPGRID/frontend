@@ -14,7 +14,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="client in clients">
+            <tr v-for="client in clients.results">
                 <td>
                     <a @click="selectClientContext(client)">{{client.name}}</a>
                 </td>
@@ -31,9 +31,6 @@
                         </span>
                     </router-link>
                 </td>
-            </tr>
-            <tr v-if="clients.length === 0">
-                <td colspan="3">{{$t('No clients yet')}}</td>
             </tr>
         </tbody>
     </table>

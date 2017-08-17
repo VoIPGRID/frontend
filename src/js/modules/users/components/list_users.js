@@ -1,6 +1,16 @@
 module.exports = (app, actions) => {
     const template = app.templates.users_list_users
     return {
+        asyncData: async function(store, route) {
+            // return the Promise from the action
+            let currentPage = parseInt(route.query.page) || 1
+            let usersData = await actions.readUsers({
+                page: currentPage,
+                url: route.fullPath,
+            })
+            store.users.users = usersData
+            return usersData
+        },
         computed: {
             clientOrPartner: function() {
                 if (this.clientId) return 'client'
@@ -12,6 +22,7 @@ module.exports = (app, actions) => {
             },
         },
         created: function() {
+            this.users = this.$store.users.users
             this.clientId = app.router.currentRoute.params.client_id
             this.partnerId = app.router.currentRoute.params.partner_id
         },

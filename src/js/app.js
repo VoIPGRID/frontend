@@ -1,6 +1,6 @@
 const Api = require('./lib/api')
 const Logger = require('./lib/logger')
-const globalStore = require('./lib/store')
+const Store = require('./lib/store')
 
 
 /**
@@ -26,6 +26,10 @@ class App {
         if (global.navigator) this.env.isBrowser = true
         else this.env.isNode = true
 
+        if (global.location && global.location.pathname.includes('/v2/')) {
+            this.env.ssr = false
+        }
+
         // Show a meaningful message to the user when the API is down.
         if (!initialState) {
             this.logger.error('Received no state. No API backend?')
@@ -47,23 +51,15 @@ class App {
 
         })
         this.setupRouter()
-
+        // Initialize form validator here.
         Vue.use(Vuelidate.default)
-
         this.api = new Api(this)
 
-        this.__state.selectedPartner = null
-        this.__state.selectedClient = null
-        // Keeping the reference to the global store here.
-        if (!global.__INITIAL_STORE__) {
-            this.store = globalStore()
-        } else {
-            this.store = window.__INITIAL_STORE__
-        }
+        this._store = new Store(this, initialState)
         this.initI18n()
 
         this.loadModules()
-        this.modules.main.mountVdom()
+        this.modules.main.initViewModel()
     }
 
 
@@ -107,12 +103,11 @@ class App {
         // Holds an array of visited routes.
         this.history = []
         Vue.use(VueRouter)
-        let baseUrl = '/ssr/'
-        // Allow falling back to non-ssr.
-        if (global.location && global.location.pathname.includes('/v2/')) {
-            baseUrl = '/v2/'
-            this.env.ssr = false
-        }
+
+        let baseUrl
+        if (this.env.ssr) baseUrl = '/ssr/'
+        else baseUrl = '/v2/'
+
         this.router = new VueRouter({
             base: baseUrl,
             linkActiveClass: 'is-active',
@@ -159,9 +154,9 @@ class App {
                     // if there is one.
                     Promise.all(activated.map(c => {
                         if (c.sealedOptions && c.sealedOptions.asyncData) {
-                            return c.sealedOptions.asyncData(this.store, this.router.currentRoute)
+                            return c.sealedOptions.asyncData(this.store, to)
                         } else if (c.asyncData) {
-                            return c.asyncData(this.store, this.router.currentRoute)
+                            return c.asyncData(this.store, to)
                         }
                     })).then(() => {
                         // Stop loading indicator.

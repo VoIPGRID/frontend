@@ -12,7 +12,11 @@ class UsersModule extends Module {
      */
     constructor(app) {
         super(app)
-        this.app.store.users = this.getObservables()
+        // Get the default store and augment.
+        let defaultStore = this.getObservables()
+        Object.assign(defaultStore, this.app.store.users)
+        this.app.store.users = defaultStore
+
         this.actions = require('./actions')(app, this)
 
         app.router.addRoutes([{
@@ -73,7 +77,7 @@ class UsersModule extends Module {
 
 
     getObservables() {
-        let _state = {
+        return {
             credentials: {
                 email: null,
                 password: null,
@@ -88,20 +92,8 @@ class UsersModule extends Module {
                     last_name: '',
                 },
             },
-            user: {
-                authenticated: false,
-                client: null,
-                csrf: null,
-                id: null,
-                language: 'en',
-                partner: null,
-                superuser: false,
-            },
             users: [],
         }
-
-        Object.assign(_state.user, JSON.parse(JSON.stringify(this.app.__state)))
-        return _state
     }
 }
 

@@ -5,16 +5,23 @@ module.exports = (app, actions) => {
         methods: {
             deselectClient() {
                 this.user.selectedClient = null
+                app._store.setCookieState({
+                    selectedClient: null,
+                })
             },
             deselectPartner() {
                 this.user.selectedClient = null
                 this.user.selectedPartner = null
+                app._store.setCookieState({
+                    selectedClient: null,
+                    selectedPartner: null,
+                })
             },
         },
         render: template.r,
         staticRenderFns: template.s,
         store: {
-            user: 'users.user',
+            user: 'user',
         },
     }
 }

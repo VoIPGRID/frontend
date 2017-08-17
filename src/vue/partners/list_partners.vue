@@ -14,7 +14,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="partner in partners">
+            <tr v-for="partner in partners.results">
                 <td>
                     <a @click="selectPartnerContext(partner)">{{partner.name}}</a>
                 </td>

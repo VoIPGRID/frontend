@@ -32,7 +32,7 @@ module.exports = (app, actions) => {
                     userId: parseInt(app.router.currentRoute.params.user_id),
                 }
 
-                if (context.userId === app.store.users.user.id) {
+                if (context.userId === app.store.user.id) {
                     context.isProfile = true
                 } else {
                     context.isProfile = false

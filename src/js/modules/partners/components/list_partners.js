@@ -3,13 +3,10 @@ module.exports = (app, actions) => {
     return Vue.component('ListPartners', {
         asyncData: async function(store, route) {
             // return the Promise from the action
-            let partnersData = await actions.readPartners({
-                params: {
-                    page: 1,
-                },
-                resourceUrl: '/partners/',
-            })
-            store.partners.partners = partnersData.results
+            let currentPage = parseInt(route.query.page) || 1
+            let partnersData = await actions.readPartners({page: currentPage})
+            store.partners.partners = partnersData
+            return partnersData
         },
         created: function() {
             this.partners = this.$store.partners.partners
@@ -17,17 +14,20 @@ module.exports = (app, actions) => {
         methods: {
             fetchData: actions.readPartners,
             /**
-             * Set the context for the currently selected partner.
-             * @param {Observable} partner - The partner object.
-             */
+            * Set the context for the currently selected partner and stores
+            * it in a cookie to persist after page reload.
+            * @param {Observable} partner - The partner object.
+            */
             selectPartnerContext: function(partner) {
-                this.$store.users.user.selectedClient = null
-                this.$store.users.user.selectedPartner = partner
-                this.$cookie.set('__INITIAL_STORE__', JSON.stringify({
+                this.$store.user.selectedClient = null
+                this.$store.user.selectedPartner = partner
+                app._store.setCookieState({
+                    selectedClient: null,
                     selectedPartner: {
                         id: partner.id,
+                        name: partner.name,
                     },
-                }), 1)
+                })
             },
         },
         render: template.r,
