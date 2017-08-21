@@ -30,12 +30,22 @@ class PartnersModule extends Module {
         const AddEditPartnerComponent = require('./components/add-edit_partner')(app, this.actions)
 
         app.router.addRoutes([{
+            alias: [
+                '/partners/add/partner',
+                '/partners/add/preferences',
+                '/partners/add/billing',
+            ],
             component: AddEditPartnerComponent,
             name: 'add_partner',
             path: '/partners/add',
         }])
 
         app.router.addRoutes([{
+            alias: [
+                '/partners/:partner_id/edit/partner',
+                '/partners/:partner_id/edit/preferences',
+                '/partners/:partner_id/edit/billing',
+            ],
             component: AddEditPartnerComponent,
             name: 'edit_partner',
             path: '/partners/:partner_id/edit',

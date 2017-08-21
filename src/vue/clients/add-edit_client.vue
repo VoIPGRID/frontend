@@ -1,6 +1,6 @@
 <div>
-    <Tabs>
-        <Tab id="client" :title="$t('Client')">
+    <Tabs :tabs=tabs :fetch=fetchData>
+        <Tab :data="tabs[0]">
             <h2 class="title">{{$t('General')}}</h2><hr/>
 
             <Field name="owner" type="select"
@@ -63,7 +63,7 @@
                 :options="[{id: '', 'name': 'High availability'}]"/>
         </Tab>
 
-        <Tab id="preferences" :title="$t('Preferences')" v-if="client.profile">
+        <Tab :data="tabs[1]">
             <Field idfield="code" name="country" type="select"  v-if="client.profile.country"
                 :help="$t('Select the country you operate from. When possible this country will ' +
                 'be the default in other forms.')"
@@ -98,7 +98,7 @@
                 :validation="$v.client.profile.timezone"/>
         </Tab>
 
-        <Tab id="billing" :title="$t('Billing Preferences')" v-if="client.billingprofile">
+        <Tab :data="tabs[2]">
             <Field name="currency" namefield="code" type="select"
                 :label="$t('Currency')"
                 :model.sync="client.billingprofile.currency"

@@ -1,7 +1,6 @@
 <div>
-    <Tabs v-if="clientId || partnerId">
-        <Tab id="personal" :title="$t('Personal information')">
-
+    <Tabs :tabs=tabs :fetch=fetchData>
+        <Tab :data="tabs[0]">
             <h2 class="title">{{$t('Personal')}}</h2><hr/>
 
             <Field name="first_name" type="text"
@@ -52,7 +51,7 @@
             </div>
         </Tab>
 
-        <Tab id="telephony" :title="$t('Language settings')">
+        <Tab :data="tabs[1]">
             <Field name="language" type="select"
                 :label="$t('Preferred language')"
                 :model.sync="user.profile.language"
@@ -70,11 +69,11 @@
             </div>
         </Tab>
 
-        <Tab v-if="clientId" id="language" :title="$t('Telephony settings')">
+        <Tab v-show="clientId" :data="tabs[2]">
 
         </Tab>
 
-        <Tab id="security" :title="$t('Security')">
+        <Tab :data="tabs[3]">
             <Field name="session_expiry" type="checkbox"
                 :label="$t('Log out after 10 minutes')"
                 :model.sync="user.session_expiry"/>

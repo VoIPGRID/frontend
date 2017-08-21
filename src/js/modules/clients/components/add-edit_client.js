@@ -1,10 +1,26 @@
 module.exports = (app, actions) => {
     const template = app.templates.clients_add_edit_client
     const v = Vuelidate.validators
+    const $t = Vue.i18n.translate
 
     return {
+        asyncData: async function(store, router) {
+            let clientData = await actions.readClient(router.params.client_id)
+            Object.assign(store.clients, clientData)
+        },
         created: function() {
-            this.fetchData()
+            this.client = this.$store.clients.client
+
+            this.tabs = [
+                {id: 'client', title: $t('Client')},
+                {id: 'preferences', title: $t('Preferences')},
+                {id: 'billing', title: $t('Billing Preferences')},
+            ]
+        },
+        data: function() {
+            return {
+                tabs: [],
+            }
         },
         methods: {
             fetchData: async function() {

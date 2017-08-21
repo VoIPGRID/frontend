@@ -28,7 +28,8 @@ module.exports = function(app, _module) {
 
         const res = await app.api.client.delete(url)
         if (res.status === 204) {
-            this.$store.users.users = this.$store.users.users.filter((i) => i.id !== user.id)
+            console.log(this.$store)
+            this.$store.users.users.results = this.$store.users.users.results.filter((i) => i.id !== user.id)
             app.vm.$shout({message: $t('User {name} succesfully deleted', {name: user.email})})
             app.router.push(backRoute)
         }
@@ -50,7 +51,7 @@ module.exports = function(app, _module) {
                     headers: {'X-CSRFToken': csrf},
                     timeout: 1000,
                 })
-                Object.assign(root.user, res.data)
+                Object.assign(this.$store.user, res.data)
                 app.router.replace('/')
             }
         })
@@ -75,23 +76,20 @@ module.exports = function(app, _module) {
     * @param {String} userId - ID of the user to read from the API.
     * @returns {Object} - The observable properties.
     */
-    actions.readUser = async function(userId) {
+    actions.readUser = async function(clientId, partnerId, userId) {
         let baseUrl, user
-        const clientId = app.router.currentRoute.params.client_id
-        const partnerId = app.router.currentRoute.params.partner_id
+
         if (clientId) baseUrl = `clients/${clientId}/users`
         else baseUrl = `/partners/${partnerId}/users`
 
         if (userId) {
-            const res = await app.api.client.get(`${baseUrl}/${userId}`)
+            const res = await app.api.client.get(`${baseUrl}/${userId}/`)
             user = Object.assign(_module.getObservables().user, res.data)
         } else {
             user = _module.getObservables().user
         }
 
-        let [groups] = await Promise.all([
-            app.api.client.get(`${baseUrl}/groups`),
-        ])
+        let groups = await app.api.client.get(`${baseUrl}/groups/`)
 
         return {
             groups: groups.data,
@@ -153,34 +151,60 @@ module.exports = function(app, _module) {
 
         if (clientId) {
             backRoute = {name: 'list_client_users', params: {client_id: clientId}}
-            url = `/clients/${clientId}/users/${user.id}/`
+            url = `/clients/${clientId}/users/`
+            user.client = clientId
         } else {
             backRoute = {name: 'list_partner_users', params: {partner_id: partnerId}}
-            url = `/partners/${partnerId}/users/${user.id}/`
+            url = `/partners/${partnerId}/users/`
+            user.partner = partnerId
         }
 
-        app.api.client.put(url, user).then((res) => {
-            if (res.status === 200) {
-                app.store.main.apiValidation = false
-                // Unset the password fields after a succesful update.
-                Object.assign(user, {
-                    old_password: '',
-                    password: '',
-                    password_confirm: '',
-                })
+        if (user.id) {
+            url += `${user.id}/`
+            app.api.client.put(url, user).then((res) => {
+                if (res.status === 200) {
+                    app.store.main.apiValidation = false
+                    // Unset the password fields after a succesful update.
+                    Object.assign(user, {
+                        old_password: '',
+                        password: '',
+                        password_confirm: '',
+                    })
 
-                // User's own profile. Don't redirect to the last/list view.
-                if (user.id === app.store.user.id) {
-                    app.vm.$shout({message: $t('Profile succesfully updated')})
+                    // User's own profile. Don't redirect to the last/list view.
+                    if (user.id === app.store.user.id) {
+                        app.vm.$shout({message: $t('Profile succesfully updated')})
+                    } else {
+                        app.vm.$shout({message: $t('User succesfully updated')})
+                        app.router.push(app.utils.lastRoute(backRoute))
+                    }
                 } else {
+                    // Trigger serverside validation.
+                    validator.$touch()
+                }
+            })
+        } else {
+            // Remove this key when creating a new user.
+            delete user.old_password
+            app.api.client.post(url, user).then((res) => {
+                if (res.status === 201) {
+                    app.store.main.apiValidation = false
+                    // Unset the password fields after a succesful update.
+                    Object.assign(user, {
+                        password: '',
+                        password_confirm: '',
+                    })
+
                     app.vm.$shout({message: $t('User succesfully updated')})
                     app.router.push(app.utils.lastRoute(backRoute))
+                } else {
+                    // Trigger serverside validation.
+                    validator.$touch()
                 }
-            } else {
-                // Trigger serverside validation.
-                validator.$touch()
-            }
-        })
+            })
+        }
+
+
     }
 
 

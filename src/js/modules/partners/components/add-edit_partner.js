@@ -1,6 +1,7 @@
 module.exports = (app, actions) => {
     const template = app.templates.partners_add_edit_partner
     const v = Vuelidate.validators
+    const $t = Vue.i18n.translate
 
     let brandingCache = {}
     const brandingFields = ['text', 'brand', 'navlink', 'navlink_active', 'spot', 'btn_text']
@@ -10,7 +11,7 @@ module.exports = (app, actions) => {
      */
     return Vue.component('AddEditPartner', {
         asyncData: async function(store, router) {
-            let partnerData = await actions.readPartner()
+            let partnerData = await actions.readPartner(router.params.partner_id)
             Object.assign(store.partners, partnerData)
         },
         computed: {
@@ -25,14 +26,24 @@ module.exports = (app, actions) => {
         },
         created: async function() {
             this.partner = this.$store.partners.partner
-            // await this.fetchData()
+
+            this.tabs = [
+                {id: 'partner', title: $t('Partner')},
+                {id: 'preferences', title: $t('Preferences')},
+                {id: 'billing', title: $t('Billing Preferences')},
+            ]
+        },
+        data: function() {
+            return {
+                tabs: [],
+            }
         },
         methods: {
             fetchData: async function() {
                 // Reset branding cache.
                 brandingCache = {}
                 const partnerId = app.router.currentRoute.params.partner_id
-                const partnerData = await actions.readPartner.call(this, partnerId)
+                const partnerData = await actions.readPartner(partnerId)
                 Object.assign(this.$store.partners, partnerData)
             },
             /*
@@ -73,9 +84,6 @@ module.exports = (app, actions) => {
         validations: {
             partner: {
                 billingprofile: {
-                    auto_export: {
-                        required: v.required,
-                    },
                     billing_email: {
                         email: v.email,
                     },
@@ -119,9 +127,6 @@ module.exports = (app, actions) => {
                     url: v.url,
                 },
             },
-        },
-        watch: {
-            $route: 'fetchData',
         },
     })
 }

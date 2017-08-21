@@ -39,6 +39,9 @@ module.exports = (app) => {
                 if (this.validation.incorrect_password === false) {
                     errorMessages.push(this.$t('Incorrect password.'))
                 }
+                if (this.validation.must_be_unique === false) {
+                    errorMessages.push(this.$t('Field must have a unique value.'))
+                }
                 if (this.validation.sameAs === false) {
                     errorMessages.push(this.$t('Field "{fieldName}" must have the same value.', {
                         fieldName: this.validation.$params.sameAs.eq,

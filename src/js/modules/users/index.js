@@ -31,23 +31,48 @@ class UsersModule extends Module {
         // the routings defer.
         const AddEditUser = Vue.component('AddEditUser', require('./components/add-edit_user')(app, this.actions))
         app.router.addRoutes([{
+            alias: [
+                '/clients/:client_id/users/add/personal',
+                '/clients/:client_id/users/add/telephony',
+                '/clients/:client_id/users/add/language',
+                '/clients/:client_id/users/add/security',
+            ],
             component: AddEditUser,
             name: 'add_client_user',
             path: '/clients/:client_id/users/add',
+
         }])
         app.router.addRoutes([{
-            component: AddEditUser,
-            name: 'add_partner_user',
-            path: '/partners/:partner_id/users/add',
-        }])
-
-
-        app.router.addRoutes([{
+            alias: [
+                '/clients/:client_id/users/:user_id/edit/personal',
+                '/clients/:client_id/users/:user_id/edit/telephony',
+                '/clients/:client_id/users/:user_id/edit/language',
+                '/clients/:client_id/users/:user_id/edit/security',
+            ],
             component: AddEditUser,
             name: 'edit_client_user',
             path: '/clients/:client_id/users/:user_id/edit',
         }])
+
+
         app.router.addRoutes([{
+            alias: [
+                '/partners/:partner_id/users/add/personal',
+                '/partners/:partner_id/users/add/telephony',
+                '/partners/:partner_id/users/add/language',
+                '/partners/:partner_id/users/add/security',
+            ],
+            component: AddEditUser,
+            name: 'add_partner_user',
+            path: '/partners/:partner_id/users/add',
+        }])
+        app.router.addRoutes([{
+            alias: [
+                '/partners/:partner_id/users/:user_id/edit/personal',
+                '/partners/:partner_id/users/:user_id/edit/telephony',
+                '/partners/:partner_id/users/:user_id/edit/language',
+                '/partners/:partner_id/users/:user_id/edit/security',
+            ],
             component: AddEditUser,
             name: 'edit_partner_user',
             path: '/partners/:partner_id/users/:user_id/edit',
@@ -83,9 +108,11 @@ class UsersModule extends Module {
                 password: null,
             },
             user: {
+                client: null,
                 email: null,
                 groups: [],
                 old_password: '',
+                partner: null,
                 password: '',
                 password_confirm: '',
                 profile: {
@@ -95,7 +122,7 @@ class UsersModule extends Module {
                     last_name: '',
                     preposition: '',
                 },
-                session_expiry: null,
+                session_expiry: true,
             },
             users: [],
         }

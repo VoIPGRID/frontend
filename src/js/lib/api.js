@@ -72,6 +72,20 @@ class Api {
                     required: v.required,
                 }
             }
+
+            if (error.code === '3014') {
+                _v[error.field] = {
+                    must_be_unique: (value, component) => {
+                        if (!this.fieldCache.must_be_unique) {
+                            this.fieldCache.must_be_unique = value
+                            return value === true
+                        } else {
+                            return true
+                        }
+                    },
+                }
+            }
+
             // Incorrect password or old password doesn't equal new one.
             if ((error.code === '5001') || (error.code === '5002')) {
                 _v[error.field] = {

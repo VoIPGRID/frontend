@@ -2,7 +2,7 @@
   "name": "voipgrid-frontend",
   "version": "1.0.0",
   "private": true,
-  "description": "VoIPGRID Frontend for API V2.",
+  "description": "VoIPGRID SPA for API V2.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

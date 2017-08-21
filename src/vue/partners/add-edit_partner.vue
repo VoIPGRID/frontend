@@ -1,6 +1,6 @@
 <div>
-    <Tabs>
-        <Tab id="partner" :title="$t('Partner')">
+    <Tabs :tabs=tabs :fetch=fetchData>
+        <Tab :data="tabs[0]">
             <h2 class="title">{{$t('General')}}</h2><hr/>
 
             <Field name="owner" type="select"
@@ -126,7 +126,7 @@
             </nav>
         </Tab>
 
-        <Tab id="preferences" :title="$t('Preferences')" v-if="partner.profile">
+        <Tab :data="tabs[1]" v-if="partner.profile">
             <Field idfield="code" name="country" type="select" v-if="partner.profile.country"
                 :help="$t('Select the country you operate from. When possible this country will ' +
                 'be the default in other forms.')" :label="$t('Country')"
@@ -159,7 +159,7 @@
                 :validation="$v.partner.profile.timezone"/>
         </Tab>
 
-        <Tab id="billing" :title="$t('Billing Preferences')" v-if="partner.billingprofile">
+        <Tab :data="tabs[2]" v-if="partner.billingprofile">
             <Field name="currency" namefield="code" type="select"
                 :label="$t('Currency')"
                 :model.sync="partner.billingprofile.currency"
@@ -201,7 +201,6 @@
                 :options="root.priceplanDiscounts"
                 :placeholder="$t('Select a discount...')"/>
         </Tab>
-
         <div class="field is-grouped margin-top-1">
             <p class="control">
                 <button class="button is-primary" :disabled="$v.$invalid" @click="upsertPartner(partner)">

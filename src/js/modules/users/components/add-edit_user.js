@@ -1,8 +1,18 @@
 module.exports = (app, actions) => {
     const template = app.templates.users_add_edit_user
     const v = Vuelidate.validators
+    const $t = Vue.i18n.translate
 
     return {
+        asyncData: async function(store, route) {
+            const clientId = route.params.client_id
+            const partnerId = route.params.partner_id
+            const userId = route.params.user_id
+
+            const userData = await actions.readUser(clientId, partnerId, userId)
+            Object.assign(store.users, userData)
+            return userData
+        },
         computed: {
             clientOrPartner: function() {
                 if (this.clientId) return 'client'
@@ -10,15 +20,26 @@ module.exports = (app, actions) => {
             },
         },
         created: function() {
-            this.fetchData()
+            const route = app.router.currentRoute
+            this.userId = route.params.user_id
+            if (this.userId === String(app.store.user.id)) {
+                this.isProfile = true
+            }
+
+            this.tabs = [
+                {id: 'personal', title: $t('Personal information')},
+                {id: 'language', title: $t('Language settings')},
+                {id: 'telephony', show: () => Boolean(this.$route.params.client_id), title: $t('Telephony settings')},
+                {id: 'security', title: $t('Security')},
+            ]
         },
         data: function() {
             return {
-                clientId: null,
-                groups: [],
-                isProfile: null,
-                partnerId: null,
-                userId: null,
+                clientId: this.$route.params.client_id,
+                isProfile: false,
+                partnerId: this.$route.params.partner_id,
+                tabs: [],
+                userId: this.$route.params.user_id,
             }
         },
         methods: {
@@ -26,19 +47,24 @@ module.exports = (app, actions) => {
             * Wrapper function for the select event that changes language.
             */
             fetchData: async function() {
-                let context = {
-                    clientId: parseInt(app.router.currentRoute.params.client_id),
-                    partnerId: parseInt(app.router.currentRoute.params.partner_id),
-                    userId: parseInt(app.router.currentRoute.params.user_id),
-                }
+                const route = app.router.currentRoute
 
-                if (context.userId === app.store.user.id) {
+                const clientId = route.params.client_id
+                const partnerId = route.params.partner_id
+                const userId = route.params.user_id
+
+                let context = await actions.readUser(clientId, partnerId, userId)
+                if (userId === app.store.user.id) {
                     context.isProfile = true
                 } else {
                     context.isProfile = false
                 }
+                Object.assign(context, {
+                    clientId: route.params.client_id,
+                    partnerId: route.params.partner_id,
+                    userId: route.params.user_id,
+                })
 
-                Object.assign(context, await actions.readUser.call(this, context.userId))
                 Object.assign(this, context)
             },
             setLanguage: actions.setLanguage,
@@ -48,6 +74,7 @@ module.exports = (app, actions) => {
         staticRenderFns: template.s,
         store: {
             apiValidation: 'main.apiValidation',
+            groups: 'users.groups',
             root: 'users',
             user: 'users.user',
         },
@@ -116,9 +143,6 @@ module.exports = (app, actions) => {
             }
 
             return validations
-        },
-        watch: {
-            $route: 'fetchData',
         },
     }
 }
