@@ -33,12 +33,22 @@ class ClientsModule extends Module {
         }])
 
         app.router.addRoutes([{
+            alias: [
+                '/clients/add/client',
+                '/clients/add/preferences',
+                '/clients/add/billing',
+            ],
             component: AddEditClientComponent,
             name: 'add_client',
             path: '/clients/add',
         }])
 
         app.router.addRoutes([{
+            alias: [
+                '/clients/:client_id/edit/client',
+                '/clients/:client_id/edit/preferences',
+                '/clients/:client_id/edit/billing',
+            ],
             component: AddEditClientComponent,
             name: 'edit_client',
             path: '/clients/:client_id/edit',
