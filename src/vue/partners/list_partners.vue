@@ -40,6 +40,6 @@
     <Paginator
         :count=partners.count
         :method=fetchData
-        path="/partners/">
+        :path="$router.currentRoute.path">
     </Paginator>
 </div>

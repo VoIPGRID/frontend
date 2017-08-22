@@ -118,7 +118,6 @@
                 :model.sync="client.billingprofile.exclude_from_export"/>
         </Tab>
     </Tabs>
-
     <div class="field is-grouped margin-top-1">
         <p class="control">
             <button class="button is-primary" :disabled="$v.$invalid" @click="upsertClient(client)">
@@ -126,7 +125,10 @@
             </button>
         </p>
         <p class="control">
-            <router-link class="button" :to="$helpers.lastRoute('list_clients')">{{$t('Cancel')}}</router-link>
+            <router-link class="button"
+                :to="$helpers.lastRoute('list_clients', {partner_id: $router.currentRoute.params.partner_id})">
+                {{$t('Cancel')}}
+            </router-link>
         </p>
     </div>
 </div>

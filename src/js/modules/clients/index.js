@@ -21,6 +21,13 @@ class ClientsModule extends Module {
         const ListClients = Vue.component('ListClients', require('./components/list_clients')(app, this.actions))
         const DeleteClient = Vue.component('DeleteClient', require('./components/delete_client')(app, this.actions))
 
+        // Order is important for this route to take precedence.
+        app.router.addRoutes([{
+            component: AddEditClient,
+            name: 'add_client',
+            path: '/partners/:partner_id/clients/add',
+        }])
+
         app.router.addRoutes([{
             children: [{
                 component: DeleteClient,
@@ -30,12 +37,6 @@ class ClientsModule extends Module {
             component: ListClients,
             name: 'list_clients',
             path: '/partners/:partner_id/clients/:client_id?',
-        }])
-
-        app.router.addRoutes([{
-            component: AddEditClient,
-            name: 'add_client',
-            path: '/partners/:partner_id/clients/add',
         }])
 
         app.router.addRoutes([{

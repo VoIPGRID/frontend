@@ -13,9 +13,9 @@
         <!--STORE-->
     </script>
     {% if translations %}
-    <script src="/public/js/i18n/{{translations}}.js"></script>
+    <script src="/public/js/i18n/{{translations}}.js" defer></script>
     {% endif %}
-    <script src="/public/js/lib/vendor.js"></script>
-    <script src="/public/js/lib/templates.js"></script>
-    <script async src="/public/js/app.js"></script>
+    <script src="/public/js/lib/vendor.js" defer></script>
+    <script src="/public/js/lib/templates.js" defer></script>
+    <script src="/public/js/app.js" defer></script>
 </html>

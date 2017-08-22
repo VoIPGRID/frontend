@@ -85,8 +85,8 @@ module.exports = function(app) {
      * @param {String} defaultRoute - Name of the Vue-router route.
      * @returns {Object} route - Name and query properties of the route.
      */
-    helpers.lastRoute = function(defaultRoute) {
-        if (typeof defaultRoute === 'string') defaultRoute = {name: defaultRoute}
+    helpers.lastRoute = function(defaultRoute, params = {}) {
+        if (typeof defaultRoute === 'string') defaultRoute = {name: defaultRoute, params: params}
         if (app.history.length > 1) {
             const lastRoute = app.history[app.history.length - 2]
             return {
