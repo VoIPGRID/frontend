@@ -263,7 +263,6 @@ gulp.task('watch', 'Watch for changes using livereload', () => {
     livereload.listen({silent: false})
     gulp.watch([
         path.join(__dirname, 'src', 'js', '**', '*.js'),
-        `!${path.join(__dirname, 'src', 'js', 'server.js')}`,
         `!${path.join(__dirname, 'src', 'js', 'lib', 'vendor.js')}`,
         `!${path.join(__dirname, 'src', 'js', 'i18n', '*.js')}`,
         `!${path.join(__dirname, 'src', 'js', 'lib', 'templates.js')}`,

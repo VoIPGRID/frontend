@@ -110,7 +110,7 @@ module.exports = function(app, _module) {
      * when the language is not yet available.
      * @param {String} e - The change event.
      */
-    actions.setLanguage = function(e) {
+    actions.setLanguage = async function(e) {
         // Set the language when user edits it's own information. Other users
         // being edited will just have a modified language field.
         if (this.user.id !== app.store.user.id) return
@@ -122,17 +122,21 @@ module.exports = function(app, _module) {
         else language = 'en'
 
         if ((!global.translations || translations[language]) && language !== 'en') {
-            app.utils.injectScript(`/public/i18n/${language}.js`, () => {
+            app.utils.injectScript(`/public/js/i18n/${language}.js`, async() => {
                 // Add the translations to the Vuex store.
                 Vue.i18n.add(language, translations[language])
-                app.api.client.get(`language/${language}`).then((res) => {
+                const res = await app.api.client.get(`language/${language}`)
+                if (res.status === 200) {
                     app.store.i18n.locale = language
-                })
+                    app._store.setCookieState({language: language})
+                }
             })
         } else {
-            app.api.client.get(`language/${language}`).then((res) => {
+            const res = await app.api.client.get(`language/${language}`)
+            if (res.status === 200) {
                 app.store.i18n.locale = language
-            })
+                app._store.setCookieState({language: language})
+            }
         }
         this.user.profile.language = language
     }

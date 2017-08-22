@@ -21,15 +21,15 @@ const renderer = require('vue-server-renderer').createRenderer()
 
 const {promisify} = require('util')
 
+const renderToString = promisify(renderer.renderToString)
 const readFileAsync = promisify(fs.readFile)
+
 
 require('./lib/vendor')
 require('./lib/templates')
+require('./i18n/nl')
 
-// Provide translations for the SSR app.
-global.translations = {
-    nl: require('./i18n/nl'),
-}
+const apiHost = 'http://localhost'
 
 
 function createApp(url, context) {
@@ -55,7 +55,7 @@ function createApp(url, context) {
                 } else return null
             }))
 
-            return resolve({app})
+            return resolve(app)
         }, reject)
     }).catch((error) => {
         console.trace(error)
@@ -63,17 +63,16 @@ function createApp(url, context) {
 }
 
 
-
-readFileAsync(path.join('src', 'index.html'), 'utf8').then((indexHTML, err) => {
-    const _connect = connect()
-    _connect.use(morgan('dev'))
-    _connect.use(favicon(path.join(__dirname, '../', 'img', 'favicon.ico')))
-    _connect.use('/public', serveStatic('/srv/http/data/frontend'))
-    _connect.use('/public', serveIndex('/srv/http/data/frontend', {icons: false}))
-    _connect.use(cookies())
-    _connect.use((req, res, next) => {
+function setupSsrProxy(indexHTML) {
+    const ssrProxy = connect()
+    ssrProxy.use(morgan('dev'))
+    ssrProxy.use(favicon(path.join(__dirname, '../', 'img', 'favicon.ico')))
+    ssrProxy.use('/public', serveStatic('/srv/http/data/frontend'))
+    ssrProxy.use('/public', serveIndex('/srv/http/data/frontend', {icons: false}))
+    ssrProxy.use(cookies())
+    ssrProxy.use(async function(req, res, next) {
         const cookieJar = new tough.CookieJar()
-        // Log the requesting user in to the proxy request.
+        // Log the requesting user in to the proxy.
         cookieJar.setCookieSync(`sessionid=${req.cookies.get('sessionid')}`, 'http://localhost/')
 
         const clientCsrf = req.cookies.get('csrftoken')
@@ -89,35 +88,41 @@ readFileAsync(path.join('src', 'index.html'), 'utf8').then((indexHTML, err) => {
         axios.defaults.withCredentials = true
         axios.defaults.jar = cookieJar
         // Get the initial user state from the Django API.
-        axios.get('http://localhost/api/v2/state/').then((_res) => {
-            const initialState = _res.data
-            axios.defaults.withCredentials = true
-            axios.defaults.jar = cookieJar
-            // Augment the initial state with the requester's cookie state.
-            Object.assign(initialState, cookieStoreMixin)
+        const {data: initialState} = await axios.get(`${apiHost}/api/v2/state/`)
 
-            // Create an isomorphic app instance with the API's initial state.
-            createApp(req.url, initialState).then(({app}) => {
-                axios.defaults.headers['X-CSRFToken'] = clientCsrf
-                renderer.renderToString(app.vm, (_err, html) => {
-                    let _html = indexHTML.replace('<div id="app"></div>', html)
-                    // Must use the browser csrf from here on.
-                    initialState.csrf = clientCsrf
-                    _html = _html.replace('{{state|safe}}', JSON.stringify(initialState))
-                    _html = _html.replace('{{translations}}', 'nl')
-                    _html = _html.replace('<!--STORE-->', `window.__INITIAL_STORE__ = ${JSON.stringify(app.store)}`)
-                    _html = _html.replace('{% if translations %}', '')
-                    _html = _html.replace('{% endif %}', '')
-                    res.end(_html)
-                })
-            })
-        })
+        // const initialState = data
+        axios.defaults.jar = cookieJar
+        // Augment the initial state with the requester's cookie state.
+        Object.assign(initialState, cookieStoreMixin)
+
+        // Create an isomorphic app instance with the API's initial state.
+        const app = await createApp(req.url, initialState)
+        axios.defaults.headers['X-CSRFToken'] = clientCsrf
+        const html = await renderToString(app.vm)
+
+        let _html = indexHTML.replace('<div id="app"></div>', html)
+        // Must use the browser csrf from here on.
+        initialState.csrf = clientCsrf
+        _html = _html.replace('{{state|safe}}', JSON.stringify(initialState))
+        _html = _html.replace('{{translations}}', 'nl')
+        _html = _html.replace('<!--STORE-->', `window.__INITIAL_STORE__ = ${JSON.stringify(app.store)}`)
+        _html = _html.replace('{% if translations %}', '')
+        _html = _html.replace('{% endif %}', '')
+        res.end(_html)
     })
 
+    return ssrProxy
+}
 
-    http.createServer(_connect).listen(3000, () => {
+
+async function initServer() {
+    const indexHTML = await readFileAsync(path.join('src', 'index.html'), 'utf8')
+    const ssrProxy = setupSsrProxy(indexHTML)
+    http.createServer(ssrProxy).listen(3000, () => {
         // Messages to nodemon that the application is ready to serve
         // requests. Nodemon fires a livereload trigger after this.
         console.log('nodemon:start:child')
     })
-})
+}
+
+initServer()
