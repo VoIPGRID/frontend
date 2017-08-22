@@ -25,23 +25,23 @@ class ClientsModule extends Module {
             children: [{
                 component: DeleteClient,
                 name: 'delete_client',
-                path: ':client_id/delete',
+                path: 'delete',
             }],
             component: ListClients,
             name: 'list_clients',
-            path: '/clients',
+            path: '/partners/:partner_id/clients/:client_id?',
         }])
 
         app.router.addRoutes([{
             component: AddEditClient,
             name: 'add_client',
-            path: '/clients/add',
+            path: '/partners/:partner_id/clients/add',
         }])
 
         app.router.addRoutes([{
             component: AddEditClient,
             name: 'edit_client',
-            path: '/clients/:client_id/edit',
+            path: '/partners/:partner_id/clients/:client_id/edit',
         }])
     }
 

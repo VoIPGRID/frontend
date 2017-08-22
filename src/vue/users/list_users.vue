@@ -22,10 +22,10 @@
         <tbody>
             <tr v-for="user in users.results">
                 <td>
-                    <a>{{user.profile.first_name}} {{user.profile.last_name}}</a>
+                    {{user.profile.first_name}} {{user.profile.last_name}}
                 </td>
                 <td>
-                    <a>{{user.email}}</a>
+                    {{user.email}}
                 </td>
                 <td>{{user.profile.description}}</td>
                 <td v-if="clientId">
@@ -45,7 +45,7 @@
                     </router-link>
                 </td>
             </tr>
-            <tr v-if="users.results.length === 0">
+            <tr v-if="users.results && users.results.length === 0">
                 <td colspan="3">{{$t('No users yet')}}</td>
             </tr>
         </tbody>

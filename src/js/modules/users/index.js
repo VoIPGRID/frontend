@@ -35,7 +35,7 @@ class UsersModule extends Module {
         app.router.addRoutes([{
             component: AddEditUser,
             name: 'add_client_user',
-            path: '/clients/:client_id/users/add',
+            path: '/partners/:partner_id/clients/:client_id/users/add',
         }])
         app.router.addRoutes([{
             component: AddEditUser,
@@ -47,7 +47,7 @@ class UsersModule extends Module {
         app.router.addRoutes([{
             component: AddEditUser,
             name: 'edit_client_user',
-            path: '/clients/:client_id/users/:user_id/edit',
+            path: '/partners/:partner_id/clients/:client_id/users/:user_id/edit',
         }])
         app.router.addRoutes([{
             component: AddEditUser,
@@ -64,7 +64,7 @@ class UsersModule extends Module {
             }],
             component: ListUsers,
             name: 'list_client_users',
-            path: '/clients/:client_id/users',
+            path: '/partners/:partner_id/clients/:client_id/users',
         }])
         app.router.addRoutes([{
             children: [{

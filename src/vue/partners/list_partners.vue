@@ -16,7 +16,7 @@
         <tbody>
             <tr v-for="partner in partners.results">
                 <td>
-                    <a @click="selectPartnerContext(partner)">{{partner.name}}</a>
+                    <router-link @click.native="selectPartnerContext(partner)" :to="{name: 'list_partners', params: {partner_id: partner.id}}">{{partner.name}}</router-link>
                 </td>
                 <td>{{partner.description}}</td>
                 <td>
@@ -32,8 +32,8 @@
                     </router-link>
                 </td>
             </tr>
-            <tr v-if="partners.results.length === 0">
-                <td colspan="3">{{$t('No users yet')}}</td>
+            <tr v-if="partners.results && partners.results.length === 0">
+                <td colspan="3">{{$t('No partners yet')}}</td>
             </tr>
         </tbody>
     </table>

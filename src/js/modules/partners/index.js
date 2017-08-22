@@ -14,17 +14,18 @@ class PartnersModule extends Module {
 
         const AddEditPartner = Vue.component('AddEditPartner',
             require('./components/add-edit_partner')(app, this.actions))
+        const DeletePartner = Vue.component('DeletePartner', require('./components/delete_partner')(app, this.actions))
         const ListPartners = Vue.component('ListPartners', require('./components/list_partners')(app, this.actions))
 
         app.router.addRoutes([{
             children: [{
-                component: require('./components/delete_partner')(app, this.actions),
+                component: DeletePartner,
                 name: 'delete_partner',
-                path: ':partner_id/delete',
+                path: '/delete',
             }],
             component: ListPartners,
             name: 'list_partners',
-            path: '/partners',
+            path: '/partners/:partner_id?',
         }])
 
         app.router.addRoutes([{

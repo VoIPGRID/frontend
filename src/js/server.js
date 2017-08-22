@@ -24,17 +24,23 @@ const {promisify} = require('util')
 const renderToString = promisify(renderer.renderToString)
 const readFileAsync = promisify(fs.readFile)
 
-
 require('./lib/vendor')
 require('./lib/templates')
 require('./i18n/nl')
 
+const appCache = {}
 const apiHost = 'http://localhost'
 
 
-function createApp(url, context) {
+function createApp(url, context, sessionId) {
     return new Promise((resolve, reject) => {
-        const app = new App(context, global.templates)
+        let app
+        if (!appCache[sessionId]) {
+            app = new App(context, global.templates)
+            appCache[sessionId] = app
+        } else {
+            app = appCache[sessionId]
+        }
 
         const fullPath = app.router.resolve(url).route.fullPath
         if (fullPath !== url) {
@@ -73,7 +79,8 @@ function setupSsrProxy(indexHTML) {
     ssrProxy.use(async function(req, res, next) {
         const cookieJar = new tough.CookieJar()
         // Log the requesting user in to the proxy.
-        cookieJar.setCookieSync(`sessionid=${req.cookies.get('sessionid')}`, 'http://localhost/')
+        const sessionId = req.cookies.get('sessionid')
+        cookieJar.setCookieSync(`sessionid=${sessionId}`, 'http://localhost/')
 
         const clientCsrf = req.cookies.get('csrftoken')
         // Allow a user to modify store properties, before the snapshot
@@ -96,7 +103,7 @@ function setupSsrProxy(indexHTML) {
         Object.assign(initialState, cookieStoreMixin)
 
         // Create an isomorphic app instance with the API's initial state.
-        const app = await createApp(req.url, initialState)
+        const app = await createApp(req.url, initialState, sessionId)
         axios.defaults.headers['X-CSRFToken'] = clientCsrf
         const html = await renderToString(app.vm)
 

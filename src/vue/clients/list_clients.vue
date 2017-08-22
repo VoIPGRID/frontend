@@ -2,7 +2,10 @@
     <router-view></router-view>
     <div class="table-options field is-grouped is-pulled-right">
         <p class="control">
-            <router-link class="button is-primary" to="/clients/add/">{{$t('Add Client')}}</router-link>
+            <router-link class="button is-primary"
+                :to="{name: 'add_client', params: {partnerId: $route.params.partner_id}}">
+                {{$t('Add Client')}}
+            </router-link>
         </p>
     </div>
     <table class="table is-fullwidth is-striped">
@@ -16,7 +19,10 @@
         <tbody>
             <tr v-for="client in clients.results">
                 <td>
-                    <a @click="selectClientContext(client)">{{client.name}}</a>
+                    <router-link @click.native="selectClientContext(client)"
+                        :to="{name: 'list_clients', params: {partner_id: $route.params.partner_id, client_id: client.id}}">
+                        {{client.name}}
+                    </router-link>
                 </td>
                 <td>{{ client.description }}</td>
                 <td>
@@ -32,8 +38,8 @@
                     </router-link>
                 </td>
             </tr>
-            <tr v-if="clients.results.length === 0">
-                <td colspan="3">{{$t('No users yet')}}</td>
+            <tr v-if="clients.results && clients.results.length === 0">
+                <td colspan="3">{{$t('No clients yet')}}</td>
             </tr>
         </tbody>
     </table>

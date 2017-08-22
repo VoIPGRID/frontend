@@ -3,14 +3,15 @@ module.exports = (app, actions) => {
     return {
         asyncData: async function(route) {
             // return the Promise from the action
-            let routeName
-            if (route.params.client_id) routeName = 'list_client_users'
-            else routeName = 'list_partner_users'
+            let apiPath
+            const partnerId = route.params.partner_id
+            const clientId = route.params.client_id
+            if (clientId) apiPath = `/clients/${clientId}/users/`
+            else apiPath = `/partners/${partnerId}/users/`
 
-            let usersRoute = app.router.resolve({name: routeName, params: route.params})
             let usersData = await actions.readUsers({
                 page: parseInt(route.query.page) || 1,
-                path: usersRoute.route.path,
+                path: apiPath,
             })
 
             app.store.users.users = usersData

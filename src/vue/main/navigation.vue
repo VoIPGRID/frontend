@@ -5,7 +5,7 @@
 
     <ul class="context-selector">
         <li>
-            <router-link v-if="user.selectedPartner" to="/partners" exact>
+            <router-link v-if="user.selectedPartner" :to="{name: 'list_partners', params: {partner_id: user.selectedPartner.id}}" exact>
                 <i class="item-level-up item-icon fa fa-level-up" @click="deselectPartner"></i>
                 <i class="item-icon fa fa-handshake-o"></i>
                 <span class="item-text">{{user.selectedPartner.name}}</span>
@@ -17,13 +17,13 @@
         </li>
 
         <li>
-            <router-link v-if="user.selectedClient" to="/clients" exact>
+            <router-link v-if="user.selectedClient" :to="{name: 'list_clients', params: {partner_id: user.selectedPartner.id}}" exact>
                 <i class="item-level-up item-icon fa fa-level-up" @click="deselectClient"></i>
                 <i class="item-icon fa fa-group"></i>
                 <span class="item-text">{{user.selectedClient.name}}</span>
             </router-link>
 
-            <router-link v-else-if="user.selectedPartner" to="/clients">
+            <router-link v-else-if="user.selectedPartner" :to="{name: 'list_clients', params: {partner_id: user.selectedPartner.id}}">
                 <i class="item-icon fa fa-group"></i>
                 <span class="item-text">{{$t('Clients')}}</span>
             </router-link>
@@ -55,7 +55,7 @@
         </li>
 
         <li>
-            <router-link :to="{name: 'list_client_users', params: {client_id: user.selectedClient.id}}">
+            <router-link :to="{name: 'list_client_users', params: {partner_id: user.selectedPartner.id, client_id: user.selectedClient.id}}">
                 <i class="item-icon fa fa-address-book"></i>
                 <span class="item-text">{{$t('Users')}}</span>
             </router-link>
@@ -69,7 +69,7 @@
         </li>
 
         <li>
-            <router-link to="/" exact>
+            <router-link :to="{name: 'dashboard_home', params: {partner_id: user.selectedPartner.id, client_id: user.selectedClient.id}}" exact>
                 <i class="item-icon fa vg-icon vg-icon-ivr"></i>
                 <span class="item-text">{{$t('Dashboard')}}</span>
             </router-link>
