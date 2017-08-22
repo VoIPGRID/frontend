@@ -17,39 +17,29 @@ class ClientsModule extends Module {
         if (!this.app.store.clients) this.app.store.clients = this.getObservables()
         this.actions = require('./actions')(app, this)
 
-        const AddEditClientComponent = require('./components/add-edit_client')(app, this.actions)
+        const AddEditClient = Vue.component('AddEditClient', require('./components/add-edit_client')(app, this.actions))
+        const ListClients = Vue.component('ListClients', require('./components/list_clients')(app, this.actions))
+        const DeleteClient = Vue.component('DeleteClient', require('./components/delete_client')(app, this.actions))
 
         app.router.addRoutes([{
-            children: [
-                {
-                    component: require('./components/delete_client')(app, this.actions),
-                    name: 'delete_client',
-                    path: ':client_id/delete',
-                },
-            ],
-            component: require('./components/list_clients')(app, this.actions),
+            children: [{
+                component: DeleteClient,
+                name: 'delete_client',
+                path: ':client_id/delete',
+            }],
+            component: ListClients,
             name: 'list_clients',
             path: '/clients',
         }])
 
         app.router.addRoutes([{
-            alias: [
-                '/clients/add/client',
-                '/clients/add/preferences',
-                '/clients/add/billing',
-            ],
-            component: AddEditClientComponent,
+            component: AddEditClient,
             name: 'add_client',
             path: '/clients/add',
         }])
 
         app.router.addRoutes([{
-            alias: [
-                '/clients/:client_id/edit/client',
-                '/clients/:client_id/edit/preferences',
-                '/clients/:client_id/edit/billing',
-            ],
-            component: AddEditClientComponent,
+            component: AddEditClient,
             name: 'edit_client',
             path: '/clients/:client_id/edit',
         }])

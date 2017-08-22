@@ -28,7 +28,6 @@ module.exports = function(app, _module) {
 
         const res = await app.api.client.delete(url)
         if (res.status === 204) {
-            console.log(this.$store)
             this.$store.users.users.results = this.$store.users.users.results.filter((i) => i.id !== user.id)
             app.vm.$shout({message: $t('User {name} succesfully deleted', {name: user.email})})
             app.router.push(backRoute)

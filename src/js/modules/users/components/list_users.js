@@ -1,7 +1,7 @@
 module.exports = (app, actions) => {
     const template = app.templates.users_list_users
     return {
-        asyncData: async function(store, route) {
+        asyncData: async function(route) {
             // return the Promise from the action
             let routeName
             if (route.params.client_id) routeName = 'list_client_users'
@@ -13,7 +13,7 @@ module.exports = (app, actions) => {
                 path: usersRoute.route.path,
             })
 
-            store.users.users = usersData
+            app.store.users.users = usersData
             return usersData
         },
         computed: {

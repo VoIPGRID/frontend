@@ -19,9 +19,11 @@ class MainModule extends Module {
         Vue.component('Navigation', require('./components/navigation')(app, this.actions))
         Vue.component('ContentHeader', require('./components/content_header')(app, this.actions))
 
-        this.app.store.main = this.getObservables()
+        const Oops = Vue.component('Oops', require('./components/oops')(app))
+
+        if (!this.app.store.main) this.app.store.main = this.getObservables()
         app.router.addRoutes([{
-            component: require('./components/oops')(app),
+            component: Oops,
             name: 'oops',
             path: '/oops',
         }])

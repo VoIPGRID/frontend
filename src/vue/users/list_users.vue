@@ -45,7 +45,7 @@
                     </router-link>
                 </td>
             </tr>
-            <tr v-if="users.length === 0">
+            <tr v-if="users.results.length === 0">
                 <td colspan="3">{{$t('No users yet')}}</td>
             </tr>
         </tbody>

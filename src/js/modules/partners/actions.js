@@ -5,6 +5,8 @@ module.exports = function(app, _module) {
     */
     let actions = {}
 
+    let $t = Vue.i18n.translate
+
 
     /**
     * Delete a partner to the API, update the store and add a notification.
@@ -13,7 +15,6 @@ module.exports = function(app, _module) {
     */
     actions.deletePartner = function(partner) {
         app.api.client.delete(`partners/${partner.id}/`).then((res) => {
-            let $t = Vue.i18n.translate
             this.$store.partners.partners = this.$store.partners.partners.filter((i) => i.id !== partner.id)
             app.vm.$shout({message: $t('Partner {name} succesfully deleted', {name: partner.name})})
             app.router.push({name: 'list_partners'})
@@ -24,18 +25,23 @@ module.exports = function(app, _module) {
     /**
     * Read partner from the API and update the partner store object.
     * @param {String} partnerId - ID of the partner to read from the API.
+    * @param {Boolean} formEndpoints - Include form data for selects.
     * @returns {Object} - All data related to the partner form.
     */
-    actions.readPartner = async function(partnerId) {
-        let partner
+    actions.readPartner = async function(partnerId, formEndpoints = true) {
+        let context = {}
         if (partnerId) {
             const res = await app.api.client.get(`partners/${partnerId}/`)
-            partner = res.data
+            context.partner = res.data
         } else {
-            partner = _module.getObservables().partner
+            context.partner = _module.getObservables().partner
         }
 
-        let [audio, countries, currencies, owners, priceplanDiscounts, system, timezones] = await Promise.all([
+        if (!formEndpoints) return context
+
+        let [audio, countries, currencies, owners,
+            priceplanDiscounts, system, timezones,
+        ] = await Promise.all([
             app.api.client.get('partners/audio_languages/'),
             app.api.client.get('partners/countries/'),
             app.api.client.get('partners/currencies/'),
@@ -45,16 +51,17 @@ module.exports = function(app, _module) {
             app.api.client.get('partners/timezones/'),
         ])
 
-        return {
+        Object.assign(context, {
             audioLanguages: audio.data,
             countries: countries.data,
             currencies: currencies.data,
             owners: owners.data.results,
-            partner: partner,
             priceplanDiscounts: priceplanDiscounts.data,
             systemLanguages: system.data,
             timezones: timezones.data,
-        }
+        })
+
+        return context
     }
 
 
@@ -77,7 +84,6 @@ module.exports = function(app, _module) {
     */
     actions.upsertPartner = function(partner) {
         // Format the data that we are about to send to the API first.
-        let $t = Vue.i18n.translate
         let payload = JSON.parse(JSON.stringify(partner))
         payload.owner = parseInt(partner.owner)
         if (partner.id) {

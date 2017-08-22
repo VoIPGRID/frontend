@@ -4,9 +4,9 @@ module.exports = (app, actions) => {
     const $t = Vue.i18n.translate
 
     return {
-        asyncData: async function(store, router) {
+        asyncData: async function(router) {
             let clientData = await actions.readClient(router.params.client_id)
-            Object.assign(store.clients, clientData)
+            Object.assign(app.store.clients, clientData)
         },
         created: function() {
             this.client = this.$store.clients.client
@@ -73,6 +73,9 @@ module.exports = (app, actions) => {
                     },
                 },
             },
+        },
+        watch: {
+            $route: 'fetchData',
         },
     }
 }

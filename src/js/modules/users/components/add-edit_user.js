@@ -3,35 +3,49 @@ module.exports = (app, actions) => {
     const v = Vuelidate.validators
     const $t = Vue.i18n.translate
 
-    return {
-        asyncData: async function(store, route) {
-            const clientId = route.params.client_id
-            const partnerId = route.params.partner_id
-            const userId = route.params.user_id
+    function localData() {
+        const route = app.router.currentRoute
+        this.userId = route.params.user_id
+        if (String(this.userId) === String(app.store.user.id)) {
+            this.isProfile = true
+        }
+    }
 
-            const userData = await actions.readUser(clientId, partnerId, userId)
-            Object.assign(store.users, userData)
-            return userData
-        },
-        computed: {
-            clientOrPartner: function() {
-                if (this.clientId) return 'client'
-                return 'partner'
-            },
+    async function asyncData(route) {
+        const clientId = route.params.client_id
+        const partnerId = route.params.partner_id
+        const userId = route.params.user_id
+
+        const context = await actions.readUser(clientId, partnerId, userId)
+
+        Object.assign(context, {
+            clientId: route.params.client_id,
+            partnerId: route.params.partner_id,
+            userId: route.params.user_id,
+        })
+
+        if (userId === app.store.user.id) context.isProfile = true
+        else context.isProfile = false
+
+        // Called from the created hook or the watch hook.
+        if (this.constructor.name === 'VueComponent') localData.call(this)
+        Object.assign(app.store.users, context)
+        return context
+    }
+
+
+    return {
+        asyncData: function(route) {
+            return asyncData.call(this, route)
         },
         created: function() {
-            const route = app.router.currentRoute
-            this.userId = route.params.user_id
-            if (this.userId === String(app.store.user.id)) {
-                this.isProfile = true
-            }
-
             this.tabs = [
                 {id: 'personal', title: $t('Personal information')},
                 {id: 'language', title: $t('Language settings')},
                 {id: 'telephony', show: () => Boolean(this.$route.params.client_id), title: $t('Telephony settings')},
                 {id: 'security', title: $t('Security')},
             ]
+            localData.call(this)
         },
         data: function() {
             return {
@@ -43,30 +57,6 @@ module.exports = (app, actions) => {
             }
         },
         methods: {
-            /**
-            * Wrapper function for the select event that changes language.
-            */
-            fetchData: async function() {
-                const route = app.router.currentRoute
-
-                const clientId = route.params.client_id
-                const partnerId = route.params.partner_id
-                const userId = route.params.user_id
-
-                let context = await actions.readUser(clientId, partnerId, userId)
-                if (userId === app.store.user.id) {
-                    context.isProfile = true
-                } else {
-                    context.isProfile = false
-                }
-                Object.assign(context, {
-                    clientId: route.params.client_id,
-                    partnerId: route.params.partner_id,
-                    userId: route.params.user_id,
-                })
-
-                Object.assign(this, context)
-            },
             setLanguage: actions.setLanguage,
             upsertUser: actions.upsertUser,
         },
@@ -143,6 +133,11 @@ module.exports = (app, actions) => {
             }
 
             return validations
+        },
+        watch: {
+            $route: function(to, from) {
+                asyncData.call(this, to)
+            },
         },
     }
 }

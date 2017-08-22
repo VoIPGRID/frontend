@@ -1,15 +1,21 @@
 module.exports = (app, actions) => {
     const template = app.templates.partners_delete_partner
+
+    async function asyncData(route) {
+        const partnerId = route.params.partner_id
+        const partnerData = await actions.readPartner(partnerId, false)
+        Object.assign(app.store.partners, partnerData)
+        return partnerData
+    }
+
     return Vue.component('DeletePartner', {
-        created: function() {
-            this.fetchData()
+        asyncData: function(route) {
+            return asyncData.call(this, route)
         },
         methods: {
             deletePartner: actions.deletePartner,
             fetchData: async function() {
-                const partnerId = app.router.currentRoute.params.partner_id
-                const partnerData = await actions.readPartner.call(this, partnerId)
-                Object.assign(this.$store.partners, partnerData)
+
             },
         },
         render: template.r,
@@ -18,7 +24,9 @@ module.exports = (app, actions) => {
             partner: 'partners.partner',
         },
         watch: {
-          '$route': 'fetchData',
+            $route: function(to, from) {
+                asyncData.call(this, to)
+            },
         },
     })
 }

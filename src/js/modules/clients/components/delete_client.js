@@ -1,14 +1,19 @@
 module.exports = (app, actions) => {
     const template = app.templates.clients_delete_client
+
+    async function asyncData(route) {
+        const clientId = route.params.client_id
+        let clientData = await actions.readClient(clientId, false)
+        Object.assign(app.store.clients, clientData)
+        return clientData
+    }
+
     return {
-        created: function() {
-            this.fetchData()
+        asyncData: function(route) {
+            return asyncData.call(this, route)
         },
         methods: {
             deleteClient: actions.deleteClient,
-            fetchData: function() {
-                actions.readClient.call(this, this.$store.clients, app.router.currentRoute.params.client_id)
-            },
         },
         render: template.r,
         staticRenderFns: template.s,
@@ -16,7 +21,9 @@ module.exports = (app, actions) => {
             client: 'clients.client',
         },
         watch: {
-            $route: 'fetchData',
+            $route: function(to, from) {
+                asyncData.call(this, to)
+            },
         },
     }
 }

@@ -5,34 +5,39 @@ module.exports = function(app, _module) {
      */
     let actions = {}
 
+    let $t = Vue.i18n.translate
+
     /**
-     * Delete a client to the API, update the store and add a notification.
-     * Route to the last route afterwards.
-     * @param {Observable} client - The client store object.
-     */
-    actions.deleteClient = function(client) {
-        app.api.client.delete(`clients/${client.id}/`).then((res) => {
-            let $t = Vue.i18n.translate
-            this.$store.clients.clients = this.$store.clients.clients.filter((i) => i.id !== client.id)
+    * Delete a client to the API, update the store and add a notification.
+    * Route to the last route afterwards.
+    * @param {Observable} client - The client store object.
+    */
+    actions.deleteClient = async function(client) {
+        const res = await app.api.client.delete(`clients/${client.id}/`)
+        if (res.status === 204) {
+            this.$store.clients.clients.results = this.$store.clients.clients.results.filter((i) => i.id !== client.id)
             app.vm.$shout({message: $t('Client {name} succesfully deleted', {name: client.name})})
             app.router.push({name: 'list_clients'})
-        })
+        }
     }
 
 
     /**
-     * Read client from the API and update the client store object.
-     * @param {String} clientId - ID of the client to read from the API.
-     * @returns {Object} - All data related to the client form.
-     */
-    actions.readClient = async(clientId) => {
-        let client
+    * Read client from the API and update the client store object.
+    * @param {String} clientId - ID of the client to read from the API.
+    * @param {Boolean} formEndpoints - Include form data for selects.
+    * @returns {Object} - All data related to the client form.
+    */
+    actions.readClient = async function(clientId, formEndpoints = true) {
+        let context = {}
         if (clientId) {
             const res = await app.api.client.get(`clients/${clientId}/`)
-            client = res.data
+            context.client = res.data
         } else {
-            client = _module.getObservables().client
+            context.client = _module.getObservables().client
         }
+
+        if (!formEndpoints) return context
 
         let [
             anonymizeAfter, audio, blockedCallPermissions, countries,
@@ -48,17 +53,18 @@ module.exports = function(app, _module) {
             app.api.client.get('clients/timezones/'),
         ])
 
-        return {
+        Object.assign(context, {
             anonymizeAfter: anonymizeAfter.data,
             audioLanguages: audio.data,
             blockedCallPermissions: blockedCallPermissions.data,
-            client: client,
             countries: countries.data,
             currencies: currencies.data,
             owners: owners.data.results,
             systemLanguages: system.data,
             timezones: timezones.data,
-        }
+        })
+
+        return context
     }
 
 
@@ -86,7 +92,6 @@ module.exports = function(app, _module) {
     */
     actions.upsertClient = function(client) {
         // Format the data that we are about to send to the API first.
-        let $t = Vue.i18n.translate
         let payload = JSON.parse(JSON.stringify(client))
         if (client.id) {
             app.api.client.put(`clients/${client.id}/`, payload).then((res) => {

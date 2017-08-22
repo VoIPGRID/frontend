@@ -1,11 +1,11 @@
 module.exports = (app, actions) => {
     const template = app.templates.partners_list_partners
     return Vue.component('ListPartners', {
-        asyncData: async function(store, route) {
+        asyncData: async function(route) {
             // return the Promise from the action
             let currentPage = parseInt(route.query.page) || 1
             let partnersData = await actions.readPartners({page: currentPage})
-            store.partners.partners = partnersData
+            app.store.partners.partners = partnersData
             return partnersData
         },
         created: function() {

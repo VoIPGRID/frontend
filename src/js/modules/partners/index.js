@@ -9,44 +9,32 @@ class PartnersModule extends Module {
 
     constructor(app) {
         super(app)
-        // Only set observables when they're not yet set from the initial store.
         if (!this.app.store.partners) this.app.store.partners = this.getObservables()
         this.actions = require('./actions')(app, this)
 
+        const AddEditPartner = Vue.component('AddEditPartner',
+            require('./components/add-edit_partner')(app, this.actions))
+        const ListPartners = Vue.component('ListPartners', require('./components/list_partners')(app, this.actions))
+
         app.router.addRoutes([{
-            children: [
-                {
-                    component: require('./components/delete_partner')(app, this.actions),
-                    name: 'delete_partner',
-                    path: ':partner_id/delete',
-                },
-            ],
-            component: require('./components/list_partners')(app, this.actions),
+            children: [{
+                component: require('./components/delete_partner')(app, this.actions),
+                name: 'delete_partner',
+                path: ':partner_id/delete',
+            }],
+            component: ListPartners,
             name: 'list_partners',
             path: '/partners',
-
         }])
 
-        const AddEditPartnerComponent = require('./components/add-edit_partner')(app, this.actions)
-
         app.router.addRoutes([{
-            alias: [
-                '/partners/add/partner',
-                '/partners/add/preferences',
-                '/partners/add/billing',
-            ],
-            component: AddEditPartnerComponent,
+            component: AddEditPartner,
             name: 'add_partner',
             path: '/partners/add',
         }])
 
         app.router.addRoutes([{
-            alias: [
-                '/partners/:partner_id/edit/partner',
-                '/partners/:partner_id/edit/preferences',
-                '/partners/:partner_id/edit/billing',
-            ],
-            component: AddEditPartnerComponent,
+            component: AddEditPartner,
             name: 'edit_partner',
             path: '/partners/:partner_id/edit',
         }])

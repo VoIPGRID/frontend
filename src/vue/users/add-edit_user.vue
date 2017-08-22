@@ -1,5 +1,5 @@
 <div>
-    <Tabs :tabs=tabs :fetch=fetchData>
+    <Tabs :tabs=tabs>
         <Tab :data="tabs[0]">
             <h2 class="title">{{$t('Personal')}}</h2><hr/>
 

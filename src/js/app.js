@@ -127,12 +127,11 @@ class App {
                 if (!this.env.ssr) {
                     const activated = this.router.getMatchedComponents(this.router.currentRoute)
                     Promise.all(activated.map(c => {
-                        if (!c) return
                         if (c.sealedOptions && c.sealedOptions.asyncData) {
-                            return c.sealedOptions.asyncData(this.store, this.router.currentRoute)
+                            return c.sealedOptions.asyncData(this.router.currentRoute)
                         } else if (c.asyncData) {
-                            return c.asyncData(this.store, this.router.currentRoute)
-                        }
+                            return c.asyncData(this.router.currentRoute)
+                        } else return null
                     }))
                 }
 
@@ -153,13 +152,12 @@ class App {
 
                     // This is where we should trigger a loading indicator
                     // if there is one.
-                    Promise.all(activated.map(c => {
-                        if (!c) return
+                    return Promise.all(activated.map(c => {
                         if (c.sealedOptions && c.sealedOptions.asyncData) {
-                            return c.sealedOptions.asyncData(this.store, to)
+                            return c.sealedOptions.asyncData(to)
                         } else if (c.asyncData) {
-                            return c.asyncData(this.store, to)
-                        }
+                            return c.asyncData(to)
+                        } else return null
                     })).then(() => {
                         // Stop loading indicator.
                         next()

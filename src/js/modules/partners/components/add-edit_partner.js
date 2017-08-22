@@ -9,10 +9,10 @@ module.exports = (app, actions) => {
      * @memberof module:partners
      * @namespace
      */
-    return Vue.component('AddEditPartner', {
-        asyncData: async function(store, router) {
+    return {
+        asyncData: async function(router) {
             let partnerData = await actions.readPartner(router.params.partner_id)
-            Object.assign(store.partners, partnerData)
+            Object.assign(app.store.partners, partnerData)
         },
         computed: {
             branding: function() {
@@ -128,5 +128,5 @@ module.exports = (app, actions) => {
                 },
             },
         },
-    })
+    }
 }

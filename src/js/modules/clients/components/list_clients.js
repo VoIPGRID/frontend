@@ -1,11 +1,11 @@
 module.exports = (app, actions) => {
     const template = app.templates.clients_list_clients
     return {
-        asyncData: async function(store, route) {
+        asyncData: async function(route) {
             // return the Promise from the action
             let currentPage = parseInt(route.query.page) || 1
             let clientsData = await actions.readClients({page: currentPage})
-            store.clients.clients = clientsData
+            app.store.clients.clients = clientsData
             return clientsData
         },
         created: function() {

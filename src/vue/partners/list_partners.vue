@@ -32,6 +32,9 @@
                     </router-link>
                 </td>
             </tr>
+            <tr v-if="partners.results.length === 0">
+                <td colspan="3">{{$t('No users yet')}}</td>
+            </tr>
         </tbody>
     </table>
     <Paginator

@@ -9,11 +9,13 @@ class DashboardModule extends Module {
      */
     constructor(app) {
         super(app)
-        this.app.store.dashboard = this.getObservables()
+        if (!this.app.store.dashboard) this.app.store.dashboard = this.getObservables()
         this.actions = require('./actions')(app)
 
+        const Dashboard = Vue.component('Dashboard', require('./components/home')(app, this.actions))
+
         app.router.addRoutes([{
-            component: require('./components/home')(app, this.actions),
+            component: Dashboard,
             name: 'dashboard_home',
             path: '/',
         }])

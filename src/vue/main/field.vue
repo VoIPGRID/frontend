@@ -71,6 +71,6 @@
 <div class="field" v-else-if="type === 'textarea'">
     <label :class="{'required': vRequired(), 'label': true}" :for="name">{{label}}</label>
     <textarea class="textarea" v-on:input="vChange($event, $event.target.value)" v-bind:value="vmodel"
-         :id="name" :name="name" :placeholder="placeholder" :disabled="disabled"/>
+         :id="name" :name="name" :placeholder="placeholder" :disabled="disabled">{{vmodel}}</textarea>
     <span class="help is-danger" v-html="validationMessage" v-if="vInvalid()"></span>
 </div>

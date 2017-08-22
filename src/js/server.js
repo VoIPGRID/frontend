@@ -49,10 +49,10 @@ function createApp(url, context) {
 
             await Promise.all(matchedComponents.map(Component => {
                 if (Component.sealedOptions && Component.sealedOptions.asyncData) {
-                    return Component.sealedOptions.asyncData(app.store, app.router.currentRoute)
+                    return Component.sealedOptions.asyncData(app.router.currentRoute)
                 } else if (Component.asyncData) {
-                    return Component.asyncData(app.store, app.router.currentRoute)
-                }
+                    return Component.asyncData(app.router.currentRoute)
+                } else return null
             }))
 
             return resolve({app})
