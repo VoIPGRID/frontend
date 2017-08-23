@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 
+import { withTranslate } from 'react-redux-multilingual'
+
 import { getPartners, updatePartner, deletePartner } from './PartnerActions'
 
 
@@ -33,7 +35,7 @@ class PartnerList extends Component {
 
                 return (
                     <tr key={partner.id}>
-                        <td><Link to={`/clients/partner/${partner.id}`}>{partner.name}</Link></td>
+                        <td><Link to={`/partners/${partner.id}/clients/`}>{partner.name}</Link></td>
                         <td>{partner.description}</td>
                         <td>{partner.partner}</td>
                         <td>
@@ -63,28 +65,31 @@ class PartnerList extends Component {
     }
 
     render() {
+
+        const { translate } = this.props;
+
         if (!this.props.partners) {
             return (
-                <div>Loading...</div>
+                <div>{translate('Loading')}...</div>
             )
         }
 
         return (
             <div>
                 <div className="list-header is-clearfix">
-                    All partners ({this.props.partners.length})
+                    {translate('All partners')} ({this.props.partners.length})
 
-                    <Link className="button is-primary is-pulled-right" to="/partners/create">Add</Link>
+                    <Link className="button is-primary is-pulled-right" to="/partners/create">{translate('Add')}</Link>
                 </div>
 
                 <table className="table is-bordered is-striped">
                     <tbody>
                         <tr>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Related partner</th>
-                            <th>Inactive</th>
-                            <th className="table-actions">Actions</th>
+                            <th>{translate('Name')}</th>
+                            <th>{translate('Description')}</th>
+                            <th>{translate('Related Partner')}</th>
+                            <th>{translate('Inactive')}</th>
+                            <th className="table-actions">{translate('Acties')}</th>
                         </tr>
                     </tbody>
 
@@ -115,4 +120,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({ getPartners, updatePartner, deletePartner }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PartnerList);
+PartnerList = connect(mapStateToProps, mapDispatchToProps)(PartnerList);
+
+PartnerList = withTranslate(PartnerList);
+
+export default PartnerList;

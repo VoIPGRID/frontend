@@ -1,6 +1,3 @@
-const Select = require('react-select');
-const classNames = require('classnames');
-
 import React, { Component } from 'react';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
 import { Link } from 'react-router-dom';
@@ -9,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import { timezones} from '../helpers/timezones';
+import renderField from '../helpers/forms/RenderField';
 
 import { getPartners, createPartner, getPartner, updatePartner, emptyPartner } from './PartnerActions';
 
@@ -21,81 +19,15 @@ class PartnerForm extends Component {
     }
 
     async componentDidMount() {
-        const { id } = this.props.match.params;
+        const { partnerId } = this.props.match.params;
 
-        if (id) {
-            await this.props.getPartner(id);
+        if (partnerId) {
+            await this.props.getPartner(partnerId);
         }
     }
 
     componentWillUnmount() {
         this.props.emptyPartner();
-    }
-
-    renderField(field) {
-        const { meta: { touched, error }} = field;
-        let className = field.type;
-
-        if (field.type === 'text') {
-            className = 'input';
-        }
-
-        // Bulma has the name class names as the type of input (e.g. input, textarea).
-        // So just reuse that determine what element to render.
-        let element = className;
-
-        className = classNames(
-            className,
-            {
-                'is-danger': touched && error,
-            }
-        )
-
-        let labelClass = classNames(
-            'label',
-            {
-                'is-required': field.required,
-            }
-        )
-
-        switch (element) {
-            case 'input':
-                element = <input className={className} disabled={field.disabled} type={field.type} {...field.input} />;
-                break;
-            case 'textarea':
-                element = <textarea className={className} disabled={field.disabled} type={field.type} {...field.input} />;
-                break;
-            case 'select':
-                element = (
-                    <Select.Async {...field.input}
-                        loadOptions={field.loadOptions}
-                        disabled={field.disabled}
-                        onBlur={() => field.input.onBlur(field.input.value.value)} />
-                )
-                break;
-            case 'checkbox':
-                element = <input className={className} disabled={field.disabled} type={field.type} {...field.input} />;
-                break;
-            default:
-                break;
-        }
-
-        return (
-            <div className="field">
-                <label className={labelClass}>{field.label}</label>
-                <div className="control">
-                    {element}
-
-                    { field.helpText &&
-                        <p className="help">{field.helpText}</p>
-                    }
-
-                    { touched && error &&
-                        <p className="help is-danger">{error}</p>
-                    }
-                </div>
-            </div>
-        )
     }
 
     async _getPartnerOptions(searchString) {
@@ -208,7 +140,7 @@ class PartnerForm extends Component {
         return (
             <div>
                 <form onSubmit={handleSubmit(this._handleSubmit)}>
-                    <Tabs className="tabs is-boxed" selectedTabClassName="is-active">
+                    <Tabs className="tabs is-boxed" selectedTabClassName="is-active" forceRenderTabPanel>
                         <TabList>
                             <Tab><a>Partner</a></Tab>
                             <Tab><a>Preferences</a></Tab>
@@ -217,37 +149,37 @@ class PartnerForm extends Component {
 
                         <TabPanel>
                             <h2 className="subtitle">General</h2>
-                            <Field label="Owner" name="owner" helpText="This allows for reseller-style relationships. Set to NULL for the system owner." type="select" required="true" component={this.renderField} loadOptions={this._getPartnerOptions} />
-                            <Field label="Name" name="name" helpText="The relation name: a company name or a person name in case of a private person." type="text" required="true" component={this.renderField} />
-                            <Field label="Description" name="description" type="textarea" component={this.renderField} />
-                            <Field label="Foreign code" name="foreign_code" helpText="A human readable identifier that the relation uses to identify you by." type="text" component={this.renderField} />
-                            <Field label="May have children" name="may_have_children" type="checkbox" component={this.renderField} />
+                            <Field label="Owner" name="owner" helpText="This allows for reseller-style relationships. Set to NULL for the system owner." type="select" required="true" component={renderField} loadOptions={this._getPartnerOptions} />
+                            <Field label="Name" name="name" helpText="The relation name: a company name or a person name in case of a private person." type="text" required="true" component={renderField} />
+                            <Field label="Description" name="description" type="textarea" component={renderField} />
+                            <Field label="Foreign code" name="foreign_code" helpText="A human readable identifier that the relation uses to identify you by." type="text" component={renderField} />
+                            <Field label="May have children" name="may_have_children" type="checkbox" component={renderField} />
 
                             <h2 className="subtitle">Domains</h2>
-                            <Field label="Domain" name="domain" type="text" helpText="E.g. your.hostname" component={this.renderField} />
-                            <Field label="Email address" name="email_address" type="text" component={this.renderField} />
-                            <Field label="No-reply email address" name="no_reply_email_address" helpText="Address to be used for sending out notifications." type="text" component={this.renderField} />
-                            <Field label="Wiki base url" name="wiki_base_url" helpText="E.g. https://wiki.voipgrid.nl/index.php/" type="text" component={this.renderField} />
-                            <Field label="Registration domain" name="registration_domain" helpText="The domain name client phones use as proxy address. E.g. proxy_hostname" type="text" component={this.renderField} />
+                            <Field label="Domain" name="domain" type="text" helpText="E.g. your.hostname" component={renderField} />
+                            <Field label="Email address" name="email_address" type="text" component={renderField} />
+                            <Field label="No-reply email address" name="no_reply_email_address" helpText="Address to be used for sending out notifications." type="text" component={renderField} />
+                            <Field label="Wiki base url" name="wiki_base_url" helpText="E.g. https://wiki.voipgrid.nl/index.php/" type="text" component={renderField} />
+                            <Field label="Registration domain" name="registration_domain" helpText="The domain name client phones use as proxy address. E.g. proxy_hostname" type="text" component={renderField} />
 
                             <h2 className="subtitle">Branding</h2>
                         </TabPanel>
 
                         <TabPanel>
-                            <Field label="Country" name="profile[country][code]" helpText="Select the country you operate from. When possible this country will be the default in other forms." type="select" required="true" component={this.renderField} loadOptions={this._getCountries} />
-                            <Field label="Audio language" name="profile[audio_language]" helpText="Select the language/voice that is used as default for messages played in modules." type="select" required="true" component={this.renderField} loadOptions={this._getAudioLanguages} />
-                            <Field label="System language" name="profile[system_language]" helpText="Select the language that is used as default for printed text (invoices, exports, interface)." type="select" required="true" component={this.renderField} loadOptions={this._getSystemLanguages} />
-                            <Field label="Timezone" name="profile[timezone]" type="select" required="true" component={this.renderField} loadOptions={this._getTimeZones} />
+                            <Field label="Country" name="profile[country][code]" helpText="Select the country you operate from. When possible this country will be the default in other forms." type="select" required="true" component={renderField} loadOptions={this._getCountries} />
+                            <Field label="Audio language" name="profile[audio_language]" helpText="Select the language/voice that is used as default for messages played in modules." type="select" required="true" component={renderField} loadOptions={this._getAudioLanguages} />
+                            <Field label="System language" name="profile[system_language]" helpText="Select the language that is used as default for printed text (invoices, exports, interface)." type="select" required="true" component={renderField} loadOptions={this._getSystemLanguages} />
+                            <Field label="Timezone" name="profile[timezone]" type="select" required="true" component={renderField} loadOptions={this._getTimeZones} />
                         </TabPanel>
 
                         <TabPanel>
-                            <Field label="Timezone" name="billingprofile[currency]" type="select" required="true" component={this.renderField} loadOptions={this._getCurrencies} />
-                            <Field label="Email address for billing" name="billingprofile[billing_email]" helpText="You can set this email address at the billing information page." disabled type="text" component={this.renderField} />
-                            <Field label="Does its own billing" helpText="When checked, this partner receives a single invoice from the system for all its clients. Otherwise, its clients receive invoices from the system." name="billingprofile[totalize_partner_cdrs]" type="checkbox" component={this.renderField} />
-                            <Field label="Use Twinfield" helpText="When checked, the partner can export his billing items to twinfield" name="billingprofile[use_twinfield]" type="checkbox" component={this.renderField} />
-                            <Field label="Automatic export" helpText="A combined export will be created and emailed on the first day of every month." name="billingprofile[auto_export]" type="checkbox" component={this.renderField} />
-                            <Field label="Exclude from billing" helpText="This relation will be excluded from billing exports." name="billingprofile[exclude_from_export]" type="checkbox" component={this.renderField} />
-                            <Field label="Priceplan discount status" name="billingprofile[priceplan_discount_status]" type="select" component={this.renderField} loadOptions={this._getPriceplanDiscountStatuses} />
+                            <Field label="Timezone" name="billingprofile[currency]" type="select" required="true" component={renderField} loadOptions={this._getCurrencies} />
+                            <Field label="Email address for billing" name="billingprofile[billing_email]" helpText="You can set this email address at the billing information page." disabled type="text" component={renderField} />
+                            <Field label="Does its own billing" helpText="When checked, this partner receives a single invoice from the system for all its clients. Otherwise, its clients receive invoices from the system." name="billingprofile[totalize_partner_cdrs]" type="checkbox" component={renderField} />
+                            <Field label="Use Twinfield" helpText="When checked, the partner can export his billing items to twinfield" name="billingprofile[use_twinfield]" type="checkbox" component={renderField} />
+                            <Field label="Automatic export" helpText="A combined export will be created and emailed on the first day of every month." name="billingprofile[auto_export]" type="checkbox" component={renderField} />
+                            <Field label="Exclude from billing" helpText="This relation will be excluded from billing exports." name="billingprofile[exclude_from_export]" type="checkbox" component={renderField} />
+                            <Field label="Priceplan discount status" name="billingprofile[priceplan_discount_status]" type="select" component={renderField} loadOptions={this._getPriceplanDiscountStatuses} />
                         </TabPanel>
                     </Tabs>
 

@@ -38,14 +38,35 @@ export async function getPartners(searchString = '') {
 export async function createPartner(values) {
     const url = `${API_ROOT}/partners/`;
 
-    values.created_at = Date.now();
-    values.is_active = true;
-    const request = await axios.post(url, values);
+    const request = await axios.create({
+        headers: {
+            Accept: 'application/json',
+            'X-CSRFToken': window.__INITIAL_STATE__.csrf
+        },
+        timeout: 3000,
+        withCredentials: true,
+    });
 
-    return {
-        type: CREATE_PARTNER,
-        payload: request,
-    }
+    let result;
+    let object;
+
+    request.interceptors.response.use((response) => {
+        result = response;
+        object = {
+            type: CREATE_PARTNER,
+            payload: result,
+        }
+    }, (error) => {
+        result = error.response.data;
+        object = {
+            type: FORM_ERROR,
+            payload: result,
+        }
+    });
+
+    result  = await request.post(url, values);
+
+    return object;
 }
 
 export async function getPartner(id) {

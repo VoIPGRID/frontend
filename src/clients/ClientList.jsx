@@ -8,6 +8,7 @@ import { getClients, updateClient, deleteClient } from './ClientActions'
 
 class ClientList extends Component {
     componentDidMount() {
+        console.log('sdf')
         const { partnerId } = this.props.match.params;
         this.props.getClients(partnerId);
     }
