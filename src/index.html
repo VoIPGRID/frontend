@@ -9,12 +9,9 @@
     </body>
     <script>
         window.global = window
-        window.__INITIAL_STATE__ = {{state|safe}}
         <!--STORE-->
     </script>
-    {% if translations %}
-    <script src="/public/js/i18n/{{translations}}.js" defer></script>
-    {% endif %}
+    <!--TRANSLATIONS-->
     <script src="/public/js/lib/vendor.js" defer></script>
     <script src="/public/js/lib/templates.js" defer></script>
     <script src="/public/js/app.js" defer></script>

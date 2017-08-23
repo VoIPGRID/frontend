@@ -4,18 +4,11 @@ module.exports = (app, actions) => {
     return {
         methods: {
             deselectClient() {
-                this.user.selectedClient = null
-                app._store.setCookieState({
-                    selectedClient: null,
-                })
+                this.user.selectedClient = {id: null, name: ''}
             },
             deselectPartner() {
-                this.user.selectedClient = null
-                this.user.selectedPartner = null
-                app._store.setCookieState({
-                    selectedClient: null,
-                    selectedPartner: null,
-                })
+                this.user.selectedClient = {id: null, name: ''}
+                this.user.selectedPartner = {id: null, name: ''}
             },
         },
         render: template.r,

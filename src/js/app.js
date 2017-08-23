@@ -4,18 +4,23 @@ const Store = require('./lib/store')
 
 
 /**
- * The VoIPGRID frontend V2 application.
- */
+* The VoIPGRID frontend V2 application.
+*/
 class App {
     /**
-     * @param {Object} initialState - The user state as passed from the backend.
-     * @param {Object} templates - The compiled Vue templates to start with.
-     */
-    constructor(initialState, templates) {
+    * @param {Object} store - The store as passed from the backend.
+    * @param {Object} templates - The compiled Vue templates to start with.
+    */
+    constructor(store, templates) {
         // Assign the template global to the app context.
-        this.__state = initialState
         this.templates = templates
         this.logger = new Logger(this)
+
+        // Show a meaningful message to the user when the API is down.
+        if (!store) {
+            this.logger.error('Received no store. No API backend?')
+            return
+        }
 
         this.env = {
             isBrowser: false,
@@ -30,11 +35,7 @@ class App {
             this.env.ssr = false
         }
 
-        // Show a meaningful message to the user when the API is down.
-        if (!initialState) {
-            this.logger.error('Received no state. No API backend?')
-            return
-        }
+
         this.utils = require('./lib/helpers')(this)
         const _this = this
         Vue.use((Vue) => {
@@ -53,9 +54,10 @@ class App {
         this.setupRouter()
         // Initialize form validator here.
         Vue.use(Vuelidate.default)
-        this.api = new Api(this)
 
-        this._store = new Store(this, initialState)
+        // Initialize the final store from the passed store object.
+        this._store = new Store(this, store)
+        this.api = new Api(this)
         this.initI18n()
 
         this.loadModules()
@@ -86,13 +88,15 @@ class App {
         // Create a I18n stash store and pass it to the I18n plugin.
         const i18nStore = new I18nStore(this.store)
         Vue.use(i18n, i18nStore)
-        if (global.translations && this.__state.language in translations) {
-            Vue.i18n.add(this.__state.language, translations.nl)
-            Vue.i18n.set(this.__state.language)
+        if (global.translations && this.store.user.language in translations) {
+            Vue.i18n.add(this.store.user.language, translations.nl)
+            Vue.i18n.set(this.store.user.language)
         } else {
             // Warn about a missing language when it's a different one than
             // the default.
-            if (this.__state.language !== 'en') this.logger.warn(`No translations found for ${this.__state.language}`)
+            if (this.store.user.language !== 'en') {
+                this.logger.warn(`No translations found for ${this.store.user.language}`)
+            }
         }
         // Add a simple reference to the translation module.
         this.$t = Vue.i18n.translate

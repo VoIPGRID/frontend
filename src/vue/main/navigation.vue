@@ -5,7 +5,7 @@
 
     <ul class="context-selector">
         <li>
-            <router-link v-if="user.selectedPartner" :to="{name: 'list_partners', params: {partner_id: user.selectedPartner.id}}" exact>
+            <router-link v-if="user.selectedPartner.id" :to="{name: 'list_partners', params: {partner_id: user.selectedPartner.id}}" exact>
                 <i class="item-level-up item-icon fa fa-level-up" @click="deselectPartner"></i>
                 <i class="item-icon fa fa-handshake-o"></i>
                 <span class="item-text">{{user.selectedPartner.name}}</span>
@@ -17,20 +17,20 @@
         </li>
 
         <li>
-            <router-link v-if="user.selectedClient" :to="{name: 'list_clients', params: {partner_id: user.selectedPartner.id}}" exact>
+            <router-link v-if="user.selectedClient.id" :to="{name: 'list_clients', params: {partner_id: user.selectedPartner.id}}" exact>
                 <i class="item-level-up item-icon fa fa-level-up" @click="deselectClient"></i>
                 <i class="item-icon fa fa-group"></i>
                 <span class="item-text">{{user.selectedClient.name}}</span>
             </router-link>
 
-            <router-link v-else-if="user.selectedPartner" :to="{name: 'list_clients', params: {partner_id: user.selectedPartner.id}}">
+            <router-link v-else-if="user.selectedPartner.id" :to="{name: 'list_clients', params: {partner_id: user.selectedPartner.id}}">
                 <i class="item-icon fa fa-group"></i>
                 <span class="item-text">{{$t('Clients')}}</span>
             </router-link>
         </li>
     </ul>
 
-    <ul v-if="user.selectedPartner && !user.selectedClient">
+    <ul v-if="user.selectedPartner.id && !user.selectedClient.id">
         <li>
             <router-link :to="{name: 'list_partner_users', params: {partner_id: user.selectedPartner.id}}">
                 <i class="item-icon fa fa-address-book"></i>
@@ -46,7 +46,7 @@
         </li>
 
     </ul>
-    <ul v-else-if="user.selectedClient">
+    <ul v-else-if="user.selectedClient.id">
         <li class="disabled">
             <router-link to="/administration" exact>
                 <i class="item-icon fa fa-money"></i>

@@ -50,8 +50,6 @@ function createApp(url, context, sessionId) {
         app.router.push(url)
         app.router.onReady(async() => {
             const matchedComponents = app.router.getMatchedComponents()
-            // No matched routes, reject with 404.
-            if (!matchedComponents.length) return reject({code: 404})
 
             await Promise.all(matchedComponents.map(Component => {
                 if (Component.sealedOptions && Component.sealedOptions.asyncData) {
@@ -87,34 +85,39 @@ function setupSsrProxy(indexHTML) {
         // is rendered. This way, the snapshot can reproduce additional
         // state that's set in a cookie.
         let cookieStoreMixin = {}
-        if (req.cookies.get('__INITIAL_STORE__')) {
-            cookieStoreMixin = JSON.parse(decodeURIComponent(req.cookies.get('__INITIAL_STORE__')))
+        if (req.cookies.get('__STORE__')) {
+            cookieStoreMixin = JSON.parse(decodeURIComponent(req.cookies.get('__STORE__')))
         }
 
         axios.defaults.headers = req.headers
         axios.defaults.withCredentials = true
         axios.defaults.jar = cookieJar
         // Get the initial user state from the Django API.
-        const {data: initialState} = await axios.get(`${apiHost}/api/v2/state/`)
+        const {data: store} = await axios.get(`${apiHost}/api/v2/state/?state=${req.originalUrl}`)
 
-        // const initialState = data
         axios.defaults.jar = cookieJar
         // Augment the initial state with the requester's cookie state.
-        Object.assign(initialState, cookieStoreMixin)
+        Object.assign(store, cookieStoreMixin)
 
         // Create an isomorphic app instance with the API's initial state.
-        const app = await createApp(req.url, initialState, sessionId)
+        const app = await createApp(req.url, store, sessionId)
         axios.defaults.headers['X-CSRFToken'] = clientCsrf
         const html = await renderToString(app.vm)
 
+        // Augment the index file with the translation file and remove the
+        // current translation from the store. It will be added later.
+        let translationFile = ''
+        if (store.language !== 'en') {
+            translationFile = `<script src="/public/js/i18n/${store.user.language}.js"></script>`
+        }
+
         let _html = indexHTML.replace('<div id="app"></div>', html)
         // Must use the browser csrf from here on.
-        initialState.csrf = clientCsrf
-        _html = _html.replace('{{state|safe}}', JSON.stringify(initialState))
-        _html = _html.replace('{{translations}}', 'nl')
-        _html = _html.replace('<!--STORE-->', `window.__INITIAL_STORE__ = ${JSON.stringify(app.store)}`)
-        _html = _html.replace('{% if translations %}', '')
-        _html = _html.replace('{% endif %}', '')
+        store.csrf = clientCsrf
+        // Inject the SSR's store in the index template.
+        _html = _html.replace('<!--STORE-->', `window.__STORE__ = ${JSON.stringify(app.store)}`)
+        // Do the same for the translations script tag.
+        _html = _html.replace('<!--TRANSLATIONS-->', translationFile)
         res.end(_html)
     })
 

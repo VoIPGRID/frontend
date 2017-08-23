@@ -123,7 +123,7 @@ module.exports = function(app, _module) {
 
         if ((!global.translations || translations[language]) && language !== 'en') {
             app.utils.injectScript(`/public/js/i18n/${language}.js`, async() => {
-                // Add the translations to the Vuex store.
+                // Add the translations to the Stash store.
                 Vue.i18n.add(language, translations[language])
                 const res = await app.api.client.get(`language/${language}`)
                 if (res.status === 200) {

@@ -10,7 +10,7 @@ class Api {
             baseURL: '/api/v2/',
             headers: {
                 Accept: 'application/json',
-                'X-CSRFToken': app.__state.csrf,
+                'X-CSRFToken': app.store.user.csrf,
             },
             timeout: 3000,
         })

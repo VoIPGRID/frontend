@@ -3,4 +3,4 @@
 */
 const App = require('./app')
 
-window.app = new App(global.__INITIAL_STATE__, window.templates)
+window.app = new App(global.__STORE__, window.templates)

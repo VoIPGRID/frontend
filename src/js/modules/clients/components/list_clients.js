@@ -19,12 +19,9 @@ module.exports = (app, actions) => {
             * @param {Observable} client - The client object.
             */
             selectClientContext: function(client) {
-                this.$store.user.selectedClient = client
-                app._store.setCookieState({
-                    selectedClient: {
-                        id: client.id,
-                        name: client.name,
-                    },
+                Object.assign(this.$store.user.selectedClient, {
+                    id: client.id,
+                    name: client.name,
                 })
             },
         },
