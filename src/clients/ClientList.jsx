@@ -8,7 +8,6 @@ import { getClients, updateClient, deleteClient } from './ClientActions'
 
 class ClientList extends Component {
     componentDidMount() {
-        console.log('sdf')
         const { partnerId } = this.props.match.params;
         this.props.getClients(partnerId);
     }
@@ -20,7 +19,7 @@ class ClientList extends Component {
             table = this.props.clients.map(client => {
                 return (
                     <tr key={client.id}>
-                        <td><Link to={`/clients/${client.id}`}>{client.name}</Link></td>
+                        <td><Link to={`/clients/${client.id}/admin`}>{client.name}</Link></td>
                         <td>{client.created}</td>
                         <td>{client.description}</td>
                         <td>{client.partner}</td>
@@ -83,7 +82,7 @@ class ClientList extends Component {
 
 function mapStateToProps(state) {
     return {
-        clients: state.clients,
+        clients: state.clients.objects,
     }
 }
 

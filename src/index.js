@@ -12,14 +12,14 @@ import reducers from 'base';
 import Login from 'base/Login';
 import PartnerList from 'partners/PartnerList';
 import PartnerForm from 'partners/PartnerForm';
+import ClientForm from 'clients/ClientForm';
 
 import ClientList from 'clients/ClientList';
+import ClientAdmin from 'clients/ClientAdmin';
 import Navigation from 'base/Navigation';
 
 import UserProfileForm from './users/UserProfileForm';
-
 import translations from './translations/translations'
-
 
 import './assets/style/base.scss';
 import './assets/vendor/fontawesome/css/font-awesome-core.css';
@@ -32,7 +32,7 @@ const store = createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENS
 
 store.dispatch({
     type: 'SET_LOCALE',
-    locale: window.__INITIAL_STATE__.language 
+    locale: window.__INITIAL_STATE__.language
 })
 
 ReactDOM.render(
@@ -47,10 +47,16 @@ ReactDOM.render(
                             <Switch>
                                 <Route path="/login" component={Login} />
                                 <PrivateRoute path="/partners/create" component={PartnerForm} />
+                                <PrivateRoute path="/clients/:clientId/admin/" component={ClientAdmin} />
+                                <PrivateRoute path="/partners/:partnerId/clients/:clientId/edit"  component={ClientForm} />
                                 <PrivateRoute path="/partners/:partnerId/edit" component={PartnerForm} />
-                                <PrivateRoute path="/partners/:partnerId/clients/"  component={ClientList} />
+                                <PrivateRoute path="/partners/:partnerId/clients/" component={ClientList} />
+
                                 <PrivateRoute path="/partners" component={PartnerList} />
+
                                 <PrivateRoute path="/clients" component={ClientList} />
+
+
                                 <PrivateRoute path="/user/personal_settings" component={UserProfileForm} />
                             </Switch>
                         </div>

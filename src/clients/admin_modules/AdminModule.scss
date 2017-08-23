@@ -1,0 +1,27 @@
+$white: #fff;
+$primary: #f15929;
+
+.admin--module-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: .75em 0;
+}
+
+.admin--module-list {
+  background: $white;
+  border: 1px #e6e7eb solid;
+  border-radius: 3px;
+  padding: 1rem;
+
+  li a {
+      color: #2A3042;
+
+      &:hover {
+          color: $primary;
+      }
+  }
+
+  i {
+      width: 20px;
+  }
+}

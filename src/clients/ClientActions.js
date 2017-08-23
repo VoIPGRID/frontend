@@ -52,13 +52,27 @@ export function createClient(values) {
     }
 }
 
-export function getClient(id) {
-    const url = `${API_ROOT}/clients/${id}`;
-    const request = axios.get(url);
+export async function getClient(id) {
+    const url = `${API_ROOT}/clients/${id}/`;
 
-    return {
-        type: GET_CLIENT,
-        payload: request,
+    try {
+        const request = await axios.create({
+            headers: {'X-CSRFToken': window.__INITIAL_STATE__.csrf},
+            timeout: 3000,
+            withCredentials: true,
+        });
+
+        const result = await request.get(url);
+
+        return {
+            type: GET_CLIENT,
+            payload: result,
+        }
+    } catch(err) {
+        return {
+            type: AUTH_FAILED,
+            payload: err,
+        }
     }
 }
 
