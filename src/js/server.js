@@ -1,11 +1,11 @@
 /**
 * Entrypoint for SSR renderer.
 */
-const axios = require('axios')
 const axiosCookieJarSupport = require('@3846masa/axios-cookiejar-support')
-const tough = require('tough-cookie')
 
-axiosCookieJarSupport(axios)
+const axios = axiosCookieJarSupport(require('axios'))
+
+const tough = require('tough-cookie')
 
 const App = require('./app')
 const cookies = require('connect-cookies')
@@ -32,32 +32,67 @@ const appCache = {}
 const apiHost = 'http://localhost'
 
 
-function createApp(url, context, sessionId) {
+/**
+* Setup the context for a SSR-rendered app instance and run the url through
+* the app router. It requires an initial store that's requested from the
+* API and information from the original requesting browser client to
+* generate the correct state.
+* @param {Request} req - The connect request.
+* @param {ToughCookie} cookieJar - A cookie jar with the session id.
+* @param {Object} store - The store as it's passed from the API.
+* @returns {App} -
+*/
+function createApp(req, cookieJar, store) {
+    const csrfToken = req.cookies.get('csrftoken')
+    const sessionId = req.cookies.get('sessionid')
+    // Augment the store with the requester's cookie state.
+    if (req.cookies.get('__STORE__')) {
+        Object.assign(store, JSON.parse(decodeURIComponent(req.cookies.get('__STORE__'))))
+    }
+
+    const headers = req.headers
+    const url = req.url
+
     return new Promise((resolve, reject) => {
         let app
         if (!appCache[sessionId]) {
-            app = new App(context, global.templates)
+            app = new App(store, global.templates)
             appCache[sessionId] = app
         } else {
+            // Reuse the app instance and update the store.
             app = appCache[sessionId]
+            Object.assign(app.store, store)
         }
+        // Make sure the app has the browser's request context.
+        app.api.client = app.api.createClient({
+            headers: Object.assign(headers, {
+                accept: 'application/json',
+                'X-CSRFToken': csrfToken,
+            }),
+            jar: cookieJar,
+            withCredentials: true,
+        })
 
-        const fullPath = app.router.resolve(url).route.fullPath
-        if (fullPath !== url) {
-            reject({ url: fullPath})
-        }
+        // Set the CSRF from the requesting browser in the store.
+        app.store.user.csrf = csrfToken
 
+        // Route the url through the app instance.
         app.router.push(url)
+        // Make sure to call all asyncData hooks on matching components
+        // after resolving the route.
         app.router.onReady(async() => {
             const matchedComponents = app.router.getMatchedComponents()
-
-            await Promise.all(matchedComponents.map(Component => {
-                if (Component.sealedOptions && Component.sealedOptions.asyncData) {
-                    return Component.sealedOptions.asyncData(app.router.currentRoute)
-                } else if (Component.asyncData) {
-                    return Component.asyncData(app.router.currentRoute)
-                } else return null
-            }))
+            try {
+                await Promise.all(matchedComponents.map(Component => {
+                    if (Component.sealedOptions && Component.sealedOptions.asyncData) {
+                        return Component.sealedOptions.asyncData(app.router.currentRoute)
+                    } else if (Component.asyncData) {
+                        return Component.asyncData(app.router.currentRoute)
+                    } else return null
+                }))
+            } catch (error) {
+                console.trace(error)
+            }
 
             return resolve(app)
         }, reject)
@@ -67,6 +102,13 @@ function createApp(url, context, sessionId) {
 }
 
 
+/**
+* Setup middleware that funnels all requests into
+* an App instance, providing Server Side Rendering for
+* a requesting browser.
+* @param {String} indexHTML - The index template.
+* @returns {Object} - A connect application instance.
+*/
 function setupSsrProxy(indexHTML) {
     const ssrProxy = connect()
     ssrProxy.use(morgan('dev'))
@@ -76,32 +118,20 @@ function setupSsrProxy(indexHTML) {
     ssrProxy.use(cookies())
     ssrProxy.use(async function(req, res, next) {
         const cookieJar = new tough.CookieJar()
-        // Log the requesting user in to the proxy.
-        const sessionId = req.cookies.get('sessionid')
-        cookieJar.setCookieSync(`sessionid=${sessionId}`, 'http://localhost/')
+        cookieJar.setCookieSync(`sessionid=${req.cookies.get('sessionid')}`, 'http://localhost/')
+        // DO a http call to the Django backend and get the initial user state
+        // from the state view on behalf of the requesting user. No need to
+        // create a new Axios instance in this case.
+        const {data: store} = await axios.get(`${apiHost}/api/v2/state/?state=${req.originalUrl}`, {
+            headers: req.headers,
+            jar: cookieJar,
+            withCredentials: true,
+        })
 
-        const clientCsrf = req.cookies.get('csrftoken')
-        // Allow a user to modify store properties, before the snapshot
-        // is rendered. This way, the snapshot can reproduce additional
-        // state that's set in a cookie.
-        let cookieStoreMixin = {}
-        if (req.cookies.get('__STORE__')) {
-            cookieStoreMixin = JSON.parse(decodeURIComponent(req.cookies.get('__STORE__')))
-        }
-
-        axios.defaults.headers = req.headers
-        axios.defaults.withCredentials = true
-        axios.defaults.jar = cookieJar
-        // Get the initial user state from the Django API.
-        const {data: store} = await axios.get(`${apiHost}/api/v2/state/?state=${req.originalUrl}`)
-
-        axios.defaults.jar = cookieJar
-        // Augment the initial state with the requester's cookie state.
-        Object.assign(store, cookieStoreMixin)
-
-        // Create an isomorphic app instance with the API's initial state.
-        const app = await createApp(req.url, store, sessionId)
-        axios.defaults.headers['X-CSRFToken'] = clientCsrf
+        // Get an isomorphic app instance with the minimal store
+        // information from the API.
+        const app = await createApp(req, cookieJar, store)
+        // Let the app do it's thing and render the html output.
         const html = await renderToString(app.vm)
 
         // Augment the index file with the translation file and remove the
@@ -112,8 +142,7 @@ function setupSsrProxy(indexHTML) {
         }
 
         let _html = indexHTML.replace('<div id="app"></div>', html)
-        // Must use the browser csrf from here on.
-        store.csrf = clientCsrf
+
         // Inject the SSR's store in the index template.
         _html = _html.replace('<!--STORE-->', `window.__STORE__ = ${JSON.stringify(app.store)}`)
         // Do the same for the translations script tag.

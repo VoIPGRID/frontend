@@ -15,7 +15,8 @@ module.exports = function(app, _module) {
     actions.deleteClient = async function(client) {
         const res = await app.api.client.delete(`clients/${client.id}/`)
         if (res.status === 204) {
-            this.$store.clients.clients.results = this.$store.clients.clients.results.filter((i) => i.id !== client.id)
+            let clients = this.$store.clients.clients.results
+            this.$store.clients.clients.results = clients.filter((i) => i.id !== client.id)
             app.vm.$shout({message: $t('Client {name} succesfully deleted', {name: client.name})})
             app.router.push({name: 'list_clients'})
         }

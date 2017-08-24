@@ -3,17 +3,7 @@ class Api {
     constructor(app) {
         this.app = app
 
-        // Add the Django CSRF token in the header and set the base URL
-        // to VoIPGRID api V2.
-        /** @memberof App */
-        this.client = axios.create({
-            baseURL: '/api/v2/',
-            headers: {
-                Accept: 'application/json',
-                'X-CSRFToken': app.store.user.csrf,
-            },
-            timeout: 3000,
-        })
+        this.client = this.createClient()
 
         // Add a response interceptor that serves the default error page,
         // when the response has a status code that indicates an application
@@ -51,6 +41,24 @@ class Api {
             // All other error codes are part of the normal application flow.
             return Promise.resolve(err.response)
         })
+    }
+
+    /**
+    * Add the Django CSRF token in the header and set
+    * the base URL to VoIPGRID api V2.
+    * @param {Object} options - Extra options for the Axios client.
+    * @returns {Object} - A new Axios instance.
+    */
+    createClient(options = {}) {
+        let _options = {
+            baseURL: '/api/v2/',
+            headers: {
+                accept: 'application/json',
+                'X-CSRFToken': this.app.store.user.csrf,
+            },
+            timeout: 3000,
+        }
+        return axios.create(Object.assign(_options, options))
     }
 
 

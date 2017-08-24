@@ -15,7 +15,8 @@ module.exports = function(app, _module) {
     */
     actions.deletePartner = function(partner) {
         app.api.client.delete(`partners/${partner.id}/`).then((res) => {
-            this.$store.partners.partners = this.$store.partners.partners.filter((i) => i.id !== partner.id)
+            let partners = this.$store.partners.partners.results
+            this.$store.partners.partners.results = partners.filter((i) => i.id !== partner.id)
             app.vm.$shout({message: $t('Partner {name} succesfully deleted', {name: partner.name})})
             app.router.push({name: 'list_partners'})
         })
@@ -71,7 +72,7 @@ module.exports = function(app, _module) {
     * @returns {Object} - Returns the partner object from the API endpoint.
     */
     actions.readPartners = async function({page}) {
-        let partners = await app.api.client.get(`/partners/?page=${page}`)
+        var partners = await app.api.client.get(`/partners/?page=${page}`)
         this.partners = partners.data
         return partners.data
     }
