@@ -1,0 +1,67 @@
+.navigation--wrapper {
+    background: #2A3042;
+    position: fixed;
+    z-index: 1052;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    overflow-x: hidden;
+    width: 80px;
+    transition: 0.3s;
+    padding-top: 20px;
+
+    &:hover {
+        width: 250px;
+    }
+}
+
+.navigation--list {
+    width: 250px;
+}
+
+.navigation--list-bottom {
+    width: 250px;
+    position: absolute;
+    bottom: 0;
+}
+
+.navigation--list-item {
+    font-size: 20px;
+    font-weight: 200px;
+
+    a {
+        text-decoration: none;
+        line-height: 45px;
+        color: rgba(255,255,255,0.4);
+        display: inline;
+
+        &:hover {
+            color: #fff;
+
+            > i {
+                color: #fff;
+            }
+        }
+    }
+
+    &:hover {
+        cursor: pointer;
+        a {
+            color: #fff;
+        }
+
+        i {
+            color: #fff;
+        }
+    }
+}
+
+.navigation--icon-wrapper {
+    display: inline-block;
+    text-align: center;
+    width: 80px;
+
+    i {
+        color: rgba(255,255,255,0.4);
+    }
+}

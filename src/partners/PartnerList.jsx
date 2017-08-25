@@ -28,9 +28,9 @@ class PartnerList extends Component {
                 let activeButtonClass;
 
                 if (partner.is_active) {
-                    activeButtonClass = 'far fa-pause';
+                    activeButtonClass = 'fas fa-pause';
                 } else {
-                    activeButtonClass = 'far fa-play';
+                    activeButtonClass = 'fas fa-play';
                 }
 
                 return (
@@ -53,8 +53,8 @@ class PartnerList extends Component {
                             </button>
                         </td>
                         <td>
-                            <Link className="far fa-edit" to={`/partners/${partner.id}/edit`}></Link>
-                            <button className="button is-link far fa-trash margin-left-5" onClick={() => this._handleDelete(partner.id)} />
+                            <Link className="fas fa-edit" to={`/partners/${partner.id}/edit`}></Link>
+                            <button className="button is-link fas fa-trash margin-left-5" onClick={() => this._handleDelete(partner.id)} />
                         </td>
                     </tr>
                 )

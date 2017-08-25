@@ -19,13 +19,14 @@ import ClientUserList from 'clients/admin_modules/ClientUserList';
 import VoipAccounts from 'clients/admin_modules/voip_accounts/VoipAccounts';
 import ClientAdmin from 'clients/ClientAdmin';
 import Navigation from 'base/Navigation';
+import Header from 'base/Header';
 
 import UserProfileForm from './users/UserProfileForm';
 import translations from './translations/translations'
 
 import './assets/style/base.scss';
 import './assets/vendor/fontawesome/css/font-awesome-core.css';
-import './assets/vendor/fontawesome/css/font-awesome-regular.css';
+import './assets/vendor/fontawesome/css/font-awesome-solid.css';
 
 
 const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
@@ -41,11 +42,12 @@ ReactDOM.render(
     <Provider store={store}>
         <IntlProvider translations={translations} locale='nl'>
             <BrowserRouter>
-                <div>
+                <div className="base-body">
+                    <Header />
                     <Navigation />
 
                     <section className="section">
-                        <div className="container">
+                        <div>
                             <Switch>
                                 <Route path="/login" component={Login} />
                                 <PrivateRoute path="/partners/create" component={PartnerForm} />

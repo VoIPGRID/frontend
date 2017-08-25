@@ -24,8 +24,8 @@ class ClientUserList extends Component {
                         <td><Link to={`/clients/${clientId}/user/${user.id}/change`}>{user.email}</Link></td>
                         <td>{user.profile.description}</td>
                         <td>
-                            <Link className="far fa-edit" to={`/clients/${clientId}/user/${user.id}/change`}></Link>
-                            <button className="button is-link far fa-trash margin-left-5" onClick={() => this._handleDelete(user.id)} />
+                            <Link className="fas fa-edit" to={`/clients/${clientId}/user/${user.id}/change`}></Link>
+                            <button className="button is-link fas fa-trash margin-left-5" onClick={() => this._handleDelete(user.id)} />
                         </td>
                     </tr>
                 )

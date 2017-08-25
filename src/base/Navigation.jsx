@@ -2,27 +2,42 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 
-import logo from 'images/vg-logo.png';
+import '../assets/style/navigation.scss';
 
 const Navigation = (props, context) => {
     return (
-        <div>
-            <nav className="nav has-shadow">
-                    {
-                        window.__INITIAL_STATE__.authenticated &&
-                        <div className="container">
-                            <div className="nav-left">
-                                <img src={logo} alt="VoIPGRID logo" className="header-logo" />
-                                <NavLink className="nav-item is-tab is-hidden-mobile" to="/partners" activeClassName="is-active">Partners</NavLink>
-                                <NavLink className="nav-item is-tab is-hidden-mobile" to="/clients" activeClassName="is-active">{context.translate('Clients')}</NavLink>
-                                <NavLink className="nav-item is-tab is-hidden-mobile" to="/accounts" activeClassName="is-active">VoIP Accounts</NavLink>
-                            </div>
+            window.__INITIAL_STATE__.authenticated &&
+            <div className="navigation--wrapper">
+                <ul className="navigation--list">
+                    <li className="navigation--list-item">
+                        <span className="navigation--icon-wrapper">
+                            <i className="fas fa-users"></i>
+                        </span>
+                        <NavLink to="/partners" activeClassName="is-active">Partners</NavLink>
+                    </li>
+                    <li className="navigation--list-item">
+                        <span className="navigation--icon-wrapper">
+                            <i className="fas fa-users"></i>
+                        </span>
+                        <NavLink to="/clients" activeClassName="is-active">{context.translate('Clients')}</NavLink>
+                    </li>
+                </ul>
 
-                            <NavLink className="nav-item is-tab is-hidden-mobile is-pulled-right" to="/user/personal_settings" activeClassName="is-active"><i className="far fa-user"></i></NavLink>
-                        </div>
-                    }
-            </nav>
-        </div>
+                <ul className="navigation--list-bottom">
+                    <li className="navigation--list-item">
+                        <span className="navigation--icon-wrapper">
+                            <i className="fas fa-question-circle"></i>
+                        </span>
+                        <NavLink to="/user/personal_settings" activeClassName="is-active">Wiki</NavLink>
+                    </li>
+                    <li className="navigation--list-item">
+                        <span className="navigation--icon-wrapper">
+                            <i className="fas fa-arrow-square-right"></i>
+                        </span>
+                        <NavLink to="/user/personal_settings" activeClassName="is-active">Logout</NavLink>
+                    </li>
+                </ul>
+            </div>
     );
 }
 

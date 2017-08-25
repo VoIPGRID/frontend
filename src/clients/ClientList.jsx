@@ -25,8 +25,8 @@ class ClientList extends Component {
                         <td>{client.partner}</td>
                         <td>{client.is_active}</td>
                         <td>
-                            <Link className="far fa-edit" to={`/clients/${client.id}/edit`}></Link>
-                            <button className="button is-link far fa-trash margin-left-5" onClick={() => this._handleDelete(client.id)} />
+                            <Link className="fas fa-edit" to={`${client.id}/edit`}></Link>
+                            <button className="button is-link fas fa-trash margin-left-5" onClick={() => this._handleDelete(client.id)} />
                         </td>
                     </tr>
                 )

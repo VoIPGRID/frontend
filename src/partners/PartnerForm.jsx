@@ -106,6 +106,7 @@ class PartnerForm extends Component {
                         </TabPanel>
 
                         <TabPanel>
+                            <h2 className="subtitle">Preferences</h2>
                             <Field label="Country" name="profile[country][code]" helpText="Select the country you operate from. When possible this country will be the default in other forms." type="select" required="true" component={renderField} loadOptions={getSelectOptions.bind(this, 'clients/countries', 'code')} />
                             <Field label="Audio language" name="profile[audio_language]" helpText="Select the language/voice that is used as default for messages played in modules." type="select" required="true" component={renderField} loadOptions={getSelectOptions.bind(this, 'clients/audio_languages')} />
                             <Field label="System language" name="profile[system_language]" helpText="Select the language that is used as default for printed text (invoices, exports, interface)." type="select" required="true" component={renderField} loadOptions={getSelectOptions.bind(this, 'clients/system_languages')} />
@@ -113,6 +114,7 @@ class PartnerForm extends Component {
                         </TabPanel>
 
                         <TabPanel>
+                            <h2 className="subtitle">Billing preferences</h2>
                             <Field label="Timezone" name="billingprofile[currency]" type="select" required="true" component={renderField} loadOptions={this._getCurrencies} />
                             <Field label="Email address for billing" name="billingprofile[billing_email]" helpText="You can set this email address at the billing information page." disabled type="text" component={renderField} />
                             <Field label="Does its own billing" helpText="When checked, this partner receives a single invoice from the system for all its clients. Otherwise, its clients receive invoices from the system." name="billingprofile[totalize_partner_cdrs]" type="checkbox" component={renderField} />
@@ -123,7 +125,7 @@ class PartnerForm extends Component {
                         </TabPanel>
                     </Tabs>
 
-                    <div className="field is-grouped margin-top-10">
+                    <div className="field is-grouped margin-top-10 margin-left-200">
                         <div className="control">
                             <button type="submit" className="button is-primary">Save</button>
                         </div>
