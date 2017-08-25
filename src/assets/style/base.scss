@@ -1,6 +1,6 @@
 @import "~bulma/sass/utilities/initial-variables.sass";
 
-$primary: #f15929;
+$primary: #E94E1B;
 
 @import "~bulma/bulma.sass";
 @import "~react-select/dist/react-select.css";
@@ -95,7 +95,6 @@ body {
     .react-tabs__tab-panel {
         padding: 30px;
         border: 1px solid $border;
-        border-top: 0;
         display: none;
         min-height: 200px;
         border-radius: 0 0 $radius $radius;
@@ -114,21 +113,26 @@ body {
 
     ul {
         border: none;
+        position: relative;
+        right: -1px;
     }
 }
 
 .tabs.is-boxed a {
     border: none;
     border-radius: 0;
+    margin-bottom: 0;
 }
 
-.tabs.is-boxed li.is-active a {
+.tabs.is-boxed a:hover {
+    background: inherit;
+}
+
+.react-tabs__tab.is-active {
     border: 1px solid #dbdbdb;
-    border-right: none;
-    border-radius: none;
-    background-color: inherit;
-    border-bottom: 1px solid #dbdbdb;
+    border-right: 0;
     background: white;
+    border-width: 1px;
 }
 
 .section {
