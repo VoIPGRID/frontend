@@ -45,7 +45,7 @@ class ClientList extends Component {
 
         return (
             <div>
-                <div className="list-header">
+                <div className="list-header is-clearfix">
                     All clients ({this.props.clients.length})
 
                     <Link className="button is-primary is-pulled-right" to="/clients/create">Add</Link>

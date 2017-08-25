@@ -11,8 +11,14 @@ export const FORM_ERROR = 'FORM_ERROR';
 
 import { AUTH_FAILED} from '../base/LoginActions';
 
-export async function getUsers(searchString = '') {
-    const url = `${API_ROOT}/users/`;
+export async function getUsers(clientId) {
+    let url;
+    if(clientId) {
+        url = `${API_ROOT}/clients/${clientId}/users/`;
+    } else {
+        url = `${API_ROOT}/users/`;
+    }
+
 
     try {
         const request = await axios.create({

@@ -15,6 +15,8 @@ import PartnerForm from 'partners/PartnerForm';
 import ClientForm from 'clients/ClientForm';
 
 import ClientList from 'clients/ClientList';
+import ClientUserList from 'clients/admin_modules/ClientUserList';
+import VoipAccounts from 'clients/admin_modules/voip_accounts/VoipAccounts';
 import ClientAdmin from 'clients/ClientAdmin';
 import Navigation from 'base/Navigation';
 
@@ -48,6 +50,8 @@ ReactDOM.render(
                                 <Route path="/login" component={Login} />
                                 <PrivateRoute path="/partners/create" component={PartnerForm} />
                                 <PrivateRoute path="/clients/:clientId/admin/" component={ClientAdmin} />
+                                <PrivateRoute path="/clients/:clientId/phoneaccount/" component={VoipAccounts} />
+                                <PrivateRoute path="/clients/:clientId/users/" component={ClientUserList} />
                                 <PrivateRoute path="/partners/:partnerId/clients/:clientId/edit"  component={ClientForm} />
                                 <PrivateRoute path="/partners/:partnerId/edit" component={PartnerForm} />
                                 <PrivateRoute path="/partners/:partnerId/clients/" component={ClientList} />

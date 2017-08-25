@@ -14,7 +14,7 @@ export default function(state = INITIAL_STATE, action) {
             };
         case GET_USERS:
             return { ...state,
-                objects: action.payload.data.results
+                users: action.payload.data.results
             };
         case FORM_ERROR:
             return {

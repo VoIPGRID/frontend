@@ -9,8 +9,8 @@ class ClientAdmin extends Component {
                 <div className="columns">
                     <AdminModule title="Main Functionalities">
                         <li><Link to="/phonenumber"><i className="far fa-phone"></i> Phonenumber</Link></li>
-                        <li><Link to="/phonenumber"><i className="far fa-phone"></i> VoIP accounts</Link></li>
-                        <li><Link to="/phonenumber"><i className="far fa-users"></i> Users</Link></li>
+                        <li><Link to="phoneaccount"><i className="far fa-phone"></i> VoIP accounts</Link></li>
+                        <li><Link to="users"><i className="far fa-users"></i> Users</Link></li>
                     </AdminModule>
 
                     <AdminModule title="Call Forwarding">

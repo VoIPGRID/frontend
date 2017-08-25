@@ -5,8 +5,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
-import { timezones} from '../helpers/timezones';
 import renderField from '../helpers/forms/RenderField';
+
+import { getSelectOptions } from '../helpers/forms/SelectOptions';
 
 import { getPartners, createPartner, getPartner, updatePartner, emptyPartner } from './PartnerActions';
 
@@ -40,71 +41,10 @@ class PartnerForm extends Component {
         return { options };
     }
 
-    async _getCountries() {
-
-        const options = [
-            {value: 'nl', label: 'Netherlands'},
-            {value: 'de', label: 'Germany'},
-            {value: 'za', label: 'South Africa'},
-        ]
-
-        return { options };
-    }
-
-    async _getSystemLanguages() {
-        const options = [
-            {value: '', label: '-----'},
-            {value: 'nl', label: 'Dutch'},
-            {value: 'en', label: 'English'},
-        ]
-
-        return { options };
-    }
-
-    async _getAudioLanguages() {
-        const options = [
-            {value: 'vg_af_ZA_F', label: 'Afrikaans, female'},
-            {value: 'vg_af_ZA_M', label: 'Afrikaans, male'},
-            {value: 'vg_nl_BE_F', label: 'Dutch (Belgium), female'},
-            {value: 'vg_nl_BE_M', label: 'Dutch (Belgium), male'},
-            {value: 'vg_nl_NL_F', label: 'Dutch (Netherlands), female'},
-            {value: 'vg_nl_NL_M', label: 'Dutch (Netherlands), male'},
-            {value: 'vg_en_UK_F', label: 'English, female'},
-            {value: 'vg_en_UK_M', label: 'English, male'},
-            {value: 'vg_fr_FR_F', label: 'French, female'},
-            {value: 'vg_fr_FR_M', label: 'French, male'},
-            {value: 'vg_de_DE_F', label: 'German, female'},
-            {value: 'vg_de_DE_M', label: 'German, male'},
-            {value: 'vg_it_IT_F', label: 'Italian, female'},
-            {value: 'vg_it_IT_M', label: 'Italian, male'},
-            {value: 'vg_es_ES_F', label: 'Spanish, female'},
-            {value: 'vg_es_ES_M', label: 'Spanish, male'},
-        ]
-
-        return { options };
-    }
-
-    async _getTimeZones() {
-        let options = timezones.map((timezone) => {
-            return {value: timezone, label: timezone};
-        });
-
-        return {options};
-    }
-
     async _getCurrencies() {
         const options = [
             {value: 1, label: 'EUR (€)'},
             {value: 2, label: 'ZAR (R)'},
-        ]
-
-        return { options };
-    }
-
-    async _getPriceplanDiscountStatuses() {
-        const options = [
-            {value: 1, label: 'Special Price'},
-            {value: 2, label: 'Wholesale'},
         ]
 
         return { options };
@@ -166,10 +106,10 @@ class PartnerForm extends Component {
                         </TabPanel>
 
                         <TabPanel>
-                            <Field label="Country" name="profile[country][code]" helpText="Select the country you operate from. When possible this country will be the default in other forms." type="select" required="true" component={renderField} loadOptions={this._getCountries} />
-                            <Field label="Audio language" name="profile[audio_language]" helpText="Select the language/voice that is used as default for messages played in modules." type="select" required="true" component={renderField} loadOptions={this._getAudioLanguages} />
-                            <Field label="System language" name="profile[system_language]" helpText="Select the language that is used as default for printed text (invoices, exports, interface)." type="select" required="true" component={renderField} loadOptions={this._getSystemLanguages} />
-                            <Field label="Timezone" name="profile[timezone]" type="select" required="true" component={renderField} loadOptions={this._getTimeZones} />
+                            <Field label="Country" name="profile[country][code]" helpText="Select the country you operate from. When possible this country will be the default in other forms." type="select" required="true" component={renderField} loadOptions={getSelectOptions.bind(this, 'clients/countries', 'code')} />
+                            <Field label="Audio language" name="profile[audio_language]" helpText="Select the language/voice that is used as default for messages played in modules." type="select" required="true" component={renderField} loadOptions={getSelectOptions.bind(this, 'clients/audio_languages')} />
+                            <Field label="System language" name="profile[system_language]" helpText="Select the language that is used as default for printed text (invoices, exports, interface)." type="select" required="true" component={renderField} loadOptions={getSelectOptions.bind(this, 'clients/system_languages')} />
+                            <Field label="Timezone" name="profile[timezone]" type="select" required="true" component={renderField} loadOptions={getSelectOptions.bind(this, 'clients/timezones')} />
                         </TabPanel>
 
                         <TabPanel>
@@ -179,7 +119,7 @@ class PartnerForm extends Component {
                             <Field label="Use Twinfield" helpText="When checked, the partner can export his billing items to twinfield" name="billingprofile[use_twinfield]" type="checkbox" component={renderField} />
                             <Field label="Automatic export" helpText="A combined export will be created and emailed on the first day of every month." name="billingprofile[auto_export]" type="checkbox" component={renderField} />
                             <Field label="Exclude from billing" helpText="This relation will be excluded from billing exports." name="billingprofile[exclude_from_export]" type="checkbox" component={renderField} />
-                            <Field label="Priceplan discount status" name="billingprofile[priceplan_discount_status]" type="select" component={renderField} loadOptions={this._getPriceplanDiscountStatuses} />
+                            <Field label="Priceplan discount status" name="billingprofile[priceplan_discount_status]" type="select" component={renderField} loadOptions={getSelectOptions.bind(this, 'partners/priceplan_discounts')} />
                         </TabPanel>
                     </Tabs>
 
