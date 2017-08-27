@@ -3,7 +3,7 @@
 */
 const axiosCookieJarSupport = require('@3846masa/axios-cookiejar-support')
 
-const axios = axiosCookieJarSupport(require('axios'))
+const axios = require('axios')
 
 const tough = require('tough-cookie')
 
@@ -64,17 +64,21 @@ function createApp(req, cookieJar, store) {
             Object.assign(app.store, store)
         }
         // Make sure the app has the browser's request context.
-        app.api.client = app.api.createClient({
-            headers: Object.assign(headers, {
-                accept: 'application/json',
-                'X-CSRFToken': csrfToken,
-            }),
-            jar: cookieJar,
-            withCredentials: true,
-        })
+        if (!app.api.client.defaults.jar) {
+            app.api.client = app.api.createClient(axiosCookieJarSupport(axios), {
+                headers: Object.assign(headers, {
+                    accept: 'application/json',
+                    'X-CSRFToken': csrfToken,
+                }),
+                jar: cookieJar,
+                withCredentials: true,
+            })
+        }
+
 
         // Set the CSRF from the requesting browser in the store.
         app.store.user.csrf = csrfToken
+        app.store.ssr = true
 
         // Route the url through the app instance.
         app.router.push(url)
@@ -119,9 +123,8 @@ function setupSsrProxy(indexHTML) {
     ssrProxy.use(async function(req, res, next) {
         const cookieJar = new tough.CookieJar()
         cookieJar.setCookieSync(`sessionid=${req.cookies.get('sessionid')}`, 'http://localhost/')
-        // DO a http call to the Django backend and get the initial user state
-        // from the state view on behalf of the requesting user. No need to
-        // create a new Axios instance in this case.
+        // Make a http call to the Django backend and get the initial user
+        // state from the state view on behalf of the requesting user.
         const {data: store} = await axios.get(`${apiHost}/api/v2/state/?state=${req.originalUrl}`, {
             headers: req.headers,
             jar: cookieJar,
@@ -142,9 +145,12 @@ function setupSsrProxy(indexHTML) {
         }
 
         let _html = indexHTML.replace('<div id="app"></div>', html)
-
-        // Inject the SSR's store in the index template.
-        _html = _html.replace('<!--STORE-->', `window.__STORE__ = ${JSON.stringify(app.store)}`)
+        // Make a copy of the store and remove the translations from it;
+        // they are supplied by a separate javascript file and applied
+        // before the app is rehydrated.
+        let copiedStore = JSON.parse(JSON.stringify(app.store))
+        copiedStore.i18n = {}
+        _html = _html.replace('<!--STORE-->', `window.__STORE__ = ${JSON.stringify(copiedStore)}`)
         // Do the same for the translations script tag.
         _html = _html.replace('<!--TRANSLATIONS-->', translationFile)
         res.end(_html)

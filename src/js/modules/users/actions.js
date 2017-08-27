@@ -50,7 +50,7 @@ module.exports = function(app, _module) {
                     headers: {'X-CSRFToken': csrf},
                     timeout: 1000,
                 })
-                Object.assign(this.$store.user, res.data)
+                Object.assign(this.$store, res.data)
                 app.router.replace('/')
             }
         })

@@ -6,25 +6,18 @@
         </header>
         <section class="modal-card-body">
             <div>
-                <div class="field">
-                    <label class="label">{{$t('Email address')}}</label>
-                    <p class="control has-icons-left">
-                        <input class="input" v-model="credentials.email" :placeholder="$t('Email address')">
-                        <span class="icon is-small is-left">
-                            <i class="fa fa-user"></i>
-                        </span>
-                     </p>
-                </div>
 
-                <div class="field">
-                    <label class="label">{{$t('Password')}}</label>
-                    <p class="control has-icons-left">
-                        <input type="password" class="input" v-model="credentials.password" :placeholder="$t('Password')">
-                        <span class="icon is-small is-left">
-                            <i class="fa fa-lock"></i>
-                        </span>
-                     </p>
-                </div>
+                <Field name="email" type="text"
+                    :label="$t('Email address')"
+                    :model.sync="credentials.email"
+                    :placeholder="$t('Email address')"
+                    :validation="$v.credentials.email"/>
+
+                <Field name="password" type="password"
+                    :label="$t('Password')"
+                    :model.sync="credentials.password"
+                    :placeholder="$t('Password')"
+                    :validation="$v.credentials.password"/>
             </div>
         </section>
         <footer class="modal-card-foot has-text-right">

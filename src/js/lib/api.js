@@ -3,7 +3,7 @@ class Api {
     constructor(app) {
         this.app = app
 
-        this.client = this.createClient()
+        this.client = this.createClient(axios)
 
         // Add a response interceptor that serves the default error page,
         // when the response has a status code that indicates an application
@@ -43,14 +43,15 @@ class Api {
         })
     }
 
+
     /**
     * Add the Django CSRF token in the header and set
     * the base URL to VoIPGRID api V2.
     * @param {Object} options - Extra options for the Axios client.
     * @returns {Object} - A new Axios instance.
     */
-    createClient(options = {}) {
-        let _options = {
+    createClient(_instance, config = {}) {
+        let _config = {
             baseURL: '/api/v2/',
             headers: {
                 accept: 'application/json',
@@ -58,7 +59,24 @@ class Api {
             },
             timeout: 3000,
         }
-        return axios.create(Object.assign(_options, options))
+        config = Object.assign(_config, config)
+        let instance = _instance.create(config)
+
+        this._cache = new Map()
+
+        // A very simple caching adapter that stores the last request
+        // and reuses it on the subsequent requests.
+        this.cachingAdapter = async(requestConfig) => {
+            let request
+            if (this._cache.has(requestConfig.url)) {
+                request = this._cache.get(requestConfig.url)
+            } else {
+                request = await axios.defaults.adapter(requestConfig)
+                this._cache.set(requestConfig.url, request)
+            }
+            return request
+        }
+        return instance
     }
 
 

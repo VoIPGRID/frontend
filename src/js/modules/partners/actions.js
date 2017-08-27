@@ -43,13 +43,13 @@ module.exports = function(app, _module) {
         let [audio, countries, currencies, owners,
             priceplanDiscounts, system, timezones,
         ] = await Promise.all([
-            app.api.client.get('partners/audio_languages/'),
-            app.api.client.get('partners/countries/'),
-            app.api.client.get('partners/currencies/'),
-            app.api.client.get('partners/owners/'),
-            app.api.client.get('partners/priceplan_discounts/'),
-            app.api.client.get('partners/system_languages/'),
-            app.api.client.get('partners/timezones/'),
+            app.api.client.get('partners/audio_languages/', {adapter: app.api.cachingAdapter}),
+            app.api.client.get('partners/countries/', {adapter: app.api.cachingAdapter}),
+            app.api.client.get('partners/currencies/', {adapter: app.api.cachingAdapter}),
+            app.api.client.get('partners/owners/', {adapter: app.api.cachingAdapter}),
+            app.api.client.get('partners/priceplan_discounts/', {adapter: app.api.cachingAdapter}),
+            app.api.client.get('partners/system_languages/', {adapter: app.api.cachingAdapter}),
+            app.api.client.get('partners/timezones/', {adapter: app.api.cachingAdapter}),
         ])
 
         Object.assign(context, {

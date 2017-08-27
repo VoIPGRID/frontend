@@ -31,7 +31,7 @@
                             <i class="fa fa-edit"></i>
                         </span>
                     </router-link>
-                    <router-link :to="{name: 'delete_client', params: {client_id: client.id}}">
+                    <router-link :to="{name: 'delete_client', params: {client_id: client.id}, query: $router.currentRoute.query}">
                         <span class="icon">
                             <i class="fa fa-remove"></i>
                         </span>

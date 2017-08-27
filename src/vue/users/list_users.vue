@@ -32,7 +32,7 @@
                     <router-link :to="{name: 'edit_client_user', params: {client_id: clientId, user_id: user.id}}">
                         <span class="icon"><i class="fa fa-edit"></i></span>
                     </router-link>
-                    <router-link :to="{name: 'delete_client_user', params: {client_id: clientId, user_id: user.id}}">
+                    <router-link :to="{name: 'delete_client_user', params: {client_id: clientId, user_id: user.id}, query: $router.currentRoute.query}">
                         <span class="icon"><i class="fa fa-remove"></i></span>
                     </router-link>
                 </td>
@@ -40,7 +40,7 @@
                     <router-link :to="{name: 'edit_partner_user', params: {partner_id: partnerId, user_id: user.id}}">
                         <span class="icon"><i class="fa fa-edit"></i></span>
                     </router-link>
-                    <router-link :to="{name: 'delete_partner_user', params: {partner_id: partnerId, user_id: user.id}}">
+                    <router-link :to="{name: 'delete_partner_user', params: {partner_id: partnerId, user_id: user.id}, query: $router.currentRoute.query}">
                         <span class="icon"><i class="fa fa-remove"></i></span>
                     </router-link>
                 </td>

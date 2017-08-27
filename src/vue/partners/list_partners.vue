@@ -25,7 +25,7 @@
                             <i class="fa fa-edit"></i>
                         </span>
                     </router-link>
-                    <router-link :to="{name: 'delete_partner', params: {partner_id: partner.id}}">
+                    <router-link :to="{name: 'delete_partner', params: {partner_id: partner.id}, query: $router.currentRoute.query}">
                         <span class="icon">
                             <i class="fa fa-remove"></i>
                         </span>
