@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
+
+import Table from '../../helpers/Table';
 
 import { getUsers, deleteUser } from '../../users/UserActions'
 
@@ -12,35 +13,27 @@ class ClientUserList extends Component {
         this.props.getUsers(clientId);
     }
 
-    renderTable() {
-        const { clientId } = this.props.match.params;
-        let table = <tr><td colSpan="6">No users</td></tr>
-
-        if (this.props.users.length) {
-            table = this.props.users.map(user => {
-                return (
-                    <tr key={user.id}>
-                        <td>-</td>
-                        <td><Link to={`/clients/${clientId}/user/${user.id}/change`}>{user.email}</Link></td>
-                        <td>{user.profile.description}</td>
-                        <td>
-                            <Link className="fas fa-edit" to={`/clients/${clientId}/user/${user.id}/change`}></Link>
-                            <button className="button is-link fas fa-trash margin-left-5" onClick={() => this._handleDelete(user.id)} />
-                        </td>
-                    </tr>
-                )
-            });
-        }
-
-        return table;
-    }
-
     render() {
-        if (!this.props.users) {
+        if (!this.props.users.length) {
             return (
                 <div>Loading...</div>
             )
         }
+
+        const { clientId } = this.props.match.params;
+
+        const columns = [{
+            Header: 'Email',
+            accessor: 'email',
+            Cell: props => <Link className="table--link" to={`/clients/${clientId}/user/${props.original.id}/`}>{props.value}</Link>
+        }, {
+            Header: 'Description',
+            accessor: 'profile.description',
+        },{
+            Header: 'Actions',
+            accessor: 'actions',
+            Cell: props => <span><Link to={`/clients/${clientId}/user/${props.original.id}/change`}><i className="fas fa-edit"></i> Edit</Link><button className="button is-link margin-left-5" onClick={() => this._handleDelete(props.original.id)}><i className="fas fa-trash"></i> Delete</button></span>
+        }]
 
         return (
             <div>
@@ -50,20 +43,8 @@ class ClientUserList extends Component {
                     <Link className="button is-primary is-pulled-right" to="/users/create">Add</Link>
                 </div>
 
-                <table className="table is-bordered is-striped">
-                    <tbody>
-                        <tr>
-                            <th>Internal number</th>
-                            <th>Email</th>
-                            <th>Description</th>
-                            <th className="table-actions">Actions</th>
-                        </tr>
-                    </tbody>
 
-                    <tbody>
-                        {this.renderTable()}
-                    </tbody>
-                </table>
+                <Table data={this.props.users} columns={columns} defaultLength={this.props.users.length} />
             </div>
         );
     }
@@ -74,14 +55,9 @@ class ClientUserList extends Component {
 }
 
 function mapStateToProps(state) {
-    console.log(state)
     return {
         users: state.user.users,
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ getUsers, deleteUser }, dispatch);
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ClientUserList);
+export default connect(mapStateToProps, { getUsers, deleteUser })(ClientUserList);

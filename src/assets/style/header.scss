@@ -1,3 +1,5 @@
+@import "./variables.scss";
+
 header {
     background: white;
     text-align: center;
@@ -31,7 +33,7 @@ header {
         border-radius: 3px;
 
         &:hover {
-            color: #f15929;
+            color: $primary
         }
     }
 }

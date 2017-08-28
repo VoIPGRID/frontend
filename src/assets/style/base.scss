@@ -1,6 +1,6 @@
 @import "~bulma/sass/utilities/initial-variables.sass";
 
-$primary: #E94E1B;
+@import "./variables.scss";
 
 @import "~bulma/bulma.sass";
 @import "~react-select/dist/react-select.css";
@@ -131,7 +131,7 @@ body {
 .react-tabs__tab.is-active {
     border: 1px solid #dbdbdb;
     border-right: 0;
-    background: white;
+    background: $white;
     border-width: 1px;
 }
 
@@ -166,11 +166,11 @@ input, textarea {
     padding: 20px;
     border: 1px solid $border;
     border-radius: 3px;
-    background-color: #fff;
+    background-color: $white;
 }
 
 .react-tabs__tab-panel {
-    background-color: #fff;
+    background-color: $white;
 }
 
 .margin-left-200 {
