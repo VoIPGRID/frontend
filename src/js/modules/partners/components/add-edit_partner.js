@@ -28,7 +28,7 @@ module.exports = (app, actions) => {
             this.partner = this.$store.partners.partner
 
             this.tabs = [
-                {id: 'partner', title: $t('Partner')},
+                {id: 'partner', title: $t('Company profile')},
                 {id: 'preferences', title: $t('Preferences')},
                 {id: 'billing', title: $t('Billing Preferences')},
             ]

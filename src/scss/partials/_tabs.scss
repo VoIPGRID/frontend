@@ -5,43 +5,92 @@
     align-items: flex-start;
     background: #f6f7fb;
 
-    ul.tabs {
-        margin: 0;
-        width: 250px;
+    .tablist {
         display: flex;
         flex-direction: column;
-        background: #f6f7fb;
+        margin-bottom: 0;
+        width: 250px;
 
-        li.item {
-            overflow: auto;
-            margin: 0;
-            width: 100%;
+        .tablist-title {
+            padding: 0.5rem;
+            clear: both;
+            border-bottom: 2px solid #dbdbdb;
+            overflow: hidden;
+            text-overflow: ellipsis;
 
-            &.is-active {
-                background: #fff;
-                border-top: 1px solid $grey-lighter;
+            i {
+                font-size: 1.5rem;
+                color: #2A3042;
+                opacity: 0.2;
+                margin-right: 5px;
             }
 
-            a {
-                overflow: visible;
-                width: auto;
+            span {
+                font-size: 1.2rem;
+                line-height: 1.5rem;
+                font-family: "Roboto", sans-serif;
+                font-weight: 400;
             }
         }
 
+        ul {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            background: #f6f7fb;
+            border-bottom: 0;
+
+            li.item {
+                margin: 0;
+                width: 100%;
+                border-top: 1px solid transparent;
+
+                &.is-active {
+                    background: #fff;
+                    font-weight: 500;
+                }
+
+                a {
+                    align-items: left;
+                    justify-content: left;
+                    overflow: visible;
+                    width: auto;
+                    border-bottom: 1px solid transparent;
+                }
+            }
+        }
+
+
         @media screen and (max-width: $desktop) {
-            flex-direction: row;
             display: flex;
             width: 100%;
 
-            li.item {
-                overflow: hidden;
-                white-space: nowrap;
-                a {
-                    display: block;
+            ul {
+                flex-direction: row;
+                li.item {
+
+                    &.is-active {
+                        border-top: 1px solid transparent;
+                    }
+
+                    &.title {
+                        width: 100% !important;
+                        max-width: 100%;
+                        flex-grow: 20;
+                    }
+
                     overflow: hidden;
-                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    a {
+                        display: block;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        text-align: center;
+                    }
                 }
             }
+
+
         }
     }
 

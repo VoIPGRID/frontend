@@ -1,5 +1,10 @@
 <Tabs :tabs=tabs>
-    <Tab :data="tabs[0]">
+    <template slot="tablist">
+        <i class="fa fa-user"></i>
+        <span>{{fullName}}</span>
+    </template>
+
+    <Tab slot="tabs" :data="tabs[0]">
         <h2 class="title">{{$t('Personal')}}</h2><hr/>
 
         <Field name="first_name" type="text"
@@ -38,41 +43,24 @@
             :label="$t('Password confirmation')"
             :model.sync="user.password_confirm"
             :validation="$v.user.password_confirm"/>
-
-        <div class="field is-grouped margin-top-1">
-            <p class="control">
-                <button class="button is-primary"
-                    :disabled="$v.$invalid"
-                    @click="upsertUser(user, $v)">
-                    {{$t('Save changes')}}
-                </button>
-            </p>
-        </div>
     </Tab>
 
-    <Tab :data="tabs[1]">
+    <Tab slot="tabs" :data="tabs[1]">
         <Field name="language" type="select"
             :label="$t('Preferred language')"
             :model.sync="user.profile.language"
             :change="setLanguage"
             :options="[{id: 'en', name: 'English'}, {id: 'nl', name: 'Dutch'}]"/>
-
-        <div class="field is-grouped margin-top-1">
-            <p class="control">
-                <button class="button is-primary"
-                    :disabled="$v.$invalid"
-                    @click="upsertUser(user, $v)">
-                    {{$t('Save changes')}}
-                </button>
-            </p>
-        </div>
     </Tab>
 
-    <Tab v-show="clientId" :data="tabs[2]">
-
+    <Tab slot="tabs" v-show="clientId" :data="tabs[2]">
+        <Field name="fixeddestinations" type="select"
+            :label="$t('Fixed/mobile number')"
+            :model.sync="fixeddestinations"
+            :validation="$v.fixeddestinations"/>
     </Tab>
 
-    <Tab :data="tabs[3]">
+    <Tab slot="tabs" :data="tabs[3]">
         <Field name="session_expiry" type="checkbox"
             :label="$t('Log out after 10 minutes')"
             :model.sync="user.session_expiry"/>
@@ -82,15 +70,15 @@
             :model.sync="user.groups"
             :options="groups"
             :placeholder="$t('Disable call permissions...')"/>
-
-        <div class="field is-grouped margin-top-1">
-            <p class="control">
-                <button class="button is-primary"
-                    :disabled="$v.$invalid"
-                    @click="upsertUser(user, $v)">
-                    {{$t('Save changes')}}
-                </button>
-            </p>
-        </div>
     </Tab>
+
+    <template slot="controls">
+        <p class="control">
+            <button class="button is-primary"
+                :disabled="$v.$invalid"
+                @click="upsertUser(user, $v)">
+                {{$t('Save changes')}}
+            </button>
+        </p>
+    </template>
 </Tabs>

@@ -38,10 +38,15 @@ module.exports = (app, actions) => {
         asyncData: function(route) {
             return asyncData.call(this, route)
         },
+        computed: {
+            fullName: function() {
+                return `${this.user.profile.first_name} ${this.user.profile.last_name}`
+            },
+        },
         created: function() {
             this.tabs = [
-                {id: 'personal', title: $t('Personal information')},
-                {id: 'language', title: $t('Language settings')},
+                {id: 'personal', title: $t('User profile')},
+                {id: 'language', title: $t('Preferences')},
                 {id: 'telephony', show: () => Boolean(this.$route.params.client_id), title: $t('Telephony settings')},
                 {id: 'security', title: $t('Security')},
             ]
