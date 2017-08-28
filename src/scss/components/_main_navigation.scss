@@ -98,7 +98,7 @@
     }
 
 
-    @media (max-width: 600px) {
+    @media (max-width: $tablet) {
         // Shrink the navigation to a small width for mobile.
         max-width: 60px;
 
@@ -154,4 +154,8 @@
     i {
         font-size: 1.3rem;
     }
+}
+
+.main-content-wrapper {
+    background: #f6f7fb;
 }

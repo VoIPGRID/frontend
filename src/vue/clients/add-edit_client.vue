@@ -118,7 +118,7 @@
                 :model.sync="client.billingprofile.exclude_from_export"/>
         </Tab>
     </Tabs>
-    <div class="field is-grouped margin-top-1">
+    <div class="field is-grouped margin-top-1 pull-right">
         <p class="control">
             <button class="button is-primary" :disabled="$v.$invalid" @click="upsertClient(client)">
                 {{$t('Save changes')}}

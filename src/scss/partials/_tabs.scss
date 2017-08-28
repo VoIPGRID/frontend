@@ -1,0 +1,63 @@
+.tabs-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    background: #f6f7fb;
+
+    ul.tabs {
+        margin: 0;
+        width: 250px;
+        display: flex;
+        flex-direction: column;
+        background: #f6f7fb;
+
+        li.item {
+            overflow: auto;
+            margin: 0;
+            width: 100%;
+
+            &.is-active {
+                background: #fff;
+                border-top: 1px solid $grey-lighter;
+            }
+
+            a {
+                overflow: visible;
+                width: auto;
+            }
+        }
+
+        @media screen and (max-width: $desktop) {
+            flex-direction: row;
+            display: flex;
+            width: 100%;
+
+            li.item {
+                overflow: hidden;
+                white-space: nowrap;
+                a {
+                    display: block;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+        }
+    }
+
+    .tabs-content {
+        border-top: 1px solid $grey-lighter;
+        border-right: 1px solid $grey-lighter;
+        background: #fff;
+        padding: 1rem;
+        width: 100%;
+    }
+
+    @media screen and (max-width: $desktop) {
+        flex-direction: column;
+
+        .tabs-content {
+            border-top: 0;
+        }
+    }
+}

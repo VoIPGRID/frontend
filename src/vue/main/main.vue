@@ -2,9 +2,9 @@
     <div class="wrapper" v-if="user.authenticated">
         <Shouts :shouts="shouts"></Shouts>
         <Navigation></Navigation>
-        <section>
+        <section class="main-content-wrapper">
             <ContentHeader></ContentHeader>
-            <div class="content">
+            <div class="content main-content">
                 <router-view></router-view>
             </div>
         </section>

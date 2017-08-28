@@ -1,3 +1,24 @@
 .table-options {
-    padding-bottom: 0.5rem;
+    padding-bottom: 1rem;
+}
+
+.content .table {
+    thead {
+        th {
+            background: #f6f7fb;
+        }
+    }
+    tr {
+        &:hover {
+            background: #fff;
+        }
+
+        td {
+             border: 1px solid #f6f7fb;
+
+             &.table-actions {
+                 min-width: 75px;
+             }
+        }
+    }
 }

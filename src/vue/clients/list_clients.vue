@@ -8,7 +8,7 @@
             </router-link>
         </p>
     </div>
-    <table class="table is-fullwidth is-striped">
+    <table class="table is-fullwidth">
         <thead>
             <tr>
                 <th>{{$t('Name')}}</th>
@@ -25,7 +25,7 @@
                     </router-link>
                 </td>
                 <td>{{ client.description }}</td>
-                <td>
+                <td class="table-actions">
                     <router-link :to="{name: 'edit_client', params: {client_id: client.id}}">
                         <span class="icon">
                             <i class="fa fa-edit"></i>

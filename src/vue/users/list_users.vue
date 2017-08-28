@@ -10,7 +10,7 @@
             </router-link>
         </p>
     </div>
-    <table class="table is-fullwidth is-striped">
+    <table class="table is-fullwidth">
         <thead>
             <tr>
                 <th>{{$t('Name')}}</th>
