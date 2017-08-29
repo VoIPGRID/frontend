@@ -6,6 +6,7 @@ module.exports = (app, actions) => {
             let currentPage = parseInt(route.query.page) || 1
             let clientsData = await actions.readClients({page: currentPage})
             app.store.clients.clients = clientsData
+            app.store.breadcrumbs = []
             return clientsData
         },
         created: function() {

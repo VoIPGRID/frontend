@@ -1,15 +1,22 @@
 <div>
     <router-view></router-view>
-    <div class="table-options field is-grouped is-pulled-right">
-        <p class="control">
-            <router-link v-if="clientId" class="button is-primary" :to="{name: 'add_client_user', params: {client_id: clientId}}">
-                {{$t('Add User')}}
-            </router-link>
-            <router-link v-else class="button is-primary" :to="{name: 'add_partner_user', params: {partner_id: partnerId}}">
-                {{$t('Add User')}}
-            </router-link>
-        </p>
+
+    <div class="table-header">
+        <div class="table-header-title">{{$t('Users')}} ({{users.count}})</div>
+        <div class="is-grouped is-pulled-right field is-grouped">
+            <p class="control">
+                <router-link v-if="clientId" class="button is-primary" :to="{name: 'add_client_user', params: {client_id: clientId}}">
+                    <span class="icon"><i class="fa fa-plus"></i></span>
+                    <span>{{$t('Add User')}}</span>
+                </router-link>
+                <router-link v-else class="button is-primary" :to="{name: 'add_partner_user', params: {partner_id: partnerId}}">
+                    <span class="icon"><i class="fa fa-plus"></i></span>
+                    <span>{{$t('Add User')}}</span>
+                </router-link>
+            </p>
+        </div>
     </div>
+
     <table class="table is-fullwidth">
         <thead>
             <tr>

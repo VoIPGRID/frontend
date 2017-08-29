@@ -1,4 +1,8 @@
 .main-content-wrapper {
+    // Always show the scrollbar, so the content doesn't indent when it
+    // gets too long.
+    overflow-y: scroll;
+
     .main-content {
         margin: 0 auto;
         margin-top: 1.5rem;

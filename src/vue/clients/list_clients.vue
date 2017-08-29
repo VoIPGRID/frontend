@@ -1,13 +1,19 @@
 <div>
     <router-view></router-view>
-    <div class="table-options field is-grouped is-pulled-right">
-        <p class="control">
-            <router-link class="button is-primary"
-                :to="{name: 'add_client', params: {partnerId: $route.params.partner_id}}">
-                {{$t('Add Client')}}
-            </router-link>
-        </p>
+
+    <div class="table-header">
+        <div class="table-header-title">{{$t('Clients')}} ({{clients.count}})</div>
+        <div class="is-grouped is-pulled-right field is-grouped">
+            <p class="control">
+                <router-link class="button is-primary"
+                    :to="{name: 'add_client', params: {partnerId: $route.params.partner_id}}">
+                    <span class="icon"><i class="fa fa-plus"></i></span>
+                    <span>{{$t('Add Client')}}</span>
+                </router-link>
+            </p>
+        </div>
     </div>
+
     <table class="table is-fullwidth">
         <thead>
             <tr>

@@ -3,6 +3,9 @@ module.exports = (app) => {
     const template = app.templates.dashboard_home
 
     return Vue.component('DashboardHome', {
+        created: function() {
+            app.store.breadcrumbs = ['Dashboard']
+        },
         data: function() {
             return {
                 modules: [

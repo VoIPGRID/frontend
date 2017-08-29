@@ -84,7 +84,42 @@
             :help="$t('A logo for a custom look-and-feel for this partner.')"
             :label="$t('Logo')"
             :model.sync="partner.logo"/>
+    </Tab>
 
+    <Tab slot="tabs" :data="tabs[1]" v-if="partner.profile">
+        <Field idfield="code" name="country" type="select" v-if="partner.profile.country"
+            :help="$t('Select the country you operate from. When possible this country will ' +
+            'be the default in other forms.')" :label="$t('Country')"
+            :model.sync="partner.profile.country.code"
+            :options="root.countries"
+            :placeholder="$t('Select a country...')"
+            :validation="$v.partner.profile.country.code"/>
+
+        <Field name="audio_language" type="select"
+            :help="$t('Select the language/voice that is used as default for messages ' +
+            'played in modules.')" :label="$t('Audio language')"
+            :model.sync="partner.profile.audio_language"
+            :options="root.audioLanguages"
+            :placeholder="$t('Select an audio language...')"
+            :validation="$v.partner.profile.audio_language"/>
+
+        <Field name="system_language" type="select"
+            :help="$t('Select the language that is used as default for printed text ' +
+            '(invoices, exports, interface).')" :label="$t('System language')"
+            :model.sync="partner.profile.system_language"
+            :options="root.systemLanguages"
+            :placeholder="$t('Select a system language...')"
+            :validation="$v.partner.profile.system_language"/>
+
+        <Field name="timezone" type="select" v-if="partner.profile"
+            :label="$t('Timezone')"
+            :model.sync="partner.profile.timezone"
+            :options="root.timezones"
+            :placeholder="$t('Select a timezone...')"
+            :validation="$v.partner.profile.timezone"/>
+    </Tab>
+
+    <Tab slot="tabs" :data="tabs[2]">
         <Field name="branding" type="checkbox"
             :click="toggleBranding"
             :label="$t('Use custom branding')"
@@ -130,40 +165,7 @@
         </nav>
     </Tab>
 
-    <Tab slot="tabs" :data="tabs[1]" v-if="partner.profile">
-        <Field idfield="code" name="country" type="select" v-if="partner.profile.country"
-            :help="$t('Select the country you operate from. When possible this country will ' +
-            'be the default in other forms.')" :label="$t('Country')"
-            :model.sync="partner.profile.country.code"
-            :options="root.countries"
-            :placeholder="$t('Select a country...')"
-            :validation="$v.partner.profile.country.code"/>
-
-        <Field name="audio_language" type="select"
-            :help="$t('Select the language/voice that is used as default for messages ' +
-            'played in modules.')" :label="$t('Audio language')"
-            :model.sync="partner.profile.audio_language"
-            :options="root.audioLanguages"
-            :placeholder="$t('Select an audio language...')"
-            :validation="$v.partner.profile.audio_language"/>
-
-        <Field name="system_language" type="select"
-            :help="$t('Select the language that is used as default for printed text ' +
-            '(invoices, exports, interface).')" :label="$t('System language')"
-            :model.sync="partner.profile.system_language"
-            :options="root.systemLanguages"
-            :placeholder="$t('Select a system language...')"
-            :validation="$v.partner.profile.system_language"/>
-
-        <Field name="timezone" type="select" v-if="partner.profile"
-            :label="$t('Timezone')"
-            :model.sync="partner.profile.timezone"
-            :options="root.timezones"
-            :placeholder="$t('Select a timezone...')"
-            :validation="$v.partner.profile.timezone"/>
-    </Tab>
-
-    <Tab slot="tabs" :data="tabs[2]" v-if="partner.billingprofile">
+    <Tab slot="tabs" :data="tabs[3]" v-if="partner.billingprofile">
         <Field name="currency" namefield="code" type="select"
             :label="$t('Currency')"
             :model.sync="partner.billingprofile.currency"
@@ -205,6 +207,7 @@
             :options="root.priceplanDiscounts"
             :placeholder="$t('Select a discount...')"/>
     </Tab>
+
 
     <template slot="controls">
         <p class="control">

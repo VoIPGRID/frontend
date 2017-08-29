@@ -6,6 +6,7 @@ module.exports = (app, actions) => {
             let currentPage = parseInt(route.query.page) || 1
             let partnersData = await actions.readPartners({page: currentPage})
             app.store.partners.partners = partnersData
+            app.store.breadcrumbs = []
             return partnersData
         },
         created: function() {
@@ -29,6 +30,7 @@ module.exports = (app, actions) => {
         render: template.r,
         staticRenderFns: template.s,
         store: {
+            breadcrumbs: 'breadcrumbs',
             partners: 'partners.partners',
         },
     })

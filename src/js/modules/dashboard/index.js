@@ -16,6 +16,9 @@ class DashboardModule extends Module {
 
         app.router.addRoutes([{
             component: Dashboard,
+            meta: {
+                breadcrumb: 'Dashboard',
+            },
             name: 'dashboard_home',
             path: '/partners/:partner_id/clients/:client_id/dashboard/',
         }])

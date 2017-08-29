@@ -15,6 +15,7 @@ class MainModule extends Module {
         super(app)
         this.actions = require('./actions')(app, this)
 
+        Vue.component('Breadcrumbs', require('./components/breadcrumbs')(app, this.actions))
         Vue.component('Field', require('./components/field')(app, this.actions))
         Vue.component('Navigation', require('./components/navigation')(app, this.actions))
         Vue.component('ContentHeader', require('./components/content_header')(app, this.actions))

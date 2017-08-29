@@ -35,12 +35,18 @@ class ClientsModule extends Module {
                 path: 'delete',
             }],
             component: ListClients,
+            meta: {
+                breadcrumb: 'Clients',
+            },
             name: 'list_clients',
             path: '/partners/:partner_id/clients/:client_id?',
         }])
 
         app.router.addRoutes([{
             component: AddEditClient,
+            meta: {
+                breadcrumb: 'Clients',
+            },
             name: 'edit_client',
             path: '/partners/:partner_id/clients/:client_id/edit',
         }])

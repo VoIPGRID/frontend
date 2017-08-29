@@ -3,13 +3,17 @@
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    background: #f6f7fb;
+    background: $default-bg;
 
     .tablist {
         display: flex;
         flex-direction: column;
         margin-bottom: 0;
         width: 250px;
+
+        // Move over the tab content, so the left border is invible.
+        margin-right: -1px;
+        z-index: 10000;
 
         .tablist-title {
             padding: 0.5rem;
@@ -37,17 +41,19 @@
             margin: 0;
             display: flex;
             flex-direction: column;
-            background: #f6f7fb;
             border-bottom: 0;
 
             li.item {
                 margin: 0;
                 width: 100%;
                 border-top: 1px solid transparent;
+                border-right: 1px solid #dbdbdb;
+                border-top: 1px solid #dbdbdb;
 
                 &.is-active {
                     background: #fff;
                     font-weight: 500;
+                    border-right: 1px solid transparent;
                 }
 
                 a {
@@ -61,16 +67,23 @@
         }
 
 
+        // Style as regular tabs to increase the content width.
         @media screen and (max-width: $desktop) {
             display: flex;
             width: 100%;
 
             ul {
                 flex-direction: row;
+                padding-left: 6px;
+                padding-right: 6px;
+
                 li.item {
 
+                    border-right: 0;
+
                     &.is-active {
-                        border-top: 1px solid transparent;
+                        border-left: 1px solid #dbdbdb;
+                        border-right: 1px solid #dbdbdb;
                     }
 
                     &.title {
@@ -95,8 +108,8 @@
     }
 
     .tabs-content {
-        border-top: 1px solid $grey-lighter;
-        border-right: 1px solid $grey-lighter;
+        border-radius: 3px;
+        border: 1px solid $grey-lighter;
         background: #fff;
         padding: 1rem;
         width: 100%;
@@ -106,7 +119,7 @@
         flex-direction: column;
 
         .tabs-content {
-            border-top: 0;
+            margin-top: -1px;
         }
     }
 }

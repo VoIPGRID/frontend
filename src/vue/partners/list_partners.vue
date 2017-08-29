@@ -1,9 +1,15 @@
 <div>
     <router-view></router-view>
-    <div class="table-options field is-grouped is-pulled-right">
-        <p class="control">
-            <router-link class="button is-primary" to="/partners/add/">{{$t('Add Partner')}}</router-link>
-        </p>
+    <div class="table-header">
+        <div class="table-header-title">{{$t('Partners')}} ({{partners.count}})</div>
+        <div class="is-grouped is-pulled-right field is-grouped">
+            <p class="control">
+                <router-link class="button is-primary" to="/partners/add/">
+                    <span class="icon"><i class="fa fa-plus"></i></span>
+                    <span>{{$t('Add Partner')}}</span>
+                </router-link>
+            </p>
+        </div>
     </div>
     <table class="table is-fullwidth">
         <thead>

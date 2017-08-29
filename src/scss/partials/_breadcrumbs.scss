@@ -1,0 +1,37 @@
+nav.breadcrumbs {
+    height: 65px;
+    border-bottom: 1px solid $default-border-color;
+    width: 100%;
+
+
+    ul {
+        overflow: auto;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-content: space-between;
+        width: 100%;
+        margin: 0;
+
+        li {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+
+            &:first-child {
+                border-left: 0;
+                padding-left: 1rem;
+            }
+
+            margin-right: 1rem;
+            color: $default-text-color;
+            font-weight: 600;
+            margin: 1rem 0;
+            display: block;
+            border-left: 1px #e6e7eb solid;
+            padding: 0.25rem;
+            padding-right: 1rem;
+            padding-left: 1rem;
+        }
+    }
+}

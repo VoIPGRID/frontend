@@ -140,7 +140,7 @@ function setupSsrProxy(indexHTML) {
         // Augment the index file with the translation file and remove the
         // current translation from the store. It will be added later.
         let translationFile = ''
-        if (store.language !== 'en') {
+        if (store.user.language !== 'en') {
             translationFile = `<script src="/public/js/i18n/${store.user.language}.js"></script>`
         }
 
@@ -163,7 +163,7 @@ function setupSsrProxy(indexHTML) {
 async function initServer() {
     const indexHTML = await readFileAsync(path.join('src', 'index.html'), 'utf8')
     const ssrProxy = setupSsrProxy(indexHTML)
-    http.createServer(ssrProxy).listen(3000, () => {
+    http.createServer(ssrProxy).listen(3000, '0.0.0.0', () => {
         // Messages to nodemon that the application is ready to serve
         // requests. Nodemon fires a livereload trigger after this.
         console.log('nodemon:start:child')

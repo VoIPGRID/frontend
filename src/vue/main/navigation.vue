@@ -55,6 +55,13 @@
         </li>
 
         <li>
+            <router-link :to="{name: 'list_phoneaccounts', params: {partner_id: user.selectedPartner.id, client_id: user.selectedClient.id}}">
+                <i class="item-icon fa fa-phone"></i>
+                <span class="item-text">{{$t('VoIP accounts')}}</span>
+            </router-link>
+        </li>
+
+        <li>
             <router-link :to="{name: 'list_client_users', params: {partner_id: user.selectedPartner.id, client_id: user.selectedClient.id}}">
                 <i class="item-icon fa fa-address-book"></i>
                 <span class="item-text">{{$t('Users')}}</span>

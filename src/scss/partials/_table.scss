@@ -1,8 +1,37 @@
-.table-options {
-    padding-bottom: 1rem;
+.table-header {
+    width: 100%;
+    float: left;
+
+    .table-header-title {
+        font-size: 1.5rem;
+        float: left;
+    }
 }
 
 .content .table {
+    @media screen and (max-width: $tablet) {
+        background: none;
+
+        tr {
+            background: #fff;
+            display: flex;
+            align-items: stretch;
+            flex-direction: row;
+            flex-wrap: wrap;
+            margin: 0.5em 0;
+            border: 1px solid rgba(3,3,3,0.2);
+        }
+        td, th {
+            flex: 1 1 100px;
+            border: 1px solid $default-border-color;
+
+            &:last-child {
+                width: 150px;
+            }
+        }
+    }
+
+
     thead {
         th {
             background: #f6f7fb;

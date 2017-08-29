@@ -15,6 +15,15 @@ module.exports = (app, actions) => {
         asyncData: function(route) {
             return asyncData.call(this, route)
         },
+        computed: {
+            backUrl: function() {
+                if (this.$route.params.client_id) {
+                    return {name: 'list_client_users', params: this.$route.params}
+                } else {
+                    return {name: 'list_partner_users', params: this.$route.params}
+                }
+            },
+        },
         methods: {
             deleteUser: actions.deleteUser,
         },

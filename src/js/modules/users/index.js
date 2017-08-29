@@ -101,6 +101,7 @@ class UsersModule extends Module {
                 },
                 session_expiry: true,
             },
+            userdestinations: [],
             users: [],
         }
     }

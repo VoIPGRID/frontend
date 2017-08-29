@@ -54,10 +54,51 @@
     </Tab>
 
     <Tab slot="tabs" v-show="clientId" :data="tabs[2]">
-        <Field name="fixeddestinations" type="select"
-            :label="$t('Fixed/mobile number')"
-            :model.sync="fixeddestinations"
-            :validation="$v.fixeddestinations"/>
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th>{{$t('Selected')}}</th>
+                    <th>{{$t('Destination')}}</th>
+                    <th>{{$t('Type')}}</th>
+                    <th class="col-sm-2">{{$t('Actions')}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input type="radio" name="selected_destination">
+                    </td>
+                    <td colspan="3">{{$t('Do not disturb')}}</td>
+                </tr>
+                <tr v-for="ud in userdestinations">
+                    <td>
+                        <input type="radio" name="selected_destination">
+                    </td>
+                    <td>
+                        {{ud.internal_number}}
+                        {{ud.description}}
+                    </td>
+                    <td v-if="ud.internal_number">
+                        VoIP account
+                    </td>
+                    <td v-else>
+                        Fixed Destination
+                    </td>
+                    <td class="table-actions">
+                        <router-link :to="{name: 'edit_client', params: {client_id: user.client.id}}">
+                            <span class="icon">
+                                <i class="fa fa-edit"></i>
+                            </span>
+                        </router-link>
+                        <router-link :to="{name: 'delete_client', params: {client_id: user.client.id}, query: $router.currentRoute.query}">
+                            <span class="icon">
+                                <i class="fa fa-remove"></i>
+                            </span>
+                        </router-link>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </Tab>
 
     <Tab slot="tabs" :data="tabs[3]">

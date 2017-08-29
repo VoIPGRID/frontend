@@ -4,6 +4,7 @@
         <Navigation></Navigation>
         <section class="main-content-wrapper">
             <ContentHeader></ContentHeader>
+            <Breadcrumbs></Breadcrumbs>
             <div class="content main-content">
                 <router-view></router-view>
             </div>

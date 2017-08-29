@@ -72,6 +72,7 @@ class App {
             {Module: require('./modules/partners'), name: 'partners'},
             {Module: require('./modules/users'), name: 'users'},
             {Module: require('./modules/main'), name: 'main'},
+            {Module: require('./modules/phoneaccounts'), name: 'phoneaccounts'},
         ]
 
         for (let {name, Module} of _modules) {

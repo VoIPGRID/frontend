@@ -31,36 +31,36 @@ module.exports = function(app, _module) {
     */
     actions.readPartner = async function(partnerId, formEndpoints = true) {
         let context = {}
-        if (partnerId) {
-            const res = await app.api.client.get(`partners/${partnerId}/`)
-            context.partner = res.data
-        } else {
-            context.partner = _module.getObservables().partner
+        let promises = []
+
+        if (formEndpoints) {
+            promises = [
+                app.api.client.get('partners/audio_languages/', {adapter: app.api.cachingAdapter}),
+                app.api.client.get('partners/countries/', {adapter: app.api.cachingAdapter}),
+                app.api.client.get('partners/currencies/', {adapter: app.api.cachingAdapter}),
+                app.api.client.get('partners/owners/', {adapter: app.api.cachingAdapter}),
+                app.api.client.get('partners/priceplan_discounts/', {adapter: app.api.cachingAdapter}),
+                app.api.client.get('partners/system_languages/', {adapter: app.api.cachingAdapter}),
+                app.api.client.get('partners/timezones/', {adapter: app.api.cachingAdapter}),
+            ]
         }
 
-        if (!formEndpoints) return context
-
-        let [audio, countries, currencies, owners,
-            priceplanDiscounts, system, timezones,
-        ] = await Promise.all([
-            app.api.client.get('partners/audio_languages/', {adapter: app.api.cachingAdapter}),
-            app.api.client.get('partners/countries/', {adapter: app.api.cachingAdapter}),
-            app.api.client.get('partners/currencies/', {adapter: app.api.cachingAdapter}),
-            app.api.client.get('partners/owners/', {adapter: app.api.cachingAdapter}),
-            app.api.client.get('partners/priceplan_discounts/', {adapter: app.api.cachingAdapter}),
-            app.api.client.get('partners/system_languages/', {adapter: app.api.cachingAdapter}),
-            app.api.client.get('partners/timezones/', {adapter: app.api.cachingAdapter}),
-        ])
+        if (partnerId) promises.push(app.api.client.get(`partners/${partnerId}/`))
+        // Load all results in parallel.
+        const res = await Promise.all(promises)
 
         Object.assign(context, {
-            audioLanguages: audio.data,
-            countries: countries.data,
-            currencies: currencies.data,
-            owners: owners.data.results,
-            priceplanDiscounts: priceplanDiscounts.data,
-            systemLanguages: system.data,
-            timezones: timezones.data,
+            audioLanguages: res[0].data,
+            countries: res[1].data,
+            currencies: res[2].data,
+            owners: res[3].data.results,
+            priceplanDiscounts: res[4].data,
+            systemLanguages: res[5].data,
+            timezones: res[6].data,
         })
+
+        if (partnerId) context.partner = res[7].data
+        else context.partner = _module.getObservables().partner
 
         return context
     }
@@ -72,9 +72,8 @@ module.exports = function(app, _module) {
     * @returns {Object} - Returns the partner object from the API endpoint.
     */
     actions.readPartners = async function({page}) {
-        var partners = await app.api.client.get(`/partners/?page=${page}`)
-        this.partners = partners.data
-        return partners.data
+        let {data: partners} = await app.api.client.get(`/partners/?page=${page}`)
+        return partners
     }
 
 

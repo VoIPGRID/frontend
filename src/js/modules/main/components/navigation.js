@@ -16,5 +16,21 @@ module.exports = (app, actions) => {
         store: {
             user: 'user',
         },
+        watch: {
+            '$route'(to, from) {
+                if (to.name === 'edit_client') {
+                    this.user.selectedClient = {
+                        id: app.store.clients.client.id,
+                        name: app.store.clients.client.name,
+                    }
+                } else if (to.name === 'edit_partner') {
+                    this.user.selectedClient = {id: null, name: null}
+                    this.user.selectedPartner = {
+                        id: app.store.partners.partner.id,
+                        name: app.store.partners.partner.name,
+                    }
+                }
+            },
+        },
     }
 }

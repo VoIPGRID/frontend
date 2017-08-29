@@ -26,8 +26,8 @@ module.exports = function(app, _module) {
             url = `/partners/${partnerId}/users/${user.id}`
         }
 
-        const res = await app.api.client.delete(url)
-        if (res.status === 204) {
+        const {status} = await app.api.client.delete(url)
+        if (status === 204) {
             this.$store.users.users.results = this.$store.users.users.results.filter((i) => i.id !== user.id)
             app.vm.$shout({message: $t('User {name} succesfully deleted', {name: user.email})})
             app.router.push(backRoute)
@@ -72,35 +72,64 @@ module.exports = function(app, _module) {
 
     /**
     * Read user context from the API and update the user store object.
-    * @param {String} userId - ID of the user to read from the API.
-    * @returns {Object} - The observable properties.
+    * @param {String} [clientId] - ID of the client the user belongs to.
+    * @param {String} [partnerId] - ID of the partner user belongs to.
+    * @param {String} userId - ID of the user to retrieve.
+    * @returns {Object} - Raw user data from the API.
     */
     actions.readUser = async function(clientId, partnerId, userId) {
-        let baseUrl, user
+        let context = {}
+        let promises = []
+        let baseUrl
 
         if (clientId) baseUrl = `clients/${clientId}/users`
         else baseUrl = `/partners/${partnerId}/users`
 
+        if (userId) promises.push(app.api.client.get(`${baseUrl}/${userId}/`))
+        promises.push(app.api.client.get(`${baseUrl}/groups/`, {adapter: app.api.cachingAdapter}))
+
         if (userId) {
-            const res = await app.api.client.get(`${baseUrl}/${userId}/`)
-            user = Object.assign(_module.getObservables().user, res.data)
+            let [{data: user}, {data: groups}] = await Promise.all(promises)
+            // context.user = Object.assign(_module.getObservables().user, user)
+            Object.assign(context, {groups: groups, user: user})
         } else {
-            user = _module.getObservables().user
+            let [{data: groups}] = await Promise.all(promises)
+            Object.assign(context, {groups: groups, user: _module.getObservables().user})
         }
 
-        let groups = await app.api.client.get(`${baseUrl}/groups/`)
-
-        return {
-            groups: groups.data,
-            user: user,
-        }
+        return context
     }
 
 
+    /**
+    * Provide data for the add_edit_users view. Retrieve all of the user's
+    * possible userdestinations; both phoneaccounts and fixeddestinations.
+    * @param {String} [clientId] - ID of the client the user belongs to.
+    * @param {String} userId - ID of the user the userdestination belongs to.
+    * @returns {Object} - Raw userdestination data from the API.
+    */
+    actions.readUserDestinations = async function(clientId, userId) {
+        let baseUrl = `clients/${clientId}/users/${userId}/userdestinations`
+        let [fixeddestinations, phoneaccounts] = await Promise.all([
+            app.api.client.get(`${baseUrl}/fixeddestinations/`),
+            app.api.client.get(`${baseUrl}/phoneaccounts/`),
+        ])
+
+        let userdestinations = phoneaccounts.data.results.concat(fixeddestinations.data.results)
+        return {userdestinations}
+    }
+
+
+    /**
+    * Provide data for the list_users view.
+    * @param {Object} url - The url object.
+    * @param {Number} url.oage - The page of the url.
+    * @param {String} url.path - The path of the url.
+    * @returns {Object} - an API endpoint formatted result list.
+    */
     actions.readUsers = async function({page, path}) {
-        let users = await app.api.client.get(`${path}?page=${page}`)
-        this.users = users.data
-        return users.data
+        let {data: users} = await app.api.client.get(`${path}?page=${page}`)
+        return users
     }
 
 

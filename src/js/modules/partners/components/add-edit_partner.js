@@ -10,8 +10,9 @@ module.exports = (app, actions) => {
      * @namespace
      */
     return {
-        asyncData: async function(router) {
-            let partnerData = await actions.readPartner(router.params.partner_id)
+        asyncData: async function(route) {
+            let partnerData = await actions.readPartner(route.params.partner_id)
+            app.store.breadcrumbs = []
             Object.assign(app.store.partners, partnerData)
         },
         computed: {
@@ -30,6 +31,7 @@ module.exports = (app, actions) => {
             this.tabs = [
                 {id: 'partner', title: $t('Company profile')},
                 {id: 'preferences', title: $t('Preferences')},
+                {id: 'branding', title: $t('Branding')},
                 {id: 'billing', title: $t('Billing Preferences')},
             ]
         },

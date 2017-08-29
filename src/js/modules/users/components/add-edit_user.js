@@ -16,13 +16,17 @@ module.exports = (app, actions) => {
         const partnerId = route.params.partner_id
         const userId = route.params.user_id
 
-        const context = await actions.readUser(clientId, partnerId, userId)
+        let context = {clientId, partnerId, userId}
+        let promises = [actions.readUser(clientId, partnerId, userId)]
 
-        Object.assign(context, {
-            clientId: route.params.client_id,
-            partnerId: route.params.partner_id,
-            userId: route.params.user_id,
-        })
+        if (clientId) {
+            promises.push(actions.readUserDestinations(clientId, userId))
+            let [userData, userDestinations] = await Promise.all(promises)
+            Object.assign(context, userData, userDestinations)
+        } else {
+            let [userData] = await Promise.all(promises)
+            Object.assign(context, userData)
+        }
 
         if (userId === app.store.user.id) context.isProfile = true
         else context.isProfile = false
@@ -30,6 +34,10 @@ module.exports = (app, actions) => {
         // Called from the created hook or the watch hook.
         if (this.constructor.name === 'VueComponent') localData.call(this)
         Object.assign(app.store.users, context)
+        const user = context.user
+        let fullName = `${user.profile.first_name} ${user.profile.last_name}`
+        app.store.breadcrumbs = ['Users', fullName]
+
         return context
     }
 
@@ -47,9 +55,10 @@ module.exports = (app, actions) => {
             this.tabs = [
                 {id: 'personal', title: $t('User profile')},
                 {id: 'language', title: $t('Preferences')},
-                {id: 'telephony', show: () => Boolean(this.$route.params.client_id), title: $t('Telephony settings')},
+                {id: 'telephony', show: () => Boolean(this.$route.params.client_id), title: $t('User destinations')},
                 {id: 'security', title: $t('Security')},
             ]
+
             localData.call(this)
         },
         data: function() {
@@ -72,6 +81,7 @@ module.exports = (app, actions) => {
             groups: 'users.groups',
             root: 'users',
             user: 'users.user',
+            userdestinations: 'users.userdestinations',
         },
         validations: function() {
             let validations = {

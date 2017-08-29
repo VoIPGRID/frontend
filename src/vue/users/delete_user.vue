@@ -3,7 +3,7 @@
   <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">{{$t('Remove')}} {{$t('user')}} <i>{{user.email}}</i>?</p>
-        <router-link :to="{name: 'list_client_users'}"><button class="delete"></button></router-link>
+        <router-link :to="backUrl"><button class="delete"></button></router-link>
       </header>
       <section class="modal-card-body">
         <div class="content">
@@ -12,7 +12,7 @@
       </section>
       <footer class="modal-card-foot">
         <a class="button is-primary" @click="deleteUser(user)">{{$t('Confirm')}}</a>
-        <router-link class="button" :to="{name: 'list_client_users'}">{{$t('Cancel')}}</router-link>
+        <router-link class="button" :to="backUrl">{{$t('Cancel')}}</router-link>
       </footer>
     </div>
 </div>
