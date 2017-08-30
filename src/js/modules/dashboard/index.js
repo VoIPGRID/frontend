@@ -12,7 +12,7 @@ class DashboardModule extends Module {
         if (!this.app.store.dashboard) this.app.store.dashboard = this.getObservables()
         this.actions = require('./actions')(app)
 
-        const Dashboard = Vue.component('Dashboard', require('./components/home')(app, this.actions))
+        const Dashboard = Vue.component('Dashboard', require('./components/dashboard')(app, this.actions))
 
         app.router.addRoutes([{
             component: Dashboard,
@@ -20,7 +20,7 @@ class DashboardModule extends Module {
                 breadcrumb: 'Dashboard',
             },
             name: 'dashboard_home',
-            path: '/partners/:partner_id/clients/:client_id/dashboard/',
+            path: '/partners/:partner_id/clients/:client_id/',
         }])
     }
 

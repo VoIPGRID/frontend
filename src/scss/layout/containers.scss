@@ -2,6 +2,7 @@ html, body {
     width: 100%;
     height: 100%;
     overflow-y: hidden;
+    font-family: "Roboto", sans-serif;
 }
 
 
@@ -9,6 +10,7 @@ html, body {
     // Always show the scrollbar, so the content doesn't indent when it
     // gets too long.
     overflow-y: scroll;
+    background: #f6f7fb;
 
     .main-content {
         margin: 0 auto;

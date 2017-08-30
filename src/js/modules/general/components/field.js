@@ -1,8 +1,8 @@
 module.exports = (app) => {
-    const template = app.templates.main_field
+    const template = app.templates.general_field
 
     /**
-     * @memberof module:main
+     * @memberof module:general
      * @namespace
      */
     return {

@@ -29,7 +29,7 @@ class Api {
                         this.app.vm.$shout({message: this.app.$t(error.message)})
                     }
                 }
-                this.app.store.main.apiValidation = fieldErrors
+                this.app.store.general.apiValidation = fieldErrors
             }
 
             if (err.response.data.non_field_errors) {

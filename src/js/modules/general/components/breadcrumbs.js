@@ -1,7 +1,10 @@
 module.exports = (app, actions) => {
-    const template = app.templates.main_breadcrumbs
+    const template = app.templates.general_breadcrumbs
 
     return {
+        created: function() {
+            console.log("BLAAA", this.breadcrumbs)
+        },
         filters: {
             // Display the correct breadcrumb text
             // depending on the Vue version
@@ -10,9 +13,6 @@ module.exports = (app, actions) => {
             },
         },
         methods: {
-            deselectClient() {
-                this.user.selectedClient = {id: null, name: ''}
-            },
             // Return the correct prop data
             linkProp: function(crumb) {
                 // If it's a named route, we'll base the route
@@ -34,7 +34,6 @@ module.exports = (app, actions) => {
         staticRenderFns: template.s,
         store: {
             breadcrumbs: 'breadcrumbs',
-            user: 'user',
         },
     }
 }

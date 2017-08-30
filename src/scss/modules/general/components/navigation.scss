@@ -1,0 +1,156 @@
+.nav-main {
+    flex: 1 0 270px;
+    // Prevent the container to expand beyond this size.
+    max-width: 270px;
+    transition: all .4s;
+    background: $vg-bg-dark-color;
+    display: flex;
+    flex-direction: column;
+
+    .logo {
+        align-items: center;
+        display: flex;
+        flex-grow: 0;
+        flex-shrink: 0;
+        font-size: 1rem;
+        justify-content: center;
+        line-height: 1.5rem;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        height: 28px;
+
+        img {
+            max-height: 1.75rem;
+            height: auto;
+        }
+    }
+
+    .nav-item-wrapper {
+        // Move down the size of the content navbar.
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+
+        .nav-item {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            color: $vg-text-dark-color;
+            padding: 0.7rem 0;
+            font-size: 1.1rem;
+            font-weight: 400;
+            display: block;
+            position: relative;
+
+            &.is-active, &:hover {
+                color: white;
+            }
+
+            &.disabled {
+                color: $vg-text-dark-disabled-color;
+            }
+
+            // The text content of the item.
+            span {
+                display: inline-block;
+            }
+
+            // The icon left of the content.
+            i {
+                display: inline-block;
+                font-size: 1.6rem;
+                width: 60px;
+                text-align: center;
+
+                // The icon to go out of the context of a partner or client.
+                &.level-up {
+                    font-size: 1.3rem;
+                    position: absolute;
+                    width: 10px;
+                    right: 0;
+                    top: 10px;
+                    line-height: 0;
+
+                    &:hover {
+                        color: $vg-accent-color;
+                    }
+                }
+            }
+        }
+
+        // Modifier to pull the nav-item-wrapper to the bottom of the page.
+        &.pull-down {
+            position: absolute;
+            bottom: 0;
+        }
+    }
+
+
+    // The first context selector box is a modified version of a nav-item-wrapper.
+    .nav-item-wrapper.context-selector {
+        // The triangle should be visible outside the box.
+        overflow: visible;
+        position:relative;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid $vg-border-dark-color;
+        background: $vg-bg-darker-color;
+
+        &::before, &::after {
+            position: absolute;
+            top: 65px;
+        }
+
+        &::before {
+            @include triangle(bottom, $vg-border-dark-color, 16px);
+            left: 14px;
+        }
+
+        &::after {
+            @include triangle(bottom, $vg-bg-darker-color, 15px);
+            left: 15px;
+        }
+
+        a {
+            padding: 0;
+            line-height: 65px;
+            text-overflow: ellipsis;
+
+            i {
+                line-height: 65px;
+            }
+        }
+    }
+
+    // Shrink the navigation to a small width for mobile.
+    @media (max-width: $tablet) {
+        max-width: 60px;
+
+        .nav-item-wrapper.context-selector .nav-item {
+            text-overflow: initial;
+            // Hide the text content of each nav-item.
+            span {
+                opacity: 0;
+                transition: opacity .4s;
+            }
+        }
+
+        // Expand the navigation sidebar on hover.
+        &:hover {
+            max-width: 270px;
+
+            .nav-item-wrapper {
+                .nav-item {
+                    // Hide the text content of each nav-item.
+                    span {
+                        opacity: 1;
+                    }
+                }
+            }
+
+            .level-up {
+                opacity: 1;
+                transition: opacity 0.6s;
+            }
+        }
+    }
+}

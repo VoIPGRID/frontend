@@ -1,0 +1,17 @@
+.nav {
+    &__logo {
+        padding-top: 15px;
+    }
+}
+
+.content-header {
+    padding-right: 1.5rem;
+    display: flex;
+    flex-direction: row-reverse;
+
+    a.nav-item {
+        i.fa {
+            font-size: 1.3rem;
+        }
+    }
+}

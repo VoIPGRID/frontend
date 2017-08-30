@@ -57,7 +57,7 @@ class App {
         this.initI18n()
 
         this.loadModules()
-        this.modules.main.initViewModel()
+        this.modules.general.initViewModel()
     }
 
 
@@ -69,9 +69,10 @@ class App {
         let _modules = [
             {Module: require('./modules/clients'), name: 'clients'},
             {Module: require('./modules/dashboard'), name: 'dashboard'},
+            {Module: require('./modules/modules'), name: 'modules'},
             {Module: require('./modules/partners'), name: 'partners'},
             {Module: require('./modules/users'), name: 'users'},
-            {Module: require('./modules/main'), name: 'main'},
+            {Module: require('./modules/general'), name: 'general'},
             {Module: require('./modules/phoneaccounts'), name: 'phoneaccounts'},
         ]
 

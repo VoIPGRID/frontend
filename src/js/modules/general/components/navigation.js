@@ -1,5 +1,5 @@
 module.exports = (app, actions) => {
-    const template = app.templates.main_navigation
+    const template = app.templates.general_navigation
 
     return {
         methods: {
@@ -10,6 +10,7 @@ module.exports = (app, actions) => {
                 this.user.selectedClient = {id: null, name: ''}
                 this.user.selectedPartner = {id: null, name: ''}
             },
+            logout: app.modules.users.actions.logout,
         },
         render: template.r,
         staticRenderFns: template.s,

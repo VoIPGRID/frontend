@@ -1,13 +1,13 @@
 const Module = require('../../lib/module')
 /**
- * @module main
+ * @module general
  */
 
 /**
- * The main app handles generic functionality that doesn't
+ * The general app handles generic functionality that doesn't
  * fall in a distinct category.
  */
-class MainModule extends Module {
+class GeneralModule extends Module {
     /**
      * @param {App} app - The application object.
      */
@@ -22,7 +22,7 @@ class MainModule extends Module {
 
         const Oops = Vue.component('Oops', require('./components/oops')(app))
 
-        if (!this.app.store.main) this.app.store.main = this.getObservables()
+        if (!this.app.store.general) this.app.store.general = this.getObservables()
         app.router.addRoutes([{
             component: Oops,
             name: 'oops',
@@ -34,9 +34,10 @@ class MainModule extends Module {
     * Start up the Vue viewmodel.
     */
     initViewModel() {
+        const template = this.app.templates.general_general
         const mainComponent = Vue.component('Main', {
-            render: this.app.templates.main_main.r,
-            staticRenderFns: this.app.templates.main_main.s,
+            render: template.r,
+            staticRenderFns: template.s,
             store: {
                 shouts: 'shouts',
                 user: 'user',
@@ -65,4 +66,4 @@ class MainModule extends Module {
 }
 
 
-module.exports = MainModule
+module.exports = GeneralModule

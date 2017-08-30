@@ -1,9 +1,10 @@
 module.exports = function(app) {
     /**
-     * @memberof module:main
+     * @memberof module:modules
      * @namespace
      */
     let actions = {}
+
 
     return actions
 }

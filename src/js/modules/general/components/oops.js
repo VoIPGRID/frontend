@@ -1,5 +1,5 @@
 module.exports = (app) => {
-    const template = app.templates.main_oops
+    const template = app.templates.general_oops
 
     /**
      * @memberof module:partners

@@ -39,7 +39,7 @@ class ClientsModule extends Module {
                 breadcrumb: 'Clients',
             },
             name: 'list_clients',
-            path: '/partners/:partner_id/clients/:client_id?',
+            path: '/partners/:partner_id',
         }])
 
         app.router.addRoutes([{

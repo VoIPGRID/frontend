@@ -1,0 +1,39 @@
+/**
+* Triangle helper mixin
+* @param {Direction} $direction - Triangle direction, either `top`, `right`, `bottom` or `left`
+* @param {Color} $color [currentcolor] - Triangle color
+* @param {Length} $size [1em] - Triangle size
+*/
+@mixin triangle($direction, $color: #f00, $size: 1em) {
+    border: solid transparent;
+    border-width: $size;
+    pointer-events: none;
+
+    @if not index(top right bottom left, $direction) {
+        @error "Direction must be either `top`, `right`, `bottom` or `left`.";
+    }
+        width: 0;
+        height: 0;
+        content: '';
+
+        $perpendicular-borders: $size solid transparent;
+
+    @if $direction == top or $direction == bottom {
+        border-left: $perpendicular-borders;
+        border-right: $perpendicular-borders;
+        @if $direction == top {
+            border-bottom-color: $color;
+        } @else if $direction == bottom {
+            border-top-color: $color;
+        }
+
+    } @else if $direction == right or $direction == left {
+        border-bottom: $perpendicular-borders;
+        border-top: $perpendicular-borders;
+        @if $direction == right {
+            border-left-color: $color;
+        } @else if $direction == left {
+            border-right-color: $color;
+        }
+    }
+}

@@ -1,6 +1,18 @@
-$default-bg: #f6f7fb;
-$default-border-color: #dbdbdb;
-$default-text-color: #2A3042;
+$vg-bg-light-color: #f6f7fb;
+$vg-bg-dark-color: #2A3042;
+$vg-bg-darker-color: #202532;
+
+$vg-border-light-color: #dbdbdb;
+$vg-border-dark-color: #3a425b;
+
+$vg-text-light-color: rgba(255,255,255, 1);
+$vg-text-light-disabled-color: rgba(255,255,255, 0.8);
+$vg-text-dark-color: rgba(255,255,255,0.4);
+$vg-text-dark-disabled-color: rgba(255,255,255,0.2);
+$vg-text-darker-color: #2A3042;
+
+$vg-accent-color: #f05a28;
+
 
 // Bulma overrides.
-$primary: #f05a28;
+$primary: $vg-accent-color;

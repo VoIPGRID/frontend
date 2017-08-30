@@ -26,7 +26,7 @@
             <tr v-for="client in clients.results">
                 <td>
                     <router-link @click.native="selectClientContext(client)"
-                        :to="{name: 'list_clients', params: {partner_id: $route.params.partner_id, client_id: client.id}}">
+                        :to="{name: 'dashboard_home', params: {partner_id: $route.params.partner_id, client_id: client.id}}">
                         {{client.name}}
                     </router-link>
                 </td>
