@@ -9,4 +9,6 @@ if (location && location.hostname === 'localhost') {
     apiRoot = LOCALHOST;
 }
 
-export const API_ROOT = apiRoot;
+const API_ROOT = apiRoot;
+
+export { API_ROOT as default }

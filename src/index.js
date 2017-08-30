@@ -6,22 +6,22 @@ import ReduxPromise from 'redux-promise';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { IntlProvider } from 'react-redux-multilingual'
 
-import PrivateRoute from 'base/PrivateRoute';
+import PrivateRoute from './components/base/PrivateRoute';
 
-import reducers from 'base';
-import Login from 'base/Login';
-import PartnerList from 'partners/PartnerList';
-import PartnerForm from 'partners/PartnerForm';
-import ClientForm from 'clients/ClientForm';
+import reducers from './components/base';
+import Login from './components/base/Login';
+import PartnerList from './components/partners/PartnerList';
+import PartnerForm from './components/partners/PartnerForm';
+import ClientForm from './components/clients/ClientForm';
 
-import ClientList from 'clients/ClientList';
-import ClientUserList from 'clients/admin_modules/users/ClientUserList';
-import VoipAccounts from 'clients/admin_modules/voip_accounts/VoipAccounts';
-import ClientAdmin from 'clients/ClientAdmin';
-import Navigation from 'base/Navigation';
-import Header from 'base/Header';
+import ClientList from './components/clients/ClientList';
+import ClientUserList from './components/clients/admin_modules/users/ClientUserList';
+import VoipAccounts from './components/clients/admin_modules/voip_accounts/VoipAccounts';
+import ClientAdmin from './components/clients/ClientAdmin';
+import Navigation from './components/base/Navigation';
+import Header from './components/base/Header';
 
-import UserProfileForm from './users/UserProfileForm';
+import UserProfileForm from './components/users/UserProfileForm';
 import translations from './translations/translations'
 
 import './assets/style/base.scss';
@@ -31,11 +31,12 @@ import './assets/vendor/fontawesome/css/font-awesome-solid.css';
 
 const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
 
-const store = createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const store = createStoreWithMiddleware(
+    reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 store.dispatch({
+    locale: window.__STORE__.user.language,
     type: 'SET_LOCALE',
-    locale: window.__STORE__.user.language
 })
 
 ReactDOM.render(
@@ -54,7 +55,10 @@ ReactDOM.render(
                                 <PrivateRoute path="/clients/:clientId/admin/" component={ClientAdmin} />
                                 <PrivateRoute path="/clients/:clientId/phoneaccount/" component={VoipAccounts} />
                                 <PrivateRoute path="/clients/:clientId/users/" component={ClientUserList} />
-                                <PrivateRoute path="/partners/:partnerId/clients/:clientId/edit"  component={ClientForm} />
+                                <PrivateRoute
+                                    path="/partners/:partnerId/clients/:clientId/edit"
+                                    component={ClientForm}
+                                />
                                 <PrivateRoute path="/partners/:partnerId/edit" component={PartnerForm} />
                                 <PrivateRoute path="/partners/:partnerId/clients/" component={ClientList} />
                                 <PrivateRoute exact path="/partners" component={PartnerList} />
