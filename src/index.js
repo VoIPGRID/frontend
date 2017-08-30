@@ -15,7 +15,7 @@ import PartnerForm from 'partners/PartnerForm';
 import ClientForm from 'clients/ClientForm';
 
 import ClientList from 'clients/ClientList';
-import ClientUserList from 'clients/admin_modules/ClientUserList';
+import ClientUserList from 'clients/admin_modules/users/ClientUserList';
 import VoipAccounts from 'clients/admin_modules/voip_accounts/VoipAccounts';
 import ClientAdmin from 'clients/ClientAdmin';
 import Navigation from 'base/Navigation';
@@ -35,12 +35,12 @@ const store = createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENS
 
 store.dispatch({
     type: 'SET_LOCALE',
-    locale: window.__INITIAL_STATE__.language
+    locale: window.__STORE__.user.language
 })
 
 ReactDOM.render(
     <Provider store={store}>
-        <IntlProvider translations={translations} locale='nl'>
+        <IntlProvider translations={translations} locale={window.__STORE__.user.language}>
             <BrowserRouter>
                 <div className="base-body">
                     <Header />
@@ -57,12 +57,8 @@ ReactDOM.render(
                                 <PrivateRoute path="/partners/:partnerId/clients/:clientId/edit"  component={ClientForm} />
                                 <PrivateRoute path="/partners/:partnerId/edit" component={PartnerForm} />
                                 <PrivateRoute path="/partners/:partnerId/clients/" component={ClientList} />
-
-                                <PrivateRoute path="/partners" component={PartnerList} />
-
-                                <PrivateRoute path="/clients" component={ClientList} />
-
-
+                                <PrivateRoute exact path="/partners" component={PartnerList} />
+                                <PrivateRoute exact path="/clients" component={ClientList} />
                                 <PrivateRoute path="/user/personal_settings" component={UserProfileForm} />
                             </Switch>
                         </div>

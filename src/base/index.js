@@ -7,13 +7,13 @@ import VoipAccountsReducer from 'clients/admin_modules/voip_accounts/VoipAccount
 import PartnerReducer from 'partners/PartnerReducer';
 import UserReducer from '../users/UserReducer';
 
-import loginReducer from 'base/LoginReducer';
+import baseReducer from 'base/BaseReducer';
 
 const rootReducer = combineReducers({
     clients: ClientReducer,
     partners: PartnerReducer,
     form: formReducer,
-    auth: loginReducer,
+    base: baseReducer,
     user: UserReducer,
     Intl: Intl,
     voipaccounts: VoipAccountsReducer

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
-import { loginUser } from './LoginActions';
+import { loginUser } from './BaseActions';
 
 class Login extends Component {
 
@@ -23,7 +23,7 @@ class Login extends Component {
         const values = {
             email: this.state.email,
             password: this.state.password,
-            xcsrftoken: window.__INITIAL_STATE__.csrf
+            xcsrftoken: window.__STORE__.user.csrf
         };
 
         e.preventDefault();
@@ -36,7 +36,7 @@ class Login extends Component {
             if(response.payload.data.authenticated === false) {
                 this.setState({error: 'wrong_creds'});
             } else {
-                window.__INITIAL_STATE__ = response.payload.data;
+                window.__STORE__.user = response.payload.data;
                 this.props.history.push('/partners');
             }
         } else {
@@ -87,5 +87,3 @@ class Login extends Component {
 }
 
 export default connect(null, {loginUser})(Login);
-
-// export default Login;

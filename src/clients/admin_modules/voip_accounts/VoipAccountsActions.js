@@ -5,14 +5,14 @@ export const GET_VOIPACCOUNTS = 'GET_VOIPACCOUNTS';
 export const GET_VOIPACCOUNT = 'GET_VOIPACCOUNT';
 export const FORM_ERROR = 'FORM_ERROR';
 
-import { AUTH_FAILED} from '../../../base/LoginActions';
+import { AUTH_FAILED} from '../../../base/BaseActions';
 
 export async function getVoipAccounts(clientId) {
     const url = `${API_ROOT}/clients/${clientId}/phoneaccounts/`;
 
     try {
         const request = await axios.create({
-            headers: {'X-CSRFToken': window.__INITIAL_STATE__.csrf},
+            headers: {'X-CSRFToken': window.__STORE__.user.csrf},
             timeout: 3000,
             withCredentials: true,
         });
@@ -36,7 +36,7 @@ export async function getVoipAccount(clientId, voipAccountId) {
 
     try {
         const request = await axios.create({
-            headers: {'X-CSRFToken': window.__INITIAL_STATE__.csrf},
+            headers: {'X-CSRFToken': window.__STORE__.user.csrf},
             timeout: 3000,
             withCredentials: true,
         });

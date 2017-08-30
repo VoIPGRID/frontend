@@ -9,7 +9,7 @@ export const DELETE_USER = 'DELETE_USER';
 export const EMPTY_USER = 'EMPTY_USER';
 export const FORM_ERROR = 'FORM_ERROR';
 
-import { AUTH_FAILED} from '../base/LoginActions';
+import { AUTH_FAILED} from '../base/BaseActions';
 
 export async function getUsers(clientId) {
     let url;
@@ -22,7 +22,7 @@ export async function getUsers(clientId) {
 
     try {
         const request = await axios.create({
-            headers: {'X-CSRFToken': window.__INITIAL_STATE__.csrf},
+            headers: {'X-CSRFToken': window.__STORE__.user.csrf},
             timeout: 3000,
             withCredentials: true,
         });
@@ -42,13 +42,13 @@ export async function getUsers(clientId) {
 }
 
 export async function getUser() {
-    const partnerId = window.__INITIAL_STATE__.partner.id;
-    const userId = window.__INITIAL_STATE__.id;
+    const partnerId = window.__STORE__.user.partner.id;
+    const userId = window.__STORE__.user.id;
     const url = `${API_ROOT}/partners/${partnerId}/users/${userId}`;
 
     try {
         const request = await axios.create({
-            headers: {'X-CSRFToken': window.__INITIAL_STATE__.csrf},
+            headers: {'X-CSRFToken': window.__STORE__.user.csrf},
             timeout: 3000,
             withCredentials: true,
         });
@@ -68,14 +68,14 @@ export async function getUser() {
 }
 
 export async function updateUser(values) {
-    const partnerId = window.__INITIAL_STATE__.partner.id;
-    const userId = window.__INITIAL_STATE__.id;
+    const partnerId = window.__STORE__.user.partner.id;
+    const userId = window.__STORE__.user.id;
     const url = `${API_ROOT}/partners/${partnerId}/users/${userId}`;
 
     const request = await axios.create({
         headers: {
             Accept: 'application/json',
-            'X-CSRFToken': window.__INITIAL_STATE__.csrf
+            'X-CSRFToken': window.__STORE__.user.csrf
         },
         timeout: 3000,
         withCredentials: true,

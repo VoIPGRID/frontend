@@ -9,14 +9,14 @@ export const DELETE_PARTNER = 'DELETE_PARTNER';
 export const EMPTY_PARTNER = 'EMPTY_PARTNER';
 export const FORM_ERROR = 'FORM_ERROR';
 
-import { AUTH_FAILED} from '../base/LoginActions';
+import { AUTH_FAILED} from '../base/BaseActions';
 
 export async function getPartners(searchString = '') {
     const url = `${API_ROOT}/partners/`;
 
     try {
         const request = await axios.create({
-            headers: {'X-CSRFToken': window.__INITIAL_STATE__.csrf},
+            headers: {'X-CSRFToken': window.__STORE__.user.csrf},
             timeout: 3000,
             withCredentials: true,
         });
@@ -41,7 +41,7 @@ export async function createPartner(values) {
     const request = await axios.create({
         headers: {
             Accept: 'application/json',
-            'X-CSRFToken': window.__INITIAL_STATE__.csrf
+            'X-CSRFToken': window.__STORE__.user.csrf
         },
         timeout: 3000,
         withCredentials: true,
@@ -74,7 +74,7 @@ export async function getPartner(id) {
 
     try {
         const request = await axios.create({
-            headers: {'X-CSRFToken': window.__INITIAL_STATE__.csrf},
+            headers: {'X-CSRFToken': window.__STORE__.user.csrf},
             timeout: 3000,
             withCredentials: true,
         });
@@ -100,7 +100,7 @@ export async function updatePartner(values) {
     const request = await axios.create({
         headers: {
             Accept: 'application/json',
-            'X-CSRFToken': window.__INITIAL_STATE__.csrf
+            'X-CSRFToken': window.__STORE__.user.csrf
         },
         timeout: 3000,
         withCredentials: true,

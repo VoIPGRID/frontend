@@ -1,4 +1,4 @@
-@import "./variables.scss";
+@import './variables';
 @import '~react-table/react-table.css';
 
 
@@ -13,6 +13,10 @@
 
 .ReactTable .rt-thead .rt-th, .ReactTable .rt-thead .rt-td {
     border-bottom: 2px #e6e7eb solid;
+
+    &:hover {
+        border-bottom: 2px solid $primary;
+    }
 }
 
 .ReactTable .rt-thead .rt-th.-sort-desc, .ReactTable .rt-thead .rt-td.-sort-desc {
@@ -34,10 +38,11 @@
 }
 
 .ReactTable .rt-th, .ReactTable .rt-td {
-    padding: 0;
+    padding: 5px 10px;
 }
 
-.rt-td a, .rt-td button.is-link {
+.rt-td a,
+.rt-td button.is-link {
     color: #2A3042;
 
     &:hover {
@@ -68,4 +73,12 @@ a.table--link {
 
 .rt-td:first-child {
     padding-left: 5px;
+}
+
+.ReactTable .rt-tbody .rt-tr-group {
+    border-bottom: none;
+}
+
+.rt-tbody {
+    background-color: $white;
 }

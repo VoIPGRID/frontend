@@ -13,7 +13,7 @@ const PrivateRoute = ({ component: Component, auth, ...rest }) => (
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        auth: state.auth.auth
+        auth: state.base.auth
     }
 };
 

@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { getVoipAccounts } from './VoipAccountsActions'
+import { getVoipAccounts } from './VoipAccountsActions';
+
+import Table from '../../../helpers/Table';
 
 
 class VoipAccounts extends Component {
@@ -11,29 +13,20 @@ class VoipAccounts extends Component {
         this.props.getVoipAccounts(clientId);
     }
 
-    renderTable() {
-        let table = <tr><td colSpan="6">No VoIP accounts</td></tr>
-
-        if (this.props.voipaccounts.length) {
-            table = this.props.voipaccounts.map(voipaccount => {
-                return (
-                    <tr key={voipaccount.account_id}>
-                        <td>{voipaccount.description}</td>
-                        <td>{voipaccount.account_id}</td>
-                    </tr>
-                )
-            });
-        }
-
-        return table;
-    }
-
     render() {
-        if (!this.props.voipaccounts) {
+        if (!this.props.voipaccounts.length) {
             return (
                 <div>Loading...</div>
             )
         }
+
+        const columns = [{
+            Header: 'Description',
+            accessor: 'description',
+        }, {
+            Header: 'Account ID',
+            accessor: 'account_id',
+        }]
 
         return (
             <div>
@@ -43,19 +36,7 @@ class VoipAccounts extends Component {
                     <Link className="button is-primary is-pulled-right" to="phoneaccount/add">Add</Link>
                 </div>
 
-                <table className="table is-bordered is-striped">
-                    <tbody>
-                        <tr>
-
-                            <th>Description</th>
-                            <th>Account ID</th>
-                        </tr>
-                    </tbody>
-
-                    <tbody>
-                        {this.renderTable()}
-                    </tbody>
-                </table>
+                <Table data={this.props.voipaccounts} columns={columns} defaultLength={this.props.voipaccounts.length} />
             </div>
         );
     }

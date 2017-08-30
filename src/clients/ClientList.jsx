@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { getClients, updateClient, deleteClient } from './ClientActions'
+import { getClients, updateClient, deleteClient } from './ClientActions';
+import { setContext } from '../base/BaseActions';
 
 import Table from '../helpers/Table';
 
@@ -10,6 +11,11 @@ import Table from '../helpers/Table';
 class ClientList extends Component {
     componentDidMount() {
         const { partnerId } = this.props.match.params;
+
+        if(partnerId) {
+            this.props.setContext({'type': 'partner', 'id': partnerId});
+        }
+
         this.props.getClients(partnerId);
     }
 
@@ -71,4 +77,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { getClients, updateClient, deleteClient })(ClientList);
+export default connect(mapStateToProps, { getClients, updateClient, deleteClient, setContext })(ClientList);

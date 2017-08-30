@@ -2,18 +2,24 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import Table from '../../helpers/Table';
+import Table from '../../../helpers/Table';
 
-import { getUsers, deleteUser } from '../../users/UserActions'
+import { getUsers, deleteUser } from '../../../users/UserActions'
 
 
 class ClientUserList extends Component {
-    componentDidMount() {
+    async componentDidMount() {
         const { clientId } = this.props.match.params;
-        this.props.getUsers(clientId);
+        await this.props.getUsers(clientId);
     }
 
     render() {
+        // if (!this.props.users) {
+        //     return (
+        //         <div>No users</div>
+        //     )
+        // }
+
         if (!this.props.users.length) {
             return (
                 <div>Loading...</div>

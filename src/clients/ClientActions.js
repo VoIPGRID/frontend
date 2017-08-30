@@ -8,7 +8,7 @@ export const GET_CLIENT = 'GET_CLIENT';
 export const UPDATE_CLIENT = 'UPDATE_CLIENT';
 export const DELETE_CLIENT = 'DELETE_CLIENT';
 
-import { AUTH_FAILED} from '../base/LoginActions';
+import { AUTH_FAILED} from '../base/BaseActions';
 
 export async function getClients(partner = null) {
     let url;
@@ -21,7 +21,7 @@ export async function getClients(partner = null) {
 
     try {
         const request = await axios.create({
-            headers: {'X-CSRFToken': window.__INITIAL_STATE__.csrf},
+            headers: {'X-CSRFToken': window.__STORE__.user.csrf},
             timeout: 3000,
             withCredentials: true,
         });
@@ -57,7 +57,7 @@ export async function getClient(id) {
 
     try {
         const request = await axios.create({
-            headers: {'X-CSRFToken': window.__INITIAL_STATE__.csrf},
+            headers: {'X-CSRFToken': window.__STORE__.user.csrf},
             timeout: 3000,
             withCredentials: true,
         });

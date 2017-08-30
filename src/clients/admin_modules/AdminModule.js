@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './AdminModule.scss';
+import '../../assets/style/AdminModule.scss';
 
 const AdminModule = (props) => (
     <div className="column admin--module">

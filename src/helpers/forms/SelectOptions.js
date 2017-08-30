@@ -7,7 +7,7 @@ export async function getSelectOptions(type, idReplacement) {
 
     try {
         const request = await axios.create({
-            headers: {'X-CSRFToken': window.__INITIAL_STATE__.csrf},
+            headers: {'X-CSRFToken': window.__STORE__.user.csrf},
             timeout: 3000,
             withCredentials: true,
         });

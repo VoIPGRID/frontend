@@ -5,7 +5,8 @@ import { withTranslate } from 'react-redux-multilingual'
 
 import Table from '../helpers/Table';
 
-import { getPartners, updatePartner, deletePartner } from './PartnerActions'
+import { getPartners, updatePartner, deletePartner } from './PartnerActions';
+import { setContext } from '../base/BaseActions';
 
 
 class PartnerList extends Component {
@@ -18,10 +19,10 @@ class PartnerList extends Component {
 
     componentDidMount() {
         this.props.getPartners();
+        this.props.setContext({'type': 'partner', 'id': null});
     }
 
     render() {
-
         const { translate } = this.props;
 
         if (!this.props.partners) {
@@ -29,8 +30,6 @@ class PartnerList extends Component {
                 <div>{translate('Loading')}...</div>
             )
         }
-
-        console.log(this.props.partners)
 
         const columns = [{
             Header: 'Name',
@@ -54,7 +53,7 @@ class PartnerList extends Component {
         return (
             <div>
                 <div className="list-header is-clearfix">
-                    {translate('All partners')} ({this.props.partners.length})
+                    <h2 className="subtitle">{translate('All partners')} ({this.props.partners.length})</h2>
 
                     <Link className="button is-primary is-pulled-right" to="/partners/create">{translate('Add')}</Link>
                 </div>
@@ -80,7 +79,7 @@ function mapStateToProps({ partners }) {
 }
 
 
-PartnerList = connect(mapStateToProps, { getPartners, updatePartner, deletePartner })(PartnerList);
+PartnerList = connect(mapStateToProps, { getPartners, updatePartner, deletePartner, setContext })(PartnerList);
 
 PartnerList = withTranslate(PartnerList);
 
