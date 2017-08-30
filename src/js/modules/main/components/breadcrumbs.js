@@ -10,6 +10,9 @@ module.exports = (app, actions) => {
             },
         },
         methods: {
+            deselectClient() {
+                this.user.selectedClient = {id: null, name: ''}
+            },
             // Return the correct prop data
             linkProp: function(crumb) {
                 // If it's a named route, we'll base the route

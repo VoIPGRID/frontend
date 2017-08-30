@@ -1,11 +1,17 @@
 <nav class="breadcrumbs">
     <ul>
-        <li v-if="user.selectedPartner.id">
-            {{user.selectedPartner.name}}
-        </li>
-        <li v-if="user.selectedClient.id">
-            {{user.selectedClient.name}}
-        </li>
+        <router-link v-if="user.selectedClient.id" :to="{name: 'list_clients', params: {partner_id: user.selectedPartner.id}}" exact>
+            <i class="item-level-up item-icon fa fa-level-up" @click="deselectClient"></i>
+            <i class="item-icon fa fa-group"></i>
+            <span class="item-text">{{user.selectedClient.name}}</span>
+        </router-link>
+
+        <router-link v-else-if="user.selectedPartner.id" :to="{name: 'list_clients', params: {partner_id: user.selectedPartner.id}}">
+            <i class="item-icon fa fa-group"></i>
+            <span class="item-text">{{$t('Clients')}}</span>
+        </router-link>
+
+
         <li v-for="crumb in breadcrumbs">
             {{$t(crumb)}}
         </li>

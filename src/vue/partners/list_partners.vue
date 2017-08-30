@@ -22,7 +22,7 @@
         <tbody>
             <tr v-for="partner in partners.results">
                 <td>
-                    <router-link @click.native="selectPartnerContext(partner)" :to="{name: 'list_partners', params: {partner_id: partner.id}}">{{partner.name}}</router-link>
+                    <router-link @click.native="selectPartnerContext(partner)" :to="{name: 'list_clients', params: {partner_id: partner.id}}">{{partner.name}}</router-link>
                 </td>
                 <td>{{partner.description}}</td>
                 <td>

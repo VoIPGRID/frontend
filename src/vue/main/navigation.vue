@@ -3,97 +3,64 @@
         <img src="/public/img/logo.png" alt="VoIPGRID logo">
     </a>
 
-    <ul class="context-selector">
-        <li>
-            <router-link v-if="user.selectedPartner.id" :to="{name: 'list_partners', params: {partner_id: user.selectedPartner.id}}" exact>
-                <i class="item-level-up item-icon fa fa-level-up" @click="deselectPartner"></i>
-                <i class="item-icon fa fa-handshake-o"></i>
-                <span class="item-text">{{user.selectedPartner.name}}</span>
-            </router-link>
-            <router-link v-else-if="user.superuser || (user.partner && user.partner.may_have_children)" to="/partners">
-                <i class="item-icon fa fa-handshake-o"></i>
-                <span class="item-text">{{$t('Partners')}}</span>
-            </router-link>
-        </li>
+    <div class="context-selector nav-item-container">
+        <router-link class="nav-item" v-if="user.selectedPartner.id" :to="{name: 'list_partners', params: {partner_id: user.selectedPartner.id}}" exact>
+            <i class="level-up fa fa-level-up" @click="deselectPartner"></i>
+            <i class="fa fa-handshake-o"></i>
+            <span>{{user.selectedPartner.name}}</span>
+        </router-link>
+        <router-link class="nav-item" v-else-if="user.superuser || (user.partner && user.partner.may_have_children)" to="/partners">
+            <i class="fa fa-handshake-o"></i>
+            <span>{{$t('Partners')}}</span>
+        </router-link>
+    </div>
 
-        <li>
-            <router-link v-if="user.selectedClient.id" :to="{name: 'list_clients', params: {partner_id: user.selectedPartner.id}}" exact>
-                <i class="item-level-up item-icon fa fa-level-up" @click="deselectClient"></i>
-                <i class="item-icon fa fa-group"></i>
-                <span class="item-text">{{user.selectedClient.name}}</span>
-            </router-link>
+    <div class="nav-item-container" v-if="user.selectedPartner.id && !user.selectedClient.id">
+        <router-link class="nav-item" :to="{name: 'list_partner_users', params: {partner_id: user.selectedPartner.id}}">
+            <i class="fa fa-address-book"></i>
+            <span>{{$t('Users')}}</span>
+        </router-link>
 
-            <router-link v-else-if="user.selectedPartner.id" :to="{name: 'list_clients', params: {partner_id: user.selectedPartner.id}}">
-                <i class="item-icon fa fa-group"></i>
-                <span class="item-text">{{$t('Clients')}}</span>
-            </router-link>
-        </li>
-    </ul>
+        <router-link class="nav-item disabled" to="/" exact>
+            <i class="fa fa-comments"></i>
+            <span>{{$t('Calls')}}</span>
+        </router-link>
+    </div>
 
-    <ul v-if="user.selectedPartner.id && !user.selectedClient.id">
-        <li>
-            <router-link :to="{name: 'list_partner_users', params: {partner_id: user.selectedPartner.id}}">
-                <i class="item-icon fa fa-address-book"></i>
-                <span class="item-text">{{$t('Users')}}</span>
-            </router-link>
-        </li>
+    <div class="nav-item-container" v-else-if="user.selectedClient.id">
+        <router-link class="nav-item disabled" to="/administration" exact>
+            <i class="fa fa-money"></i>
+            <span>{{$t('Administration')}}</span>
+        </router-link>
 
-        <li class="disabled">
-            <router-link to="/" exact>
-                <i class="item-icon fa fa-comments"></i>
-                <span class="item-text">{{$t('Calls')}}</span>
-            </router-link>
-        </li>
+        <router-link class="nav-item" :to="{name: 'list_phoneaccounts', params: {partner_id: user.selectedPartner.id, client_id: user.selectedClient.id}}">
+            <i class="fa fa-phone"></i>
+            <span>{{$t('VoIP accounts')}}</span>
+        </router-link>
 
-    </ul>
-    <ul v-else-if="user.selectedClient.id">
-        <li class="disabled">
-            <router-link to="/administration" exact>
-                <i class="item-icon fa fa-money"></i>
-                <span class="item-text">{{$t('Administration')}}</span>
-            </router-link>
-        </li>
+        <router-link class="nav-item" :to="{name: 'list_client_users', params: {partner_id: user.selectedPartner.id, client_id: user.selectedClient.id}}">
+            <i class="fa fa-address-book"></i>
+            <span>{{$t('Users')}}</span>
+        </router-link>
 
-        <li>
-            <router-link :to="{name: 'list_phoneaccounts', params: {partner_id: user.selectedPartner.id, client_id: user.selectedClient.id}}">
-                <i class="item-icon fa fa-phone"></i>
-                <span class="item-text">{{$t('VoIP accounts')}}</span>
-            </router-link>
-        </li>
+        <router-link class="nav-item disabled" to="/calls" exact>
+            <i class="fa fa-comments"></i>
+            <span>{{$t('Calls')}}</span>
+        </router-link>
 
-        <li>
-            <router-link :to="{name: 'list_client_users', params: {partner_id: user.selectedPartner.id, client_id: user.selectedClient.id}}">
-                <i class="item-icon fa fa-address-book"></i>
-                <span class="item-text">{{$t('Users')}}</span>
-            </router-link>
-        </li>
+        <router-link class="nav-item" :to="{name: 'dashboard_home', params: {partner_id: user.selectedPartner.id, client_id: user.selectedClient.id}}" exact>
+            <i class="fa vg-icon vg-icon-ivr"></i>
+            <span>{{$t('Dashboard')}}</span>
+        </router-link>
 
-        <li class="disabled">
-            <router-link to="/calls" exact>
-                <i class="item-icon fa fa-comments"></i>
-                <span class="item-text">{{$t('Calls')}}</span>
-            </router-link>
-        </li>
+        <router-link class="nav-item disabled" to="/dialplan" exact>
+            <i class="fa fa-retweet"></i>
+            <span>{{$t('Dialplan')}}</span>
+        </router-link>
 
-        <li>
-            <router-link :to="{name: 'dashboard_home', params: {partner_id: user.selectedPartner.id, client_id: user.selectedClient.id}}" exact>
-                <i class="item-icon fa vg-icon vg-icon-ivr"></i>
-                <span class="item-text">{{$t('Dashboard')}}</span>
-            </router-link>
-        </li>
-
-        <li class="disabled">
-            <router-link to="/dialplan" exact>
-                <i class="item-icon fa fa-retweet"></i>
-                <span class="item-text">{{$t('Dialplan')}}</span>
-            </router-link>
-        </li>
-
-        <li class="disabled">
-            <router-link to="/statistics" exact>
-                <i class="item-icon fa fa-signal"></i>
-                <span class="item-text">{{$t('Statistics')}}</span>
-            </router-link>
-        </li>
-    </ul>
+        <router-link class="nav-item disabled" to="/statistics" exact>
+            <i class="fa fa-signal"></i>
+            <span>{{$t('Statistics')}}</span>
+        </router-link>
+    </div>
 </nav>
