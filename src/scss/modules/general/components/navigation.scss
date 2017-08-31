@@ -48,6 +48,10 @@
 
             &.disabled {
                 color: $vg-text-dark-disabled-color;
+
+                &:hover {
+                    cursor: default;
+                }
             }
 
             // The text content of the item.
@@ -64,6 +68,7 @@
 
                 // The icon to go out of the context of a partner or client.
                 &.level-up {
+                    color: #fff;
                     font-size: 1.3rem;
                     position: absolute;
                     width: 10px;

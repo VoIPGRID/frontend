@@ -7,7 +7,6 @@ module.exports = (app, actions) => {
             const clientId = route.params.client_id
             let phoneaccountsData = await actions.readPhoneaccounts(clientId, currentPage)
             app.store.phoneaccounts.phoneaccounts = phoneaccountsData
-            app.store.breadcrumbs = []
             return phoneaccountsData
         },
         created: function() {

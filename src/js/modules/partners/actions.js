@@ -49,18 +49,20 @@ module.exports = function(app, _module) {
         // Load all results in parallel.
         const res = await Promise.all(promises)
 
-        Object.assign(context, {
-            audioLanguages: res[0].data,
-            countries: res[1].data,
-            currencies: res[2].data,
-            owners: res[3].data.results,
-            priceplanDiscounts: res[4].data,
-            systemLanguages: res[5].data,
-            timezones: res[6].data,
-        })
-
-        if (partnerId) context.partner = res[7].data
-        else context.partner = _module.getObservables().partner
+        if (formEndpoints) {
+            Object.assign(context, {
+                audioLanguages: res[0].data,
+                countries: res[1].data,
+                currencies: res[2].data,
+                owners: res[3].data.results,
+                partner: partnerId ? res[7].data : _module.getObservables().partner,
+                priceplanDiscounts: res[4].data,
+                systemLanguages: res[5].data,
+                timezones: res[6].data,
+            })
+        } else {
+            context.partner = partnerId ? res[0].data : _module.getObservables().partner
+        }
 
         return context
     }

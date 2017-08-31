@@ -6,14 +6,15 @@ module.exports = (app, actions) => {
             let currentPage = parseInt(route.query.page) || 1
             let partnersData = await actions.readPartners({page: currentPage})
             app.store.partners.partners = partnersData
-            app.store.breadcrumbs = []
             return partnersData
         },
         created: function() {
             this.partners = this.$store.partners.partners
         },
         methods: {
-            fetchData: actions.readPartners,
+            fetchData: async function(...args) {
+                this.partners = await actions.readPartners(...args)
+            },
             /**
             * Set the context for the currently selected partner and stores
             * it in a cookie to persist after page reload.
@@ -30,7 +31,6 @@ module.exports = (app, actions) => {
         render: template.r,
         staticRenderFns: template.s,
         store: {
-            breadcrumbs: 'breadcrumbs',
             partners: 'partners.partners',
         },
     })

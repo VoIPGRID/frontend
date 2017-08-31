@@ -2,9 +2,6 @@ module.exports = (app, actions) => {
     const template = app.templates.general_breadcrumbs
 
     return {
-        created: function() {
-            console.log("BLAAA", this.breadcrumbs)
-        },
         filters: {
             // Display the correct breadcrumb text
             // depending on the Vue version
@@ -34,6 +31,7 @@ module.exports = (app, actions) => {
         staticRenderFns: template.s,
         store: {
             breadcrumbs: 'breadcrumbs',
+            user: 'user',
         },
     }
 }

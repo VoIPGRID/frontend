@@ -5,16 +5,72 @@ html, body {
     font-family: "Roboto", sans-serif;
 }
 
-
 .main-content-wrapper {
     // Always show the scrollbar, so the content doesn't indent when it
     // gets too long.
     overflow-y: scroll;
-    background: #f6f7fb;
+    background: $vg-bg-light-color;
 
     .main-content {
         margin: 0 auto;
         margin-top: 1.5rem;
-        background: #f6f7fb;
+        background: $vg-bg-light-color;
+    }
+
+    // A masonry style page.
+    .vg-masonry-page {
+        padding: $vg-spacing-1;
+        column-gap: $vg-spacing-2;
+
+        &.masonry-2 {
+            column-count: 2;
+
+            @media (max-width: $desktop) {
+                column-count: 1;
+            }
+        }
+
+        &.masonry-4 {
+            @media (max-width: $widescreen) {
+                column-count: 3;
+            }
+
+            @media (min-width: $widescreen) {
+                column-count: 4;
+            }
+
+            @media (max-width: $desktop) {
+                column-count: 2;
+            }
+
+            @media (max-width: $tablet) {
+                column-count: 1;
+            }
+        }
+
+
+
+        .vg-box-wrapper {
+            width: 100%;
+            display: inline-block;
+            margin-bottom: $vg-spacing-1;
+
+            h4 {
+                font-size: 1.3rem;
+                font-weight: 300;
+                padding-bottom: $vg-spacing-05;
+            }
+            .vg-box {
+                background: #fff;
+                border: 1px solid $vg-border-light-color;
+                overflow: auto;
+            }
+        }
+    }
+
+
+
+    .content-page {
+        padding: $vg-spacing-1;
     }
 }

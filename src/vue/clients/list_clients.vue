@@ -1,4 +1,4 @@
-<div>
+<div class="content-page">
     <router-view></router-view>
 
     <div class="table-header">
@@ -26,7 +26,7 @@
             <tr v-for="client in clients.results">
                 <td>
                     <router-link @click.native="selectClientContext(client)"
-                        :to="{name: 'dashboard_home', params: {partner_id: $route.params.partner_id, client_id: client.id}}">
+                        :to="{name: 'dashboard_client', params: {partner_id: $route.params.partner_id, client_id: client.id}}">
                         {{client.name}}
                     </router-link>
                 </td>

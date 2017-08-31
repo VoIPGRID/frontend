@@ -34,11 +34,17 @@ class UsersModule extends Module {
 
         app.router.addRoutes([{
             component: AddEditUser,
+            meta: {
+                breadcrumbs: ['Users'],
+            },
             name: 'add_client_user',
             path: '/partners/:partner_id/clients/:client_id/users/add',
         }])
         app.router.addRoutes([{
             component: AddEditUser,
+            meta: {
+                breadcrumbs: ['Users'],
+            },
             name: 'add_partner_user',
             path: '/partners/:partner_id/users/add',
         }])
@@ -46,11 +52,17 @@ class UsersModule extends Module {
 
         app.router.addRoutes([{
             component: AddEditUser,
+            meta: {
+                breadcrumbs: ['Users'],
+            },
             name: 'edit_client_user',
             path: '/partners/:partner_id/clients/:client_id/users/:user_id/edit',
         }])
         app.router.addRoutes([{
             component: AddEditUser,
+            meta: {
+                breadcrumbs: ['Users'],
+            },
             name: 'edit_partner_user',
             path: '/partners/:partner_id/users/:user_id/edit',
         }])
@@ -63,6 +75,9 @@ class UsersModule extends Module {
                 path: ':user_id/delete',
             }],
             component: ListUsers,
+            meta: {
+                breadcrumbs: ['Users'],
+            },
             name: 'list_client_users',
             path: '/partners/:partner_id/clients/:client_id/users',
         }])
@@ -73,6 +88,9 @@ class UsersModule extends Module {
                 path: ':user_id/delete',
             }],
             component: ListUsers,
+            meta: {
+                breadcrumbs: ['Users'],
+            },
             name: 'list_partner_users',
             path: '/partners/:partner_id/users',
         }])

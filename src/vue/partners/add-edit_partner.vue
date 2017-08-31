@@ -1,11 +1,11 @@
-<Tabs :tabs=tabs>
+<Tabs :tabs=tabs class="content-page">
     <template slot="tablist">
         <i class="fa fa-group"></i>
-        <span v-once>{{partner.name}}</span>
+        <span>{{partner.name}}</span>
     </template>
 
     <Tab slot="tabs" :data="tabs[0]">
-        <h2 class="title">{{$t('General')}}</h2><hr/>
+        <h4>{{$t('General')}}</h4>
 
         <Field name="owner" type="select"
             :help="$t('This allows for reseller-style relationships. Unset for the system owner.')"
@@ -39,7 +39,9 @@
             :label="$t('May have children')"
             :model.sync="partner.may_have_children"/>
 
-        <h2 class="title">{{$t('Domains')}}</h2><hr/>
+        <hr/>
+
+        <h4>{{$t('Domains')}}</h4>
 
         <Field name="domain" type="text"
             :help="$t('E.g. your.hostname')"
@@ -72,21 +74,11 @@
             :model.sync="partner.wiki_base_url"
             :placeholder="$t('E.g. https://wiki.voipgrid.nl/index.php/')"
             :validation="$v.partner.wiki_base_url"/>
-
-        <h2 class="title">{{$t('Branding')}}</h2><hr/>
-
-        <Field name="favicon" type="file"
-            :help="$t('A favicon for this partner.')"
-            :label="$t('Favicon')"
-            :model.sync="partner.favicon"/>
-
-        <Field name="logo" type="file"
-            :help="$t('A logo for a custom look-and-feel for this partner.')"
-            :label="$t('Logo')"
-            :model.sync="partner.logo"/>
     </Tab>
 
     <Tab slot="tabs" :data="tabs[1]" v-if="partner.profile">
+        <h4>{{$t('Geography')}}</h4>
+
         <Field idfield="code" name="country" type="select" v-if="partner.profile.country"
             :help="$t('Select the country you operate from. When possible this country will ' +
             'be the default in other forms.')" :label="$t('Country')"
@@ -95,6 +87,16 @@
             :placeholder="$t('Select a country...')"
             :validation="$v.partner.profile.country.code"/>
 
+        <Field name="timezone" type="select" v-if="partner.profile"
+            :label="$t('Timezone')"
+            :model.sync="partner.profile.timezone"
+            :options="root.timezones"
+            :placeholder="$t('Select a timezone...')"
+            :validation="$v.partner.profile.timezone"/>
+
+        <hr/>
+
+        <h4>{{$t('Language')}}</h4>
         <Field name="audio_language" type="select"
             :help="$t('Select the language/voice that is used as default for messages ' +
             'played in modules.')" :label="$t('Audio language')"
@@ -111,15 +113,22 @@
             :placeholder="$t('Select a system language...')"
             :validation="$v.partner.profile.system_language"/>
 
-        <Field name="timezone" type="select" v-if="partner.profile"
-            :label="$t('Timezone')"
-            :model.sync="partner.profile.timezone"
-            :options="root.timezones"
-            :placeholder="$t('Select a timezone...')"
-            :validation="$v.partner.profile.timezone"/>
+        <hr/>
     </Tab>
 
     <Tab slot="tabs" :data="tabs[2]">
+        <h4>{{$t('Branding')}}</h4>
+
+        <Field name="favicon" type="file"
+            :help="$t('A favicon for this partner.')"
+            :label="$t('Favicon')"
+            :model.sync="partner.favicon"/>
+
+        <Field name="logo" type="file"
+            :help="$t('A logo for a custom look-and-feel for this partner.')"
+            :label="$t('Logo')"
+            :model.sync="partner.logo"/>
+
         <Field name="branding" type="checkbox"
             :click="toggleBranding"
             :label="$t('Use custom branding')"
@@ -166,6 +175,7 @@
     </Tab>
 
     <Tab slot="tabs" :data="tabs[3]" v-if="partner.billingprofile">
+        <h4>{{$t('Billing')}}</h4>
         <Field name="currency" namefield="code" type="select"
             :label="$t('Currency')"
             :model.sync="partner.billingprofile.currency"

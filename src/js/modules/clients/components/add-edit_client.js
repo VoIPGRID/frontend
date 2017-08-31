@@ -9,6 +9,7 @@ module.exports = (app, actions) => {
             Object.assign(app.store.clients, clientData)
         },
         created: function() {
+            // selectedClient kicks in on the breadcrumb, so just keep it empty.
             this.client = this.$store.clients.client
 
             this.tabs = [

@@ -1,4 +1,4 @@
-<div>
+<div class="content-page">
     <router-view></router-view>
 
     <div class="table-header">

@@ -1,10 +1,10 @@
-<div>
+<div class="content-page">
     <router-view></router-view>
     <div class="table-header">
         <div class="table-header-title">{{$t('Partners')}} ({{partners.count}})</div>
         <div class="is-grouped is-pulled-right field is-grouped">
             <p class="control">
-                <router-link class="button is-primary" to="/partners/add/">
+                <router-link class="button is-primary" :to="{name: 'add_partner'}">
                     <span class="icon"><i class="fa fa-plus"></i></span>
                     <span>{{$t('Add Partner')}}</span>
                 </router-link>

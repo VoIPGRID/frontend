@@ -12,7 +12,6 @@ module.exports = (app, actions) => {
     return {
         asyncData: async function(route) {
             let partnerData = await actions.readPartner(route.params.partner_id)
-            app.store.breadcrumbs = []
             Object.assign(app.store.partners, partnerData)
         },
         computed: {

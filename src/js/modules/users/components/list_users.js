@@ -15,7 +15,6 @@ module.exports = (app, actions) => {
             })
 
             app.store.users.users = usersData
-            app.store.breadcrumbs = ['Users']
             return usersData
         },
         computed: {

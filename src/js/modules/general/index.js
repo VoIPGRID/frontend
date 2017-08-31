@@ -34,7 +34,7 @@ class GeneralModule extends Module {
     * Start up the Vue viewmodel.
     */
     initViewModel() {
-        const template = this.app.templates.general_general
+        const template = this.app.templates.general_main
         const mainComponent = Vue.component('Main', {
             render: template.r,
             staticRenderFns: template.s,

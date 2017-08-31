@@ -1,11 +1,12 @@
-<Tabs :tabs=tabs>
+<Tabs :tabs=tabs class="content-page">
+
     <template slot="tablist">
         <i class="fa fa-user"></i>
         <span>{{fullName}}</span>
     </template>
 
     <Tab slot="tabs" :data="tabs[0]">
-        <h2 class="title">{{$t('Personal')}}</h2><hr/>
+        <h4>{{$t('Personal')}}</h4>
 
         <Field name="first_name" type="text"
             :label="$t('First name')"
@@ -25,27 +26,10 @@
             :label="$t('Email address')"
             :model.sync="user.email"
             :validation="$v.user.email"/>
-
-        <h2 class="title">{{$t('Password')}}</h2><hr/>
-
-        <Field name="old_password" type="password" v-if="isProfile"
-            :label="$t('Old password')"
-            :model.sync="user.old_password"
-            :validation="$v.user.old_password"/>
-
-        <Field name="password" type="password"
-            :help="$t('Password should have at least 6 characters and 1 non-alphabetical character.')"
-            :label="$t('Password')"
-            :model.sync="user.password"
-            :validation="$v.user.password"/>
-
-        <Field name="password_confirm" type="password"
-            :label="$t('Password confirmation')"
-            :model.sync="user.password_confirm"
-            :validation="$v.user.password_confirm"/>
     </Tab>
 
     <Tab slot="tabs" :data="tabs[1]">
+        <h4>{{$t('Interface settings')}}</h4>
         <Field name="language" type="select"
             :label="$t('Preferred language')"
             :model.sync="user.profile.language"
@@ -85,16 +69,7 @@
                         Fixed Destination
                     </td>
                     <td class="table-actions">
-                        <router-link :to="{name: 'edit_client', params: {client_id: user.client.id}}">
-                            <span class="icon">
-                                <i class="fa fa-edit"></i>
-                            </span>
-                        </router-link>
-                        <router-link :to="{name: 'delete_client', params: {client_id: user.client.id}, query: $router.currentRoute.query}">
-                            <span class="icon">
-                                <i class="fa fa-remove"></i>
-                            </span>
-                        </router-link>
+
                     </td>
                 </tr>
             </tbody>
@@ -102,15 +77,35 @@
     </Tab>
 
     <Tab slot="tabs" :data="tabs[3]">
+        <h4>{{$t('Password')}}</h4>
+
+        <Field name="old_password" type="password" v-if="isProfile"
+            :label="$t('Old password')"
+            :model.sync="user.old_password"
+            :validation="$v.user.old_password"/>
+
+        <Field name="password" type="password"
+            :help="$t('Password should have at least 6 characters and 1 non-alphabetical character.')"
+            :label="$t('Password')"
+            :model.sync="user.password"
+            :validation="$v.user.password"/>
+
+        <Field name="password_confirm" type="password"
+            :label="$t('Password confirmation')"
+            :model.sync="user.password_confirm"
+            :validation="$v.user.password_confirm"/>
         <Field name="session_expiry" type="checkbox"
             :label="$t('Log out after 10 minutes')"
             :model.sync="user.session_expiry"/>
+        <hr/>
 
+        <h4>{{$t('Permissions')}}</h4>
         <Field name="groups" type="multiselect" :label="$t('Member of permission groups')"
             :help="$t('Select at least one group.')"
             :model.sync="user.groups"
             :options="groups"
             :placeholder="$t('Disable call permissions...')"/>
+
     </Tab>
 
     <template slot="controls">

@@ -49,19 +49,21 @@ module.exports = function(app, _module) {
         if (clientId) promises.push(app.api.client.get(`clients/${clientId}/`))
         const res = await Promise.all(promises)
 
-        Object.assign(context, {
-            anonymizeAfter: res[0].data,
-            audioLanguages: res[1].data,
-            blockedCallPermissions: res[2].data,
-            countries: res[3].data,
-            currencies: res[4].data,
-            owners: res[5].data.results,
-            systemLanguages: res[6].data,
-            timezones: res[7].data,
-        })
-
-        if (clientId) context.client = res[8].data
-        else context.client = _module.getObservables().client
+        if (formEndpoints) {
+            Object.assign(context, {
+                anonymizeAfter: res[0].data,
+                audioLanguages: res[1].data,
+                blockedCallPermissions: res[2].data,
+                client: clientId ? res[8].data : _module.getObservables().client,
+                countries: res[3].data,
+                currencies: res[4].data,
+                owners: res[5].data.results,
+                systemLanguages: res[6].data,
+                timezones: res[7].data,
+            })
+        } else {
+            context.client = clientId ? res[0].data : _module.getObservables().client
+        }
 
         return context
     }

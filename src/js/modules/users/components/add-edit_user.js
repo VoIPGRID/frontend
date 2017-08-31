@@ -19,7 +19,7 @@ module.exports = (app, actions) => {
         let context = {clientId, partnerId, userId}
         let promises = [actions.readUser(clientId, partnerId, userId)]
 
-        if (clientId) {
+        if (clientId && userId) {
             promises.push(actions.readUserDestinations(clientId, userId))
             let [userData, userDestinations] = await Promise.all(promises)
             Object.assign(context, userData, userDestinations)
@@ -36,8 +36,6 @@ module.exports = (app, actions) => {
         Object.assign(app.store.users, context)
         const user = context.user
         let fullName = `${user.profile.first_name} ${user.profile.last_name}`
-        app.store.breadcrumbs = ['Users', fullName]
-
         return context
     }
 
@@ -77,7 +75,7 @@ module.exports = (app, actions) => {
         render: template.r,
         staticRenderFns: template.s,
         store: {
-            apiValidation: 'main.apiValidation',
+            apiValidation: 'general.apiValidation',
             groups: 'users.groups',
             root: 'users',
             user: 'users.user',

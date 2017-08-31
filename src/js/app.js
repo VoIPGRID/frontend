@@ -62,8 +62,8 @@ class App {
 
 
     /**
-     * Initialize all modules.
-     */
+    * Initialize all modules.
+    */
     loadModules() {
         this.modules = {}
         let _modules = [
@@ -112,8 +112,22 @@ class App {
             mode: 'history',
         })
         // Keep track of the last route for cancel actions and the like.
-        this.router.afterEach((to, from) => {
+        this.router.beforeEach((to, from, next) => {
             this.history.push(to)
+            // Set the breadcrumbs.
+            if (to.meta.breadcrumbs) {
+                this.store.breadcrumbs = to.meta.breadcrumbs
+            }
+
+            // Unset selected client/partner on these routes.
+            if (to.name === 'list_clients') {
+                this.store.user.selectedClient = {id: null, name: ''}
+            } else if (to.name === 'list_partners') {
+                this.store.user.selectedClient = {id: null, name: ''}
+                this.store.user.selectedPartner = {id: null, name: ''}
+            }
+
+            return next()
         })
 
         if (!this.env.isBrowser) return

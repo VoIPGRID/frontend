@@ -5,13 +5,16 @@
     </template>
 
     <Tab slot="tabs" :data="tabs[0]">
-        <h2 class="title">{{$t('VoIP account')}}</h2><hr/>
+        <h4>{{$t('VoIP account')}}</h4>
 
         <Field name="description" type="textarea"
             :label="$t('Description')"
             :model.sync="phoneaccount.description"
             :placeholder="$t('Name')"
             :validation="$v.phoneaccount.description"/>
+
+
+        <hr/>
 
     </Tab>
 

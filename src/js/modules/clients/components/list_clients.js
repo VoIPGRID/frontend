@@ -6,14 +6,15 @@ module.exports = (app, actions) => {
             let currentPage = parseInt(route.query.page) || 1
             let clientsData = await actions.readClients({page: currentPage})
             app.store.clients.clients = clientsData
-            app.store.breadcrumbs = []
             return clientsData
         },
         created: function() {
             this.clients = this.$store.clients.clients
         },
         methods: {
-            fetchData: actions.readClients,
+            fetchData: async function(...args) {
+                this.clients = await actions.readClients(...args)
+            },
             /**
             * Set the context for the currently selected client and stores
             * it in a cookie to persist after page reload.

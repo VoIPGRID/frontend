@@ -31,6 +31,9 @@ class PartnersModule extends Module {
                 path: 'delete',
             }],
             component: ListPartners,
+            meta: {
+                breadcrumbs: ['Partners'],
+            },
             name: 'list_partners',
             path: '/partners/:partner_id?',
         }])

@@ -1,0 +1,31 @@
+.modules {
+    .vg-box {
+        .module {
+            padding: $vg-spacing-025;
+
+            &:hover {
+                cursor: hand;
+            }
+
+            &[disabled] {
+                color: #cccfd5;
+                &:hover {
+                    cursor: default;
+                }
+            }
+
+            i {
+                padding: 0 $vg-spacing-025;
+            }
+
+            a {
+                display: inline-block;
+                color: $vg-text-darker-color;
+
+                &:hover {
+                    color: $vg-accent-color;
+                }
+            }
+        }
+    }
+}

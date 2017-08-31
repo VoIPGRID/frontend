@@ -1,11 +1,11 @@
-<Tabs :tabs=tabs>
+<Tabs :tabs=tabs class="content-page">
     <template slot="tablist">
         <i class="fa fa-group"></i>
-        <span v-once>{{client.name}}</span>
+        <span>{{client.name}}</span>
     </template>
 
     <Tab slot="tabs" :data="tabs[0]">
-        <h2 class="title">{{$t('General')}}</h2><hr/>
+        <h4>{{$t('General')}}</h4>
 
         <Field name="owner" type="select"
             :label="$t('Owner')" :model.sync="client.owner"
@@ -33,6 +33,10 @@
             :model.sync="client.foreign_code"
             :placeholder="$t('Foreign code')"
             :validation="$v.client.foreign_code"/>
+
+        <hr/>
+
+        <h4>{{$t('Telephony')}}</h4>
 
         <Field name="anonymize_data" type="checkbox"
             :label="$t('Anonymize conversation data')"
@@ -68,6 +72,8 @@
     </Tab>
 
     <Tab slot="tabs" :data="tabs[1]">
+        <h4>{{$t('Geography')}}</h4>
+
         <Field idfield="code" name="country" type="select"  v-if="client.profile.country"
             :help="$t('Select the country you operate from. When possible this country will ' +
             'be the default in other forms.')"
@@ -77,6 +83,14 @@
             :placeholder="$t('Select an owner...')"
             :validation="$v.client.profile.country.code"/>
 
+        <Field name="timezone" type="select" :label="$t('Timezone')"
+            :model.sync="client.profile.timezone"
+            :options="root.timezones"
+            :placeholder="$t('Select a timezone...')"
+            :validation="$v.client.profile.timezone"/>
+        <hr/>
+
+        <h4>{{$t('Language')}}</h4>
         <Field name="audio_language" type="select"
             :help="$t('Select the language/voice that is used as default for messages ' +
             'played in modules.')"
@@ -94,15 +108,11 @@
             :options="root.systemLanguages"
             :placeholder="$t('Select a system language...')"
             :validation="$v.client.profile.system_language"/>
-
-        <Field name="timezone" type="select" :label="$t('Timezone')"
-            :model.sync="client.profile.timezone"
-            :options="root.timezones"
-            :placeholder="$t('Select a timezone...')"
-            :validation="$v.client.profile.timezone"/>
+        <hr/>
     </Tab>
 
     <Tab slot="tabs" :data="tabs[2]">
+        <h4>{{$t('Billing')}}</h4>
         <Field name="currency" namefield="code" type="select"
             :label="$t('Currency')"
             :model.sync="client.billingprofile.currency"

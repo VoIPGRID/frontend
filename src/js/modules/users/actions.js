@@ -195,7 +195,7 @@ module.exports = function(app, _module) {
             url += `${user.id}/`
             app.api.client.put(url, user).then((res) => {
                 if (res.status === 200) {
-                    app.store.main.apiValidation = false
+                    app.store.general.apiValidation = false
                     // Unset the password fields after a succesful update.
                     Object.assign(user, {
                         old_password: '',
@@ -220,7 +220,7 @@ module.exports = function(app, _module) {
             delete user.old_password
             app.api.client.post(url, user).then((res) => {
                 if (res.status === 201) {
-                    app.store.main.apiValidation = false
+                    app.store.general.apiValidation = false
                     // Unset the password fields after a succesful update.
                     Object.assign(user, {
                         password: '',

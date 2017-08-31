@@ -14,13 +14,25 @@ class DashboardModule extends Module {
 
         const Dashboard = Vue.component('Dashboard', require('./components/dashboard')(app, this.actions))
 
+        // This is the default view for a selected client context.
         app.router.addRoutes([{
             component: Dashboard,
             meta: {
-                breadcrumb: 'Dashboard',
+                breadcrumbs: ['Dashboard'],
             },
-            name: 'dashboard_home',
+            name: 'dashboard_client',
             path: '/partners/:partner_id/clients/:client_id/',
+        }])
+
+        // The default view for the selected partner context is the client list;
+        // not the dashboard view.
+        app.router.addRoutes([{
+            component: Dashboard,
+            meta: {
+                breadcrumbs: ['Dashboard'],
+            },
+            name: 'dashboard_partner',
+            path: '/partners/:partner_id/dashboard/',
         }])
     }
 

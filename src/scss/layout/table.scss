@@ -1,14 +1,40 @@
 .table-header {
     width: 100%;
     float: left;
+    margin-bottom: $vg-spacing-3;
 
     .table-header-title {
         font-size: 1.5rem;
+        font-weight: 300;
         float: left;
     }
 }
 
-.content .table {
+.table {
+    thead {
+        th {
+            background: $vg-bg-light-color;
+            font-weight: 500;
+        }
+    }
+    tr {
+        &:hover {
+            background: #fff;
+        }
+
+        td {
+            padding: 0;
+            padding-left: $vg-spacing-05;
+            border: 1px solid $vg-bg-light-color;
+            line-height: 2.5rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            &.table-actions {
+                min-width: 75px;
+            }
+        }
+    }
+
     @media screen and (max-width: $tablet) {
         background: none;
 
@@ -29,25 +55,4 @@
                 width: 150px;
             }
         }
-    }
-
-
-    thead {
-        th {
-            background: #f6f7fb;
-        }
-    }
-    tr {
-        &:hover {
-            background: #fff;
-        }
-
-        td {
-             border: 1px solid #f6f7fb;
-
-             &.table-actions {
-                 min-width: 75px;
-             }
-        }
-    }
-}
+    }}

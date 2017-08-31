@@ -89,6 +89,7 @@ global.translations.nl = {
     'Select the language/voice that is used as default for messages played in modules.': 'Selecteer de taal/stem om als standaard te gebruiken in modules.',
     'SIP analysis': 'SIP-analyse',
     'Sounds': 'Geluiden',
+    'Statistics': 'Statistieken',
     'System language': 'Systeemtaal',
     'The domain name client phones use as proxy address. E.g. proxy_hostname': 'De domeinnaam die telefoontoestellen van klanten als proxy gebruiken. Bijvoorbeeld proxy_hostname',
     'The relation name: a company name or a person name in case of a private person.': 'De naam van de relatie, bijvoorbeeld de bedrijfsnaam.',

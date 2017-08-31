@@ -53,6 +53,7 @@ if (PRODUCTION) gutil.log('(!) Gulp optimized for production')
 gulp.task('assets', `Copy required assets to '${BUILD_DIR}'`, () => {
     return gulp.src('./src/img/**', {base: './src'})
         .pipe(addsrc('./src/fonts/**', {base: './src'}))
+        .pipe(addsrc(path.join(NODE_PATH, 'roboto-fontface', 'fonts', '**'), {base: path.join(NODE_PATH, 'roboto-fontface')}))
         .pipe(addsrc(path.join(NODE_PATH, 'font-awesome', 'fonts', '**'), {base: path.join(NODE_PATH, 'font-awesome')}))
         .pipe(addsrc(path.join(NODE_PATH, 'vg-icons', 'fonts', '**'), {base: path.join(NODE_PATH, 'vg-icons')}))
         .pipe(addsrc('./src/index.html', {base: './src'}))

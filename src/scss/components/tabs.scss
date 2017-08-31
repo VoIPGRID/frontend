@@ -17,7 +17,6 @@
 
         .tablist-title {
             padding: 0.5rem;
-            clear: both;
             border-bottom: 2px solid #dbdbdb;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -32,7 +31,6 @@
             span {
                 font-size: 1.2rem;
                 line-height: 1.5rem;
-                font-family: "Roboto", sans-serif;
                 font-weight: 400;
             }
         }
@@ -46,14 +44,17 @@
             li.item {
                 margin: 0;
                 width: 100%;
-                border-top: 1px solid transparent;
-                border-right: 1px solid #dbdbdb;
-                border-top: 1px solid #dbdbdb;
+                border: 1px solid transparent;
 
                 &.is-active {
                     background: #fff;
-                    font-weight: 500;
-                    border-right: 1px solid transparent;
+                    border-top: 1px solid $vg-border-light-color;
+                    border-left: 1px solid $vg-border-light-color;
+                    border-bottom: 1px solid $vg-border-light-color;
+
+                    &:first-child {
+                        border-top: 1px solid transparent;
+                    }
                 }
 
                 a {
@@ -67,10 +68,11 @@
         }
 
 
-        // Style as regular tabs to increase the content width.
+        // Style as regular tabs to increase content space.
         @media screen and (max-width: $desktop) {
             display: flex;
             width: 100%;
+            transition: width 0.2s ease-in-out;
 
             ul {
                 flex-direction: row;
@@ -78,12 +80,13 @@
                 padding-right: 6px;
 
                 li.item {
-
+                    border-top: 1px solid transparent !important;
                     border-right: 0;
 
                     &.is-active {
-                        border-left: 1px solid #dbdbdb;
-                        border-right: 1px solid #dbdbdb;
+                        border-left: 1px solid $vg-border-light-color;
+                        border-right: 1px solid $vg-border-light-color;
+                        border-bottom: 1px solid transparent;
                     }
 
                     &.title {
@@ -102,8 +105,6 @@
                     }
                 }
             }
-
-
         }
     }
 
@@ -113,6 +114,10 @@
         background: #fff;
         padding: 1rem;
         width: 100%;
+
+        .tabs-controls {
+            margin-top: $vg-spacing-2;
+        }
     }
 
     @media screen and (max-width: $desktop) {
