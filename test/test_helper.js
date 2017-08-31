@@ -15,7 +15,7 @@ import reducers from '../src/reducers/RootReducer';
 import translations from '../src/translations/translations';
 
 // Skip requiring files with these formats in components.
-['.css', '.scss', '.png', '.jpg'].forEach((ext) => {
+['.css', '.scss', '.png', '.jpg', '.svg'].forEach((ext) => {
     require.extensions[ext] = () => null
 })
 

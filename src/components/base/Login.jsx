@@ -35,7 +35,7 @@ class Login extends Component {
         const { status } = response.payload;
 
         if (status === 200 || status === 201) {
-            if (response.payload.data.authenticated === false) {
+            if (response.payload.data.user.authenticated === false) {
                 this.setState({error: 'wrong_creds'});
             } else {
                 window.__STORE__.user = response.payload.data;
