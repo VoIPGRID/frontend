@@ -1,14 +1,14 @@
 const LOCALHOST = 'http://localhost:8001/api/v2';
 
-let apiRoot = '';
+// let apiRoot = '';
+//
+// if (location && location.hostname === 'localhost') {
+//     apiRoot = LOCALHOST;
+// } else {
+//     // Obviously this should be a production url in a real life situation.
+//     apiRoot = LOCALHOST;
+// }
+//
+// const API_ROOT = apiRoot;
 
-if (location && location.hostname === 'localhost') {
-    apiRoot = LOCALHOST;
-} else {
-    // Obviously this should be a production url in a real life situation.
-    apiRoot = LOCALHOST;
-}
-
-const API_ROOT = apiRoot;
-
-export { API_ROOT as default }
+export { LOCALHOST as default }

@@ -2,12 +2,12 @@ import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import { IntlReducer as Intl } from 'react-redux-multilingual'
 
-import ClientReducer from '../../reducers/ClientReducer';
-import VoipAccountsReducer from '../../reducers/VoipAccountsReducer';
-import PartnerReducer from '../../reducers/PartnerReducer';
-import UserReducer from '../../reducers/UserReducer';
+import ClientReducer from './ClientReducer';
+import VoipAccountsReducer from './VoipAccountsReducer';
+import PartnerReducer from './PartnerReducer';
+import UserReducer from './UserReducer';
 
-import baseReducer from '../../reducers/BaseReducer';
+import baseReducer from './BaseReducer';
 
 const rootReducer = combineReducers({
     base: baseReducer,

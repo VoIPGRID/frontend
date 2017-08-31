@@ -1,7 +1,14 @@
 import { LOGIN_USER, AUTH_FAILED, LOGOUT_USER, SET_CONTEXT } from '../actions/BaseActions'
 
+let initialAuth = {};
+
+// Serve an empty object when JSDom sets up our virtual dom for test purposes.
+if (typeof window !== 'undefined') {
+    initialAuth = window.__STORE__.user
+}
+
 const INITIAL_STATE = {
-    auth: window.__STORE__.user,
+    auth: initialAuth,
     context: {
         type: null,
         id: null,

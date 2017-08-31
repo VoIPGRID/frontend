@@ -12,7 +12,7 @@
         "eslint-config-airbnb": "13.0.0",
         "global": "^4.3.2",
         "jquery": "^3.2.1",
-        "jsdom": "^11.2.0",
+        "jsdom": "8.1.0",
         "json-server": "^0.10.1",
         "lodash": "^3.10.1",
         "prop-types": "^15.5.10",
@@ -91,7 +91,7 @@
         "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
         "start": "node scripts/start.js",
         "build": "node scripts/build.js",
-        "test": "NODE_ENV=development mocha --compilers js:babel-core/register --require ./test/test_helper.js 'test/**/*.js'",
+        "test": "NODE_ENV=test mocha --compilers js:babel-core/register --require ./test/test_helper.js 'test/**/*.js'",
         "test:watch": "npm run test -- --watch"
     },
     "jest": {

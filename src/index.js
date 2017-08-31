@@ -8,7 +8,7 @@ import { IntlProvider } from 'react-redux-multilingual'
 
 import PrivateRoute from './components/base/PrivateRoute';
 
-import reducers from './components/base';
+import reducers from './reducers/RootReducer';
 import Login from './components/base/Login';
 import PartnerList from './components/partners/PartnerList';
 import PartnerForm from './components/partners/PartnerForm';
@@ -22,7 +22,7 @@ import Navigation from './components/base/Navigation';
 import Header from './components/base/Header';
 
 import UserProfileForm from './components/users/UserProfileForm';
-import translations from './translations/translations'
+import translations from './translations/translations';
 
 import './assets/style/base.scss';
 import './assets/vendor/fontawesome/css/font-awesome-core.css';

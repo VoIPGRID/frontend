@@ -1,23 +1,14 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+
+import { withTranslate } from 'react-redux-multilingual';
 
 import '../../assets/style/navigation.scss';
 
 class Navigation extends Component {
-
-    constructor(props) {
-        super(props);
-
-        console.log(this.props)
-    }
-
-    componentDidMount() {
-        console.log(this.props.context)
-    }
-
     render() {
+        const { translate } = this.props;
         return (
             window.__STORE__.user.authenticated &&
                 <div className="navigation--wrapper">
@@ -33,7 +24,7 @@ class Navigation extends Component {
                                 <i className="fas fa-users" />
                             </span>
                             <NavLink to="/clients" activeClassName="is-active">
-                                {this.context.translate('Clients')}
+                                {translate('Clients')}
                             </NavLink>
                         </li>
                     </ul>
@@ -54,19 +45,16 @@ class Navigation extends Component {
                     </ul>
                 </div>
         );
-
     }
 }
 
-
-Navigation.contextTypes = {
-    translate: PropTypes.func,
-};
 
 function mapStateToProps(state) {
     return {
         context: state.base.context,
     }
 }
+
+Navigation = withTranslate(Navigation);
 
 export default connect(mapStateToProps)(Navigation);
