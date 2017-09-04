@@ -20,3 +20,31 @@
         }
     }
 }
+
+.stats-block {
+    padding: 15px;
+    background: #fff;
+    text-align: center;
+    border: 1px #e6e7eb solid;
+    border-radius: 3px;
+    padding: 10px;
+    box-sizing: border-box;
+    color: #2A3042;
+    margin-bottom: 1rem;
+}
+
+.stats-block-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 16px;
+    font-weight: 300;
+    text-align: center;
+}
+
+.stats-block-data {
+    text-align: center;
+    font-size: 20px;
+    text-decoration: none;
+    color: #2A3042;
+}

@@ -30,7 +30,6 @@ module.exports = function(app, _module) {
     * @returns {Object} - All data related to the client form.
     */
     actions.readPhoneaccount = async function(clientId, phoneaccountId, formEndpoints = true) {
-        console.log("READ PHONEACCOUNT")
         let context = {}
         let promises = []
 
@@ -40,9 +39,9 @@ module.exports = function(app, _module) {
             ]
         }
 
-        if (phoneaccountId) promises.push(app.api.client.get(`clients/${clientId}/phoneaccounts/`))
+        if (phoneaccountId) promises.push(app.api.client.get(`clients/${clientId}/phoneaccounts/${phoneaccountId}/`))
         const res = await Promise.all(promises)
-
+        console.log(res)
         // Object.assign(context, {
         //
         // })

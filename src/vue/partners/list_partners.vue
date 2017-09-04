@@ -25,16 +25,12 @@
                     <router-link @click.native="selectPartnerContext(partner)" :to="{name: 'list_clients', params: {partner_id: partner.id}}">{{partner.name}}</router-link>
                 </td>
                 <td>{{partner.description}}</td>
-                <td>
+                <td class="table-actions">
                     <router-link :to="{name: 'edit_partner', params: {partner_id: partner.id}}">
-                        <span class="icon">
-                            <i class="fa fa-edit"></i>
-                        </span>
+                        <i class="fa fa-edit"></i>
                     </router-link>
                     <router-link :to="{name: 'delete_partner', params: {partner_id: partner.id}, query: $router.currentRoute.query}">
-                        <span class="icon">
-                            <i class="fa fa-remove"></i>
-                        </span>
+                        <i class="fa fa-remove"></i>
                     </router-link>
                 </td>
             </tr>

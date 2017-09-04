@@ -50,7 +50,9 @@ class PhoneaccountsModule extends Module {
     getObservables() {
         return {
             phoneaccount: {
-
+                account_id: null,
+                description: '',
+                password: '',
             },
             phoneaccounts: [],
         }

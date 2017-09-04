@@ -5,6 +5,10 @@ html, body {
     font-family: "Roboto", sans-serif;
 }
 
+.columns {
+    margin: 0;
+}
+
 .main-content-wrapper {
     // Always show the scrollbar, so the content doesn't indent when it
     // gets too long.

@@ -5,7 +5,8 @@ module.exports = (app, actions) => {
 
     return {
         asyncData: async function(router) {
-            let phoneaccountData = await actions.readPhoneaccount(router.params.phoneaccount_id)
+            const clientId = router.params.client_id
+            let phoneaccountData = await actions.readPhoneaccount(clientId, router.params.phoneaccount_id)
             Object.assign(app.store.phoneaccounts, phoneaccountData)
         },
         created: function() {
@@ -24,7 +25,9 @@ module.exports = (app, actions) => {
         methods: {
             fetchData: async function() {
                 const clientId = app.router.currentRoute.params.client_id
-                const phoneaccountData = await actions.readPhoneaccount(clientId)
+                const phoneaccountId = app.router.currentRoute.params.phoneaccount_id
+                console.log("WTF:", phoneaccountId)
+                const phoneaccountData = await actions.readPhoneaccount(clientId, phoneaccountId)
                 Object.assign(this.$store.phoneaccounts, phoneaccountData)
             },
             upsertPhoneaccount: actions.upsertPhoneaccount,

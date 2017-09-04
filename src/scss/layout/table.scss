@@ -11,6 +11,8 @@
 }
 
 .table {
+    border-collapse: inherit;
+
     thead {
         th {
             background: $vg-bg-light-color;
@@ -29,8 +31,22 @@
             line-height: 2.5rem;
             overflow: hidden;
             text-overflow: ellipsis;
+
             &.table-actions {
-                min-width: 75px;
+                vertical-align: middle;
+
+                a {
+                    display: inline-block;
+                    vertical-align: middle;
+                    i {
+                        font-size: 1.3rem;
+                        padding: 0.3rem;
+                    }
+                }
+            }
+
+            input {
+                height: 40px;
             }
         }
     }

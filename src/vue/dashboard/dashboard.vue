@@ -1,7 +1,7 @@
 <div class="dashboard">
-    <div class="modules vg-masonry-page masonry-2">
+    <div class="modules columns is-desktop">
         <!-- Recent calls widget-->
-        <div class="vg-box-wrapper">
+        <div class="vg-box-wrapper column">
             <h4>{{$t('Recent calls')}}</h4>
             <div class="vg-box">
                 <table class="table is-fullwidth">
@@ -23,10 +23,24 @@
             </div>
         </div>
 
-        <div class="vg-box-wrapper">
+        <div class="vg-box-wrapper column">
             <h4>{{$t('Statistics')}}</h4>
-            <div class="vg-box">
+            <div class="vg-box stats-block">
+                <div class="stats-block-name">
+                    Calls answered
+                </div>
+                <div class="stats-block-data">
+                    245 <small>of</small> 256 <i class="fa fa-arrow-up"></i>
+                </div>
+            </div>
 
+            <div class="vg-box stats-block">
+                <div class="stats-block-name">
+                    Total call time
+                </div>
+                <div class="stats-block-data">
+                    13:05:25 <i class="fa fa-arrow-down"></i>
+                </div>
             </div>
         </div>
     </div>

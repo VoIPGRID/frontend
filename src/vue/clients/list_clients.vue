@@ -33,14 +33,10 @@
                 <td>{{ client.description }}</td>
                 <td class="table-actions">
                     <router-link :to="{name: 'edit_client', params: {client_id: client.id}}">
-                        <span class="icon">
-                            <i class="fa fa-edit"></i>
-                        </span>
+                        <i class="fa fa-edit"></i>
                     </router-link>
                     <router-link :to="{name: 'delete_client', params: {client_id: client.id}, query: $router.currentRoute.query}">
-                        <span class="icon">
-                            <i class="fa fa-remove"></i>
-                        </span>
+                        <i class="fa fa-remove"></i>
                     </router-link>
                 </td>
             </tr>

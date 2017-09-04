@@ -35,20 +35,20 @@
                     {{user.email}}
                 </td>
                 <td>{{user.profile.description}}</td>
-                <td v-if="clientId">
+                <td v-if="clientId" class="table-actions">
                     <router-link :to="{name: 'edit_client_user', params: {client_id: clientId, user_id: user.id}}">
-                        <span class="icon"><i class="fa fa-edit"></i></span>
+                        <i class="fa fa-edit"></i>
                     </router-link>
                     <router-link :to="{name: 'delete_client_user', params: {client_id: clientId, user_id: user.id}, query: $router.currentRoute.query}">
-                        <span class="icon"><i class="fa fa-remove"></i></span>
+                        <i class="fa fa-remove"></i>
                     </router-link>
                 </td>
-                <td v-else>
+                <td v-else class="table-actions">
                     <router-link :to="{name: 'edit_partner_user', params: {partner_id: partnerId, user_id: user.id}}">
-                        <span class="icon"><i class="fa fa-edit"></i></span>
+                        <i class="fa fa-edit"></i>
                     </router-link>
                     <router-link :to="{name: 'delete_partner_user', params: {partner_id: partnerId, user_id: user.id}, query: $router.currentRoute.query}">
-                        <span class="icon"><i class="fa fa-remove"></i></span>
+                        <i class="fa fa-remove"></i>
                     </router-link>
                 </td>
             </tr>
