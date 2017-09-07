@@ -6,7 +6,6 @@ import { withTranslate } from 'react-redux-multilingual';
 import Table from '../helpers/Table';
 
 import { getPartners, updatePartner, deletePartner } from '../../actions/PartnerActions';
-import { setContext } from '../../actions/BaseActions';
 
 
 class PartnerList extends Component {
@@ -19,7 +18,6 @@ class PartnerList extends Component {
 
     componentDidMount() {
         this.props.getPartners();
-        this.props.setContext({id: null, type: 'partner'});
     }
 
     async _handleDelete(id) {
@@ -87,7 +85,7 @@ function mapStateToProps({ partners }) {
 }
 
 
-PartnerList = connect(mapStateToProps, { deletePartner, getPartners, setContext, updatePartner})(PartnerList);
+PartnerList = connect(mapStateToProps, { deletePartner, getPartners, updatePartner})(PartnerList);
 
 PartnerList = withTranslate(PartnerList);
 

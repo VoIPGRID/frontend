@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { getClients, updateClient, deleteClient } from '../../actions/ClientActions';
-import { setContext } from '../../actions/BaseActions';
 
 import Table from '../helpers/Table';
 
@@ -11,11 +10,6 @@ import Table from '../helpers/Table';
 class ClientList extends Component {
     componentDidMount() {
         const { partnerId } = this.props.match.params;
-
-        if (partnerId) {
-            this.props.setContext({id: partnerId, type: 'partner'});
-        }
-
         this.props.getClients(partnerId);
     }
 
@@ -81,4 +75,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { deleteClient, getClients, setContext, updateClient})(ClientList);
+export default connect(mapStateToProps, { deleteClient, getClients, updateClient})(ClientList);

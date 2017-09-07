@@ -2,9 +2,8 @@ import axios from 'axios';
 import API_ROOT from '../constants';
 
 export const LOGIN_USER = 'LOGIN_USER';
-export const AUTH_FAILED = 'AUTH_FAILED';
 export const LOGOUT_USER = 'LOGOUT_USER';
-export const SET_CONTEXT = 'SET_CONTEXT';
+export const AUTH_FAILED = 'AUTH_FAILED';
 export const SEND_NOTIFICATION = 'SEND_NOTIFICATION';
 export const HIDE_NOTIFICATION = 'HIDE_NOTIFICATION';
 
@@ -30,13 +29,6 @@ export function logoutUser(result) {
     return {
         type: LOGOUT_USER,
         payload: result,
-    }
-}
-
-export function setContext(context) {
-    return {
-        type: SET_CONTEXT,
-        payload: context,
     }
 }
 
