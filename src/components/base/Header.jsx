@@ -1,12 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
-import { withRouter } from 'react-router';
-
 import '../../assets/style/header.scss';
 import logo from '../../assets/images/logo.svg';
 
-const Header = (props, context) =>
+/**
+ * Header component to render the logo and the user preferences link.
+ * @constructor
+ * @param {object} props - Props data from higher order component.
+ */
+const Header = props =>
     window.__STORE__.user.authenticated &&
     <header>
         <img src={logo} alt="VoIPGRID logo" className="header--logo" />
@@ -16,9 +18,4 @@ const Header = (props, context) =>
     </header>
 
 
-
-Header.contextTypes = {
-    translate: PropTypes.func,
-};
-
-export default withRouter(Header);
+export default Header;

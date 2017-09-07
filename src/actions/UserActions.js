@@ -43,6 +43,41 @@ export async function getUsers(clientId) {
     }
 }
 
+export async function deleteUser(clientId, userId) {
+    const url = `${API_ROOT}/clients/${clientId}/users/${userId}`;
+
+    const request = await axios.create({
+        headers: {
+            Accept: 'application/json',
+            'X-CSRFToken': window.__STORE__.user.csrf,
+        },
+        timeout: 3000,
+        withCredentials: true,
+    });
+
+    let result;
+    let object;
+
+    request.interceptors.response.use((response) => {
+        result = response;
+        object = {
+            type: DELETE_USER,
+            payload: result,
+            userId: userId,
+        }
+    }, (error) => {
+        result = error.response.data;
+        object = {
+            type: FORM_ERROR,
+            payload: result,
+        }
+    });
+
+    result = await request.delete(url);
+
+    return object;
+}
+
 export async function getUser() {
     const partnerId = window.__STORE__.user.partner.id;
     const userId = window.__STORE__.user.id;

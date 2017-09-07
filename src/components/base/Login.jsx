@@ -5,12 +5,16 @@ import { loginUser } from '../../actions/BaseActions';
 
 class Login extends Component {
 
+    /**
+     * Smart redux connected login component.
+     * @constructor
+     * @param {object} props - Props data from higher order component.
+     */
     constructor(props) {
         super(props);
 
+        // Bind this scope to the handleSubmit method.
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleEmailChange = this.handleEmailChange.bind(this);
-        this.handlePasswordChange = this.handlePasswordChange.bind(this);
 
         this.state = {
             email: '',
@@ -19,6 +23,12 @@ class Login extends Component {
         }
     }
 
+
+    /**
+     * This function gets executed when the form is submitted and sends an
+     * API with login credentials to log in a user.
+     * @param {object} e - Event object of the form submission.
+     */
     async handleSubmit(e) {
         let response;
 
@@ -36,22 +46,20 @@ class Login extends Component {
 
         if (status === 200 || status === 201) {
             if (response.payload.data.user.authenticated === false) {
+                // Set state to show an error message when the user
+                // tries logging in with the wrong credentials.
                 this.setState({error: 'wrong_creds'});
             } else {
+                // Set the data returned into the window store global.
+                // This global gets set by our backend but we set our data
+                // temporarely so it corresponds with the backend data
+                // before refreshing.
                 window.__STORE__.user = response.payload.data;
                 this.props.history.push('/partners');
             }
         } else {
             console.log('Error');
         }
-    }
-
-    handleEmailChange(e) {
-        this.setState({email: e.target.value});
-    }
-
-    handlePasswordChange(e) {
-        this.setState({password: e.target.value});
     }
 
     render() {
@@ -71,7 +79,7 @@ class Login extends Component {
                         <div className="control">
                             <input
                                 className="input" name="email" type="email" value={this.state.email}
-                                onChange={this.handleEmailChange}
+                                onChange={e => this.setState({email: e.target.value})}
                             />
                         </div>
                     </div>
@@ -81,7 +89,7 @@ class Login extends Component {
                         <div className="control">
                             <input
                                 className="input" type="password" name="password" value={this.state.password}
-                                onChange={this.handlePasswordChange}
+                                onChange={e => this.setState({password: e.target.value})}
                             />
                         </div>
                     </div>

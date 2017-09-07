@@ -13,7 +13,8 @@ class ClientUserList extends Component {
     }
 
     _handleDelete(id) {
-        this.props.deleteUser(id);
+        const { clientId } = this.props.match.params;
+        this.props.deleteUser(clientId, id);
     }
 
     render() {

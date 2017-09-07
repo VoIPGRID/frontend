@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-
 import { withTranslate } from 'react-redux-multilingual';
 
 import '../../assets/style/navigation.scss';
 
+/**
+ * Navigation component that renders our main navigation.
+ */
 class Navigation extends Component {
     render() {
         const { translate } = this.props;
@@ -48,13 +49,6 @@ class Navigation extends Component {
     }
 }
 
-
-function mapStateToProps(state) {
-    return {
-        context: state.base.context,
-    }
-}
-
-Navigation = withTranslate(Navigation);
-
-export default connect(mapStateToProps)(Navigation);
+// Use the withTranslate Higher Order Component (HoC) to transpose the
+// translate function in our component.
+export default withTranslate(Navigation);

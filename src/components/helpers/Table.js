@@ -4,13 +4,12 @@ import ReactTable from 'react-table';
 
 import '../../assets/style/Table.scss';
 
-const Table = ({columns, data, defaultLength}) =>
+const Table = ({columns, data}) =>
     <ReactTable
         data={data}
         columns={columns}
-        defaultPageSize={defaultLength}
         showPagination={false}
+        minRows={0}
     />
-
 
 export default Table;

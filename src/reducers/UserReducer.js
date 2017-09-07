@@ -35,8 +35,8 @@ export default function(state = INITIAL_STATE, action) {
         return { ...state }
     case DELETE_USER:
         return { ...state,
-            objects: state.objects.filter(user =>
-                user.id !== action.payload.id
+            users: state.users.filter(user =>
+                user.id !== action.userId
             ),
         }
     case EMPTY_USER:
