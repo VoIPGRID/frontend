@@ -55,7 +55,7 @@ function hideNotification(id) {
 
 
 let nextNotificationId = 0
-export function showNotificationWithTimeout(text, type) {
+export function showNotification(text, type, timeout) {
     return function(dispatch) {
         // Assigning IDs to notifications lets reducer ignore HIDE_NOTIFICATION
         // for the notification that is not currently visible.
@@ -64,8 +64,10 @@ export function showNotificationWithTimeout(text, type) {
         const id = nextNotificationId++;
         dispatch(sendNotification(text, type));
 
-        setTimeout(() => {
-            dispatch(hideNotification(id));
-        }, 2000);
+        if (timeout) {
+            setTimeout(() => {
+                dispatch(hideNotification(id));
+            }, 2000);
+        }
     }
 }

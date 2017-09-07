@@ -7,9 +7,10 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import renderField from '../helpers/forms/RenderField';
 
-import { getSelectOptions } from '../helpers/forms/SelectOptions';
+import getSelectOptions from '../helpers/forms/SelectOptions';
 
 import { getPartners, createPartner, getPartner, updatePartner, emptyPartner } from '../../actions/PartnerActions';
+import { showNotification } from '../../actions/BaseActions';
 
 class PartnerForm extends Component {
     constructor(props) {
@@ -63,7 +64,10 @@ class PartnerForm extends Component {
 
         if (status === 200 || status === 201) {
             this.props.history.push('/partners');
+
+            this.props.showNotification('Partner was edited succesfully.', 'is-success', true);
         } else {
+            this.props.showNotification('Fields with errors are marked down below.', 'is-danger');
             // Loop over errors and throw a new SubmissionError for every field
             // that has an error.
             response.payload.errors.map((err) => {
@@ -153,14 +157,14 @@ class PartnerForm extends Component {
                                 helpText="Select the country you operate from. When possible this country will be the
                                 default in other forms."
                                 type="select" required="true" component={renderField}
-                                loadOptions={getSelectOptions.bind(this, 'clients/countries', 'code')}
+                                loadOptions={() => getSelectOptions('clients/countries', 'code')}
                             />
                             <Field
                                 label="Audio language" name="profile[audio_language]"
                                 helpText="Select the language/voice that is
                                 used as default for messages played in modules."
                                 type="select" required="true" component={renderField}
-                                loadOptions={getSelectOptions.bind(this, 'clients/audio_languages')}
+                                loadOptions={() => getSelectOptions('clients/audio_languages')}
                             />
 
                             <Field
@@ -168,11 +172,11 @@ class PartnerForm extends Component {
                                 helpText="Select the language that is used as default
                                 for printed text (invoices, exports, interface)."
                                 type="select" required="true" component={renderField}
-                                loadOptions={getSelectOptions.bind(this, 'clients/system_languages')}
+                                loadOptions={() => getSelectOptions('clients/system_languages')}
                             />
                             <Field
                                 label="Timezone" name="profile[timezone]" type="select" required="true"
-                                component={renderField} loadOptions={getSelectOptions.bind(this, 'clients/timezones')}
+                                component={renderField} loadOptions={() => getSelectOptions('clients/timezones')}
                             />
                         </TabPanel>
 
@@ -220,7 +224,7 @@ class PartnerForm extends Component {
                             <Field
                                 label="Priceplan discount status" name="billingprofile[priceplan_discount_status]"
                                 type="select" component={renderField}
-                                loadOptions={getSelectOptions.bind(this, 'partners/priceplan_discounts')}
+                                loadOptions={() => getSelectOptions('partners/priceplan_discounts')}
                             />
                         </TabPanel>
                     </Tabs>
@@ -267,6 +271,7 @@ function mapDispatchToProps(dispatch) {
         getPartner,
         getPartners,
         updatePartner,
+        showNotification,
     }, dispatch);
 }
 

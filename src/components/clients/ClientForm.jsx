@@ -19,7 +19,6 @@ class ClientForm extends Component {
     }
 
     async componentDidMount() {
-        console.log(this.props.match.params)
         const { clientId } = this.props.match.params;
 
         if (clientId) {

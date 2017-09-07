@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { API_ROOT } from '../../../constants';
+import API_ROOT from '../../../constants';
 
 // General function to request API data for select option fields.
 async function getSelectOptions(type, idReplacement) {
+    console.log(type)
     const url = `${API_ROOT}/${type}`;
 
     try {
