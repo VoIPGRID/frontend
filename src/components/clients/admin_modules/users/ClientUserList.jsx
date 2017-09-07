@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { getUsers, deleteUser } from '../../../../actions/UserActions';
+import { showNotificationWithTimeout } from '../../../../actions/BaseActions';
 import Table from '../../../helpers/Table';
 
 
@@ -12,9 +13,13 @@ class ClientUserList extends Component {
         await this.props.getUsers(clientId);
     }
 
-    _handleDelete(id) {
+    async _handleDelete(id) {
         const { clientId } = this.props.match.params;
-        this.props.deleteUser(clientId, id);
+        const result = await this.props.deleteUser(clientId, id);
+
+        if (result) {
+            this.props.showNotificationWithTimeout('Succesvol verwijderd', 'is-success');
+        }
     }
 
     render() {
@@ -65,4 +70,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { deleteUser, getUsers })(ClientUserList);
+export default connect(mapStateToProps, { deleteUser, getUsers, showNotificationWithTimeout })(ClientUserList);

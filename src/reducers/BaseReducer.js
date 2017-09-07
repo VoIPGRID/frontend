@@ -1,4 +1,11 @@
-import { LOGIN_USER, AUTH_FAILED, LOGOUT_USER, SET_CONTEXT } from '../actions/BaseActions'
+import {
+    LOGIN_USER,
+    AUTH_FAILED,
+    LOGOUT_USER,
+    SET_CONTEXT,
+    SEND_NOTIFICATION,
+    HIDE_NOTIFICATION,
+} from '../actions/BaseActions';
 
 let initialAuth = {};
 
@@ -13,6 +20,7 @@ const INITIAL_STATE = {
         type: null,
         id: null,
     },
+    notification: null,
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -29,6 +37,19 @@ export default function(state = INITIAL_STATE, action) {
         return {
             ...state,
             context: action.payload,
+        }
+    case SEND_NOTIFICATION:
+        return {
+            ...state,
+            notification: {
+                type: action.notificationType,
+                content: action.content,
+            },
+        }
+    case HIDE_NOTIFICATION:
+        return {
+            ...state,
+            notification: null,
         }
     default:
         return state;

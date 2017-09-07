@@ -5,6 +5,8 @@ export const LOGIN_USER = 'LOGIN_USER';
 export const AUTH_FAILED = 'AUTH_FAILED';
 export const LOGOUT_USER = 'LOGOUT_USER';
 export const SET_CONTEXT = 'SET_CONTEXT';
+export const SEND_NOTIFICATION = 'SEND_NOTIFICATION';
+export const HIDE_NOTIFICATION = 'HIDE_NOTIFICATION';
 
 export async function loginUser(values) {
     let url = `${API_ROOT}/login/`;
@@ -35,5 +37,35 @@ export function setContext(context) {
     return {
         type: SET_CONTEXT,
         payload: context,
+    }
+}
+
+function sendNotification(content, notificationType) {
+    return {
+        type: SEND_NOTIFICATION,
+        content,
+        notificationType,
+    }
+}
+
+function hideNotification(id) {
+    return { type: HIDE_NOTIFICATION, id }
+}
+
+
+
+let nextNotificationId = 0
+export function showNotificationWithTimeout(text, type) {
+    return function(dispatch) {
+        // Assigning IDs to notifications lets reducer ignore HIDE_NOTIFICATION
+        // for the notification that is not currently visible.
+        // Alternatively, we could store the interval ID and call
+        // clearInterval(), but we’d still want to do it in a single place.
+        const id = nextNotificationId++;
+        dispatch(sendNotification(text, type));
+
+        setTimeout(() => {
+            dispatch(hideNotification(id));
+        }, 2000);
     }
 }

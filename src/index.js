@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 import ReduxPromise from 'redux-promise';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { IntlProvider } from 'react-redux-multilingual'
@@ -20,6 +21,7 @@ import VoipAccounts from './components/clients/admin_modules/voip_accounts/VoipA
 import ClientAdmin from './components/clients/ClientAdmin';
 import Navigation from './components/base/Navigation';
 import Header from './components/base/Header';
+import Notification from './components/base/Notification';
 
 import UserProfileForm from './components/users/UserProfileForm';
 import translations from './translations/translations';
@@ -32,7 +34,12 @@ import './assets/vendor/fontawesome/css/font-awesome-solid.css';
 const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
 
 const store = createStoreWithMiddleware(
-    reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+    reducers,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+    applyMiddleware(thunk)
+);
+
+
 
 store.dispatch({
     locale: window.__STORE__.user.language,
@@ -45,6 +52,7 @@ ReactDOM.render(
             <BrowserRouter>
                 <div className="base-body">
                     <Header />
+                    <Notification />
                     <Navigation />
 
                     <section className="section">
