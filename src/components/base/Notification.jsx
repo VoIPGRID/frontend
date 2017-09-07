@@ -5,7 +5,7 @@ import '../../assets/style/notification.scss';
 
 
 /**
- * Header component to render the logo and the user preferences link.
+ * Notification component to render a notification on top of the page.
  * @constructor
  * @param {object} props - Props data from higher order component.
  */
