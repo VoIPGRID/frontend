@@ -8,8 +8,46 @@ import '../../assets/style/navigation.scss';
  * Navigation component that renders our main navigation.
  */
 class Navigation extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            context: {
+                type: null,
+                id: null,
+            },
+        }
+    }
+
+    // This lifecycle method will set the state with params from the url
+    // to change the url when switching context between partner and client.
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.match.params.id) {
+            this.setState({
+                context: {
+                    type: nextProps.match.params.type,
+                    id: nextProps.match.params.id,
+                },
+            })
+        } else {
+            this.setState({
+                context: {
+                    type: nextProps.match.params.type,
+                    id: null,
+                },
+            })
+        }
+    }
+
     render() {
         const { translate } = this.props;
+        let urlPrepend = '/';
+
+        if (this.state.context.id && this.state.context.type) {
+            urlPrepend = `/${this.state.context.type}/${this.state.context.id}/`
+        }
+
         return (
             window.__STORE__.user.authenticated &&
                 <div className="navigation--wrapper">
@@ -24,7 +62,7 @@ class Navigation extends Component {
                             <span className="navigation--icon-wrapper">
                                 <i className="fas fa-users" />
                             </span>
-                            <NavLink to="/clients" activeClassName="is-active">
+                            <NavLink to={`${urlPrepend}clients`} activeClassName="is-active">
                                 {translate('Clients')}
                             </NavLink>
                         </li>

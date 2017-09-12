@@ -53,7 +53,7 @@ ReactDOM.render(
                 <div className="base-body">
                     <Header />
                     <Notification />
-                    <Navigation />
+                    <PrivateRoute path="/:type?/:id?" component={Navigation} />
 
                     <section className="section">
                         <div>
