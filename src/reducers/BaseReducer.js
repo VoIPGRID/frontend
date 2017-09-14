@@ -11,7 +11,7 @@ let initialAuth = {};
 
 // Serve an empty object when JSDom sets up our virtual dom for test purposes.
 if (typeof window !== 'undefined') {
-    initialAuth = window.__STORE__.user
+    initialAuth = window.__STORE__
 }
 
 const INITIAL_STATE = {

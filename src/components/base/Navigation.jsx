@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { withTranslate } from 'react-redux-multilingual';
 
@@ -49,7 +50,7 @@ class Navigation extends Component {
         }
 
         return (
-            window.__STORE__.user.authenticated &&
+            this.props.auth.user.authenticated &&
                 <div className="navigation--wrapper">
                     <ul className="navigation--list">
                         <li className="navigation--list-item">
@@ -87,6 +88,14 @@ class Navigation extends Component {
     }
 }
 
+const mapStateToProps = state => ({
+    auth: state.base.auth,
+});
+
+Navigation = connect(mapStateToProps)(Navigation);
+
 // Use the withTranslate Higher Order Component (HoC) to transpose the
 // translate function in our component.
-export default withTranslate(Navigation);
+Navigation = withTranslate(Navigation);
+
+export default Navigation;
