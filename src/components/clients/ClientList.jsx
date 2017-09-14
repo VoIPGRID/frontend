@@ -47,10 +47,10 @@ class ClientList extends Component {
             Header: 'Inactive',
         }, {
             accessor: 'actions',
-            Cell: props => <span>
+            Cell: props => (<span>
                 <Link to={`${props.original.id}/edit`}><i className="fas fa-edit" /> Edit</Link>
                 <button className="button is-link margin-left-5" onClick={() => this._handleDelete(props.original.id)}>
-                    <i className="fas fa-trash" /> Delete</button></span>,
+                    <i className="fas fa-trash" /> Delete</button></span>),
             Header: 'Actions',
         }]
 

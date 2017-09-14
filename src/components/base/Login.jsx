@@ -78,7 +78,10 @@ class Login extends Component {
                         <label className="label" htmlFor="name">Email</label>
                         <div className="control">
                             <input
-                                className="input" name="email" type="email" value={this.state.email}
+                                className="input"
+                                name="email"
+                                type="email"
+                                value={this.state.email}
                                 onChange={e => this.setState({email: e.target.value})}
                             />
                         </div>
@@ -88,7 +91,10 @@ class Login extends Component {
                         <label className="label" htmlFor="password">Password</label>
                         <div className="control">
                             <input
-                                className="input" type="password" name="password" value={this.state.password}
+                                className="input"
+                                type="password"
+                                name="password"
+                                value={this.state.password}
                                 onChange={e => this.setState({password: e.target.value})}
                             />
                         </div>

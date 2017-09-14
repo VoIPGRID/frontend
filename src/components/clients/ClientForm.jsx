@@ -95,20 +95,30 @@ class ClientForm extends Component {
                                 name="owner"
                                 helpText="This allows for reseller-style relationships.
                                 Set to NULL for the system owner."
-                                type="select" required="true" component={renderField}
+                                type="select"
+                                required="true"
+                                component={renderField}
                                 loadOptions={this._getPartnerOptions}
                             />
                             <Field
-                                label="Name" name="name"
+                                label="Name"
+                                name="name"
                                 helpText="The relation name: a company name or a
-                                person name in case of a private person." type="text" required="true"
+                                person name in case of a private person."
+                                type="text"
+                                required="true"
                                 component={renderField}
                             />
 
                             <Field
-                                label="Name" name="foreign_code" disabled="true"
+                                label="Name"
+                                name="foreign_code"
+                                disabled="true"
                                 helpText="A human readable identifier that the relation uses to
-                                identify you by." type="text" required="true" component={renderField}
+                                identify you by."
+                                type="text"
+                                required="true"
+                                component={renderField}
                             />
 
                             <Field label="Description" name="description" type="textarea" component={renderField} />

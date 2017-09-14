@@ -37,7 +37,8 @@ class VoipAccounts extends Component {
                 </div>
 
                 <Table
-                    data={this.props.voipaccounts} columns={columns}
+                    data={this.props.voipaccounts}
+                    columns={columns}
                     defaultLength={this.props.voipaccounts.length}
                 />
             </div>

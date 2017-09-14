@@ -45,7 +45,7 @@ class Navigation extends Component {
         let urlPrepend = '/';
 
         if (this.state.context.id && this.state.context.type) {
-            urlPrepend = `/${this.state.context.type}/${this.state.context.id}/`
+            urlPrepend = `/${this.state.context.type}/${this.state.context.id}/`;
         }
 
         return (

@@ -33,19 +33,25 @@ class ClientUserList extends Component {
 
         const columns = [{
             accessor: 'email',
-            Cell: props => <Link className="table--link" to={`/clients/${clientId}/user/${props.original.id}/`}>
-                {props.value}</Link>,
+            Cell: props => (<Link className="table--link" to={`/clients/${clientId}/user/${props.original.id}/`}>
+                {props.value}</Link>),
             Header: 'Email',
         }, {
             accessor: 'profile.description',
             Header: 'Description',
         }, {
             accessor: 'actions',
-            Cell: props => <span>
-                <Link to={`/clients/${clientId}/user/${props.original.id}/change`}>
-                    <i className="fas fa-edit" /> Edit</Link>
-                <button className="button is-link margin-left-5" onClick={() => this._handleDelete(props.original.id)}>
-                    <i className="fas fa-trash" /> Delete</button></span>,
+            Cell: props => (
+                <span>
+                    <Link to={`/clients/${clientId}/user/${props.original.id}/change`}>
+                        <i className="fas fa-edit" /> Edit
+                    </Link>
+                    <button
+                        className="button is-link margin-left-5"
+                        onClick={() => this._handleDelete(props.original.id)}
+                    ><i className="fas fa-trash" /> Delete</button>
+                </span>
+            ),
             Header: 'Actions',
         }]
 

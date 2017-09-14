@@ -85,28 +85,43 @@ class UserProfileForm extends Component {
                     <h2 className="subtitle">{translate('Personal')}</h2>
 
                     <Field
-                        label={translate('First name')} validate={requiredField}
-                        name="profile[first_name]" type="text" required="true" component={renderField}
+                        label={translate('First name')}
+                        validate={requiredField}
+                        name="profile[first_name]"
+                        type="text"
+                        required="true"
+                        component={renderField}
                     />
 
                     <Field
-                        label={translate('Preposition')} name="profile[preposition]"
-                        type="text" component={renderField}
+                        label={translate('Preposition')}
+                        name="profile[preposition]"
+                        type="text"
+                        component={renderField}
                     />
 
                     <Field
-                        label={translate('Last name')} validate={requiredField}
-                        name="profile[last_name]" type="text" required="true" component={renderField}
+                        label={translate('Last name')}
+                        validate={requiredField}
+                        name="profile[last_name]"
+                        type="text"
+                        required="true"
+                        component={renderField}
                     />
 
                     <h2 className="subtitle">{translate('Password')}</h2>
 
                     <Field
-                        label={translate('Old password')} name="old_password" type="password" component={renderField}
+                        label={translate('Old password')}
+                        name="old_password"
+                        type="password"
+                        component={renderField}
                     />
 
                     <Field
-                        label={translate('New password')} name="new_password1" type="password"
+                        label={translate('New password')}
+                        name="new_password1"
+                        type="password"
                         helpText={
                             translate('Password should have at least 6 characters and 1 non-alphabetical character')
                         }
@@ -114,20 +129,28 @@ class UserProfileForm extends Component {
                     />
 
                     <Field
-                        label={translate('New password confirmation')} name="new_password2"
-                        type="password" component={renderField}
+                        label={translate('New password confirmation')}
+                        name="new_password2"
+                        type="password"
+                        component={renderField}
                     />
 
                     <h2 className="subtitle">{translate('Preferences')}</h2>
 
                     <Field
-                        label={translate('Preferred language')} name="profile[language]" type="select"
-                        required="true" component={renderField} loadOptions={this._getPreferredLanguages}
+                        label={translate('Preferred language')}
+                        name="profile[language]"
+                        type="select"
+                        required="true"
+                        component={renderField}
+                        loadOptions={this._getPreferredLanguages}
                     />
 
                     <Field
-                        label={translate('Log out after 10 minutes')} name="session_expiry"
-                        type="checkbox" component={renderField}
+                        label={translate('Log out after 10 minutes')}
+                        name="session_expiry"
+                        type="checkbox"
+                        component={renderField}
                     />
 
                     <div className="field is-grouped margin-top-10">

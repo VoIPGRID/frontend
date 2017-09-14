@@ -4,7 +4,7 @@ import AdminModule from './admin_modules/AdminModule';
 
 
 const ClientAdmin = props =>
-    <div>
+    (<div>
         <div className="columns">
             <AdminModule title="Main Functionalities">
                 <li><Link to="/phonenumber"><i className="fas fa-phone" /> Phonenumber</Link></li>
@@ -63,7 +63,7 @@ const ClientAdmin = props =>
                 <li><Link to="/phonenumber"><i className="fas fa-phone" /> CRM</Link></li>
             </AdminModule>
         </div>
-    </div>
+    </div>)
 
 
 export default ClientAdmin;

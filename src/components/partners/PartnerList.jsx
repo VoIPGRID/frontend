@@ -39,8 +39,10 @@ class PartnerList extends Component {
 
         const columns = [{
             accessor: 'name',
-            Cell: props => <Link className="table--link" to={`/partners/${props.original.id}/clients`}>
-                {props.value}</Link>,
+            Cell: props => (
+                <Link className="table--link" to={`/partners/${props.original.id}/clients`}>
+                    {props.value}
+                </Link>),
             Header: 'Name',
         }, {
             accessor: 'description',
@@ -53,13 +55,13 @@ class PartnerList extends Component {
             Header: 'Inactive',
         }, {
             accessor: 'actions',
-            Cell: props => <span>
+            Cell: props => (<span>
                 <Link to={`/partners/${props.original.id}/edit`}>
                     <i className="fas fa-edit" /> Edit
                 </Link>
                 <button className="button is-link margin-left-5" onClick={() => this._handleDelete(props)}>
                     <i className="fas fa-trash" /> Delete
-                </button></span>,
+                </button></span>),
             Header: 'Actions',
 
         }]
