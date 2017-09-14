@@ -32,7 +32,7 @@ export default function(state = INITIAL_STATE, action) {
     case AUTH_FAILED:
     case LOGOUT_USER:
         window.__STORE__.user.authenticated = false;
-        return state;
+        return INITIAL_STATE;
     case SET_CONTEXT:
         return {
             ...state,

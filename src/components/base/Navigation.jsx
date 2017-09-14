@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { withTranslate } from 'react-redux-multilingual';
 
+import { logoutUser } from '../../actions/BaseActions';
+
 import '../../assets/style/navigation.scss';
 
 /**
@@ -39,6 +41,13 @@ class Navigation extends Component {
                 },
             })
         }
+    }
+
+    // This function calls an API endpoint to logout the user, reset our
+    // app state to the initial values and redirects to the login page.
+    logoutUser() {
+        this.props.logoutUser();
+        this.props.history.push('/login');
     }
 
     render() {
@@ -80,7 +89,11 @@ class Navigation extends Component {
                             <span className="navigation--icon-wrapper">
                                 <i className="fas fa-arrow-square-right" />
                             </span>
-                            <NavLink to="/user/personal_settings" activeClassName="is-active">Logout</NavLink>
+                            <a
+                                onClick={() => this.logoutUser()}
+                                role="button"
+                                tabIndex={0}
+                            >Logout</a>
                         </li>
                     </ul>
                 </div>
@@ -92,7 +105,7 @@ const mapStateToProps = state => ({
     auth: state.base.auth,
 });
 
-Navigation = connect(mapStateToProps)(Navigation);
+Navigation = connect(mapStateToProps, {logoutUser})(Navigation);
 
 // Use the withTranslate Higher Order Component (HoC) to transpose the
 // translate function in our component.

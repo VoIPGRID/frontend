@@ -25,7 +25,17 @@ export async function loginUser(values) {
     }
 }
 
-export function logoutUser(result) {
+export async function logoutUser(result) {
+    const url = `${API_ROOT}/logout`;
+
+    const request = axios.create({
+        headers: {'X-CSRFToken': window.__STORE__.user.csrf},
+        timeout: 3000,
+        withCredentials: true,
+    });
+
+    request.get(url);
+
     return {
         type: LOGOUT_USER,
         payload: result,
