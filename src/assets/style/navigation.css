@@ -1,0 +1,47 @@
+.navigation--wrapper {
+  background: #2a3042;
+  position: fixed;
+  z-index: 1052;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  overflow-x: hidden;
+  width: 80px;
+  transition: 0.3s;
+  padding-top: 20px; }
+  .navigation--wrapper:hover {
+    width: 250px; }
+
+.navigation--list {
+  width: 250px; }
+
+.navigation--list-bottom {
+  width: 250px;
+  position: absolute;
+  bottom: 0; }
+
+.navigation--list-item {
+  font-size: 20px;
+  font-weight: 200px; }
+  .navigation--list-item a {
+    text-decoration: none;
+    line-height: 45px;
+    color: rgba(255, 255, 255, 0.4);
+    display: inline; }
+    .navigation--list-item a:hover {
+      color: #fff; }
+      .navigation--list-item a:hover > i {
+        color: #fff; }
+  .navigation--list-item:hover {
+    cursor: pointer; }
+    .navigation--list-item:hover a {
+      color: #fff; }
+    .navigation--list-item:hover i {
+      color: #fff; }
+
+.navigation--icon-wrapper {
+  display: inline-block;
+  text-align: center;
+  width: 80px; }
+  .navigation--icon-wrapper i {
+    color: rgba(255, 255, 255, 0.4); }

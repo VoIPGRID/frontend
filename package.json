@@ -1,0 +1,51 @@
+{
+    "name": "voipgrid-react",
+    "version": "0.1.0",
+    "private": true,
+    "devDependencies": {
+        "react-scripts": "^1.0.13"
+    },
+    "dependencies": {
+        "axios": "^0.16.2",
+        "babel-core": "^6.26.0",
+        "babel-jest": "^21.0.2",
+        "bulma": "^0.5.2",
+        "chai": "^4.1.2",
+        "chai-jquery": "^2.0.0",
+        "jquery": "^3.2.1",
+        "jsdom": "^11.2.0",
+        "node-sass-chokidar": "^0.0.3",
+        "npm-run-all": "^4.1.1",
+        "prop-types": "^15.5.10",
+        "proptypes": "^1.1.0",
+        "react": "^15.6.1",
+        "react-dom": "^15.6.1",
+        "react-loadable": "^4.0.5",
+        "react-redux": "^5.0.6",
+        "react-redux-multilingual": "^1.0.4",
+        "react-router-dom": "^4.2.2",
+        "react-select": "^1.0.0-rc.10",
+        "react-table": "^6.5.3",
+        "react-tabs": "^2.0.0",
+        "redux": "^3.7.2",
+        "redux-form": "^7.0.4",
+        "redux-promise": "^0.5.3",
+        "redux-thunk": "^2.2.0"
+    },
+    "scripts": {
+        "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
+        "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
+        "start-js": "react-scripts start",
+        "start": "npm-run-all -p watch-css start-js",
+        "build": "npm run build-css && react-scripts build",
+        "test": "NODE_ENV=development react-scripts test --coverage",
+        "eject": "react-scripts eject"
+    },
+    "jest": {
+        "collectCoverageFrom": [
+            "src/**/*.{js,jsx}",
+            "!<rootDir>/node_modules/",
+            "!src/assets/vendor/**/*.js"
+        ]
+    }
+}

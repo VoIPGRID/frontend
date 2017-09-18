@@ -1,0 +1,59 @@
+import axios from 'axios';
+import API_ROOT from '../constants';
+
+import { AUTH_FAILED} from './BaseActions';
+
+export const GET_VOIPACCOUNTS = 'GET_VOIPACCOUNTS';
+export const GET_VOIPACCOUNT = 'GET_VOIPACCOUNT';
+export const EMPTY_VOIPACCOUNT = 'EMPTY_VOIPACCOUNT';
+export const FORM_ERROR = 'FORM_ERROR';
+
+
+
+export async function getVoipAccounts(clientId) {
+    const url = `${API_ROOT}/clients/${clientId}/phoneaccounts/`;
+
+    try {
+        const request = await axios.create({
+            headers: {'X-CSRFToken': window.__STORE__.user.csrf},
+            timeout: 3000,
+            withCredentials: true,
+        });
+
+        const result = await request.get(url);
+
+        return {
+            type: GET_VOIPACCOUNTS,
+            payload: result,
+        }
+    } catch (err) {
+        return {
+            type: AUTH_FAILED,
+            payload: err,
+        }
+    }
+}
+
+export async function getVoipAccount(clientId, voipAccountId) {
+    const url = `${API_ROOT}/clients/${clientId}/phoneaccounts/${voipAccountId}`;
+
+    try {
+        const request = await axios.create({
+            headers: {'X-CSRFToken': window.__STORE__.user.csrf},
+            timeout: 3000,
+            withCredentials: true,
+        });
+
+        const result = await request.get(url);
+
+        return {
+            type: GET_VOIPACCOUNT,
+            payload: result,
+        }
+    } catch (err) {
+        return {
+            type: AUTH_FAILED,
+            payload: err,
+        }
+    }
+}
