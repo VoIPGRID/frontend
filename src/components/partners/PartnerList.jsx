@@ -89,6 +89,4 @@ function mapStateToProps({ partners }) {
 
 PartnerList = connect(mapStateToProps, { deletePartner, getPartners, updatePartner})(PartnerList);
 
-PartnerList = withTranslate(PartnerList);
-
-export default PartnerList;
+export default withTranslate(PartnerList);

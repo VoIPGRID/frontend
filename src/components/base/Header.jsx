@@ -14,6 +14,7 @@ import logo from '../../assets/images/logo.svg';
 class Header extends Component {
 
     render() {
+        console.log(this.props)
         return (
             this.props.auth.user.authenticated &&
             <header>

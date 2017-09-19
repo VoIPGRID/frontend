@@ -178,11 +178,10 @@ function validate(values, props) {
     return errors;
 }
 
-function mapStateToProps({user}) {
-    return {
-        initialValues: user.current,
-    }
-}
+const mapStateToProps = ({user}) => ({
+    initialValues: user.current,
+});
+
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
@@ -197,11 +196,6 @@ UserProfileForm = reduxForm({
     form: 'UserProfileForm',
 })(UserProfileForm);
 
-UserProfileForm = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(UserProfileForm);
+UserProfileForm = connect(mapStateToProps, mapDispatchToProps)(UserProfileForm);
 
-UserProfileForm = withTranslate(UserProfileForm);
-
-export default UserProfileForm;
+export default withTranslate(UserProfileForm);

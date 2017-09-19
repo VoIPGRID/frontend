@@ -2,9 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import AdminModule from './admin_modules/AdminModule';
 
-
-const ClientAdmin = props =>
-    (<div>
+/**
+ * Client Admin. Component for show the available modules for a client.
+ * @param {object} props - Props data from higher order component.
+ */
+const ClientAdmin = () => (
+    <div>
         <div className="columns">
             <AdminModule title="Main Functionalities">
                 <li><Link to="/phonenumber"><i className="fas fa-phone" /> Phonenumber</Link></li>
@@ -23,10 +26,8 @@ const ClientAdmin = props =>
                 <li className="not-used"><Link to="/phonenumber"><i className="fas fa-phone" /> Messages</Link></li>
                 <li className="not-used"><Link to="/phonenumber"><i className="fas fa-music" /> Music on old</Link></li>
             </AdminModule>
-
         </div>
-
-    </div>)
-
+    </div>
+)
 
 export default ClientAdmin;

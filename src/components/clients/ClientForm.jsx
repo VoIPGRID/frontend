@@ -63,7 +63,7 @@ class ClientForm extends Component {
         const { status } = response.payload;
 
         if (status === 200 || status === 201) {
-            this.props.history.push('/clients');
+            this.props.history.push(`/partners/${this.props.match.params.partnerId}/clients`);
         } else {
             // Loop over errors and throw a new SubmissionError for every field
             // that has an error.
@@ -149,12 +149,10 @@ function validate(values) {
     return errors;
 }
 
-function mapStateToProps({ clients, partners }) {
-    return {
-        initialValues: clients.current,
-        partners: partners.objects,
-    }
-}
+const mapStateToProps = ({clients, partners}) => ({
+    initialValues: clients.current,
+    partners: partners.objects,
+});
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
@@ -170,9 +168,4 @@ ClientForm = reduxForm({
     validate,
 })(ClientForm);
 
-ClientForm = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ClientForm);
-
-export default ClientForm;
+export default connect(mapStateToProps, mapDispatchToProps)(ClientForm);

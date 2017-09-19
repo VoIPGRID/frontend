@@ -28,10 +28,12 @@ class ClientList extends Component {
             )
         }
 
+        const { partnerId } = this.props.match.params;
+
         const columns = [{
             accessor: 'name',
             Cell: props =>
-                <Link className="table--link" to={`/clients/${props.original.id}/admin`}>{props.value}</Link>,
+                <Link className="table--link" to={`/partners/${partnerId}/clients/${props.original.id}/admin`}>{props.value}</Link>,
             Header: 'Name',
         }, {
             accessor: 'created',
@@ -48,7 +50,7 @@ class ClientList extends Component {
         }, {
             accessor: 'actions',
             Cell: props => (<span>
-                <Link to={`${props.original.id}/edit`}><i className="fas fa-edit" /> Edit</Link>
+                <Link to={`/partners/${partnerId}/clients/${props.original.id}/edit`}><i className="fas fa-edit" /> Edit</Link>
                 <button className="button is-link margin-left-5" onClick={() => this._handleDelete(props.original.id)}>
                     <i className="fas fa-trash" /> Delete</button></span>),
             Header: 'Actions',
@@ -69,10 +71,9 @@ class ClientList extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        clients: state.clients.objects,
-    }
-}
+const mapStateToProps = state => ({
+    clients: state.clients.objects,
+});
+
 
 export default connect(mapStateToProps, { deleteClient, getClients, updateClient})(ClientList);

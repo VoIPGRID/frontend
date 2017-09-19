@@ -79,15 +79,40 @@ export async function getClient(id) {
     }
 }
 
-export function updateClient(values) {
-    const { id } = values;
-    const url = `${API_ROOT}/clients/${id}`;
-    const request = axios.patch(url, values);
 
-    return {
-        type: UPDATE_CLIENT,
-        payload: request,
-    }
+export async function updateClient(values) {
+    const { id } = values;
+    const url = `${API_ROOT}/clients/${id}/`;
+
+    const request = await axios.create({
+        headers: {
+            Accept: 'application/json',
+            'X-CSRFToken': window.__STORE__.user.csrf,
+        },
+        timeout: 3000,
+        withCredentials: true,
+    });
+
+    let result;
+    let object;
+
+    request.interceptors.response.use((response) => {
+        result = response;
+        object = {
+            type: UPDATE_CLIENT,
+            payload: result,
+        }
+    }, (error) => {
+        result = error.response.data;
+        object = {
+            type: FORM_ERROR,
+            payload: result,
+        }
+    });
+
+    result = await request.patch(url, values);
+
+    return object;
 }
 
 export function deleteClient(id) {

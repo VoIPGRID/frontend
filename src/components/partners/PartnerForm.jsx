@@ -296,14 +296,6 @@ class PartnerForm extends Component {
 function validate(values) {
     let errors = {};
 
-    // if (!values.partner) {
-    //     errors.partner = 'Please enter an owner';
-    // }
-
-    // if (!values.name) {
-    //     errors.name = 'Please enter a name';
-    // }
-
     return errors;
 }
 
@@ -330,9 +322,4 @@ PartnerForm = reduxForm({
     validate,
 })(PartnerForm);
 
-PartnerForm = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(PartnerForm);
-
-export default PartnerForm;
+export default connect(mapStateToProps, mapDispatchToProps)(PartnerForm);

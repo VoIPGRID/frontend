@@ -19,10 +19,12 @@ body {
     font-size: 15px;
 }
 
-.base-body {
-    // background: #f6f7fb;
-    margin: 80px 0 0 80px;
+#app {
+    background: #f6f7fb;
+}
 
+.base-body {
+    margin: 80px 0 0 80px;
 }
 
 .is-required {
@@ -47,6 +49,7 @@ body {
 
 .list-header {
     margin-bottom: 10px;
+    overflow: hidden;
 }
 
 .table {

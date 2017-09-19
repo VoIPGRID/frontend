@@ -12,7 +12,10 @@ const PrivateRoute = ({ component: Component, auth, ...rest }) => (
     <Route
         {...rest}
         render={(props) => {
-            if (props.location.pathname === '/login' || props.location.pathname === '/user/logout') {
+            // Prevent a double redirect when manually redirecting a user to
+            // the login page or logout page after auth fails or a user logs out.
+            if (props.location.pathname === '/login' ||
+                props.location.pathname === '/user/logout') {
                 return null;
             }
 
