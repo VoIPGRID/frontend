@@ -7,13 +7,11 @@ const Breadcrumbs = () => (
     <Route
         path="*"
         render = {props => {
-            console.log(props)
             let parts = props.location.pathname.split("/");
             const place = parts[parts.length-1];
             parts = parts.slice(1, parts.length-1);
             return (<ul className="breadcrumbs">{parts.map(crumb)} <li>{capitalizeFirstLetter(place)}</li></ul>)
         }}
-        staticName={true}
     />
 )
 
