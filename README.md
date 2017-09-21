@@ -1,14 +1,21 @@
 # About
-VoIPGRID webapp prototype 1 is a single-page web application built on top of Vue.js
-and friends. The main mantras of the project are:
+This is the VoIPGRID webapp prototype built with Vue. It's focussed around
+these key concepts:
 * Light-weight
 * Fast build flow
 * DOM-agnostic (SSR & testing)
 * Well documented
 
 # Install
-    git clone git@github.com:VoIPGRID/voipgrid-frontend.git
-    cd voipgrid-frontend
+The proprietary VoIPGRID portal is a requirement for this prototype to work.
+Install [VoIPGRID](https://ci.wearespindle.com/job/voipgrid-docs/docs/manuals/install.html) first.
+Then proceed with:
+
+    cd ~/projects/voipgrid-env/voipgrid
+    git checkout feature/frontend-rest-mock
+    git submodule update
+    cd frontend
+    git checkout prototype-vue
     npm i
     gulp build
     gulp watch

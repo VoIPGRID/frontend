@@ -79,7 +79,7 @@
     "vg-icons": "git+https://github.com/voipgrid/vg-icons#master",
     "vue": "^2.4.2",
     "vue-i18n": "^7.0.5",
-    "vue-i18n-stash": "git+https://github.com/wearespindle/vue-stash-i18n#master",
+    "vue-i18n-stash": "git+https://github.com/wearespindle/vue-stash-i18n.git#master",
     "vue-router": "^2.4.0",
     "vue-server-renderer": "^2.4.2",
     "vue-stash": "^2.0.1-beta",
