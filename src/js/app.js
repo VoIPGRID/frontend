@@ -43,7 +43,6 @@ class App {
                     },
                 })
             }
-
         })
 
         // Initialize form validator here.

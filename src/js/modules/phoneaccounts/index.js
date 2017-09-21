@@ -49,12 +49,26 @@ class PhoneaccountsModule extends Module {
 
     getObservables() {
         return {
+            calling_codes: [],
             phoneaccount: {
-                account_id: null,
+                // For now use a random value. This should be supplied by
+                // a simple endpoint.
+                // TODO: Use and describe endpoint.
+                account_id: Math.floor(Math.random() * (129600000 - 129500000 + 1)) + 129500000,
+                callerid_name: '',
+                callerid_number: '',
+                country: {
+                    code: null,
+                },
                 description: '',
-                password: '',
+                internal_number: null,
+                n112_region: {
+                    id: null,
+                },
+                password: Math.random().toString(36).substring(5, 15) + Math.random().toString(36).substring(6, 15),
             },
             phoneaccounts: [],
+            regions_112: [],
         }
     }
 }

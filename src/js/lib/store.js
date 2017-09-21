@@ -25,7 +25,7 @@ class Store {
     getDefaults() {
         return {
             breadcrumbs: [],
-            shouts: [],
+            notifications: [],
         }
     }
 

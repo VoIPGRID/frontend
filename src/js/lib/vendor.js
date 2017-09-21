@@ -16,18 +16,17 @@ global.VueRouter = require('vue-router')
 global.Vuelidate = require('vuelidate')
 global.Vuelidate.validators = require('vuelidate/lib/validators')
 
-global.i18n = require('vue-i18n-stash')
-global.I18nStore = require('vue-i18n-stash/src/store-stash')
+global.i18n = require('vue-stash-i18n')
+global.I18nStore = require('vue-stash-i18n/src/store-stash')
 
-const {Tabs, Tab} = require('vue-tabcordion')
-global.Paginator = require('vue-paginator2')
+const {Tabs, Tab} = require('fuet-tabs')
+const Pagination = require('fuet-pagination')
+const {Notification, Notifications, FuetNotify} = require('fuet-notify')
 
-const {Shout, Shouts, VueShout} = require('vue-shout')
+Vue.use(FuetNotify)
 
-Vue.use(VueShout)
-
-Vue.component('Paginator', global.Paginator)
-Vue.component('Shout', Shout)
-Vue.component('Shouts', Shouts)
+Vue.component('Pagination', Pagination)
+Vue.component('Notification', Notification)
+Vue.component('Notifications', Notifications)
 Vue.component('Tab', Tab)
 Vue.component('Tabs', Tabs)

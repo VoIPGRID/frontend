@@ -29,7 +29,7 @@ module.exports = function(app, _module) {
         const {status} = await app.api.client.delete(url)
         if (status === 204) {
             this.$store.users.users.results = this.$store.users.users.results.filter((i) => i.id !== user.id)
-            app.vm.$shout({message: $t('User {name} succesfully deleted', {name: user.email})})
+            app.vm.$notify({message: $t('User {name} succesfully deleted', {name: user.email})})
             app.router.push(backRoute)
         }
     }
@@ -205,9 +205,9 @@ module.exports = function(app, _module) {
 
                     // User's own profile. Don't redirect to the last/list view.
                     if (user.id === app.store.user.id) {
-                        app.vm.$shout({message: $t('Profile succesfully updated')})
+                        app.vm.$notify({message: $t('Profile succesfully updated')})
                     } else {
-                        app.vm.$shout({message: $t('User succesfully updated')})
+                        app.vm.$notify({message: $t('User succesfully updated')})
                         app.router.push(app.utils.lastRoute(backRoute))
                     }
                 } else {
@@ -227,7 +227,7 @@ module.exports = function(app, _module) {
                         password_confirm: '',
                     })
 
-                    app.vm.$shout({message: $t('User succesfully updated')})
+                    app.vm.$notify({message: $t('User succesfully updated')})
                     app.router.push(app.utils.lastRoute(backRoute))
                 } else {
                     // Trigger serverside validation.

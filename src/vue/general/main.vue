@@ -1,6 +1,6 @@
 <div id="app">
     <div class="wrapper" v-if="user.authenticated">
-        <Shouts :shouts="shouts"></Shouts>
+        <Notifications :notifications="notifications"></Notifications>
         <Navigation></Navigation>
         <section class="main-content-wrapper">
             <ContentHeader></ContentHeader>

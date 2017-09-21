@@ -26,7 +26,6 @@ module.exports = (app, actions) => {
             fetchData: async function() {
                 const clientId = app.router.currentRoute.params.client_id
                 const phoneaccountId = app.router.currentRoute.params.phoneaccount_id
-                console.log("WTF:", phoneaccountId)
                 const phoneaccountData = await actions.readPhoneaccount(clientId, phoneaccountId)
                 Object.assign(this.$store.phoneaccounts, phoneaccountData)
             },
@@ -36,37 +35,34 @@ module.exports = (app, actions) => {
         staticRenderFns: template.s,
         store: {
             phoneaccount: 'phoneaccounts.phoneaccount',
-            root: 'clients',
+            root: 'phoneaccounts',
         },
-        validations: {
-            phoneaccount: {
-                description: {
-                    maxLength: v.maxLength(63),
+        validations: function() {
+            let validations = {
+                phoneaccount: {
+                    account_id: {
+                        required: v.required,
+                    },
+                    callerid_number: {
+                        required: v.required,
+                    },
+                    country: {
+                        code: {
+                            required: v.required,
+                        },
+                    },
+                    description: {
+                        maxLength: v.maxLength(63),
+                        required: v.required,
+                    },
                 },
-                // foreign_code: {
-                //     maxLength: v.maxLength(16),
-                // },
-                // name: {
-                //     minLength: v.minLength(3),
-                //     required: v.required,
-                // },
-                // profile: {
-                //     audio_language: {
-                //         required: v.required,
-                //     },
-                //     country: {
-                //         code: {
-                //             required: v.required,
-                //         },
-                //     },
-                //     system_language: {
-                //         required: v.required,
-                //     },
-                //     timezone: {
-                //         required: v.required,
-                //     },
-                // },
-            },
+            }
+
+            if (this.phoneaccount.country.code === 'nl') {
+                validations.phoneaccount.n112_region = {id: {required: v.required}}
+            }
+
+            return validations
         },
         watch: {
             $route: 'fetchData',

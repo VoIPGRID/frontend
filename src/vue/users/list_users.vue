@@ -57,9 +57,9 @@
             </tr>
         </tbody>
     </table>
-    <Paginator
+    <Pagination
         :count="users.count"
         :method="fetchData"
         :path="resourceUrl">
-    </Paginator>
+    </Pagination>
 </div>

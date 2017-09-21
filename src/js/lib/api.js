@@ -26,7 +26,7 @@ class Api {
                     if (error.field !== 'None') {
                         fieldErrors.push(error)
                     } else {
-                        this.app.vm.$shout({message: this.app.$t(error.message)})
+                        this.app.vm.$notify({message: this.app.$t(error.message)})
                     }
                 }
                 this.app.store.general.apiValidation = fieldErrors
@@ -34,7 +34,7 @@ class Api {
 
             if (err.response.data.non_field_errors) {
                 for (let nonFieldError of err.response.data.non_field_errors) {
-                    this.app.vm.$shout({message: this.app.$t(nonFieldError)})
+                    this.app.vm.$notify({message: this.app.$t(nonFieldError)})
                 }
             }
 

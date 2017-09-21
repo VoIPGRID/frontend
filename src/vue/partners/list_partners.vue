@@ -39,9 +39,9 @@
             </tr>
         </tbody>
     </table>
-    <Paginator
+    <Pagination
         :count=partners.count
         :method=fetchData
         :path="$router.currentRoute.path">
-    </Paginator>
+    </Pagination>
 </div>

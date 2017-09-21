@@ -17,7 +17,7 @@ module.exports = function(app, _module) {
         app.api.client.delete(`partners/${partner.id}/`).then((res) => {
             let partners = this.$store.partners.partners.results
             this.$store.partners.partners.results = partners.filter((i) => i.id !== partner.id)
-            app.vm.$shout({message: $t('Partner {name} succesfully deleted', {name: partner.name})})
+            app.vm.$notify({message: $t('Partner {name} succesfully deleted', {name: partner.name})})
             app.router.push({name: 'list_partners'})
         })
     }
@@ -90,12 +90,12 @@ module.exports = function(app, _module) {
         payload.owner = parseInt(partner.owner)
         if (partner.id) {
             app.api.client.put(`partners/${partner.id}/`, payload).then((res) => {
-                app.vm.$shout({message: $t('Partner {name} succesfully updated', {name: partner.name})})
+                app.vm.$notify({message: $t('Partner {name} succesfully updated', {name: partner.name})})
                 app.router.push(app.utils.lastRoute('list_partners'))
             })
         } else {
             app.api.client.post('partners/', payload).then((res) => {
-                app.vm.$shout({message: $t('Partner {name} succesfully created', {name: partner.name})})
+                app.vm.$notify({message: $t('Partner {name} succesfully created', {name: partner.name})})
                 app.router.push(app.utils.lastRoute('list_partners'))
             })
         }

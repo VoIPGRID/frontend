@@ -46,9 +46,9 @@
         </tbody>
     </table>
 
-    <Paginator
+    <Pagination
         :count=clients.count
         :method=fetchData
         :path="$router.currentRoute.path">
-    </Paginator>
+    </Pagination>
 </div>
