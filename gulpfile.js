@@ -22,6 +22,7 @@ const livereload = require('gulp-livereload')
 const ifElse = require('gulp-if-else')
 const insert = require('gulp-insert')
 const minifier = composer(require('uglify-es'), console)
+const file = require('gulp-file')
 const nodemon = require('gulp-nodemon')
 const notify = require('gulp-notify')
 const rename = require('gulp-rename')
@@ -75,10 +76,10 @@ gulp.task('assets', `Copy required assets to '${BUILD_DIR}'`, () => {
 
 gulp.task('build', 'Build application', [
     'assets',
-    'js-app',
-    'mjs-vendor',
     'js-vendor',
     'js-translations',
+    'mjs-app',
+    'mjs-vendor',
     'templates',
     'scss',
     'scss-vendor',
@@ -110,19 +111,6 @@ gulp.task('docs', 'Generate documentation', (done) => {
 })
 
 
-gulp.task('js-app', 'Generate app for the browser', async(done) => {
-    const bundle = await rollup.rollup({
-        input: path.join(__dirname, 'src', 'js', 'browser.mjs'),
-    })
-    await bundle.write({
-        cache: cache.app,
-        file: path.join(BUILD_DIR, 'js', 'app.js'),
-        format: 'iife',
-        sourcemap: true,
-    })
-})
-
-
 gulp.task('js-translations', 'Generate translations', (done) => {
     return gulp.src(path.join('src', 'js', 'i18n', '*.js'), {base: './src/js/'})
         .pipe(ifElse(PRODUCTION, () => minifier()))
@@ -132,51 +120,7 @@ gulp.task('js-translations', 'Generate translations', (done) => {
 })
 
 
-let includePathOptions = {
-    external: ['vue', 'vue-router'],
-    include: {
-        vue: 'node_modules/vue/dist/vue.common.js',
-        'vue-router': 'node_modules/vue-router/dist/vue-router.js',
-        'vue-stash': 'node_modules/vue-stash/dist/index.js',
-    },
-};
-
-
-gulp.task('mjs-vendor', 'Generate vendor.js', async(done) => {
-    const bundle = await rollup.rollup({
-        cache: cache.app,
-        input: path.join(__dirname, 'src', 'js', 'lib', 'vendor.mjs'),
-        plugins: [
-            includePaths(includePathOptions),
-            replace({
-                'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
-                'process.env.VUE_ENV': JSON.stringify('browser'),
-            }),
-            resolve({
-                extensions: ['.js', '.mjs'],
-                main: true,
-                module: true,
-            }),
-            commonjs({
-                include: 'node_modules/**',
-                namedExports: {
-                    'node_modules/axios/lib/axios.js': ['axios'],
-                },
-            }),
-        ],
-    })
-    await bundle.write({
-        file: path.join(BUILD_DIR, 'js', 'lib', 'vendor.mjs'),
-        format: 'iife',
-        name: 'vendor',
-        sourcemap: true,
-    })
-
-    livereload.changed('vendor.mjs')
-})
-
-
-gulp.task('js-vendor', 'Generate vendor.js', async(done) => {
+gulp.task('js-vendor', 'Generate vendor.js', (done) => {
     if (!bundlers.vendor) {
         bundlers.vendor = browserify({
             cache: {},
@@ -207,6 +151,72 @@ gulp.task('js-vendor', 'Generate vendor.js', async(done) => {
         .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
         .pipe(ifElse(PRODUCTION, () => gulp.dest(path.join(BUILD_DIR, 'js', 'lib'))))
         .pipe(ifElse(PRODUCTION, () => size(extend({title: 'js-vendor[gzip]'}, sizeConfig))))
+})
+
+
+gulp.task('mjs-app', 'Generate app for the browser', async(done) => {
+    const bundle = await rollup.rollup({
+        input: path.join(__dirname, 'src', 'js', 'browser.mjs'),
+    })
+
+    const {code, map} = await bundle.generate({
+        file: path.join(BUILD_DIR, 'js', 'lib', 'app.mjs'),
+        format: 'iife',
+        name: 'vendor',
+        sourcemap: !PRODUCTION,
+    })
+
+    return file([{
+        name: 'app.js',
+        source: code,
+    }], {src: true})
+        .pipe(gulp.dest(path.join(BUILD_DIR, 'js')))
+        .pipe(size(extend({title: 'mjs-app'}, sizeConfig)))
+        .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
+        .pipe(ifElse(PRODUCTION, () => gulp.dest(path.join(BUILD_DIR, 'js'))))
+        .pipe(ifElse(PRODUCTION, () => size(extend({title: 'mjs-app[gzip]'}, sizeConfig))))
+})
+
+
+gulp.task('mjs-vendor', 'Generate vendor.js', async(done) => {
+    const bundle = await rollup.rollup({
+        cache: cache.app,
+        input: path.join(__dirname, 'src', 'js', 'lib', 'vendor.mjs'),
+        plugins: [
+            replace({
+                'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
+                'process.env.VUE_ENV': JSON.stringify('browser'),
+            }),
+            resolve({
+                extensions: ['.mjs'],
+                main: true,
+                module: true,
+            }),
+            commonjs({
+                include: 'node_modules/**',
+                namedExports: {
+                    'node_modules/axios/lib/axios.js': ['axios'],
+                },
+            }),
+        ],
+    })
+
+    const {code, map} = await bundle.generate({
+        file: path.join(BUILD_DIR, 'js', 'lib', 'vendor.mjs'),
+        format: 'iife',
+        name: 'vendor',
+        sourcemap: !PRODUCTION,
+    })
+
+    return file([{
+        name: 'vendor.mjs',
+        source: code,
+    }], {src: true})
+        .pipe(gulp.dest(path.join(BUILD_DIR, 'js', 'lib')))
+        .pipe(size(extend({title: 'mjs-vendor'}, sizeConfig)))
+        .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
+        .pipe(ifElse(PRODUCTION, () => gulp.dest(path.join(BUILD_DIR, 'js', 'lib'))))
+        .pipe(ifElse(PRODUCTION, () => size(extend({title: 'mjs-vendor[gzip]'}, sizeConfig))))
 })
 
 
@@ -304,7 +314,7 @@ gulp.task('watch', 'Watch for changes using livereload', () => {
         `!${path.join(__dirname, 'src', 'js', 'i18n', '*.{mjs, js}')}`,
         `!${path.join(__dirname, 'src', 'js', 'lib', 'templates.js')}`,
     ], () => {
-        gulp.start('js-app')
+        gulp.start('mjs-app')
         if (WITHDOCS) gulp.start('docs')
     })
 
