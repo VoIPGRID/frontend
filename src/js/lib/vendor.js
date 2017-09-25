@@ -17,5 +17,5 @@ global.VueRouter = require('vue-router')
 global.Vuelidate = require('vuelidate')
 global.Vuelidate.validators = require('vuelidate/lib/validators')
 
-global.i18n = require('vue-i18n-stash')
-global.I18nStore = require('vue-i18n-stash/src/store-stash')
+global.i18n = require('vue-stash-i18n')
+global.I18nStore = require('vue-stash-i18n/src/store-stash')
