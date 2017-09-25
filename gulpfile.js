@@ -8,6 +8,7 @@ const browserify = require('browserify')
 const buffer = require('vinyl-buffer')
 const childExec = require('child_process').exec
 const cleanCSS = require('gulp-clean-css')
+const commonjs = require('rollup-plugin-commonjs')
 const composer = require('gulp-uglify/composer')
 const concat = require('gulp-concat')
 const del = require('del')
@@ -24,6 +25,8 @@ const minifier = composer(require('uglify-es'), console)
 const nodemon = require('gulp-nodemon')
 const notify = require('gulp-notify')
 const rename = require('gulp-rename')
+const replace = require('rollup-plugin-replace')
+const rollup = require('rollup')
 const sass = require('gulp-sass')
 const size = require('gulp-size')
 const source = require('vinyl-source-stream')
@@ -32,6 +35,9 @@ const tape = require('gulp-tape')
 const tapColorize = require('tap-colorize')
 
 const watchify = require('watchify')
+
+const resolve = require('rollup-plugin-node-resolve')
+const includePaths = require('rollup-plugin-includepaths')
 
 const BUILD_DIR = process.env.BUILD_DIR || '/srv/http/data/frontend'
 const NODE_ENV = process.env.NODE_ENV || 'development'
@@ -43,7 +49,9 @@ const SRCDIR = path.join(__dirname, 'src')
 const WITHDOCS = argv.docs ? argv.docs : false
 const WATCHLINKED = argv.linked ? argv.linked : false
 
-let bundlers = {app: null, vendor: null}
+let bundlers = {vendor: null}
+let cache = {}
+
 let isWatching
 let gzipConfig = {append: true, gzipOptions: {level: 9}}
 let _nodemon
@@ -68,6 +76,7 @@ gulp.task('assets', `Copy required assets to '${BUILD_DIR}'`, () => {
 gulp.task('build', 'Build application', [
     'assets',
     'js-app',
+    'mjs-vendor',
     'js-vendor',
     'js-translations',
     'templates',
@@ -101,48 +110,21 @@ gulp.task('docs', 'Generate documentation', (done) => {
 })
 
 
-gulp.task('js-app', 'Generate app for the browser', (done) => {
-    if (!bundlers.app) {
-        bundlers.app = browserify({
-            cache: {},
-            debug: !PRODUCTION,
-            entries: path.join(__dirname, 'src', 'js', 'browser.js'),
-            packageCache: {},
-        })
-        if (isWatching) bundlers.app.plugin(watchify)
-    }
-    bundlers.app.bundle()
-        .on('error', notify.onError('Error: <%= error.message %>'))
-        .pipe(source('browser.js'))
-        .pipe(buffer())
-        .pipe(rename('app.js'))
-        .pipe(ifElse(!PRODUCTION, () => sourcemaps.init({loadMaps: true})))
-        .pipe(ifElse(PRODUCTION, () => babel({compact: true, presets: ['es2015', 'es2016', 'es2017']})))
-        .pipe(envify({NODE_ENV: NODE_ENV}))
-        .pipe(ifElse(PRODUCTION, () => minifier()))
-        .on('error', notify.onError('Error: <%= error.toString() %>'))
-        .on('end', () => {
-            if (!PRODUCTION) del(path.join(BUILD_DIR, 'js', '*.js.gz'), {force: true})
-            if (isWatching) {
-                if (RUN_SSR) _nodemon.emit('restart', 'app.js')
-                // Let the docs task handle livereload when it
-                // is part of the build.
-                else if (!WITHDOCS) livereload.changed('app.js')
-            }
-
-            done()
-        })
-        .pipe(ifElse(!PRODUCTION, () => sourcemaps.write('./')))
-        .pipe(gulp.dest(path.join(BUILD_DIR, 'js')))
-        .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
-        .pipe(ifElse(PRODUCTION, () => gulp.dest(path.join(BUILD_DIR, 'js'))))
-        .pipe(size(extend({title: 'js-app'}, sizeConfig)))
-        .pipe(ifElse(PRODUCTION, () => size(extend({title: 'js-app[gzip]'}, sizeConfig))))
+gulp.task('js-app', 'Generate app for the browser', async(done) => {
+    const bundle = await rollup.rollup({
+        input: path.join(__dirname, 'src', 'js', 'browser.mjs'),
+    })
+    await bundle.write({
+        cache: cache.app,
+        file: path.join(BUILD_DIR, 'js', 'app.js'),
+        format: 'iife',
+        sourcemap: true,
+    })
 })
 
 
 gulp.task('js-translations', 'Generate translations', (done) => {
-    return gulp.src('./src/js/i18n/*.js', {base: './src/js/'})
+    return gulp.src(path.join('src', 'js', 'i18n', '*.js'), {base: './src/js/'})
         .pipe(ifElse(PRODUCTION, () => minifier()))
         .pipe(gulp.dest(path.join(BUILD_DIR, 'js')))
         .pipe(size(extend({title: 'js-translations'}, sizeConfig)))
@@ -150,7 +132,51 @@ gulp.task('js-translations', 'Generate translations', (done) => {
 })
 
 
-gulp.task('js-vendor', 'Generate vendor.js', (done) => {
+let includePathOptions = {
+    external: ['vue', 'vue-router'],
+    include: {
+        vue: 'node_modules/vue/dist/vue.common.js',
+        'vue-router': 'node_modules/vue-router/dist/vue-router.js',
+        'vue-stash': 'node_modules/vue-stash/dist/index.js',
+    },
+};
+
+
+gulp.task('mjs-vendor', 'Generate vendor.js', async(done) => {
+    const bundle = await rollup.rollup({
+        cache: cache.app,
+        input: path.join(__dirname, 'src', 'js', 'lib', 'vendor.mjs'),
+        plugins: [
+            includePaths(includePathOptions),
+            replace({
+                'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
+                'process.env.VUE_ENV': JSON.stringify('browser'),
+            }),
+            resolve({
+                extensions: ['.js', '.mjs'],
+                main: true,
+                module: true,
+            }),
+            commonjs({
+                include: 'node_modules/**',
+                namedExports: {
+                    'node_modules/axios/lib/axios.js': ['axios'],
+                },
+            }),
+        ],
+    })
+    await bundle.write({
+        file: path.join(BUILD_DIR, 'js', 'lib', 'vendor.mjs'),
+        format: 'iife',
+        name: 'vendor',
+        sourcemap: true,
+    })
+
+    livereload.changed('vendor.mjs')
+})
+
+
+gulp.task('js-vendor', 'Generate vendor.js', async(done) => {
     if (!bundlers.vendor) {
         bundlers.vendor = browserify({
             cache: {},
@@ -273,9 +299,9 @@ gulp.task('watch', 'Watch for changes using livereload', () => {
     isWatching = true
     livereload.listen({silent: false})
     gulp.watch([
-        path.join(__dirname, 'src', 'js', '**', '*.js'),
-        `!${path.join(__dirname, 'src', 'js', 'lib', 'vendor.js')}`,
-        `!${path.join(__dirname, 'src', 'js', 'i18n', '*.js')}`,
+        path.join(__dirname, 'src', 'js', '**', '*.{mjs, js}'),
+        `!${path.join(__dirname, 'src', 'js', 'lib', 'vendor.{js, mjs}')}`,
+        `!${path.join(__dirname, 'src', 'js', 'i18n', '*.{mjs, js}')}`,
         `!${path.join(__dirname, 'src', 'js', 'lib', 'templates.js')}`,
     ], () => {
         gulp.start('js-app')
@@ -288,14 +314,14 @@ gulp.task('watch', 'Watch for changes using livereload', () => {
         gutil.log('Starting SSR daemon')
         _nodemon = nodemon({
             env: {NODE_ENV: NODE_ENV},
-            exec: `node${NODE_INSPECT}`,
+            exec: `node --experimental-modules${NODE_INSPECT}`,
             ext: 'js',
             // Reloads are triggered manually from the appropriate tasks.
             ignore: [
                 '*.js',
             ],
             restartable: true,
-            script: 'src/js/server.js',
+            script: 'src/js/server.mjs',
         })
 
 
@@ -333,10 +359,12 @@ gulp.task('watch', 'Watch for changes using livereload', () => {
         ], ['docs'])
         gulp.watch([
             path.join(NODE_PATH, 'vue-stash-i18n', 'src', '*.js'),
-            path.join(NODE_PATH, 'fuet-pagination', 'src', 'js', '*.js'),
-            path.join(NODE_PATH, 'fuet-notify', 'src', 'js', '*.js'),
-            path.join(NODE_PATH, 'fuet-tabs', 'src', 'js', '*.js'),
         ], ['js-vendor'])
+        gulp.watch([
+            path.join(NODE_PATH, 'fuet-pagination', 'src', 'js', '*.mjs'),
+            path.join(NODE_PATH, 'fuet-notify', 'src', 'js', '*.mjs'),
+            path.join(NODE_PATH, 'fuet-tabs', 'src', 'js', '*.mjs'),
+        ], ['mjs-vendor'])
         gulp.watch([
             path.join(NODE_PATH, 'fuet-notify', 'src', 'scss', 'styles.scss'),
             path.join(NODE_PATH, 'fuet-tabs', 'src', 'scss', 'styles.scss'),
@@ -345,6 +373,8 @@ gulp.task('watch', 'Watch for changes using livereload', () => {
 
     gulp.watch(path.join(__dirname, 'src', 'js', 'i18n', '*.js'), ['js-translations'])
     gulp.watch(path.join(__dirname, 'src', 'js', 'lib', 'vendor.js'), ['js-vendor'])
+    gulp.watch(path.join(__dirname, 'src', 'js', 'lib', 'vendor.mjs'), ['mjs-vendor'])
+
     gulp.watch(path.join(__dirname, 'src', 'vue', '**', '*.vue'), ['templates'])
     gulp.watch(path.join(__dirname, 'src', 'index.html'), ['assets'])
     gulp.watch([
