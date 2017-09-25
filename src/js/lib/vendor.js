@@ -8,13 +8,16 @@ if (process.env.NODE_ENV === 'production') {
     global.regeneratorRuntime = require('regenerator-runtime/runtime-module')
 }
 
-global.VueStash = require('vue-stash')
+global.VueStash = require('vue-stash').default
+
 // Leave this in, otherwise it breaks beforeCreate hooks with SSR.
 Vue.use(global.VueStash)
 global.VueRouter = require('vue-router')
 
 global.Vuelidate = require('vuelidate')
 global.Vuelidate.validators = require('vuelidate/lib/validators')
+global.JSData = require('js-data/dist/js-data.min')
+// global.HttpAdapter = require('js-data-http/dist/js-data-http.min')
 
 global.i18n = require('vue-i18n-stash')
 global.I18nStore = require('vue-i18n-stash/src/store-stash')

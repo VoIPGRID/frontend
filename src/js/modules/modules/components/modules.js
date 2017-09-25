@@ -1,5 +1,4 @@
 module.exports = (app) => {
-    const $t = Vue.i18n.translate
     const template = app.templates.modules_modules
 
     return Vue.component('DashboardHome', {

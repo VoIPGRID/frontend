@@ -28,6 +28,8 @@ const sass = require('gulp-sass')
 const size = require('gulp-size')
 const source = require('vinyl-source-stream')
 const sourcemaps = require('gulp-sourcemaps')
+const tape = require('gulp-tape')
+const tapColorize = require('tap-colorize')
 
 const watchify = require('watchify')
 
@@ -259,6 +261,14 @@ gulp.task('templates', 'Build Vue templates', () => {
 })
 
 
+gulp.task('test', function() {
+    return gulp.src('test/**/*.js')
+        .pipe(tape({
+            reporter: tapColorize(),
+        }))
+})
+
+
 gulp.task('watch', 'Watch for changes using livereload', () => {
     isWatching = true
     livereload.listen({silent: false})
@@ -272,7 +282,10 @@ gulp.task('watch', 'Watch for changes using livereload', () => {
         if (WITHDOCS) gulp.start('docs')
     })
 
+    gulp.watch([path.join(__dirname, 'test', '**', '*.js')], ['test'])
+
     if (RUN_SSR) {
+        gutil.log('Starting SSR daemon')
         _nodemon = nodemon({
             env: {NODE_ENV: NODE_ENV},
             exec: `node${NODE_INSPECT}`,
@@ -319,14 +332,14 @@ gulp.task('watch', 'Watch for changes using livereload', () => {
             path.join(NODE_PATH, 'jsdoc-rtd', 'tmpl', '**', '*.tmpl'),
         ], ['docs'])
         gulp.watch([
-            path.join(NODE_PATH, 'vuex-i18n-stash', 'src', '*.js'),
-            path.join(NODE_PATH, 'vue-paginator2', 'src', 'js', '*.js'),
-            path.join(NODE_PATH, 'vue-shout', 'src', 'js', '*.js'),
-            path.join(NODE_PATH, 'vue-tabcordion', 'src', 'js', '*.js'),
+            path.join(NODE_PATH, 'vue-stash-i18n', 'src', '*.js'),
+            path.join(NODE_PATH, 'fuet-pagination', 'src', 'js', '*.js'),
+            path.join(NODE_PATH, 'fuet-notify', 'src', 'js', '*.js'),
+            path.join(NODE_PATH, 'fuet-tabs', 'src', 'js', '*.js'),
         ], ['js-vendor'])
         gulp.watch([
-            path.join(NODE_PATH, 'vue-shout', 'src', 'scss', 'styles.scss'),
-            path.join(NODE_PATH, 'vue-tabcordion', 'src', 'scss', 'styles.scss'),
+            path.join(NODE_PATH, 'fuet-notify', 'src', 'scss', 'styles.scss'),
+            path.join(NODE_PATH, 'fuet-tabs', 'src', 'scss', 'styles.scss'),
         ], ['scss-vendor'])
     }
 

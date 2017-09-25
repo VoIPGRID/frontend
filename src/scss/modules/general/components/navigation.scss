@@ -100,6 +100,52 @@
         border-bottom: 1px solid $vg-border-dark-color;
         background: $vg-bg-darker-color;
 
+        .nav-item {
+            position: relative;
+            padding: 0;
+            margin: 0;
+            height: 65px;
+
+            .item-text {
+                max-width: 150px;
+                display: inline-block;
+                line-height: 65px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+
+
+            a {
+                display: inline-block;
+                line-height: 65px;
+                height: 65px;
+                text-align: left;
+                color: #fff;
+                padding: 0;
+                text-overflow: ellipsis;
+
+                i {
+                    float: left;
+                    line-height: 65px;
+                }
+
+                &:last-child {
+                    position: absolute;
+                    right: 0;
+                    top: -20px;
+                    i {
+                        text-align: left;
+                    }
+
+                }
+            }
+        }
+
+        .level-up {
+            text-align:right;
+            letter-spacing: 0;
+        }
+
         &::before, &::after {
             position: absolute;
             top: 65px;
@@ -115,15 +161,7 @@
             left: 15px;
         }
 
-        a {
-            padding: 0;
-            line-height: 65px;
-            text-overflow: ellipsis;
 
-            i {
-                line-height: 65px;
-            }
-        }
     }
 
     // Shrink the navigation to a small width for mobile.

@@ -61,6 +61,28 @@ class App {
 
 
     /**
+    * Find the current route's matching components and gather all
+    * state that's defined in it's `asyncData` methods. This is done
+    * here, because SSR doesn't have all of the components's lifecycle
+    * hooks, and we need a common way to gather state from components.
+    */
+    async loadHookData() {
+        const matchedComponents = this.router.getMatchedComponents()
+        try {
+            await Promise.all(matchedComponents.map(Component => {
+                if (Component.sealedOptions && Component.sealedOptions.asyncData) {
+                    return Component.sealedOptions.asyncData(this.router.currentRoute)
+                } else if (Component.asyncData) {
+                    return Component.asyncData(this.router.currentRoute)
+                } else return null
+            }))
+        } catch (error) {
+            console.trace(error)
+        }
+    }
+
+
+    /**
     * Initialize all modules.
     */
     loadModules() {
@@ -110,6 +132,7 @@ class App {
             linkActiveClass: 'is-active',
             mode: 'history',
         })
+
         // Keep track of the last route for cancel actions and the like.
         this.router.beforeEach((to, from, next) => {
             this.history.push(to)
@@ -129,23 +152,10 @@ class App {
             return next()
         })
 
-        if (!this.env.isBrowser) return
-
-        this.router.onReady(() => {
-            // Add router hook for handling asyncData. Doing it after
-            // initial route is resolved so that we don't double-fetch the
-            // data that we already have. Using `router.beforeResolve()`
-            // so that all async components are resolved.
-            if (!this.store.ssr) {
-                const activated = this.router.getMatchedComponents(this.router.currentRoute)
-                Promise.all(activated.map(c => {
-                    if (c.sealedOptions && c.sealedOptions.asyncData) {
-                        return c.sealedOptions.asyncData(this.router.currentRoute)
-                    } else if (c.asyncData) {
-                        return c.asyncData(this.router.currentRoute)
-                    } else return null
-                }))
-            }
+        this.router.onReady(async() => {
+            // Retrieve the state on pageload in case we are rendering in
+            // a browser in non-SSR mode.
+            if (!this.store.ssr) await this.loadHookData()
 
             this.router.beforeResolve((to, from, next) => {
                 const matched = this.router.getMatchedComponents(to)
@@ -158,9 +168,7 @@ class App {
                     return diffed || (diffed = (prevMatched[i] !== c))
                 })
 
-                if (!activated.length) {
-                    return next()
-                }
+                if (!activated.length) return next()
 
                 // This is where we should trigger a loading indicator
                 // if there is one.

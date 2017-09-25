@@ -54,8 +54,6 @@ module.exports = function(app, _module) {
             context.phoneaccount = phoneaccountId ? res[2].data : _module.getObservables().phoneaccount
         }
 
-        console.log(context)
-
         return context
     }
 

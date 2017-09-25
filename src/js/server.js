@@ -18,6 +18,7 @@ const fs = require('fs')
 const http = require('http')
 const path = require('path')
 const renderer = require('vue-server-renderer').createRenderer()
+const redirect = require('connect-redirection')
 
 const {promisify} = require('util')
 
@@ -30,6 +31,7 @@ require('./i18n/nl')
 
 const appCache = {}
 const apiHost = 'http://localhost'
+const HTTP_REDIRECTS = false
 
 
 /**
@@ -84,22 +86,11 @@ function createApp(req, cookieJar, store) {
         app.router.push(url)
         // Make sure to call all asyncData hooks on matching components
         // after resolving the route.
-        app.router.onReady(async() => {
-            const matchedComponents = app.router.getMatchedComponents()
-            try {
-                await Promise.all(matchedComponents.map(Component => {
-                    if (Component.sealedOptions && Component.sealedOptions.asyncData) {
-                        return Component.sealedOptions.asyncData(app.router.currentRoute)
-                    } else if (Component.asyncData) {
-                        return Component.asyncData(app.router.currentRoute)
-                    } else return null
-                }))
-            } catch (error) {
-                console.trace(error)
-            }
 
-            return resolve(app)
-        }, reject)
+        app.router.onReady(async() => {
+            await app.loadHookData()
+            resolve(app)
+        })
     }).catch((error) => {
         console.trace(error)
     })
@@ -116,6 +107,7 @@ function createApp(req, cookieJar, store) {
 function setupSsrProxy(indexHTML) {
     const ssrProxy = connect()
     ssrProxy.use(morgan('dev'))
+    ssrProxy.use(redirect())
     ssrProxy.use(favicon(path.join(__dirname, '../', 'img', 'favicon.ico')))
     ssrProxy.use('/public', serveStatic('/srv/http/data/frontend'))
     ssrProxy.use('/public', serveIndex('/srv/http/data/frontend', {icons: false}))
@@ -143,7 +135,6 @@ function setupSsrProxy(indexHTML) {
         if (store.user.language !== 'en') {
             translationFile = `<script src="/public/js/i18n/${store.user.language}.js"></script>`
         }
-
         let _html = indexHTML.replace('<div id="app"></div>', html)
         // Make a copy of the store and remove the translations from it;
         // they are supplied by a separate javascript file and applied
@@ -153,6 +144,11 @@ function setupSsrProxy(indexHTML) {
         _html = _html.replace('<!--STORE-->', `window.__STORE__ = ${JSON.stringify(copiedStore)}`)
         // Do the same for the translations script tag.
         _html = _html.replace('<!--TRANSLATIONS-->', translationFile)
+
+        // Sync vue-router redirects with the actual http response.
+        if (HTTP_REDIRECTS & (app.router.currentRoute.path !== req.url)) {
+            res.redirect(path.join(app.router.options.base, app.router.currentRoute.path))
+        }
         res.end(_html)
     })
 

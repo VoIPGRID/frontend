@@ -23,6 +23,30 @@ class GeneralModule extends Module {
         const Oops = Vue.component('Oops', require('./components/oops')(app))
 
         if (!this.app.store.general) this.app.store.general = this.getObservables()
+
+        app.router.addRoutes([{
+            path: '/',
+            redirect: to => {
+                if (!this.app.store.user.authenticated) {
+                    return {name: 'user_login'}
+                }
+
+                if (this.app.store.user.partner) {
+                    const selectedPartner = this.app.store.user.selectedPartner
+                    return {name: 'list_clients', params: {partner_id: selectedPartner.id}}
+                } else {
+                    const selectedClient = this.app.store.user.selectedClient
+                    return {
+                        name: 'dashboard_client',
+                        params: {
+                            client_id: selectedClient.id,
+                            partner_id: selectedClient.owner.id,
+                        },
+                    }
+                }
+            },
+        }])
+
         app.router.addRoutes([{
             component: Oops,
             name: 'oops',
@@ -39,7 +63,7 @@ class GeneralModule extends Module {
             render: template.r,
             staticRenderFns: template.s,
             store: {
-                shouts: 'shouts',
+                notifications: 'notifications',
                 user: 'user',
             },
         })

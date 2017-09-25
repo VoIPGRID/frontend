@@ -4,24 +4,33 @@
     </a>
 
     <div class="nav-item-wrapper context-selector">
-        <router-link class="nav-item" v-if="user.selectedClient.id" :to="{name: 'dashboard_client', params: {partner_id: user.selectedPartner.id, client_id: user.selectedClient.id}}">
+        <span class="nav-item" v-if="user.selectedClient.id">
+            <router-link :to="{name: 'dashboard_client', params: {partner_id: user.selectedPartner.id, client_id: user.selectedClient.id}}">
+                <i class="item-icon fa fa-group"></i>
+                <span class="item-text">{{user.selectedClient.name}}</span>
+            </router-link>
+            <router-link class="level-up" :to="{name: 'list_clients', params: {partner_id: user.selectedPartner.id}}">
+                <i class="item-icon fa fa-level-up fa-flip-horizontal"></i>
+            </router-link>
+        </span>
+        <span class="nav-item" v-else-if="user.selectedPartner.id">
             <router-link :to="{name: 'list_clients', params: {partner_id: user.selectedPartner.id}}">
-                <i class="level-up item-icon fa fa-level-up fa-flip-horizontal"></i>
+                <i class="fa fa-handshake-o"></i>
+                <span>{{user.selectedPartner.name}}</span>
             </router-link>
-            <i class="item-icon fa fa-group"></i>
-            <span class="item-text">{{user.selectedClient.name}}</span>
-        </router-link>
-        <router-link class="nav-item" v-else-if="user.selectedPartner.id" :to="{name: 'list_clients', params: {partner_id: user.selectedPartner.id}}">
-            <router-link :to="{name: 'list_partners'}">
-                <i class="level-up item-icon fa fa-level-up fa-flip-horizontal"></i>
+            <router-link class="level-up" :to="{name: 'list_partners'}">
+                <i class="item-icon fa fa-level-up fa-flip-horizontal"></i>
             </router-link>
-            <i class="fa fa-handshake-o"></i>
-            <span>{{user.selectedPartner.name}}</span>
-        </router-link>
-        <router-link class="nav-item" v-else-if="user.superuser || (user.partner && user.partner.may_have_children)" to="/partners">
-            <i class="fa fa-handshake-o"></i>
-            <span>{{$t('Partners')}}</span>
-        </router-link>
+        </span>
+        <span class="nav-item" v-else-if="user.superuser || (user.partner && user.partner.may_have_children)">
+            <router-link to="/partners">
+                <i class="item-icon fa fa-handshake-o"></i>
+                <span>{{$t('Partners')}}</span>
+            </router-link>
+            <router-link class="level-up" :to="{name: 'list_partners'}">
+                <i class="item-icon fa-flip-horizontal"></i>
+            </router-link>
+        </span>
     </div>
 
     <div class="nav-item-wrapper" v-if="user.selectedPartner.id && !user.selectedClient.id">
