@@ -11,7 +11,7 @@ import '../../assets/style/notification.css';
  */
 const Notification = props =>
     props.notification &&
-    <div className={`notification ${props.notification.type}`}>
+    <div className={`notification ${props.notification.notificationType}`}>
         <p>{props.notification.content}</p>
     </div>
 

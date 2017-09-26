@@ -32,7 +32,7 @@ export default function(state = INITIAL_STATE, action) {
     case AUTH_FAILED:
     case LOGOUT_USER:
         window.__STORE__.user.authenticated = false;
-        return INITIAL_STATE;
+        return state;
     case SET_CONTEXT:
         return {
             ...state,
@@ -42,8 +42,8 @@ export default function(state = INITIAL_STATE, action) {
         return {
             ...state,
             notification: {
-                type: action.notificationType,
-                content: action.content,
+                notificationType: action.payload.notificationType,
+                content: action.payload.content,
             },
         }
     case HIDE_NOTIFICATION:

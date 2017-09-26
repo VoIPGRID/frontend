@@ -7,7 +7,7 @@ describe('Notification', () => {
     let component;
 
     beforeEach(() => {
-        const componentState = {base: {notification: {content: 'Test notification', type: 'is-success'}}}
+        const componentState = {base: {notification: {content: 'Test notification', notificationType: 'is-success'}}}
         component = renderComponent(Notification, null, componentState);
     });
 

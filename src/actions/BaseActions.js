@@ -47,8 +47,10 @@ export async function logoutUser(result) {
 function sendNotification(content, notificationType) {
     return {
         type: SEND_NOTIFICATION,
-        content,
-        notificationType,
+        payload: {
+            content,
+            notificationType,
+        }
     }
 }
 

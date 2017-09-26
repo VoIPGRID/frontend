@@ -40,7 +40,7 @@
         "start-js": "react-scripts start",
         "start": "npm-run-all -p watch-css start-js",
         "build": "npm run build-css && react-scripts build",
-        "test": "NODE_ENV=development react-scripts test --coverage",
+        "test": "NODE_ENV=development react-scripts test",
         "eject": "react-scripts eject"
     },
     "jest": {
