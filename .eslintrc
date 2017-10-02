@@ -25,6 +25,7 @@
         "I18nStore": true,
         "translations": true,
         "__state": true,
+        "JSData": true,
         "_Vuex"
     },
     "plugins": [

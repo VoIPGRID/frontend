@@ -23,6 +23,8 @@ global.I18nStore = require('vue-i18n-stash/src/store-stash')
 const {Tabs, Tab} = require('fuet-tabs')
 const Pagination = require('fuet-pagination')
 const {Notification, Notifications, FuetNotify} = require('fuet-notify')
+const JSData = require('js-data')
+const DSHttpAdapter = require('js-data-http')
 
 Vue.use(FuetNotify)
 
@@ -31,3 +33,5 @@ Vue.component('Notification', Notification)
 Vue.component('Notifications', Notifications)
 Vue.component('Tab', Tab)
 Vue.component('Tabs', Tabs)
+
+Object.assign(global, {DSHttpAdapter, JSData})

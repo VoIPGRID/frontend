@@ -128,8 +128,10 @@ module.exports = function(app, _module) {
     * @returns {Object} - an API endpoint formatted result list.
     */
     actions.readUsers = async function({page, path}) {
-        let {data: users} = await app.api.client.get(`${path}?page=${page}`)
-        return users
+        const users = app.storage.getMapper('users')
+        let response = await users.findAll({page: page})
+        response.results = users.toJSON(response.results)
+        return response
     }
 
 

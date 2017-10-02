@@ -25,6 +25,18 @@ class UsersModule extends Module {
         const ListUsers = Vue.component('ListUsers', require('./components/list_users')(app, this.actions))
         const Login = Vue.component('Login', require('./components/login')(app, this.actions))
 
+        app.storage.defineMapper('users', {
+            endpoint: 'users',
+            wrap: function(data, opts) {
+                // Override behavior of wrap in this instance
+                if (opts.op === 'afterFindAll') {
+                    data.results = app.storage.getMapper('users').createRecord(data.results)
+                    return data
+                }
+                return JSData.Mapper.prototype.wrap.call(this, data, opts)
+            },
+        })
+
         app.router.addRoutes([{
             alias: '/logout',
             component: Login,
