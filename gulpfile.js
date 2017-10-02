@@ -3,7 +3,6 @@ const path = require('path')
 
 const addsrc = require('gulp-add-src')
 const argv = require('yargs').argv
-const babel = require('gulp-babel')
 const browserify = require('browserify')
 const buffer = require('vinyl-buffer')
 const childExec = require('child_process').exec
@@ -38,7 +37,6 @@ const tapColorize = require('tap-colorize')
 const watchify = require('watchify')
 
 const resolve = require('rollup-plugin-node-resolve')
-const includePaths = require('rollup-plugin-includepaths')
 
 const BUILD_DIR = process.env.BUILD_DIR || '/srv/http/data/frontend'
 const NODE_ENV = process.env.NODE_ENV || 'development'
@@ -50,8 +48,8 @@ const SRCDIR = path.join(__dirname, 'src')
 const WITHDOCS = argv.docs ? argv.docs : false
 const WATCHLINKED = argv.linked ? argv.linked : false
 
-let bundlers = {vendor: null}
-let cache = {}
+let bundlers = {jsVendor: null, mjsApp: null, mjsVendor: null}
+let cache = {jsVendor: null, mjsApp: null, mjsVendor: null}
 
 let isWatching
 let gzipConfig = {append: true, gzipOptions: {level: 9}}
@@ -121,16 +119,19 @@ gulp.task('js-translations', 'Generate translations', (done) => {
 
 
 gulp.task('js-vendor', 'Generate vendor.js', (done) => {
-    if (!bundlers.vendor) {
-        bundlers.vendor = browserify({
-            cache: {},
+    var resolutions = require('browserify-resolutions')
+    if (!bundlers.jsVendor) {
+        bundlers.jsVendor = browserify({
             debug: !PRODUCTION,
             entries: path.join(__dirname, 'src', 'js', 'lib', 'vendor.js'),
             packageCache: {},
         })
         if (isWatching) bundlers.vendor.plugin(watchify)
     }
-    bundlers.vendor.bundle()
+    bundlers.jsVendor.plugin(resolutions, ['js-data'])
+    // bundlers.vendor.external('js-data')
+    // bundlers.vendor.external('axios')
+    bundlers.jsVendor.bundle()
         .on('error', notify.onError('Error: <%= error.message %>'))
         .pipe(source('vendor.js'))
         .pipe(buffer())
@@ -154,33 +155,41 @@ gulp.task('js-vendor', 'Generate vendor.js', (done) => {
 })
 
 
-gulp.task('mjs-app', 'Generate app for the browser', async(done) => {
+gulp.task('mjs-app', 'Generate app for the browser', async() => {
     const bundle = await rollup.rollup({
+        cache: bundlers.mjsApp,
         input: path.join(__dirname, 'src', 'js', 'browser.mjs'),
     })
 
-    const {code, map} = await bundle.generate({
+    if (!bundlers.mjsApp) bundlers.mjsApp = bundle
+
+    const {code} = await bundle.generate({
         file: path.join(BUILD_DIR, 'js', 'lib', 'app.mjs'),
         format: 'iife',
-        name: 'vendor',
         sourcemap: !PRODUCTION,
     })
 
-    return file([{
-        name: 'app.js',
-        source: code,
-    }], {src: true})
-        .pipe(gulp.dest(path.join(BUILD_DIR, 'js')))
-        .pipe(size(extend({title: 'mjs-app'}, sizeConfig)))
-        .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
-        .pipe(ifElse(PRODUCTION, () => gulp.dest(path.join(BUILD_DIR, 'js'))))
-        .pipe(ifElse(PRODUCTION, () => size(extend({title: 'mjs-app[gzip]'}, sizeConfig))))
+    await new Promise((_resolve, reject) => {
+        file([{
+            name: 'app.js',
+            source: code,
+        }], {src: true})
+            .on('end', () => {
+                if (isWatching) livereload.changed('app.js')
+                _resolve()
+            })
+            .pipe(gulp.dest(path.join(BUILD_DIR, 'js')))
+            .pipe(size(extend({title: 'mjs-app'}, sizeConfig)))
+            .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
+            .pipe(ifElse(PRODUCTION, () => gulp.dest(path.join(BUILD_DIR, 'js'))))
+            .pipe(ifElse(PRODUCTION, () => size(extend({title: 'mjs-app[gzip]'}, sizeConfig))))
+    })
 })
 
 
-gulp.task('mjs-vendor', 'Generate vendor.js', async(done) => {
+gulp.task('mjs-vendor', 'Generate vendor.js', async() => {
     const bundle = await rollup.rollup({
-        cache: cache.app,
+        cache: bundlers.mjsVendor,
         input: path.join(__dirname, 'src', 'js', 'lib', 'vendor.mjs'),
         plugins: [
             replace({
@@ -188,35 +197,48 @@ gulp.task('mjs-vendor', 'Generate vendor.js', async(done) => {
                 'process.env.VUE_ENV': JSON.stringify('browser'),
             }),
             resolve({
-                extensions: ['.mjs'],
+                extensions: ['.js', '.mjs'],
+                jsnext: true,
                 main: true,
                 module: true,
             }),
             commonjs({
                 include: 'node_modules/**',
                 namedExports: {
-                    'node_modules/axios/lib/axios.js': ['axios'],
+                    './node_modules/axios/lib/axios.js': ['axios'],
+                    './node_modules/js-data/dist/js-data.min.js': ['js-data'],
+                    './node_modules/js-data-http/dist/js-data-http.js': ['js-data-http'],
                 },
             }),
         ],
     })
 
-    const {code, map} = await bundle.generate({
+    if (!bundlers.mjsVendor) bundlers.mjsVendor = bundle
+
+    const {code} = await bundle.generate({
         file: path.join(BUILD_DIR, 'js', 'lib', 'vendor.mjs'),
         format: 'iife',
         name: 'vendor',
         sourcemap: !PRODUCTION,
     })
 
-    return file([{
-        name: 'vendor.mjs',
-        source: code,
-    }], {src: true})
-        .pipe(gulp.dest(path.join(BUILD_DIR, 'js', 'lib')))
-        .pipe(size(extend({title: 'mjs-vendor'}, sizeConfig)))
-        .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
-        .pipe(ifElse(PRODUCTION, () => gulp.dest(path.join(BUILD_DIR, 'js', 'lib'))))
-        .pipe(ifElse(PRODUCTION, () => size(extend({title: 'mjs-vendor[gzip]'}, sizeConfig))))
+
+    await new Promise((_resolve, reject) => {
+        file([{
+            name: 'vendor.mjs',
+            source: code,
+        }], {src: true})
+            .on('end', () => {
+                if (isWatching) livereload.changed('vendor_es.js')
+                _resolve()
+            })
+            .pipe(rename('vendor_es.js'))
+            .pipe(gulp.dest(path.join(BUILD_DIR, 'js', 'lib')))
+            .pipe(size(extend({title: 'mjs-vendor'}, sizeConfig)))
+            .pipe(ifElse(PRODUCTION, () => gzip(gzipConfig)))
+            .pipe(ifElse(PRODUCTION, () => gulp.dest(path.join(BUILD_DIR, 'js', 'lib'))))
+            .pipe(ifElse(PRODUCTION, () => size(extend({title: 'mjs-vendor[gzip]'}, sizeConfig))))
+    })
 })
 
 
@@ -308,15 +330,6 @@ gulp.task('test', function() {
 gulp.task('watch', 'Watch for changes using livereload', () => {
     isWatching = true
     livereload.listen({silent: false})
-    gulp.watch([
-        path.join(__dirname, 'src', 'js', '**', '*.{mjs, js}'),
-        `!${path.join(__dirname, 'src', 'js', 'lib', 'vendor.{js, mjs}')}`,
-        `!${path.join(__dirname, 'src', 'js', 'i18n', '*.{mjs, js}')}`,
-        `!${path.join(__dirname, 'src', 'js', 'lib', 'templates.js')}`,
-    ], () => {
-        gulp.start('mjs-app')
-        if (WITHDOCS) gulp.start('docs')
-    })
 
     gulp.watch([path.join(__dirname, 'test', '**', '*.js')], ['test'])
 
@@ -344,7 +357,6 @@ gulp.task('watch', 'Watch for changes using livereload', () => {
             livereload.changed('app.js')
         })
     }
-
 
 
     if (WITHDOCS) {
@@ -380,6 +392,17 @@ gulp.task('watch', 'Watch for changes using livereload', () => {
             path.join(NODE_PATH, 'fuet-tabs', 'src', 'scss', 'styles.scss'),
         ], ['scss-vendor'])
     }
+
+    gulp.watch([
+        path.join(__dirname, 'src', 'js', '**', '*.{js,mjs}'),
+        `!${path.join(__dirname, 'src', 'js', 'lib', 'vendor.{js,mjs}')}`,
+        `!${path.join(__dirname, 'src', 'js', 'i18n', '*.js')}`,
+        `!${path.join(__dirname, 'src', 'js', 'lib', 'templates.js')}`,
+    ], () => {
+        gulp.start('mjs-app')
+        if (WITHDOCS) gulp.start('docs')
+    })
+
 
     gulp.watch(path.join(__dirname, 'src', 'js', 'i18n', '*.js'), ['js-translations'])
     gulp.watch(path.join(__dirname, 'src', 'js', 'lib', 'vendor.js'), ['js-vendor'])
