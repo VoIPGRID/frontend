@@ -1,5 +1,5 @@
 {
-  "extends": "react-app",
+  "extends": ["react-app"],
   "env": {
     "browser": true,
     "commonjs": true,
@@ -13,6 +13,10 @@
   "rules": {
     "no-console": "off",
     "strict": ["error", "global"],
-    "curly": "warn"
-  }
+    "curly": "warn",
+    "prettier/prettier": "error"
+  },
+  "plugins": [
+    "prettier"
+  ]
 }

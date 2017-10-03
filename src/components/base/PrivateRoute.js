@@ -1,6 +1,6 @@
-import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
+import React from "react";
+import { Route, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
 
 /**
  * PrivateRoute component
@@ -9,28 +9,33 @@ import { connect } from 'react-redux';
  * component.
  */
 const PrivateRoute = ({ component: Component, auth, ...rest }) => (
-    <Route
-        {...rest}
-        render={(props) => {
-            // Prevent a double redirect when manually redirecting a user to
-            // the login page or logout page after auth fails or a user logs out.
-            if (props.location.pathname === '/login' ||
-                props.location.pathname === '/user/logout') {
-                return null;
-            }
+  <Route
+    {...rest}
+    render={props => {
+      // Prevent a double redirect when manually redirecting a user to
+      // the login page or logout page after auth fails or a user logs out.
+      if (
+        props.location.pathname === "/login" ||
+        props.location.pathname === "/user/logout"
+      ) {
+        return null;
+      }
 
-            const comp = auth.user.authenticated === true
-                ? <Component {...props} />
-                : <Redirect to={{pathname: '/login'}} />
-            return comp;
-        }}
-    />
-)
+      const comp =
+        auth.user.authenticated === true ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to={{ pathname: "/login" }} />
+        );
+      return comp;
+    }}
+  />
+);
 
 const mapStateToProps = (state, ownProps) => ({
-    auth: state.base.auth,
+  auth: state.base.auth
 });
 
 export default connect(mapStateToProps, null, null, {
-    pure: false,
+  pure: false
 })(PrivateRoute);
