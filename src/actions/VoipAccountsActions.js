@@ -10,17 +10,17 @@ export const FORM_ERROR = 'FORM_ERROR';
 
 
 
-export async function getVoipAccounts(clientId) {
+export function getVoipAccounts(clientId) {
     const url = `${API_ROOT}/clients/${clientId}/phoneaccounts/`;
 
     try {
-        const request = await axios.create({
+        const request = axios.create({
             headers: {'X-CSRFToken': window.__STORE__.user.csrf},
             timeout: 3000,
             withCredentials: true,
         });
 
-        const result = await request.get(url);
+        const result = request.get(url);
 
         return {
             type: GET_VOIPACCOUNTS,
@@ -34,17 +34,17 @@ export async function getVoipAccounts(clientId) {
     }
 }
 
-export async function getVoipAccount(clientId, voipAccountId) {
+export function getVoipAccount(clientId, voipAccountId) {
     const url = `${API_ROOT}/clients/${clientId}/phoneaccounts/${voipAccountId}`;
 
     try {
-        const request = await axios.create({
+        const request = axios.create({
             headers: {'X-CSRFToken': window.__STORE__.user.csrf},
             timeout: 3000,
             withCredentials: true,
         });
 
-        const result = await request.get(url);
+        const result = request.get(url);
 
         return {
             type: GET_VOIPACCOUNT,

@@ -9,10 +9,10 @@ export const HIDE_NOTIFICATION = 'HIDE_NOTIFICATION';
 export const SET_CONTEXT = 'SET_CONTEXT';
 
 
-export async function loginUser(values) {
+export function loginUser(values) {
     let url = `${API_ROOT}/login/`;
 
-    let request = await axios.create({
+    let request = axios.create({
         baseURL: 'http://localhost:8001/api/v2/',
         headers: {'X-CSRFToken': window.__STORE__.user.csrf},
         timeout: 3000,
@@ -27,7 +27,7 @@ export async function loginUser(values) {
     }
 }
 
-export async function logoutUser(result) {
+export function logoutUser(result) {
     const url = `${API_ROOT}/logout`;
 
     const request = axios.create({
