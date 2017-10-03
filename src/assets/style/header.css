@@ -10,21 +10,27 @@ header {
 .header--logo {
   margin: 20px;
   height: 40px;
-  max-height: 40px; }
+  max-height: 40px;
+}
 
 .header--navigation {
   position: absolute;
   right: 25px;
   top: 0;
   height: 80px;
-  line-height: 30px; }
-  .header--navigation a {
-    color: #2a3042;
-    display: inline-block;
-    text-decoration: none;
-    font-size: 18px;
-    padding: 0 5px;
-    margin: 25px 0;
-    border-radius: 3px; }
-    .header--navigation a:hover {
-      color: #e94e1b; }
+  line-height: 30px;
+}
+
+.header--navigation a {
+  color: #2a3042;
+  display: inline-block;
+  text-decoration: none;
+  font-size: 18px;
+  padding: 0 5px;
+  margin: 25px 0;
+  border-radius: 3px;
+}
+
+.header--navigation a:hover {
+  color: #e94e1b;
+}
