@@ -1,15 +1,15 @@
-import axios from "axios";
-import API_ROOT from "../constants";
+import axios from 'axios';
+import API_ROOT from '../constants';
 
-import { AUTH_FAILED } from "./BaseActions";
+import { AUTH_FAILED } from './BaseActions';
 
-export const GET_USERS = "GET_USERS";
-export const CREATE_USER = "CREATE_USER";
-export const GET_USER = "GET_USER";
-export const UPDATE_USER = "UPDATE_USER";
-export const DELETE_USER = "DELETE_USER";
-export const EMPTY_USER = "EMPTY_USER";
-export const FORM_ERROR = "FORM_ERROR";
+export const GET_USERS = 'GET_USERS';
+export const CREATE_USER = 'CREATE_USER';
+export const GET_USER = 'GET_USER';
+export const UPDATE_USER = 'UPDATE_USER';
+export const DELETE_USER = 'DELETE_USER';
+export const EMPTY_USER = 'EMPTY_USER';
+export const FORM_ERROR = 'FORM_ERROR';
 
 export async function getUsers(clientId) {
   let url;
@@ -21,7 +21,7 @@ export async function getUsers(clientId) {
 
   try {
     const request = await axios.create({
-      headers: { "X-CSRFToken": window.__STORE__.user.csrf },
+      headers: { 'X-CSRFToken': window.__STORE__.user.csrf },
       timeout: 3000,
       withCredentials: true
     });
@@ -45,8 +45,8 @@ export async function deleteUser(clientId, userId) {
 
   const request = await axios.create({
     headers: {
-      Accept: "application/json",
-      "X-CSRFToken": window.__STORE__.user.csrf
+      Accept: 'application/json',
+      'X-CSRFToken': window.__STORE__.user.csrf
     },
     timeout: 3000,
     withCredentials: true
@@ -85,7 +85,7 @@ export async function getUser() {
 
   try {
     const request = await axios.create({
-      headers: { "X-CSRFToken": window.__STORE__.user.csrf },
+      headers: { 'X-CSRFToken': window.__STORE__.user.csrf },
       timeout: 3000,
       withCredentials: true
     });
@@ -111,8 +111,8 @@ export async function updateUser(values) {
 
   const request = await axios.create({
     headers: {
-      Accept: "application/json",
-      "X-CSRFToken": window.__STORE__.user.csrf
+      Accept: 'application/json',
+      'X-CSRFToken': window.__STORE__.user.csrf
     },
     timeout: 3000,
     withCredentials: true

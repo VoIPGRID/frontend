@@ -1,6 +1,6 @@
-import React from "react";
-import { connect } from "react-redux";
-import "../../assets/style/notification.css";
+import React from 'react';
+import { connect } from 'react-redux';
+import '../../assets/style/notification.css';
 
 /**
  * Notification component to render a notification on top of the page.

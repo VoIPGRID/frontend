@@ -1,15 +1,15 @@
-import axios from "axios";
-import API_ROOT from "../constants";
-import { AUTH_FAILED } from "./BaseActions";
+import axios from 'axios';
+import API_ROOT from '../constants';
+import { AUTH_FAILED } from './BaseActions';
 
-export const GET_CLIENTS = "GET_CLIENTS";
-export const GET_CLIENTS_PARTNER = "GET_CLIENTS_PARTNER";
-export const CREATE_CLIENT = "CREATE_CLIENT";
-export const GET_CLIENT = "GET_CLIENT";
-export const UPDATE_CLIENT = "UPDATE_CLIENT";
-export const DELETE_CLIENT = "DELETE_CLIENT";
-export const FORM_ERROR = "FORM_ERROR";
-export const EMPTY_CLIENT = "EMPTY_CLIENT";
+export const GET_CLIENTS = 'GET_CLIENTS';
+export const GET_CLIENTS_PARTNER = 'GET_CLIENTS_PARTNER';
+export const CREATE_CLIENT = 'CREATE_CLIENT';
+export const GET_CLIENT = 'GET_CLIENT';
+export const UPDATE_CLIENT = 'UPDATE_CLIENT';
+export const DELETE_CLIENT = 'DELETE_CLIENT';
+export const FORM_ERROR = 'FORM_ERROR';
+export const EMPTY_CLIENT = 'EMPTY_CLIENT';
 
 export async function getClients(partner = null) {
   let url;
@@ -22,7 +22,7 @@ export async function getClients(partner = null) {
 
   try {
     const request = await axios.create({
-      headers: { "X-CSRFToken": window.__STORE__.user.csrf },
+      headers: { 'X-CSRFToken': window.__STORE__.user.csrf },
       timeout: 3000,
       withCredentials: true
     });
@@ -58,7 +58,7 @@ export async function getClient(id) {
 
   try {
     const request = await axios.create({
-      headers: { "X-CSRFToken": window.__STORE__.user.csrf },
+      headers: { 'X-CSRFToken': window.__STORE__.user.csrf },
       timeout: 3000,
       withCredentials: true
     });
@@ -83,8 +83,8 @@ export async function updateClient(values) {
 
   const request = await axios.create({
     headers: {
-      Accept: "application/json",
-      "X-CSRFToken": window.__STORE__.user.csrf
+      Accept: 'application/json',
+      'X-CSRFToken': window.__STORE__.user.csrf
     },
     timeout: 3000,
     withCredentials: true

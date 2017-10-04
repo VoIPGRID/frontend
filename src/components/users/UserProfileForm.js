@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import { Field, reduxForm, SubmissionError } from "redux-form";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { withTranslate } from "react-redux-multilingual";
+import React, { Component } from 'react';
+import { Field, reduxForm, SubmissionError } from 'redux-form';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { withTranslate } from 'react-redux-multilingual';
 
-import { getUser, updateUser, emptyUser } from "../../actions/UserActions";
+import { getUser, updateUser, emptyUser } from '../../actions/UserActions';
 
-import renderField from "../helpers/forms/RenderField";
+import renderField from '../helpers/forms/RenderField';
 
 // Error messages
-const requiredField = value => (value ? undefined : "This field is required.");
+const requiredField = value => (value ? undefined : 'This field is required.');
 
 class UserProfileForm extends Component {
   constructor(props) {
@@ -30,8 +30,8 @@ class UserProfileForm extends Component {
 
   async _getPreferredLanguages() {
     const options = [
-      { value: "nl", label: this.props.translate("Dutch") },
-      { value: "en", label: this.props.translate("English") }
+      { value: 'nl', label: this.props.translate('Dutch') },
+      { value: 'en', label: this.props.translate('English') }
     ];
 
     return { options };
@@ -41,11 +41,11 @@ class UserProfileForm extends Component {
     let response;
 
     if (!values.old_password) {
-      values.old_password = "";
+      values.old_password = '';
     }
 
     if (!values.password) {
-      values.password = "";
+      values.password = '';
     }
 
     if (values.id) {
@@ -55,10 +55,10 @@ class UserProfileForm extends Component {
     const { status } = response.payload;
 
     if (status === 200 || status === 201) {
-      this.props.history.push("/partners");
+      this.props.history.push('/partners');
 
       this.props.dispatch({
-        type: "SET_LOCALE",
+        type: 'SET_LOCALE',
         locale: values.profile.language
       });
     } else {
@@ -78,10 +78,10 @@ class UserProfileForm extends Component {
     return (
       <div className="main">
         <form onSubmit={handleSubmit(this._handleSubmit)}>
-          <h2 className="subtitle">{translate("Personal")}</h2>
+          <h2 className="subtitle">{translate('Personal')}</h2>
 
           <Field
-            label={translate("First name")}
+            label={translate('First name')}
             validate={requiredField}
             name="profile[first_name]"
             type="text"
@@ -90,14 +90,14 @@ class UserProfileForm extends Component {
           />
 
           <Field
-            label={translate("Preposition")}
+            label={translate('Preposition')}
             name="profile[preposition]"
             type="text"
             component={renderField}
           />
 
           <Field
-            label={translate("Last name")}
+            label={translate('Last name')}
             validate={requiredField}
             name="profile[last_name]"
             type="text"
@@ -105,36 +105,36 @@ class UserProfileForm extends Component {
             component={renderField}
           />
 
-          <h2 className="subtitle">{translate("Password")}</h2>
+          <h2 className="subtitle">{translate('Password')}</h2>
 
           <Field
-            label={translate("Old password")}
+            label={translate('Old password')}
             name="old_password"
             type="password"
             component={renderField}
           />
 
           <Field
-            label={translate("New password")}
+            label={translate('New password')}
             name="new_password1"
             type="password"
             helpText={translate(
-              "Password should have at least 6 characters and 1 non-alphabetical character"
+              'Password should have at least 6 characters and 1 non-alphabetical character'
             )}
             component={renderField}
           />
 
           <Field
-            label={translate("New password confirmation")}
+            label={translate('New password confirmation')}
             name="new_password2"
             type="password"
             component={renderField}
           />
 
-          <h2 className="subtitle">{translate("Preferences")}</h2>
+          <h2 className="subtitle">{translate('Preferences')}</h2>
 
           <Field
-            label={translate("Preferred language")}
+            label={translate('Preferred language')}
             name="profile[language]"
             type="select"
             required="true"
@@ -143,7 +143,7 @@ class UserProfileForm extends Component {
           />
 
           <Field
-            label={translate("Log out after 10 minutes")}
+            label={translate('Log out after 10 minutes')}
             name="session_expiry"
             type="checkbox"
             component={renderField}
@@ -199,7 +199,7 @@ function mapDispatchToProps(dispatch) {
 
 UserProfileForm = reduxForm({
   validate,
-  form: "UserProfileForm"
+  form: 'UserProfileForm'
 })(UserProfileForm);
 
 UserProfileForm = connect(mapStateToProps, mapDispatchToProps)(UserProfileForm);

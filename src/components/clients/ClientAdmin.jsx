@@ -1,6 +1,6 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import AdminModule from "./admin_modules/AdminModule";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import AdminModule from './admin_modules/AdminModule';
 
 /**
  * Client Admin. Component for show the available modules for a client.

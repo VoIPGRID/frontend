@@ -1,22 +1,22 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { withTranslate } from "react-redux-multilingual";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { withTranslate } from 'react-redux-multilingual';
 
-import Table from "../helpers/Table";
+import Table from '../helpers/Table';
 
 import {
   getPartners,
-  updatePartner,
+  // updatePartner,
   deletePartner
-} from "../../actions/PartnerActions";
+} from '../../actions/PartnerActions';
 
 class PartnerList extends Component {
   constructor(props, context) {
     super(props, context);
 
     this._handleDelete = this._handleDelete.bind(this);
-    this._toggleActive = this._toggleActive.bind(this);
+    // this._toggleActive = this._toggleActive.bind(this);
   }
 
   componentDidMount() {
@@ -27,20 +27,20 @@ class PartnerList extends Component {
     await this.props.deletePartner(id);
   }
 
-  async _toggleActive({ id, is_active }) {
-    await this.props.updatePartner({ id, is_active: !is_active });
-  }
+  // async _toggleActive({ id, is_active }) {
+  //   await this.props.updatePartner({ id, is_active: !is_active });
+  // }
 
   render() {
     const { translate } = this.props;
 
     if (!this.props.partners) {
-      return <div>{translate("Loading")}...</div>;
+      return <div>{translate('Loading')}...</div>;
     }
 
     const columns = [
       {
-        accessor: "name",
+        accessor: 'name',
         Cell: props => (
           <Link
             className="table--link"
@@ -49,22 +49,22 @@ class PartnerList extends Component {
             {props.value}
           </Link>
         ),
-        Header: "Name"
+        Header: 'Name'
       },
       {
-        accessor: "description",
-        Header: "Description"
+        accessor: 'description',
+        Header: 'Description'
       },
       {
-        accessor: "partner",
-        Header: "Partner"
+        accessor: 'partner',
+        Header: 'Partner'
       },
       {
-        accessor: "is_active",
-        Header: "Inactive"
+        accessor: 'is_active',
+        Header: 'Inactive'
       },
       {
-        accessor: "actions",
+        accessor: 'actions',
         Cell: props => (
           <span>
             <Link to={`/partners/${props.original.id}/edit`}>
@@ -78,7 +78,7 @@ class PartnerList extends Component {
             </button>
           </span>
         ),
-        Header: "Actions"
+        Header: 'Actions'
       }
     ];
 
@@ -86,14 +86,14 @@ class PartnerList extends Component {
       <div>
         <div className="list-header is-clearfix">
           <h2 className="subtitle">
-            {translate("All partners")} ({this.props.partners.length})
+            {translate('All partners')} ({this.props.partners.length})
           </h2>
 
           <Link
             className="button is-primary is-pulled-right"
             to="/partners/create"
           >
-            {translate("Add")}
+            {translate('Add')}
           </Link>
         </div>
 
@@ -109,14 +109,14 @@ class PartnerList extends Component {
 
 function mapStateToProps({ partners }) {
   return {
-    partners: partners.objects
+    partners: partners.partners
   };
 }
 
 PartnerList = connect(mapStateToProps, {
   deletePartner,
-  getPartners,
-  updatePartner
+  getPartners
+  // updatePartner
 })(PartnerList);
 
 export default withTranslate(PartnerList);

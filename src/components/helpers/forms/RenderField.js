@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 
-const Select = require("react-select");
-const classNames = require("classnames");
+const Select = require('react-select');
+const classNames = require('classnames');
 
 const renderField = field => {
   const { meta: { touched, error } } = field;
   let className = field.type;
 
-  if (field.type === "text" || field.type === "password") {
-    className = "input";
+  if (field.type === 'text' || field.type === 'password') {
+    className = 'input';
   }
 
   // Bulma has the name class names as the type of input
@@ -17,15 +17,15 @@ const renderField = field => {
   let element = className;
 
   className = classNames(className, {
-    "is-danger": touched && error
+    'is-danger': touched && error
   });
 
-  let labelClass = classNames("label", {
-    "is-required": field.required
+  let labelClass = classNames('label', {
+    'is-required': field.required
   });
 
   switch (element) {
-    case "input":
+    case 'input':
       element = (
         <input
           className={className}
@@ -35,7 +35,7 @@ const renderField = field => {
         />
       );
       break;
-    case "textarea":
+    case 'textarea':
       element = (
         <textarea
           className={className}
@@ -45,7 +45,7 @@ const renderField = field => {
         />
       );
       break;
-    case "select":
+    case 'select':
       element = (
         <Select.Async
           {...field.input}
@@ -55,7 +55,7 @@ const renderField = field => {
         />
       );
       break;
-    case "checkbox":
+    case 'checkbox':
       element = (
         <input
           className={className}

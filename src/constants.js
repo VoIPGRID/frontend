@@ -1,4 +1,4 @@
-const LOCALHOST = "http://localhost:8001/api/v2";
+const LOCALHOST = 'http://localhost:8001/api/v2';
 
 // let apiRoot = '';
 //

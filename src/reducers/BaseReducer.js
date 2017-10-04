@@ -5,12 +5,12 @@ import {
   SET_CONTEXT,
   SEND_NOTIFICATION,
   HIDE_NOTIFICATION
-} from "../actions/BaseActions";
+} from '../actions/BaseActions';
 
 let initialAuth = {};
 
 // Serve an empty object when JSDom sets up our virtual dom for test purposes.
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
   initialAuth = window.__STORE__;
 }
 

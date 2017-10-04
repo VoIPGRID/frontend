@@ -1,21 +1,22 @@
-import axios from "axios";
-import API_ROOT from "../constants";
-import { AUTH_FAILED } from "./BaseActions";
+import axios from 'axios';
+import API_ROOT from '../constants';
+import { AUTH_FAILED } from './BaseActions';
 
-export const GET_PARTNERS = "GET_PARTNERS";
-export const CREATE_PARTNER = "CREATE_PARTNER";
-export const GET_PARTNER = "GET_PARTNER";
-export const UPDATE_PARTNER = "UPDATE_PARTNER";
-export const DELETE_PARTNER = "DELETE_PARTNER";
-export const EMPTY_PARTNER = "EMPTY_PARTNER";
-export const FORM_ERROR = "FORM_ERROR";
+export const GET_PARTNERS = 'GET_PARTNERS';
+export const CREATE_PARTNER = 'CREATE_PARTNER';
+export const GET_PARTNER = 'GET_PARTNER';
+export const UPDATE_PARTNER = 'UPDATE_PARTNER';
+export const DELETE_PARTNER = 'DELETE_PARTNER';
+export const EMPTY_PARTNER = 'EMPTY_PARTNER';
+export const FORM_ERROR = 'FORM_ERROR';
+export const UPDATE_BRANDING = 'UPDATE_BRANDING';
 
-export async function getPartners(searchString = "") {
+export async function getPartners(searchString = '') {
   const url = `${API_ROOT}/partners/`;
 
   try {
     const request = await axios.create({
-      headers: { "X-CSRFToken": window.__STORE__.user.csrf },
+      headers: { 'X-CSRFToken': window.__STORE__.user.csrf },
       timeout: 3000,
       withCredentials: true
     });
@@ -39,8 +40,8 @@ export async function createPartner(values) {
 
   const request = await axios.create({
     headers: {
-      Accept: "application/json",
-      "X-CSRFToken": window.__STORE__.user.csrf
+      Accept: 'application/json',
+      'X-CSRFToken': window.__STORE__.user.csrf
     },
     timeout: 3000,
     withCredentials: true
@@ -76,7 +77,7 @@ export async function getPartner(id) {
 
   try {
     const request = await axios.create({
-      headers: { "X-CSRFToken": window.__STORE__.user.csrf },
+      headers: { 'X-CSRFToken': window.__STORE__.user.csrf },
       timeout: 3000,
       withCredentials: true
     });
@@ -101,8 +102,8 @@ export async function updatePartner(values) {
 
   const request = await axios.create({
     headers: {
-      Accept: "application/json",
-      "X-CSRFToken": window.__STORE__.user.csrf
+      Accept: 'application/json',
+      'X-CSRFToken': window.__STORE__.user.csrf
     },
     timeout: 3000,
     withCredentials: true

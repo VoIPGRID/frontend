@@ -1,27 +1,27 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import { createStore, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
-import ReduxPromise from "redux-promise";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import { IntlProvider } from "react-redux-multilingual";
-import PrivateRoute from "./components/base/PrivateRoute";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import ReduxPromise from 'redux-promise';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { IntlProvider } from 'react-redux-multilingual';
+import PrivateRoute from './components/base/PrivateRoute';
 
 // Main reducer and translations file.
-import reducers from "./reducers/RootReducer";
-import translations from "./translations/translations";
+import reducers from './reducers/RootReducer';
+import translations from './translations/translations';
 
 // Assets for our generic app styling.
-import "./assets/style/base.css";
-import "./assets/vendor/fontawesome/css/font-awesome-core.css";
-import "./assets/vendor/fontawesome/css/font-awesome-solid.css";
+import './assets/style/base.css';
+import './assets/vendor/fontawesome/css/font-awesome-core.css';
+import './assets/vendor/fontawesome/css/font-awesome-solid.css';
 
 // Small pure components, that do not necessarily need to be loaded async.
-import Login from "./components/base/Login";
-import Header from "./components/base/Header";
-import Breadcrumbs from "./components/base/Breadcrumbs";
-import LogoutMessage from "./components/base/LogoutMessage";
+import Login from './components/base/Login';
+import Header from './components/base/Header';
+import Breadcrumbs from './components/base/Breadcrumbs';
+import LogoutMessage from './components/base/LogoutMessage';
 
 // Async components. These are to setup code splitting (chunks) for Webpack 2.
 // This speeds up load time of the bundle because it can load different
@@ -37,7 +37,7 @@ import {
   AsyncClientList,
   AsyncPartnerList,
   AsyncUserProfileForm
-} from "./components/helpers/AsyncComponents";
+} from './components/helpers/AsyncComponents';
 
 const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
 const store = createStoreWithMiddleware(
@@ -50,7 +50,7 @@ const store = createStoreWithMiddleware(
 // language and sets it in the store.
 store.dispatch({
   locale: window.__STORE__.user.language,
-  type: "SET_LOCALE"
+  type: 'SET_LOCALE'
 });
 
 ReactDOM.render(
@@ -134,5 +134,5 @@ ReactDOM.render(
       </BrowserRouter>
     </IntlProvider>
   </Provider>,
-  document.querySelector("#app")
+  document.querySelector('#app')
 );

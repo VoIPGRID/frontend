@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-import { getVoipAccounts } from "../../../../actions/VoipAccountsActions";
+import { getVoipAccounts } from '../../../../actions/VoipAccountsActions';
 
-import Table from "../../../helpers/Table";
+import Table from '../../../helpers/Table';
 
 class VoipAccounts extends Component {
   componentDidMount() {
@@ -19,12 +19,12 @@ class VoipAccounts extends Component {
 
     const columns = [
       {
-        accessor: "description",
-        Header: "Description"
+        accessor: 'description',
+        Header: 'Description'
       },
       {
-        accessor: "account_id",
-        Header: "Account ID"
+        accessor: 'account_id',
+        Header: 'Account ID'
       }
     ];
 

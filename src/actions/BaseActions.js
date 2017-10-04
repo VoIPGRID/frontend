@@ -1,19 +1,19 @@
-import axios from "axios";
-import API_ROOT from "../constants";
+import axios from 'axios';
+import API_ROOT from '../constants';
 
-export const LOGIN_USER = "LOGIN_USER";
-export const LOGOUT_USER = "LOGOUT_USER";
-export const AUTH_FAILED = "AUTH_FAILED";
-export const SEND_NOTIFICATION = "SEND_NOTIFICATION";
-export const HIDE_NOTIFICATION = "HIDE_NOTIFICATION";
-export const SET_CONTEXT = "SET_CONTEXT";
+export const LOGIN_USER = 'LOGIN_USER';
+export const LOGOUT_USER = 'LOGOUT_USER';
+export const AUTH_FAILED = 'AUTH_FAILED';
+export const SEND_NOTIFICATION = 'SEND_NOTIFICATION';
+export const HIDE_NOTIFICATION = 'HIDE_NOTIFICATION';
+export const SET_CONTEXT = 'SET_CONTEXT';
 
 export function loginUser(values) {
   let url = `${API_ROOT}/login/`;
 
   let request = axios.create({
-    baseURL: "http://localhost:8001/api/v2/",
-    headers: { "X-CSRFToken": window.__STORE__.user.csrf },
+    baseURL: 'http://localhost:8001/api/v2/',
+    headers: { 'X-CSRFToken': window.__STORE__.user.csrf },
     timeout: 3000,
     withCredentials: true
   });
@@ -30,7 +30,7 @@ export function logoutUser(result) {
   const url = `${API_ROOT}/logout`;
 
   const request = axios.create({
-    headers: { "X-CSRFToken": window.__STORE__.user.csrf },
+    headers: { 'X-CSRFToken': window.__STORE__.user.csrf },
     timeout: 3000,
     withCredentials: true
   });

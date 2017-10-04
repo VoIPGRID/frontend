@@ -3,7 +3,7 @@ import {
   GET_VOIPACCOUNT,
   EMPTY_VOIPACCOUNT,
   FORM_ERROR
-} from "../actions/VoipAccountsActions";
+} from '../actions/VoipAccountsActions';
 
 const INITIAL_STATE = {
   current: null,

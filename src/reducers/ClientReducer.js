@@ -3,7 +3,7 @@ import {
   GET_CLIENT,
   FORM_ERROR,
   EMPTY_CLIENT
-} from "../actions/ClientActions";
+} from '../actions/ClientActions';
 
 const INITIAL_STATE = {
   current: null,

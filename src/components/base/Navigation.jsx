@@ -1,11 +1,34 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { NavLink } from "react-router-dom";
-import { withTranslate } from "react-redux-multilingual";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withTranslate } from 'react-redux-multilingual';
+import styled, { ThemeProvider } from 'styled-components';
 
-import { logoutUser } from "../../actions/BaseActions";
+import { logoutUser } from '../../actions/BaseActions';
 
-import "../../assets/style/navigation.css";
+import NavigationItem from './NavigationItem';
+
+import '../../assets/style/navigation.css';
+
+const StyledNavigation = styled.div`
+  background: ${props => props.theme.primary};
+  position: fixed;
+  z-index: 1052;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  overflow-x: hidden;
+  width: 80px;
+  transition: 0.3s;
+  padding-top: 20px;
+
+  &:hover {
+    width: 250px;
+  }
+
+  > ul {
+    width: 250px;
+  }
+`;
 
 /**
  * Navigation component that renders our main navigation.
@@ -18,6 +41,10 @@ class Navigation extends Component {
       context: {
         type: null,
         id: null
+      },
+      theme: {
+        primary: props.auth.user.partner.branding.brand,
+        secondary: props.auth.user.partner.branding.secondary
       }
     };
   }
@@ -25,6 +52,15 @@ class Navigation extends Component {
   // This lifecycle method will set the state with params from the url
   // to change the url when switching context between partner and client.
   componentWillReceiveProps(nextProps) {
+    if (this.props.partner.branding !== nextProps.partner.branding) {
+      this.setState({
+        theme: {
+          primary: nextProps.partner.branding.primary,
+          secondary: nextProps.partner.branding.secondary
+        }
+      });
+    }
+
     if (nextProps.match.params.id) {
       this.setState({
         context: {
@@ -46,12 +82,12 @@ class Navigation extends Component {
   // app state to the initial values and redirects to the login page.
   logoutUser() {
     this.props.logoutUser();
-    this.props.history.push("/user/logout");
+    this.props.history.push('/user/logout');
   }
 
   render() {
     const { translate } = this.props;
-    let urlPrepend = "/";
+    let urlPrepend = '/';
 
     if (this.state.context.id && this.state.context.type) {
       urlPrepend = `/${this.state.context.type}/${this.state.context.id}/`;
@@ -59,52 +95,46 @@ class Navigation extends Component {
 
     return (
       this.props.auth.user.authenticated && (
-        <div className="navigation--wrapper">
-          <ul className="navigation--list">
-            <li className="navigation--list-item">
-              <span className="navigation--icon-wrapper">
-                <i className="fas fa-users" />
-              </span>
-              <NavLink to="/partners" activeClassName="is-active">
-                Partners
-              </NavLink>
-            </li>
-            <li className="navigation--list-item">
-              <span className="navigation--icon-wrapper">
-                <i className="fas fa-users" />
-              </span>
-              <NavLink to={`${urlPrepend}clients`} activeClassName="is-active">
-                {translate("Clients")}
-              </NavLink>
-            </li>
-          </ul>
+        <ThemeProvider theme={this.state.theme}>
+          <StyledNavigation>
+            <ul>
+              <NavigationItem
+                link="/partners"
+                icon="fa-users"
+                title="Partners"
+              />
+              <NavigationItem
+                link={`${urlPrepend}clients`}
+                icon="fa-users"
+                title={translate('Clients')}
+              />
+            </ul>
 
-          <ul className="navigation--list-bottom">
-            <li className="navigation--list-item">
-              <span className="navigation--icon-wrapper">
-                <i className="fas fa-question-circle" />
-              </span>
-              <NavLink to="/user/personal_settings" activeClassName="is-active">
-                Wiki
-              </NavLink>
-            </li>
-            <li className="navigation--list-item">
-              <span className="navigation--icon-wrapper">
-                <i className="fas fa-arrow-square-right" />
-              </span>
-              <a onClick={() => this.logoutUser()} role="button" tabIndex={0}>
-                Logout
-              </a>
-            </li>
-          </ul>
-        </div>
+            <ul className="navigation--list-bottom">
+              <NavigationItem
+                link="/user/personal_settings"
+                icon="fa-question-circle"
+                title="Wiki"
+              />
+              <li className="navigation--list-item">
+                <span className="navigation--icon-wrapper">
+                  <i className="fas fa-arrow-square-right" />
+                </span>
+                <a onClick={() => this.logoutUser()} role="button" tabIndex={0}>
+                  Logout
+                </a>
+              </li>
+            </ul>
+          </StyledNavigation>
+        </ThemeProvider>
       )
     );
   }
 }
 
 const mapStateToProps = state => ({
-  auth: state.base.auth
+  auth: state.base.auth,
+  partner: state.partners
 });
 
 Navigation = connect(mapStateToProps, { logoutUser })(Navigation);

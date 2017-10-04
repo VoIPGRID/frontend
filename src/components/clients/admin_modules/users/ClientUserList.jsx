@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-import { getUsers, deleteUser } from "../../../../actions/UserActions";
-import { showNotification } from "../../../../actions/BaseActions";
-import Table from "../../../helpers/Table";
+import { getUsers, deleteUser } from '../../../../actions/UserActions';
+import { showNotification } from '../../../../actions/BaseActions';
+import Table from '../../../helpers/Table';
 
 class ClientUserList extends Component {
   async componentDidMount() {
@@ -18,8 +18,8 @@ class ClientUserList extends Component {
 
     if (result) {
       this.props.showNotification(
-        "Succesfully deleted the user.",
-        "is-success",
+        'Succesfully deleted the user.',
+        'is-success',
         true
       );
     }
@@ -34,7 +34,7 @@ class ClientUserList extends Component {
 
     const columns = [
       {
-        accessor: "email",
+        accessor: 'email',
         Cell: props => (
           <Link
             className="table--link"
@@ -43,14 +43,14 @@ class ClientUserList extends Component {
             {props.value}
           </Link>
         ),
-        Header: "Email"
+        Header: 'Email'
       },
       {
-        accessor: "profile.description",
-        Header: "Description"
+        accessor: 'profile.description',
+        Header: 'Description'
       },
       {
-        accessor: "actions",
+        accessor: 'actions',
         Cell: props => (
           <span>
             <Link to={`/clients/${clientId}/user/${props.original.id}/change`}>
@@ -64,7 +64,7 @@ class ClientUserList extends Component {
             </button>
           </span>
         ),
-        Header: "Actions"
+        Header: 'Actions'
       }
     ];
 

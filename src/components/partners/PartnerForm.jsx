@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { Field, reduxForm, SubmissionError } from "redux-form";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import React, { Component } from 'react';
+import { Field, reduxForm, SubmissionError } from 'redux-form';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
-import renderField from "../helpers/forms/RenderField";
+import renderField from '../helpers/forms/RenderField';
 
-import getSelectOptions from "../helpers/forms/SelectOptions";
+import getSelectOptions from '../helpers/forms/SelectOptions';
 
 import {
   getPartners,
@@ -15,8 +15,8 @@ import {
   getPartner,
   updatePartner,
   emptyPartner
-} from "../../actions/PartnerActions";
-import { showNotification } from "../../actions/BaseActions";
+} from '../../actions/PartnerActions';
+import { showNotification } from '../../actions/BaseActions';
 
 class PartnerForm extends Component {
   constructor(props) {
@@ -51,8 +51,8 @@ class PartnerForm extends Component {
 
   async _getCurrencies() {
     const options = [
-      { label: "EUR (€)", value: 1 },
-      { label: "ZAR (R)", value: 2 }
+      { label: 'EUR (€)', value: 1 },
+      { label: 'ZAR (R)', value: 2 }
     ];
 
     return { options };
@@ -70,17 +70,17 @@ class PartnerForm extends Component {
     const { status } = response.payload;
 
     if (status === 200 || status === 201) {
-      this.props.history.push("/partners");
+      this.props.history.push('/partners');
 
       this.props.showNotification(
-        "Partner was edited succesfully.",
-        "is-success",
+        'Partner was edited succesfully.',
+        'is-success',
         true
       );
     } else {
       this.props.showNotification(
-        "Fields with errors are marked down below.",
-        "is-danger"
+        'Fields with errors are marked down below.',
+        'is-danger'
       );
       // Loop over errors and throw a new SubmissionError for every field
       // that has an error.
@@ -202,6 +202,20 @@ class PartnerForm extends Component {
               />
 
               <h2 className="subtitle">Branding</h2>
+
+              <Field
+                label="Text color"
+                name="text"
+                type="text"
+                component={renderField}
+              />
+
+              <Field
+                label="Navigation bar"
+                name="brand"
+                type="text"
+                component={renderField}
+              />
             </TabPanel>
 
             <TabPanel>
@@ -216,7 +230,7 @@ class PartnerForm extends Component {
                 required="true"
                 component={renderField}
                 loadOptions={() =>
-                  getSelectOptions("clients/countries", "code")}
+                  getSelectOptions('clients/countries', 'code')}
               />
               <Field
                 label="Audio language"
@@ -226,7 +240,7 @@ class PartnerForm extends Component {
                 type="select"
                 required="true"
                 component={renderField}
-                loadOptions={() => getSelectOptions("clients/audio_languages")}
+                loadOptions={() => getSelectOptions('clients/audio_languages')}
               />
 
               <Field
@@ -237,7 +251,7 @@ class PartnerForm extends Component {
                 type="select"
                 required="true"
                 component={renderField}
-                loadOptions={() => getSelectOptions("clients/system_languages")}
+                loadOptions={() => getSelectOptions('clients/system_languages')}
               />
               <Field
                 label="Timezone"
@@ -245,7 +259,7 @@ class PartnerForm extends Component {
                 type="select"
                 required="true"
                 component={renderField}
-                loadOptions={() => getSelectOptions("clients/timezones")}
+                loadOptions={() => getSelectOptions('clients/timezones')}
               />
             </TabPanel>
 
@@ -310,7 +324,7 @@ class PartnerForm extends Component {
                 type="select"
                 component={renderField}
                 loadOptions={() =>
-                  getSelectOptions("partners/priceplan_discounts")}
+                  getSelectOptions('partners/priceplan_discounts')}
               />
             </TabPanel>
           </Tabs>
@@ -342,7 +356,7 @@ function validate(values) {
 function mapStateToProps({ partners }) {
   return {
     initialValues: partners.current,
-    partners: partners.objects
+    partners: partners.partners
   };
 }
 
@@ -361,7 +375,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 PartnerForm = reduxForm({
-  form: "PartnerForm",
+  form: 'PartnerForm',
   validate
 })(PartnerForm);
 

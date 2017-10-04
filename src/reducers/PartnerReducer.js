@@ -5,13 +5,18 @@ import {
   UPDATE_PARTNER,
   DELETE_PARTNER,
   EMPTY_PARTNER,
+  UPDATE_BRANDING,
   FORM_ERROR
-} from "../actions/PartnerActions";
+} from '../actions/PartnerActions';
 
 const INITIAL_STATE = {
   current: null,
   partners: [],
-  errors: null
+  errors: null,
+  branding: {
+    primary: window.__STORE__.user.partner.branding.brand,
+    secondary: window.__STORE__.user.partner.branding.text
+  }
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -24,7 +29,7 @@ export default function(state = INITIAL_STATE, action) {
     case GET_PARTNERS:
       return {
         ...state,
-        objects: action.payload.data.results
+        partners: action.payload.data.results
       };
     case FORM_ERROR:
       return {
@@ -36,18 +41,22 @@ export default function(state = INITIAL_STATE, action) {
     case UPDATE_PARTNER:
       return {
         ...state,
-        objects: state.objects.map(partner => {
+        partners: state.partners.map(partner => {
           if (partner.id === action.payload.data.id) {
             partner = action.payload.data;
           }
 
           return partner;
-        })
+        }),
+        branding: {
+          primary: action.payload.data.brand,
+          secondary: action.payload.data.text
+        }
       };
     case DELETE_PARTNER:
       return {
         ...state,
-        objects: state.objects.filter(
+        partners: state.partners.filter(
           partner => partner.id !== action.payload.id
         )
       };
@@ -55,6 +64,14 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         current: null
+      };
+    case UPDATE_BRANDING:
+      return {
+        ...state,
+        branding: {
+          primary: action.payload,
+          secondary: action.payload
+        }
       };
     default:
       return state;

@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import "../../../assets/style/AdminModule.css";
+import '../../../assets/style/AdminModule.css';
 
 /**
  * Admin Module. Generic component for showing available modules.

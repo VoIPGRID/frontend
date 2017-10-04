@@ -1,7 +1,7 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 
-import "../../assets/style/login.css";
+import '../../assets/style/login.css';
 
 /**
  * Logout message component to show a user is succesfully logged out.

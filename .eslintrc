@@ -14,7 +14,7 @@
     "no-console": "off",
     "strict": ["error", "global"],
     "curly": "warn",
-    "prettier/prettier": "error"
+    # "prettier/prettier": "error"
   },
   "plugins": [
     "prettier"

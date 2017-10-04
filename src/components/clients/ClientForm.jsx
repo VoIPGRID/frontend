@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import { Field, reduxForm, SubmissionError } from "redux-form";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import React, { Component } from 'react';
+import { Field, reduxForm, SubmissionError } from 'redux-form';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
-import renderField from "../helpers/forms/RenderField";
+import renderField from '../helpers/forms/RenderField';
 
-import { getPartners } from "../../actions/PartnerActions";
+import { getPartners } from '../../actions/PartnerActions';
 import {
   getClient,
   updateClient,
   createClient
-} from "../../actions/ClientActions";
+} from '../../actions/ClientActions';
 
 class ClientForm extends Component {
   constructor(props) {
@@ -47,9 +47,9 @@ class ClientForm extends Component {
 
   async _getCountries() {
     const options = [
-      { label: "Netherlands", value: "nl" },
-      { label: "Germany", value: "de" },
-      { label: "South Africa", value: "za" }
+      { label: 'Netherlands', value: 'nl' },
+      { label: 'Germany', value: 'de' },
+      { label: 'South Africa', value: 'za' }
     ];
 
     return { options };
@@ -175,7 +175,7 @@ function validate(values) {
 
 const mapStateToProps = ({ clients, partners }) => ({
   initialValues: clients.current,
-  partners: partners.objects
+  partners: partners.partners
 });
 
 function mapDispatchToProps(dispatch) {
@@ -191,7 +191,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 ClientForm = reduxForm({
-  form: "ClientForm",
+  form: 'ClientForm',
   validate
 })(ClientForm);
 

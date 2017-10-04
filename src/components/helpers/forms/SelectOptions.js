@@ -1,5 +1,5 @@
-import axios from "axios";
-import API_ROOT from "../../../constants";
+import axios from 'axios';
+import API_ROOT from '../../../constants';
 
 // General function to request API data for select option fields.
 async function getSelectOptions(type, idReplacement) {
@@ -7,7 +7,7 @@ async function getSelectOptions(type, idReplacement) {
 
   try {
     const request = await axios.create({
-      headers: { "X-CSRFToken": window.__STORE__.user.csrf },
+      headers: { 'X-CSRFToken': window.__STORE__.user.csrf },
       timeout: 3000,
       withCredentials: true
     });

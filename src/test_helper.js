@@ -1,27 +1,27 @@
-import jsdom from "jsdom";
-import jquery from "jquery";
-import TestUtils from "react-dom/test-utils";
-import ReactDOM from "react-dom";
-import chai, { expect } from "chai";
-import React from "react";
-import { Provider } from "react-redux";
-import { createStore } from "redux";
-import chaiJquery from "chai-jquery";
+import jsdom from 'jsdom';
+import jquery from 'jquery';
+import TestUtils from 'react-dom/test-utils';
+import ReactDOM from 'react-dom';
+import chai, { expect } from 'chai';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import chaiJquery from 'chai-jquery';
 
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter } from 'react-router-dom';
 
-import { IntlProvider } from "react-redux-multilingual";
-import reducers from "./reducers/RootReducer";
-import translations from "./translations/translations";
+import { IntlProvider } from 'react-redux-multilingual';
+import reducers from './reducers/RootReducer';
+import translations from './translations/translations';
 
 // Skip requiring files with these formats in components.
-[".css", ".scss", ".png", ".jpg", ".svg"].forEach(ext => {
+['.css', '.scss', '.png', '.jpg', '.svg'].forEach(ext => {
   require.extensions[ext] = () => null;
 });
 
 const { JSDOM } = jsdom;
 
-const { document } = new JSDOM("").window;
+const { document } = new JSDOM('').window;
 global.document = document;
 global.window = document.defaultView;
 
@@ -30,15 +30,15 @@ global.window.__STORE__ = {
   user: {
     selectedPartner: {
       id: null,
-      name: ""
+      name: ''
     },
     superuser: true,
     authenticated: true,
-    language: "en",
-    selectedClient: { id: null, name: "" },
+    language: 'en',
+    selectedClient: { id: null, name: '' },
     client: null,
-    csrf: "",
-    partner: { may_have_children: true, id: 1, name: "Default partner" },
+    csrf: '',
+    partner: { may_have_children: true, id: 1, name: 'Default partner' },
     id: 1
   }
 };

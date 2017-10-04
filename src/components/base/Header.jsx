@@ -1,7 +1,7 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-import "../../assets/style/header.css";
-import logo from "../../assets/images/logo.svg";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import '../../assets/style/header.css';
+import logo from '../../assets/images/logo.svg';
 
 /**
  * Header component to render the logo and the user preferences link.

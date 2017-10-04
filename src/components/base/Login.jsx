@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { connect } from "react-redux";
-import { loginUser } from "../../actions/BaseActions";
+import { connect } from 'react-redux';
+import { loginUser } from '../../actions/BaseActions';
 
-import "../../assets/style/login.css";
+import '../../assets/style/login.css';
 
 class Login extends Component {
   /**
@@ -18,9 +18,9 @@ class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
-      email: "",
-      error: "",
-      password: ""
+      email: '',
+      error: '',
+      password: ''
     };
   }
 
@@ -48,17 +48,17 @@ class Login extends Component {
       if (response.payload.data.user.authenticated === false) {
         // Set state to show an error message when the user
         // tries logging in with the wrong credentials.
-        this.setState({ error: "wrong_creds" });
+        this.setState({ error: 'wrong_creds' });
       } else {
         // Set the data returned into the window store global.
         // This global gets set by our backend but we set our data
         // temporarely so it corresponds with the backend data
         // before refreshing.
         window.__STORE__ = response.payload.data;
-        this.props.history.push("/partners");
+        this.props.history.push('/partners');
       }
     } else {
-      console.log("Error");
+      console.log('Error');
     }
   }
 

@@ -6,7 +6,7 @@ import {
   DELETE_USER,
   EMPTY_USER,
   FORM_ERROR
-} from "../actions/UserActions";
+} from '../actions/UserActions';
 
 const INITIAL_STATE = {
   current: null,

@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import {
   getClients,
   updateClient,
   deleteClient
-} from "../../actions/ClientActions";
+} from '../../actions/ClientActions';
 
-import Table from "../helpers/Table";
+import Table from '../helpers/Table';
 
 class ClientList extends Component {
   componentDidMount() {
@@ -33,7 +33,7 @@ class ClientList extends Component {
 
     const columns = [
       {
-        accessor: "name",
+        accessor: 'name',
         Cell: props => (
           <Link
             className="table--link"
@@ -42,26 +42,26 @@ class ClientList extends Component {
             {props.value}
           </Link>
         ),
-        Header: "Name"
+        Header: 'Name'
       },
       {
-        accessor: "created",
-        Header: "Created"
+        accessor: 'created',
+        Header: 'Created'
       },
       {
-        accessor: "description",
-        Header: "Description"
+        accessor: 'description',
+        Header: 'Description'
       },
       {
-        accessor: "partner",
-        Header: "Partner"
+        accessor: 'partner',
+        Header: 'Partner'
       },
       {
-        accessor: "is_active",
-        Header: "Inactive"
+        accessor: 'is_active',
+        Header: 'Inactive'
       },
       {
-        accessor: "actions",
+        accessor: 'actions',
         Cell: props => (
           <span>
             <Link
@@ -77,7 +77,7 @@ class ClientList extends Component {
             </button>
           </span>
         ),
-        Header: "Actions"
+        Header: 'Actions'
       }
     ];
 
