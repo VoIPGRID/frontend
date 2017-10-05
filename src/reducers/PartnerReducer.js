@@ -14,8 +14,12 @@ const INITIAL_STATE = {
   partners: [],
   errors: null,
   branding: {
-    primary: window.__STORE__.user.partner.branding.brand,
-    secondary: window.__STORE__.user.partner.branding.text
+    primary: window.__STORE__.user.partner
+      ? window.__STORE__.user.partner.branding.brand
+      : '',
+    secondary: window.__STORE__.user.partner
+      ? window.__STORE__.user.partner.branding.text
+      : ''
   }
 };
 

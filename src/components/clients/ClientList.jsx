@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import LinkButton from '../base/LinkButton';
+
 import {
   getClients,
   updateClient,
@@ -85,12 +87,9 @@ class ClientList extends Component {
       <div>
         <div className="list-header is-clearfix">
           All clients ({this.props.clients.length})
-          <Link
-            className="button is-primary is-pulled-right"
-            to="/clients/create"
-          >
+          <LinkButton link="/clients/create" addClasses="pull-right">
             Add
-          </Link>
+          </LinkButton>
         </div>
 
         <Table

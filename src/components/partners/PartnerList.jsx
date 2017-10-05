@@ -5,6 +5,8 @@ import { withTranslate } from 'react-redux-multilingual';
 
 import Table from '../helpers/Table';
 
+import LinkButton from '../base/LinkButton';
+
 import {
   getPartners,
   // updatePartner,
@@ -89,12 +91,9 @@ class PartnerList extends Component {
             {translate('All partners')} ({this.props.partners.length})
           </h2>
 
-          <Link
-            className="button is-primary is-pulled-right"
-            to="/partners/create"
-          >
+          <LinkButton link="/partners/create" addClasses="pull-right">
             {translate('Add')}
-          </Link>
+          </LinkButton>
         </div>
 
         <Table

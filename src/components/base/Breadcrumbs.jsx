@@ -1,7 +1,29 @@
 import React from 'react';
 import { Route, Link } from 'react-router-dom';
+import styled from 'styled-components';
 
-import '../../assets/style/Breadcrumbs.css';
+const StyledBreadcrumbs = styled.ul`
+  width: 100%;
+  height: 60px;
+  border-bottom: 1px solid #e6e7eb;
+  padding-left: 1.5em;
+
+  li {
+    display: inline-block;
+    padding-right: 15px;
+    margin-right: 15px;
+    border-right: 1px #e6e7eb solid;
+    height: 36px;
+    color: #2a3042;
+    line-height: 36px;
+    margin-top: 11px;
+    font-weight: bold;
+
+    :last-child {
+      order-right: 0;
+    }
+  }
+`;
 
 const Breadcrumbs = () => (
   <Route
@@ -11,9 +33,9 @@ const Breadcrumbs = () => (
       const place = parts[parts.length - 1];
       parts = parts.slice(1, parts.length - 1);
       return (
-        <ul className="breadcrumbs">
+        <StyledBreadcrumbs>
           {parts.map(crumb)} <li>{capitalizeFirstLetter(place)}</li>
-        </ul>
+        </StyledBreadcrumbs>
       );
     }}
   />

@@ -74,7 +74,7 @@ class PartnerForm extends Component {
 
       this.props.showNotification(
         'Partner was edited succesfully.',
-        'is-success',
+        'success',
         true
       );
     } else {

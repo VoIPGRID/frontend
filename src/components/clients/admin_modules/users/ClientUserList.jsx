@@ -6,6 +6,8 @@ import { getUsers, deleteUser } from '../../../../actions/UserActions';
 import { showNotification } from '../../../../actions/BaseActions';
 import Table from '../../../helpers/Table';
 
+import LinkButton from '../../../base/LinkButton';
+
 class ClientUserList extends Component {
   async componentDidMount() {
     const { clientId } = this.props.match.params;
@@ -19,7 +21,7 @@ class ClientUserList extends Component {
     if (result) {
       this.props.showNotification(
         'Succesfully deleted the user.',
-        'is-success',
+        'success',
         true
       );
     }
@@ -72,12 +74,9 @@ class ClientUserList extends Component {
       <div>
         <div className="list-header">
           All users ({this.props.users.length})
-          <Link
-            className="button is-primary is-pulled-right"
-            to="/users/create"
-          >
+          <LinkButton link="/users/create" addClasses="pull-right">
             Add
-          </Link>
+          </LinkButton>
         </div>
 
         <Table

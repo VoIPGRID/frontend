@@ -1,7 +1,78 @@
 import React from 'react';
+import styled from 'styled-components';
 
 const Select = require('react-select');
 const classNames = require('classnames');
+
+const StyledField = styled.div`
+  &:not(:last-child) {
+    margin-bottom: 0.75rem;
+  }
+
+  .input,
+  .textarea {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    -ms-flex-align: center;
+    align-items: center;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    font-size: 14px;
+    height: 2.25em;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    line-height: 1.5;
+    padding-bottom: calc(0.375em - 1px);
+    padding-left: calc(0.625em - 1px);
+    padding-right: calc(0.625em - 1px);
+    padding-top: calc(0.375em - 1px);
+    position: relative;
+    vertical-align: top;
+    background-color: white;
+    border-color: #dbdbdb;
+    color: #363636;
+    -webkit-box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+    box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+    max-width: 100%;
+    width: 100%;
+
+    &[disabled] {
+      background-color: #eee;
+      border: 1px solid #dbdbdb;
+    }
+  }
+
+  .textarea:not([rows]) {
+    max-height: 600px;
+    min-height: 120px;
+  }
+
+  .control {
+    max-width: 400px;
+    margin-bottom: 1.5em;
+  }
+
+  label {
+    color: #363636;
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .Select {
+    font-size: 14px;
+  }
+
+  .help {
+    display: block;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+  }
+`;
 
 const renderField = field => {
   const { meta: { touched, error } } = field;
@@ -70,7 +141,7 @@ const renderField = field => {
   }
 
   return (
-    <div className="field">
+    <StyledField>
       <label htmlFor="field" className={labelClass}>
         {field.label}
       </label>
@@ -81,7 +152,7 @@ const renderField = field => {
 
         {touched && error && <p className="help is-danger">{error}</p>}
       </div>
-    </div>
+    </StyledField>
   );
 };
 

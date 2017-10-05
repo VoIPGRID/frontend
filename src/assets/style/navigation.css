@@ -1,44 +1,8 @@
-/*.navigation--list {
-  width: 250px;
-}*/
-
 .navigation--list-bottom {
   width: 250px;
   position: absolute;
   bottom: 0;
 }
-
-/*.navigation--list-item {
-  font-size: 20px;
-  font-weight: 200px;
-}*/
-
-/*.navigation--list-item a {
-  text-decoration: none;
-  line-height: 45px;
-  color: rgba(255, 255, 255, 0.4);
-  display: inline;
-}
-
-.navigation--list-item a:hover {
-  color: #fff;
-}
-
-.navigation--list-item a:hover > i {
-  color: #fff;
-}
-
-.navigation--list-item:hover {
-  cursor: pointer;
-}
-
-.navigation--list-item:hover a {
-  color: #fff;
-}
-
-.navigation--list-item:hover i {
-  color: #fff;
-}*/
 
 .navigation--icon-wrapper {
   display: inline-block;

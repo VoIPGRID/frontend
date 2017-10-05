@@ -2,7 +2,7 @@ import Loadable from 'react-loadable';
 import LoadingComponent from './LoadingComponent';
 
 export const AsyncNotification = Loadable({
-  loader: () => import('../base/Notification'),
+  loader: () => import('../base/NotificationContainer'),
   loading: LoadingComponent
 });
 

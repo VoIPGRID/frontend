@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { loginUser } from '../../actions/BaseActions';
 
+import Notification from './Notification';
+
 import '../../assets/style/login.css';
 
 class Login extends Component {
@@ -69,12 +71,10 @@ class Login extends Component {
         <h1 className="title">Login</h1>
 
         {err && (
-          <div className="notification is-danger">
-            <p>
-              Please enter a correct email address and password. Note that both
-              fields may be case-sensitive.
-            </p>
-          </div>
+          <Notification type="error">
+            Please enter a correct email address and password. Note that both
+            fields may be case-sensitive.
+          </Notification>
         )}
 
         <form onSubmit={this.handleSubmit}>
