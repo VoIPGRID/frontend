@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const StyledLinkButton = styled(Link)`
+const StyledFormButton = styled.button`
   display: inline-block;
   border: none;
   background: ${props => props.theme.primary || '#E94E1B'};
@@ -30,12 +29,16 @@ const StyledLinkButton = styled(Link)`
     border: none;
     color: #000;
   }
+
+  &.is-inline {
+    display: inline-block;
+  }
 `;
 
-const LinkButton = ({ title, addClasses, link, ...props }) => (
-  <StyledLinkButton to={link} className={addClasses}>
+const FormButton = ({ title, addClasses, type, ...props }) => (
+  <StyledFormButton type={type} className={addClasses}>
     {props.children}
-  </StyledLinkButton>
+  </StyledFormButton>
 );
 
-export default LinkButton;
+export default FormButton;

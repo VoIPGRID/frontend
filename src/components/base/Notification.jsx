@@ -3,19 +3,20 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   width: 100%;
-  padding: 15px;
+  padding: 10px;
   color: #fff;
+  margin-bottom: 10px;
 
   &.success {
-    background: green;
+    background: #5eb75f;
   }
 
-  &.danger {
-    background: orange;
+  &.is-danger {
+    background: #fe3f64;
   }
 
   &.error {
-    background: red;
+    background: #fe3f64;
   }
 `;
 

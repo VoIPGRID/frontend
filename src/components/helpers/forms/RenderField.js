@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import 'react-select/dist/react-select.min.css';
 
 const Select = require('react-select');
 const classNames = require('classnames');
 
-const StyledField = styled.div`
+export const StyledField = styled.div`
   &:not(:last-child) {
     margin-bottom: 0.75rem;
   }
@@ -44,6 +45,10 @@ const StyledField = styled.div`
       background-color: #eee;
       border: 1px solid #dbdbdb;
     }
+
+    &.is-danger {
+      border-color: #fe3f64;
+    }
   }
 
   .textarea:not([rows]) {
@@ -59,8 +64,8 @@ const StyledField = styled.div`
   label {
     color: #363636;
     display: block;
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: 13px;
+    font-weight: 100;
   }
 
   .Select {
@@ -71,6 +76,10 @@ const StyledField = styled.div`
     display: block;
     font-size: 0.75rem;
     margin-top: 0.25rem;
+
+    &.is-danger {
+      color: #fe3f64;
+    }
   }
 `;
 

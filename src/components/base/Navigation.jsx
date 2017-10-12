@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withTranslate } from 'react-redux-multilingual';
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 
 import { logoutUser } from '../../actions/BaseActions';
 
 import NavigationItem from './NavigationItem';
-
-import '../../assets/style/navigation.css';
 
 const StyledNavigation = styled.div`
   background: ${props => props.theme.primary};
@@ -32,6 +30,12 @@ const StyledNavigation = styled.div`
   }
 `;
 
+const NavigationListBottom = styled.ul`
+  width: 250px;
+  position: absolute;
+  bottom: 0;
+`;
+
 /**
  * Navigation component that renders our main navigation.
  */
@@ -43,10 +47,6 @@ class Navigation extends Component {
       context: {
         type: null,
         id: null
-      },
-      theme: {
-        primary: props.auth.user.partner.branding.brand,
-        secondary: props.auth.user.partner.branding.secondary
       }
     };
   }
@@ -54,14 +54,14 @@ class Navigation extends Component {
   // This lifecycle method will set the state with params from the url
   // to change the url when switching context between partner and client.
   componentWillReceiveProps(nextProps) {
-    if (this.props.partner.branding !== nextProps.partner.branding) {
-      this.setState({
-        theme: {
-          primary: nextProps.partner.branding.primary,
-          secondary: nextProps.partner.branding.secondary
-        }
-      });
-    }
+    // if (this.props.partner.branding !== nextProps.partner.branding) {
+    //   this.setState({
+    //     theme: {
+    //       primary: nextProps.partner.branding.primary,
+    //       secondary: nextProps.partner.branding.secondary
+    //     }
+    //   });
+    // }
 
     if (nextProps.match.params.id) {
       this.setState({
@@ -97,38 +97,30 @@ class Navigation extends Component {
 
     return (
       this.props.auth.user.authenticated && (
-        <ThemeProvider theme={this.state.theme}>
-          <StyledNavigation>
-            <ul>
-              <NavigationItem
-                link="/partners"
-                icon="fa-users"
-                title="Partners"
-              />
-              <NavigationItem
-                link={`${urlPrepend}clients`}
-                icon="fa-users"
-                title={translate('Clients')}
-              />
-            </ul>
+        <StyledNavigation>
+          <ul>
+            <NavigationItem link="/partners" icon="fa-users" title="Partners" />
+            <NavigationItem
+              link={`${urlPrepend}clients`}
+              icon="fa-users"
+              title={translate('Clients')}
+            />
+          </ul>
 
-            <ul className="navigation--list-bottom">
-              <NavigationItem
-                link="/user/personal_settings"
-                icon="fa-question-circle"
-                title="Wiki"
-              />
-              <li className="navigation--list-item">
-                <span className="navigation--icon-wrapper">
-                  <i className="fas fa-arrow-square-right" />
-                </span>
-                <a onClick={() => this.logoutUser()} role="button" tabIndex={0}>
-                  Logout
-                </a>
-              </li>
-            </ul>
-          </StyledNavigation>
-        </ThemeProvider>
+          <NavigationListBottom>
+            <NavigationItem
+              link="/user/personal_settings"
+              icon="fa-question-circle"
+              title="Wiki"
+            />
+
+            <NavigationItem icon="fa-arrow-square-right">
+              <a onClick={() => this.logoutUser()} role="button" tabIndex={0}>
+                Logout
+              </a>
+            </NavigationItem>
+          </NavigationListBottom>
+        </StyledNavigation>
       )
     );
   }

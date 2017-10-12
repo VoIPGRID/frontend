@@ -2,6 +2,8 @@ import axios from 'axios';
 import API_ROOT from '../constants';
 import { AUTH_FAILED } from './BaseActions';
 
+import { updateBranding } from './BrandingActions';
+
 export const GET_PARTNERS = 'GET_PARTNERS';
 export const CREATE_PARTNER = 'CREATE_PARTNER';
 export const GET_PARTNER = 'GET_PARTNER';
@@ -96,42 +98,53 @@ export async function getPartner(id) {
   }
 }
 
-export async function updatePartner(values) {
-  const { id } = values;
-  const url = `${API_ROOT}/partners/${id}/`;
+export function updatePartner(values) {
+  return async dispatch => {
+    const { id } = values;
+    const url = `${API_ROOT}/partners/${id}/`;
 
-  const request = await axios.create({
-    headers: {
-      Accept: 'application/json',
-      'X-CSRFToken': window.__STORE__.user.csrf
-    },
-    timeout: 3000,
-    withCredentials: true
-  });
+    const request = await axios.create({
+      headers: {
+        Accept: 'application/json',
+        'X-CSRFToken': window.__STORE__.user.csrf
+      },
+      timeout: 3000,
+      withCredentials: true
+    });
 
-  let result;
-  let object;
+    let result;
+    let object;
 
-  request.interceptors.response.use(
-    response => {
-      result = response;
-      object = {
-        type: UPDATE_PARTNER,
-        payload: result
+    request.interceptors.response.use(
+      response => {
+        result = response;
+        object = {
+          type: UPDATE_PARTNER,
+          payload: result
+        };
+      },
+      error => {
+        result = error.response.data;
+        object = {
+          type: FORM_ERROR,
+          payload: result
+        };
+      }
+    );
+
+    result = await request.patch(url, values);
+
+    if (object.payload.status === 200) {
+      const branding = {
+        brand: values.brand,
+        text: values.text
       };
-    },
-    error => {
-      result = error.response.data;
-      object = {
-        type: FORM_ERROR,
-        payload: result
-      };
+      // Update branding colors if the partner is succesfully updated.
+      dispatch(updateBranding(branding));
     }
-  );
 
-  result = await request.patch(url, values);
-
-  return object;
+    return dispatch(object);
+  };
 }
 
 export async function deletePartner(id) {

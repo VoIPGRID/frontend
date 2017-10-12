@@ -20,7 +20,7 @@ const StyledBreadcrumbs = styled.ul`
     font-weight: bold;
 
     :last-child {
-      order-right: 0;
+      border-right: 0;
     }
   }
 `;

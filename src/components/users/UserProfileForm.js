@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withTranslate } from 'react-redux-multilingual';
+
+import FormButton from '../base/FormButton';
+import LinkButton from '../base/LinkButton';
 
 import { getUser, updateUser, emptyUser } from '../../actions/UserActions';
 
@@ -149,17 +151,13 @@ class UserProfileForm extends Component {
             component={renderField}
           />
 
-          <div className="field is-grouped margin-top-10">
-            <div className="control">
-              <button type="submit" className="button is-primary">
-                Save
-              </button>
-            </div>
-            <div className="control">
-              <Link className="button margin-left-5" to="/partners/">
-                Cancel
-              </Link>
-            </div>
+          <div className="margin-top-10">
+            <FormButton type="submit" addClasses="is-primary is-inline">
+              Save
+            </FormButton>
+            <LinkButton addClasses="secondary" link="/partners/">
+              Cancel
+            </LinkButton>
           </div>
         </form>
       </div>

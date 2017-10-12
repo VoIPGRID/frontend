@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 
 import { connect } from 'react-redux';
 import { loginUser } from '../../actions/BaseActions';
 
 import Notification from './Notification';
 
-import '../../assets/style/login.css';
+import { StyledField } from '../helpers/forms/RenderField';
+import FormButton from '../base/FormButton';
 
 class Login extends Component {
   /**
@@ -67,8 +69,8 @@ class Login extends Component {
   render() {
     const err = this.state.error;
     return (
-      <div className="login--container">
-        <h1 className="title">Login</h1>
+      <Container>
+        <h1>Login</h1>
 
         {err && (
           <Notification type="error">
@@ -78,10 +80,8 @@ class Login extends Component {
         )}
 
         <form onSubmit={this.handleSubmit}>
-          <div className="field">
-            <label className="label" htmlFor="name">
-              Email
-            </label>
+          <StyledField>
+            <label htmlFor="name">Email</label>
             <div className="control">
               <input
                 className="input"
@@ -91,12 +91,10 @@ class Login extends Component {
                 onChange={e => this.setState({ email: e.target.value })}
               />
             </div>
-          </div>
+          </StyledField>
 
-          <div className="field">
-            <label className="label" htmlFor="password">
-              Password
-            </label>
+          <StyledField>
+            <label htmlFor="password">Password</label>
             <div className="control">
               <input
                 className="input"
@@ -106,15 +104,21 @@ class Login extends Component {
                 onChange={e => this.setState({ password: e.target.value })}
               />
             </div>
-          </div>
+          </StyledField>
 
-          <div className="control">
-            <input type="submit" className="button is-primary" value="Submit" />
-          </div>
+          <FormButton type="submit">Submit</FormButton>
         </form>
-      </div>
+      </Container>
     );
   }
 }
+
+const Container = styled.div`
+  max-width: 400px;
+  background: white;
+  margin: auto;
+  padding: 1rem;
+  border-radius: 4px;
+`;
 
 export default connect(null, { loginUser })(Login);

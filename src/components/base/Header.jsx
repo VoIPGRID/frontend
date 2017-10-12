@@ -12,10 +12,9 @@ const Container = styled.header`
   top: 0;
   height: 80px;
   line-height: 80px;
-
-  a {
-    vertical-align: middle;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Logo = styled.img`
@@ -24,18 +23,25 @@ const Logo = styled.img`
   max-height: 40px;
 `;
 
+const NavRight = styled.div`
+  position: absolute;
+  right: 20px;
+`;
+
 /**
  * Header component to render the logo and the user preferences link.
  */
 const Header = () => (
   <Container>
     <Logo src={logo} alt="VoIPGRID logo" className="header--logo" />
-    <LinkButton
-      link="/user/personal_settings"
-      addClasses="secondary pull-right"
-    >
-      <i className="fas fa-user" />
-    </LinkButton>
+    <NavRight>
+      <LinkButton
+        link="/user/personal_settings"
+        addClasses="secondary pull-right"
+      >
+        <i className="fas fa-user" />
+      </LinkButton>
+    </NavRight>
   </Container>
 );
 

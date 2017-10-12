@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import renderField from '../helpers/forms/RenderField';
+
+import FormButton from '../base/FormButton';
+import LinkButton from '../base/LinkButton';
 
 import getSelectOptions from '../helpers/forms/SelectOptions';
 
@@ -329,17 +331,13 @@ class PartnerForm extends Component {
             </TabPanel>
           </Tabs>
 
-          <div className="field is-grouped margin-top-10 margin-left-200">
-            <div className="control">
-              <button type="submit" className="button is-primary">
-                Save
-              </button>
-            </div>
-            <div className="control">
-              <Link className="button margin-left-5" to="/partners/">
-                Cancel
-              </Link>
-            </div>
+          <div className="margin-top-10 margin-left-200">
+            <FormButton type="submit" addClasses="is-primary is-inline">
+              Save
+            </FormButton>
+            <LinkButton addClasses="secondary" link="/partners/">
+              Cancel
+            </LinkButton>
           </div>
         </form>
       </div>

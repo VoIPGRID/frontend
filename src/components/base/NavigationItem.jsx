@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-const StyledNavigationItem = styled.li`
+const Wrapper = styled.li`
   font-size: 20px;
   font-weight: 200px;
 
@@ -10,8 +10,7 @@ const StyledNavigationItem = styled.li`
     cursor: pointer;
 
     a, i {
-      color: ${props =>
-        props.theme.secondary ? props.theme.secondary : '#fff'};
+      color: ${props => props.theme.secondary || '#fff'};
     }
   }
 
@@ -23,22 +22,34 @@ const StyledNavigationItem = styled.li`
 
     &:hover,
     &:hover > i {
-      color: ${props =>
-        props.theme.secondary ? props.theme.secondary : '#fff'};
+      color: ${props => props.theme.secondary || '#fff'};
       }
     }
   }
 `;
 
-const NavigationItem = ({ icon, link, title }) => (
-  <StyledNavigationItem>
-    <span className="navigation--icon-wrapper">
+const IconWrapper = styled.span`
+  display: inline-block;
+  text-align: center;
+  width: 80px;
+
+  i {
+    color: #fff;
+  }
+`;
+
+const NavigationItem = ({ icon, link, title, ...props }) => (
+  <Wrapper>
+    <IconWrapper>
       <i className={`fas ${icon}`} />
-    </span>
-    <NavLink to={link} activeClassName="is-active">
-      {title}
-    </NavLink>
-  </StyledNavigationItem>
+    </IconWrapper>
+    {link && (
+      <NavLink to={link} activeClassName="is-active">
+        {title}
+      </NavLink>
+    )}
+    {props.children}
+  </Wrapper>
 );
 
 export default NavigationItem;

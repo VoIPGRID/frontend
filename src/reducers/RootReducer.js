@@ -8,6 +8,7 @@ import PartnerReducer from './PartnerReducer';
 import UserReducer from './UserReducer';
 
 import baseReducer from './BaseReducer';
+import BrandingReducer from './BrandingReducer';
 
 const rootReducer = combineReducers({
   base: baseReducer,
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
   Intl: Intl,
   partners: PartnerReducer,
   user: UserReducer,
-  voipaccounts: VoipAccountsReducer
+  voipaccounts: VoipAccountsReducer,
+  branding: BrandingReducer
 });
 
 export default rootReducer;

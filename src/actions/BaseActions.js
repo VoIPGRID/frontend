@@ -1,5 +1,6 @@
 import axios from 'axios';
 import API_ROOT from '../constants';
+import { updateBranding } from './BrandingActions';
 
 export const LOGIN_USER = 'LOGIN_USER';
 export const LOGOUT_USER = 'LOGOUT_USER';
@@ -7,24 +8,6 @@ export const AUTH_FAILED = 'AUTH_FAILED';
 export const SEND_NOTIFICATION = 'SEND_NOTIFICATION';
 export const HIDE_NOTIFICATION = 'HIDE_NOTIFICATION';
 export const SET_CONTEXT = 'SET_CONTEXT';
-
-export function loginUser(values) {
-  let url = `${API_ROOT}/login/`;
-
-  let request = axios.create({
-    baseURL: 'http://localhost:8001/api/v2/',
-    headers: { 'X-CSRFToken': window.__STORE__.user.csrf },
-    timeout: 3000,
-    withCredentials: true
-  });
-
-  const result = request.post(url, values);
-
-  return {
-    type: LOGIN_USER,
-    payload: result
-  };
-}
 
 export function logoutUser(result) {
   const url = `${API_ROOT}/logout`;
@@ -43,23 +26,40 @@ export function logoutUser(result) {
   };
 }
 
-function sendNotification(content, notificationType) {
-  return {
-    type: SEND_NOTIFICATION,
-    payload: {
-      content,
-      notificationType
+// This loginUser functionality calls the login function as well as
+// using the branding information returned after the login in call
+// to set the default branding when the user logs in succesfully.
+export function loginUser(values) {
+  return async dispatch => {
+    let url = `${API_ROOT}/login/`;
+
+    let request = await axios.create({
+      baseURL: 'http://localhost:8001/api/v2/',
+      headers: { 'X-CSRFToken': window.__STORE__.user.csrf },
+      timeout: 3000,
+      withCredentials: true
+    });
+
+    const result = await request.post(url, values);
+
+    if (result.data.user.authenticated) {
+      dispatch(updateBranding(result.data.user.partner.branding));
     }
+
+    return dispatch(login(result));
   };
 }
 
-function hideNotification(id) {
-  return { type: HIDE_NOTIFICATION, id };
+function login(result) {
+  return {
+    type: LOGIN_USER,
+    payload: result
+  };
 }
 
 let nextNotificationId = 0;
 export function showNotification(text, type, timeout) {
-  return function(dispatch) {
+  return dispatch => {
     // Assigning IDs to notifications lets reducer ignore HIDE_NOTIFICATION
     // for the notification that is not currently visible.
     // Alternatively, we could store the interval ID and call
@@ -73,4 +73,18 @@ export function showNotification(text, type, timeout) {
       }, 2000);
     }
   };
+}
+
+function sendNotification(content, notificationType) {
+  return {
+    type: SEND_NOTIFICATION,
+    payload: {
+      content,
+      notificationType
+    }
+  };
+}
+
+function hideNotification(id) {
+  return { type: HIDE_NOTIFICATION, id };
 }

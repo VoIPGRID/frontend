@@ -23,6 +23,8 @@ import Header from './components/base/Header';
 import Breadcrumbs from './components/base/Breadcrumbs';
 import LogoutMessage from './components/base/LogoutMessage';
 
+import SetTheme from './components/helpers/SetTheme';
+
 // Async components. These are to setup code splitting (chunks) for Webpack 2.
 // This speeds up load time of the bundle because it can load different
 // JS files at the right time, instead of loading one big bundle.
@@ -53,12 +55,12 @@ store.dispatch({
   type: 'SET_LOCALE'
 });
 
-ReactDOM.render(
-  <Provider store={store}>
-    <IntlProvider
-      translations={translations}
-      locale={window.__STORE__.user.language}
-    >
+export const App = () => (
+  <IntlProvider
+    translations={translations}
+    locale={window.__STORE__.user.language}
+  >
+    <SetTheme>
       <BrowserRouter>
         <div className="base-body">
           <Route exact path="/user/logout" component={LogoutMessage} />
@@ -132,7 +134,13 @@ ReactDOM.render(
           </section>
         </div>
       </BrowserRouter>
-    </IntlProvider>
+    </SetTheme>
+  </IntlProvider>
+);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
   </Provider>,
   document.querySelector('#app')
 );
