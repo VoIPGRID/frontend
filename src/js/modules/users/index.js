@@ -18,15 +18,7 @@ class UsersModule extends Module {
         Object.assign(defaultStore, this.app.store.users)
         this.app.store.users = defaultStore
 
-        this.actions = require('./actions')(app, this)
-
-        const AddEditUser = Vue.component('AddEditUser', require('./components/add-edit_user')(app, this.actions))
-        const DeleteUser = Vue.component('DeleteUser', require('./components/delete_user')(app, this.actions))
-        const ListUsers = Vue.component('ListUsers', require('./components/list_users')(app, this.actions))
-        const Login = Vue.component('Login', require('./components/login')(app, this.actions))
-
         app.storage.defineMapper('users', {
-            endpoint: 'users',
             wrap: function(data, opts) {
                 // Override behavior of wrap in this instance
                 if (opts.op === 'afterFindAll') {
@@ -36,6 +28,13 @@ class UsersModule extends Module {
                 return JSData.Mapper.prototype.wrap.call(this, data, opts)
             },
         })
+
+        this.actions = require('./actions')(app, this)
+
+        const AddEditUser = Vue.component('AddEditUser', require('./components/add-edit_user')(app, this.actions))
+        const DeleteUser = Vue.component('DeleteUser', require('./components/delete_user')(app, this.actions))
+        const ListUsers = Vue.component('ListUsers', require('./components/list_users')(app, this.actions))
+        const Login = Vue.component('Login', require('./components/login')(app, this.actions))
 
         app.router.addRoutes([{
             alias: '/logout',

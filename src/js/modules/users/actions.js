@@ -7,6 +7,8 @@ module.exports = function(app, _module) {
 
     let $t = Vue.i18n.translate
 
+    const users = app.storage.getMapper('users')
+
     /**
     * Delete a user, update the store and add a notification.
     * Route to the last route afterwards.
@@ -128,8 +130,7 @@ module.exports = function(app, _module) {
     * @returns {Object} - an API endpoint formatted result list.
     */
     actions.readUsers = async function({page, path}) {
-        const users = app.storage.getMapper('users')
-        let response = await users.findAll({page: page})
+        let response = await users.findAll({page: page}, {endpoint: path})
         response.results = users.toJSON(response.results)
         return response
     }

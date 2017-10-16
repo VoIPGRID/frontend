@@ -10,10 +10,22 @@ class PartnersModule extends Module {
     constructor(app) {
         super(app)
         if (!this.app.store.partners) this.app.store.partners = this.getObservables()
+
+        app.storage.defineMapper('partners', {
+            endpoint: 'partners',
+            wrap: function(data, opts) {
+                // Override behavior of wrap in this instance
+                if (opts.op === 'afterFindAll') {
+                    data.results = app.storage.getMapper('partners').createRecord(data.results)
+                    return data
+                }
+                return JSData.Mapper.prototype.wrap.call(this, data, opts)
+            },
+        })
+
         this.actions = require('./actions')(app, this)
 
-        const AddEditPartner = Vue.component('AddEditPartner',
-            require('./components/add-edit_partner')(app, this.actions))
+        const AddEditPartner = Vue.component('AddEditPartner', require('./components/add-edit_partner')(app, this.actions))
         const DeletePartner = Vue.component('DeletePartner', require('./components/delete_partner')(app, this.actions))
         const ListPartners = Vue.component('ListPartners', require('./components/list_partners')(app, this.actions))
 

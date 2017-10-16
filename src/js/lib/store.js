@@ -14,17 +14,16 @@ class Store {
         // SSR provides an initial store to be reused for
         // clientside hydration.
         app.store = Object.assign(store, this.getDefaults())
-        console.log("STORAGE")
+
         app.storage = new JSData.DataStore({
             addToCache: function(name, data, opts) {
-                // Make sure the paginated post records get added to the store (and
-                // not the whole page object).
+                // Make sure the paginated post records get added to the store
+                // (and not the whole page object).
                 if (name === 'users' && opts.op === 'afterFindAll') {
-                    console.log(data)
-                    return DataStore.prototype.addToCache.call(this, name, data.results, opts)
+                    return JSData.DataStore.prototype.addToCache.call(this, name, data.results, opts)
                 }
                 // Otherwise do default behavior
-                return DataStore.prototype.addToCache.call(this, name, data, opts);
+                return JSData.DataStore.prototype.addToCache.call(this, name, data, opts);
             }
         })
 

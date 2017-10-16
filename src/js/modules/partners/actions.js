@@ -7,6 +7,8 @@ module.exports = function(app, _module) {
 
     let $t = Vue.i18n.translate
 
+    const partners = app.storage.getMapper('partners')
+
 
     /**
     * Delete a partner to the API, update the store and add a notification.
@@ -74,8 +76,9 @@ module.exports = function(app, _module) {
     * @returns {Object} - Returns the partner object from the API endpoint.
     */
     actions.readPartners = async function({page}) {
-        let {data: partners} = await app.api.client.get(`/partners/?page=${page}`)
-        return partners
+        let response = await partners.findAll({page: page})
+        response.results = partners.toJSON(response.results)
+        return response
     }
 
 
