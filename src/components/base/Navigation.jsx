@@ -36,9 +36,7 @@ const NavigationListBottom = styled.ul`
   bottom: 0;
 `;
 
-/**
- * Navigation component that renders our main navigation.
- */
+// Navigation component that renders our main navigation.
 class Navigation extends Component {
   constructor(props) {
     super(props);
@@ -54,15 +52,6 @@ class Navigation extends Component {
   // This lifecycle method will set the state with params from the url
   // to change the url when switching context between partner and client.
   componentWillReceiveProps(nextProps) {
-    // if (this.props.partner.branding !== nextProps.partner.branding) {
-    //   this.setState({
-    //     theme: {
-    //       primary: nextProps.partner.branding.primary,
-    //       secondary: nextProps.partner.branding.secondary
-    //     }
-    //   });
-    // }
-
     if (nextProps.match.params.id) {
       this.setState({
         context: {

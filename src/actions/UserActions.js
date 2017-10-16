@@ -11,6 +11,10 @@ export const DELETE_USER = 'DELETE_USER';
 export const EMPTY_USER = 'EMPTY_USER';
 export const FORM_ERROR = 'FORM_ERROR';
 
+/**
+ * Get a list of users for a specific client.
+ * @param {int} clientId - The id of a client for which to retrieve users.
+ */
 export async function getUsers(clientId) {
   let url;
   if (clientId) {
@@ -40,6 +44,11 @@ export async function getUsers(clientId) {
   }
 }
 
+/**
+ * Delete a user
+ * @param {int} clientId - The id of a client of which the user belongs to.
+ * @param {int} userId - The id of the to be deleted user.
+ */
 export async function deleteUser(clientId, userId) {
   const url = `${API_ROOT}/clients/${clientId}/users/${userId}`;
 
@@ -55,6 +64,8 @@ export async function deleteUser(clientId, userId) {
   let result;
   let object;
 
+  // Use a request interceptor to intercept errors and send back the
+  // right action type to our reducer.
   request.interceptors.response.use(
     response => {
       result = response;

@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 
 /**
  * PrivateRoute component
- * @param {Component} Component - The routing Component we wish to authenticate.
- * @returns {Component} Comp - The authenticated component or a redirect
- * component.
+ * @param {object} Component - The routing Component we wish to authenticate.
+ * @param {object} auth - The auth object from state with data from the API.
+ * @param {object} ...rest - Spreaded object with the rest of the props.
+ * @returns {component} comp - Component or redirect object.
  */
 const PrivateRoute = ({ component: Component, auth, ...rest }) => (
   <Route
@@ -32,7 +33,7 @@ const PrivateRoute = ({ component: Component, auth, ...rest }) => (
   />
 );
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = state => ({
   auth: state.base.auth
 });
 

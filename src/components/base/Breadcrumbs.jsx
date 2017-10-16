@@ -41,6 +41,13 @@ const Breadcrumbs = () => (
   />
 );
 
+/**
+ * Set up different crumbs for our breadcrumb path.
+ * @param {string} part - Value of the looped over array part.
+ * @param {int} partIndex -Index of the looped over array part.
+ * @param {array} parts - Original array
+ * @return {JSX} The list element for every part in the breadcrumb.
+ */
 const crumb = (part, partIndex, parts) => {
   const path = ['', ...parts.slice(0, partIndex + 1)].join('/');
   return (

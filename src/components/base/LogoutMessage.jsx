@@ -10,9 +10,7 @@ const Container = styled.div`
   border-radius: 4px;
 `;
 
-/**
- * Logout message component to show a user is succesfully logged out.
- */
+// Logout message component to show a user is succesfully logged out.
 const LogoutMessage = () => (
   <Container>
     <h1>Logged out</h1>

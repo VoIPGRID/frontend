@@ -22,8 +22,8 @@ const Container = styled.div`
 
 /**
  * Notification component to render a notification on top of the page.
- * @constructor
- * @param {object} props - Props data from higher order component.
+ * @param {string} type - A string that renders a specific type of notification.
+ * @param {object} ...props - A spreaded props object to display children.
  */
 const Notification = ({ type, ...props }) => (
   <Container className={type}>

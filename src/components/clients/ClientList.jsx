@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import LinkButton from '../base/LinkButton';
+import { StyledTableActions } from '../helpers/Table';
 
 import {
   getClients,
@@ -65,7 +66,7 @@ class ClientList extends Component {
       {
         accessor: 'actions',
         Cell: props => (
-          <span>
+          <StyledTableActions>
             <Link
               to={`/partners/${partnerId}/clients/${props.original.id}/edit`}
             >
@@ -77,7 +78,7 @@ class ClientList extends Component {
             >
               <i className="fas fa-trash" /> Delete
             </button>
-          </span>
+          </StyledTableActions>
         ),
         Header: 'Actions'
       }

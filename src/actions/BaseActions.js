@@ -9,6 +9,8 @@ export const SEND_NOTIFICATION = 'SEND_NOTIFICATION';
 export const HIDE_NOTIFICATION = 'HIDE_NOTIFICATION';
 export const SET_CONTEXT = 'SET_CONTEXT';
 
+// Send a request to the API to logout the user
+// and return the result object.
 export function logoutUser(result) {
   const url = `${API_ROOT}/logout`;
 
@@ -46,14 +48,10 @@ export function loginUser(values) {
       dispatch(updateBranding(result.data.user.partner.branding));
     }
 
-    return dispatch(login(result));
-  };
-}
-
-function login(result) {
-  return {
-    type: LOGIN_USER,
-    payload: result
+    return dispatch({
+      type: LOGIN_USER,
+      payload: result
+    });
   };
 }
 

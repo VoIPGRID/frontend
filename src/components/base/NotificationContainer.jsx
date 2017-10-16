@@ -5,7 +5,6 @@ import Notification from './Notification';
 
 /**
  * Notification component to render a notification on top of the page.
- * @constructor
  * @param {object} props - Props data from higher order component.
  */
 const NotificationContainer = props =>

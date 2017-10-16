@@ -7,6 +7,7 @@ import { showNotification } from '../../../../actions/BaseActions';
 import Table from '../../../helpers/Table';
 
 import LinkButton from '../../../base/LinkButton';
+import { StyledTableActions } from '../../../helpers/Table';
 
 class ClientUserList extends Component {
   async componentDidMount() {
@@ -54,7 +55,7 @@ class ClientUserList extends Component {
       {
         accessor: 'actions',
         Cell: props => (
-          <span>
+          <StyledTableActions>
             <Link to={`/clients/${clientId}/user/${props.original.id}/change`}>
               <i className="fas fa-edit" /> Edit
             </Link>
@@ -64,9 +65,10 @@ class ClientUserList extends Component {
             >
               <i className="fas fa-trash" /> Delete
             </button>
-          </span>
+          </StyledTableActions>
         ),
-        Header: 'Actions'
+        Header: 'Actions',
+        sortable: false
       }
     ];
 
@@ -89,11 +91,9 @@ class ClientUserList extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    users: state.user.users
-  };
-}
+const mapStateToProps = state => ({
+  users: state.user.users
+});
 
 export default connect(mapStateToProps, {
   deleteUser,

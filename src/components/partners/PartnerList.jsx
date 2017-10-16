@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { withTranslate } from 'react-redux-multilingual';
 
 import Table from '../helpers/Table';
-
 import LinkButton from '../base/LinkButton';
+import { StyledTableActions } from '../helpers/Table';
 
 import {
   getPartners,
@@ -68,19 +68,17 @@ class PartnerList extends Component {
       {
         accessor: 'actions',
         Cell: props => (
-          <span>
+          <StyledTableActions>
             <Link to={`/partners/${props.original.id}/edit`}>
               <i className="fas fa-edit" /> Edit
             </Link>
-            <button
-              className="button is-link margin-left-5"
-              onClick={() => this._handleDelete(props)}
-            >
+            <button onClick={() => this._handleDelete(props)}>
               <i className="fas fa-trash" /> Delete
             </button>
-          </span>
+          </StyledTableActions>
         ),
-        Header: 'Actions'
+        Header: 'Actions',
+        sortable: false
       }
     ];
 

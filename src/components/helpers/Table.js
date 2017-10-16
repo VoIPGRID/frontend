@@ -42,7 +42,7 @@ const StyledTable = styled.div`
       color: ${props => props.theme.primary};
     }
 
-    .rt-thead .rt-th:hover,
+    .rt-thead .rt-th.-cursor-pointer:hover,
     .rt-thead .rt-td:hover {
       border-bottom: 2px solid ${props => props.theme.primary};
     }
@@ -82,6 +82,7 @@ const StyledTable = styled.div`
     .rt-th,
     .rt-td {
       padding: 5px 10px;
+      text-align: left;
     }
 
     .rt-td a,
@@ -105,4 +106,22 @@ const StyledTable = styled.div`
   }
 `;
 
+// This helper can be used to wrap table actions for styling.
+export const StyledTableActions = styled.div`
+  a {
+    text-decoration: none;
+  }
+
+  button {
+    background: none;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    color: ${props => props.theme.primary};
+    margin-left: 10px;
+  }
+`;
 export default Table;

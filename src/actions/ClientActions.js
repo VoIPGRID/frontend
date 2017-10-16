@@ -11,6 +11,10 @@ export const DELETE_CLIENT = 'DELETE_CLIENT';
 export const FORM_ERROR = 'FORM_ERROR';
 export const EMPTY_CLIENT = 'EMPTY_CLIENT';
 
+/**
+ * Gets a list of clients.
+ * @param {int} partner - Gets a list of clients for a specific partner
+ */
 export async function getClients(partner = null) {
   let url;
 
@@ -53,6 +57,10 @@ export function createClient(values) {
   };
 }
 
+/**
+ * Gets a specific client.
+ * @param {int} id - Client id
+ */
 export async function getClient(id) {
   const url = `${API_ROOT}/clients/${id}/`;
 
@@ -77,6 +85,10 @@ export async function getClient(id) {
   }
 }
 
+/**
+ * Updates a client.
+ * @param {object} values - To be updated values of the client, including the id.
+ */
 export async function updateClient(values) {
   const { id } = values;
   const url = `${API_ROOT}/clients/${id}/`;

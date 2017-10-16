@@ -38,6 +38,13 @@ const IconWrapper = styled.span`
   }
 `;
 
+/**
+ * NavigationItem component for every item in the main navigation bar.
+ * @param {string} icon - A font-awesome classname to display an icon.
+ * @param {string} link - The link to which the navigationitem should link.
+ * @param {string} title - The title for the anchor tag link.
+ * @param {object} ...props - Spreaded props to display possible children.
+ */
 const NavigationItem = ({ icon, link, title, ...props }) => (
   <Wrapper>
     <IconWrapper>

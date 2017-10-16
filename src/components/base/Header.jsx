@@ -28,9 +28,7 @@ const NavRight = styled.div`
   right: 20px;
 `;
 
-/**
- * Header component to render the logo and the user preferences link.
- */
+// Header component to render the logo and the user preferences link.
 const Header = () => (
   <Container>
     <Logo src={logo} alt="VoIPGRID logo" className="header--logo" />

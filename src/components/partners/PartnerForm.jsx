@@ -351,12 +351,10 @@ function validate(values) {
   return errors;
 }
 
-function mapStateToProps({ partners }) {
-  return {
-    initialValues: partners.current,
-    partners: partners.partners
-  };
-}
+const mapStateToProps = ({ partners }) => ({
+  initialValues: partners.current,
+  partners: partners.partners
+});
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(

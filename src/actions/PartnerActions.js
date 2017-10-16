@@ -13,7 +13,10 @@ export const EMPTY_PARTNER = 'EMPTY_PARTNER';
 export const FORM_ERROR = 'FORM_ERROR';
 export const UPDATE_BRANDING = 'UPDATE_BRANDING';
 
-export async function getPartners(searchString = '') {
+/**
+ * Get a list of partners.
+ */
+export async function getPartners() {
   const url = `${API_ROOT}/partners/`;
 
   try {
@@ -37,6 +40,10 @@ export async function getPartners(searchString = '') {
   }
 }
 
+/**
+ * Create a partner
+ * @param {object} values - Object of partner values
+ */
 export async function createPartner(values) {
   const url = `${API_ROOT}/partners/`;
 
@@ -52,6 +59,8 @@ export async function createPartner(values) {
   let result;
   let object;
 
+  // Use a request interceptor to check for errors before returning the
+  // action type for success or an error.
   request.interceptors.response.use(
     response => {
       result = response;
@@ -74,6 +83,10 @@ export async function createPartner(values) {
   return object;
 }
 
+/**
+ * Get a partner object.
+ * @param {int} id - Id of the partner to retrieve.
+ */
 export async function getPartner(id) {
   const url = `${API_ROOT}/partners/${id}/`;
 
@@ -98,6 +111,10 @@ export async function getPartner(id) {
   }
 }
 
+/**
+ * Update a specific partner.
+ * @param {object} values - Object of partner values
+ */
 export function updatePartner(values) {
   return async dispatch => {
     const { id } = values;
@@ -115,6 +132,8 @@ export function updatePartner(values) {
     let result;
     let object;
 
+    // Use a request interceptor to check for errors before returning the
+    // action type for success or an error.
     request.interceptors.response.use(
       response => {
         result = response;
@@ -134,12 +153,13 @@ export function updatePartner(values) {
 
     result = await request.patch(url, values);
 
+    // Update branding colors if the partner is succesfully updated.
     if (object.payload.status === 200) {
       const branding = {
         brand: values.brand,
         text: values.text
       };
-      // Update branding colors if the partner is succesfully updated.
+
       dispatch(updateBranding(branding));
     }
 
