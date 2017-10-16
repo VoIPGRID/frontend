@@ -89,16 +89,12 @@ class PartnerList extends Component {
             {translate('All partners')} ({this.props.partners.length})
           </h2>
 
-          <LinkButton link="/partners/create" addClasses="pull-right">
+          <LinkButton link="/partners/create" addClasses="primary pull-right">
             {translate('Add')}
           </LinkButton>
         </div>
 
-        <Table
-          data={this.props.partners}
-          columns={columns}
-          defaultLength={this.props.partners.length}
-        />
+        <Table data={this.props.partners} columns={columns} />
       </div>
     );
   }

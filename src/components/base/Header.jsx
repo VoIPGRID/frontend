@@ -33,10 +33,7 @@ const Header = () => (
   <Container>
     <Logo src={logo} alt="VoIPGRID logo" className="header--logo" />
     <NavRight>
-      <LinkButton
-        link="/user/personal_settings"
-        addClasses="secondary pull-right"
-      >
+      <LinkButton link="/user/personal_settings" addClasses="pull-right">
         <i className="fas fa-user" />
       </LinkButton>
     </NavRight>

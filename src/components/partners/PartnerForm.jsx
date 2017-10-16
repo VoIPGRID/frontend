@@ -82,7 +82,7 @@ class PartnerForm extends Component {
     } else {
       this.props.showNotification(
         'Fields with errors are marked down below.',
-        'is-danger'
+        'error'
       );
       // Loop over errors and throw a new SubmissionError for every field
       // that has an error.
@@ -332,7 +332,7 @@ class PartnerForm extends Component {
           </Tabs>
 
           <div className="margin-top-10 margin-left-200">
-            <FormButton type="submit" addClasses="is-primary is-inline">
+            <FormButton type="submit" addClasses="primary is-inline">
               Save
             </FormButton>
             <LinkButton addClasses="secondary" link="/partners/">

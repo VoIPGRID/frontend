@@ -76,16 +76,12 @@ class ClientUserList extends Component {
       <div>
         <div className="list-header">
           All users ({this.props.users.length})
-          <LinkButton link="/users/create" addClasses="pull-right">
+          <LinkButton link="/users/create" addClasses="primary pull-right">
             Add
           </LinkButton>
         </div>
 
-        <Table
-          data={this.props.users}
-          columns={columns}
-          defaultLength={this.props.users.length}
-        />
+        <Table data={this.props.users} columns={columns} />
       </div>
     );
   }

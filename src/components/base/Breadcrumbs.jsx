@@ -13,7 +13,6 @@ const StyledBreadcrumbs = styled.ul`
     padding-right: 15px;
     margin-right: 15px;
     border-right: 1px #e6e7eb solid;
-    height: 36px;
     color: #2a3042;
     line-height: 36px;
     margin-top: 11px;

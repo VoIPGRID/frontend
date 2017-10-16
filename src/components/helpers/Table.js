@@ -2,8 +2,16 @@ import React from 'react';
 import ReactTable from 'react-table';
 import styled from 'styled-components';
 
+import PropTypes from 'prop-types';
+
 import 'react-table/react-table.css';
 
+/**
+ * React Table that returns a table with a given header and data.
+ * @public
+ * @param {array} columns - Columns array with data for the table header.
+ * @param {array} data - Array with data that should be displayed in the table.
+ */
 const Table = ({ columns, data }) => (
   <StyledTable>
     <ReactTable
@@ -14,6 +22,11 @@ const Table = ({ columns, data }) => (
     />
   </StyledTable>
 );
+
+Table.propTypes = {
+  columns: PropTypes.array.isRequired,
+  data: PropTypes.array
+};
 
 // Overriding styles from ReactTable package.
 const StyledTable = styled.div`

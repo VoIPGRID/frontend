@@ -1,5 +1,24 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
+
+/**
+ * Admin Module. Generic component for showing available modules.
+ * @public
+ * @param {string} title - Title for the module.
+ * @param {array} children - children object from the parent component.
+*/
+const AdminModule = ({ title, children }) => (
+  <div>
+    <Title>{title}</Title>
+    <List>{children}</List>
+  </div>
+);
+
+AdminModule.propTypes = {
+  title: PropTypes.string,
+  children: PropTypes.array
+};
 
 const Title = styled.h3`
   font-size: 20px;
@@ -38,19 +57,8 @@ const List = styled.ul`
   }
 
   li a:hover {
-    color: #e94e1b;
+    color: ${props => props.theme.secondary || '#000'};
   }
 `;
-
-/**
- * Admin Module. Generic component for showing available modules.
- * @param {object} props - Props data from higher order component.
- */
-const AdminModule = props => (
-  <div>
-    <Title>{props.title}</Title>
-    <List>{props.children}</List>
-  </div>
-);
 
 export default AdminModule;

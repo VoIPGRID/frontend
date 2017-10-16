@@ -152,7 +152,7 @@ class UserProfileForm extends Component {
           />
 
           <div className="margin-top-10">
-            <FormButton type="submit" addClasses="is-primary is-inline">
+            <FormButton type="submit" addClasses="primary is-inline">
               Save
             </FormButton>
             <LinkButton addClasses="secondary" link="/partners/">

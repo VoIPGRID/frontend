@@ -106,7 +106,9 @@ class Login extends Component {
             </div>
           </StyledField>
 
-          <FormButton type="submit">Submit</FormButton>
+          <FormButton type="submit" addClasses="primary">
+            Submit
+          </FormButton>
         </form>
       </Container>
     );

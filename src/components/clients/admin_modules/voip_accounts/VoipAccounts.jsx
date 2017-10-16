@@ -32,16 +32,15 @@ class VoipAccounts extends Component {
       <div>
         <div className="list-header is-clearfix">
           All VoIP Accounts ({this.props.voipaccounts.length})
-          <LinkButton link="phoneaccount/create" addClasses="pull-right">
+          <LinkButton
+            link="phoneaccount/create"
+            addClasses="primary pull-right"
+          >
             Add
           </LinkButton>
         </div>
 
-        <Table
-          data={this.props.voipaccounts}
-          columns={columns}
-          defaultLength={this.props.voipaccounts.length}
-        />
+        <Table data={this.props.voipaccounts} columns={columns} />
       </div>
     );
   }

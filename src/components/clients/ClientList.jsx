@@ -88,16 +88,12 @@ class ClientList extends Component {
       <div>
         <div className="list-header is-clearfix">
           All clients ({this.props.clients.length})
-          <LinkButton link="/clients/create" addClasses="pull-right">
+          <LinkButton link="/clients/create" addClasses="primary pull-right">
             Add
           </LinkButton>
         </div>
 
-        <Table
-          data={this.props.clients}
-          columns={columns}
-          defaultLength={this.props.clients.length}
-        />
+        <Table data={this.props.clients} columns={columns} />
       </div>
     );
   }
