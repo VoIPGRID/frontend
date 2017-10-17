@@ -25,6 +25,8 @@ import LogoutMessage from './components/base/LogoutMessage';
 
 import SetTheme from './components/helpers/SetTheme';
 
+import registerServiceWorker from './registerServiceWorker';
+
 // Async components. These are to setup code splitting (chunks) for Webpack 2.
 // This speeds up load time of the bundle because it can load different
 // JS files at the right time, instead of loading one big bundle.
@@ -144,3 +146,4 @@ ReactDOM.render(
   </Provider>,
   document.querySelector('#app')
 );
+registerServiceWorker();
