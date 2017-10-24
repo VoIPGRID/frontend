@@ -74,12 +74,13 @@ module.exports = function(app, _module) {
      * @param {Object} data - Context passed from the Paginator component.
      * @returns {Object} - Returns the client object from the API endpoint.
      */
-    actions.readClients = async function({page}) {
+    actions.readClients = async function({page, partnerId}) {
         // Filter the selection based on the currently selected partner.
         let url = `/clients/?page=${page}`
-        if (app.store.user.selectedPartner) {
-            url += `&partner=${app.store.user.selectedPartner.id}`
+        if (partnerId) {
+            url += `&partner=${partnerId}`
         }
+
         let {data: clients} = await app.api.client.get(url)
         return clients
     }

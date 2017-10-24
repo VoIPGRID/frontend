@@ -4,7 +4,7 @@ module.exports = (app, actions) => {
         asyncData: async function(route) {
             // return the Promise from the action
             let currentPage = parseInt(route.query.page) || 1
-            let clientsData = await actions.readClients({page: currentPage})
+            let clientsData = await actions.readClients({page: currentPage, partnerId: route.params.partner_id})
             app.store.clients.clients = clientsData
             return clientsData
         },
@@ -13,6 +13,7 @@ module.exports = (app, actions) => {
         },
         methods: {
             fetchData: async function(...args) {
+                args[0].partnerId = app.router.currentRoute.params.partner_id
                 this.clients = await actions.readClients(...args)
             },
             /**
