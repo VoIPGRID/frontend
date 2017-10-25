@@ -57,7 +57,7 @@ gulp.task('assets', `Copy required assets to '${BUILD_DIR}'`, () => {
         .pipe(addsrc('./src/fonts/**', {base: './src'}))
         .pipe(addsrc(path.join(NODE_PATH, 'roboto-fontface', 'fonts', '**'), {base: path.join(NODE_PATH, 'roboto-fontface')}))
         .pipe(addsrc(path.join(NODE_PATH, 'font-awesome', 'fonts', '**'), {base: path.join(NODE_PATH, 'font-awesome')}))
-        .pipe(addsrc(path.join(NODE_PATH, 'vg-icons', 'fonts', '**'), {base: path.join(NODE_PATH, 'vg-icons')}))
+        .pipe(addsrc(path.join(NODE_PATH, 'vg-icons', 'font', '**'), {base: path.join(NODE_PATH, 'vg-icons')}))
         .pipe(addsrc('./src/index.html', {base: './src'}))
         .pipe(gulp.dest(BUILD_DIR))
         .pipe(size(extend({title: 'assets'}, sizeConfig)))
