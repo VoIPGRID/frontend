@@ -57,7 +57,7 @@ function createApp(req, cookieJar, store) {
 
     return new Promise((resolve, reject) => {
         let app
-        if (!appCache[sessionId]) {
+        if (appCache[sessionId] || !appCache[sessionId]) {
             app = new App(store, global.templates)
             appCache[sessionId] = app
         } else {
