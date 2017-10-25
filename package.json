@@ -84,7 +84,7 @@
     "roboto-fontface": "^0.8.0",
     "serve-favicon": "^2.4.3",
     "serve-static": "^1.12.4",
-    "vg-icons": "git+https://github.com/voipgrid/vg-icons#master",
+    "vg-icons": "git+https://github.com/voipgrid/vg-icons.git#master",
     "vue": "^2.4.4",
     "vue-i18n": "^7.0.5",
     "vue-i18n-stash": "git+https://github.com/wearespindle/vue-stash-i18n.git#master",
