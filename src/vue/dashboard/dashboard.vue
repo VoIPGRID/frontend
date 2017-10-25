@@ -27,7 +27,7 @@
             <h4>{{$t('Statistics')}}</h4>
             <div class="vg-box stats-block">
                 <div class="stats-block-name">
-                    Calls answered
+                    {{$t('Calls answered')}}
                 </div>
                 <div class="stats-block-data">
                     245 <small>of</small> 256 <i class="fa fa-arrow-up"></i>
@@ -36,7 +36,7 @@
 
             <div class="vg-box stats-block">
                 <div class="stats-block-name">
-                    Total call time
+                    {{$t('Total call time')}}
                 </div>
                 <div class="stats-block-data">
                     13:05:25 <i class="fa fa-arrow-down"></i>

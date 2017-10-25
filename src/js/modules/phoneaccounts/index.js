@@ -1,4 +1,6 @@
 const Module = require('../../lib/module')
+const $t = Vue.i18n.translate
+
 /**
  * @module clients
  */
@@ -14,6 +16,7 @@ class PhoneaccountsModule extends Module {
      */
     constructor(app) {
         super(app)
+
         if (!this.app.store.phoneaccounts) this.app.store.phoneaccounts = this.getObservables()
         this.actions = require('./actions')(app, this)
 
@@ -25,24 +28,33 @@ class PhoneaccountsModule extends Module {
         app.router.addRoutes([{
             component: AddEditPhoneaccount,
             name: 'add_phoneaccount',
-            path: '/partners/:partner_id/clients/:client_id/phoneaccounts/add',
+            path: '/partners/:partner_id/clients/:client_id/modules/phoneaccounts/add',
         }])
 
         app.router.addRoutes([{
             children: [{
                 component: DeletePhoneaccount,
+                meta: {
+                    breadcrumbs: [$t('Modules'), $t('VoIP accounts'), $t('Delete')],
+                },
                 name: 'delete_phoneaccount',
                 path: ':phoneaccount_id/delete',
             }],
             component: ListPhoneaccounts,
+            meta: {
+                breadcrumbs: [$t('Modules'), $t('VoIP accounts')],
+            },
             name: 'list_phoneaccounts',
-            path: '/partners/:partner_id/clients/:client_id/phoneaccounts',
+            path: '/partners/:partner_id/clients/:client_id/modules/phoneaccounts',
         }])
 
         app.router.addRoutes([{
             component: AddEditPhoneaccount,
+            meta: {
+                breadcrumbs: [$t('Modules'), $t('VoIP accounts'), $t('Edit')],
+            },
             name: 'edit_phoneaccount',
-            path: '/partners/:partner_id/clients/:client_id/phoneaccounts/:phoneaccount_id/edit',
+            path: '/partners/:partner_id/clients/:client_id/modules/phoneaccounts/:phoneaccount_id/edit',
         }])
     }
 
@@ -61,6 +73,7 @@ class PhoneaccountsModule extends Module {
                     code: null,
                 },
                 description: '',
+                id: null,
                 internal_number: null,
                 n112_region: {
                     id: null,

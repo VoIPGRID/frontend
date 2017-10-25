@@ -1,4 +1,5 @@
 const Module = require('../../lib/module')
+const $t = Vue.i18n.translate
 
 /** @module partners */
 
@@ -20,6 +21,9 @@ class PartnersModule extends Module {
         // Order is important for this route to take precedence.
         app.router.addRoutes([{
             component: AddEditPartner,
+            meta: {
+                breadcrumbs: [$t('Partners'), $t('Add')],
+            },
             name: 'add_partner',
             path: '/partners/add',
         }])
@@ -27,12 +31,15 @@ class PartnersModule extends Module {
         app.router.addRoutes([{
             children: [{
                 component: DeletePartner,
+                meta: {
+                    breadcrumbs: [$t('Partners'), $t('Delete')],
+                },
                 name: 'delete_partner',
                 path: 'delete',
             }],
             component: ListPartners,
             meta: {
-                breadcrumbs: ['Partners'],
+                breadcrumbs: [$t('Partners')],
             },
             name: 'list_partners',
             path: '/partners/:partner_id?',
@@ -40,6 +47,9 @@ class PartnersModule extends Module {
 
         app.router.addRoutes([{
             component: AddEditPartner,
+            meta: {
+                breadcrumbs: [$t('Partners'), $t('Edit')],
+            },
             name: 'edit_partner',
             path: '/partners/:partner_id/edit',
         }])

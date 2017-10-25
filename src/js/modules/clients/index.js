@@ -1,4 +1,5 @@
 const Module = require('../../lib/module')
+const $t = Vue.i18n.translate
 /**
  * @module clients
  */
@@ -31,19 +32,25 @@ class ClientsModule extends Module {
         app.router.addRoutes([{
             children: [{
                 component: DeleteClient,
+                meta: {
+                    breadcrumbs: [$t('Clients'), $t('Delete')],
+                },
                 name: 'delete_client',
                 path: 'delete',
             }],
             component: ListClients,
             meta: {
-                breadcrumbs: ['Clients'],
+                breadcrumbs: [$t('Clients')],
             },
             name: 'list_clients',
-            path: '/partners/:partner_id',
+            path: '/partners/:partner_id/clients/:client_id?',
         }])
 
         app.router.addRoutes([{
             component: AddEditClient,
+            meta: {
+                breadcrumbs: [$t('Clients'), $t('Edit')],
+            },
             name: 'edit_client',
             path: '/partners/:partner_id/clients/:client_id/edit',
         }])

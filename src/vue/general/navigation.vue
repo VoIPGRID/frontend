@@ -25,7 +25,7 @@
         <span class="nav-item" v-else-if="user.superuser || (user.partner && user.partner.may_have_children)">
             <router-link to="/partners">
                 <i class="item-icon fa fa-handshake-o"></i>
-                <span>{{$t('Partners')}}</span>
+                <span>{{$t('Select partner')}}</span>
             </router-link>
             <router-link class="level-up" :to="{name: 'list_partners'}">
                 <i class="item-icon fa-flip-horizontal"></i>

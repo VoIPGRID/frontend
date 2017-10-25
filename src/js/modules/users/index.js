@@ -1,4 +1,5 @@
 const Module = require('../../lib/module')
+const $t = Vue.i18n.translate
 /**
 * @module user
 */
@@ -35,7 +36,7 @@ class UsersModule extends Module {
         app.router.addRoutes([{
             component: AddEditUser,
             meta: {
-                breadcrumbs: ['Users'],
+                breadcrumbs: [$t('Users'), $t('Add')],
             },
             name: 'add_client_user',
             path: '/partners/:partner_id/clients/:client_id/users/add',
@@ -43,7 +44,7 @@ class UsersModule extends Module {
         app.router.addRoutes([{
             component: AddEditUser,
             meta: {
-                breadcrumbs: ['Users'],
+                breadcrumbs: [$t('Users'), $t('Add')],
             },
             name: 'add_partner_user',
             path: '/partners/:partner_id/users/add',
@@ -53,7 +54,7 @@ class UsersModule extends Module {
         app.router.addRoutes([{
             component: AddEditUser,
             meta: {
-                breadcrumbs: ['Users'],
+                breadcrumbs: [$t('Users'), $t('Edit')],
             },
             name: 'edit_client_user',
             path: '/partners/:partner_id/clients/:client_id/users/:user_id/edit',
@@ -61,7 +62,7 @@ class UsersModule extends Module {
         app.router.addRoutes([{
             component: AddEditUser,
             meta: {
-                breadcrumbs: ['Users'],
+                breadcrumbs: [$t('Users'), $t('Edit')],
             },
             name: 'edit_partner_user',
             path: '/partners/:partner_id/users/:user_id/edit',
@@ -71,6 +72,9 @@ class UsersModule extends Module {
         app.router.addRoutes([{
             children: [{
                 component: DeleteUser,
+                meta: {
+                    breadcrumbs: [$t('Users'), $t('Delete')],
+                },
                 name: 'delete_client_user',
                 path: ':user_id/delete',
             }],

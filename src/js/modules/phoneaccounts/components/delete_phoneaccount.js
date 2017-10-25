@@ -2,8 +2,7 @@ module.exports = (app, actions) => {
     const template = app.templates.phoneaccounts_delete_phoneaccount
 
     async function asyncData(route) {
-        const clientId = route.params.client_id
-        let phoneaccountData = await actions.readPhoneaccount(clientId, false)
+        let phoneaccountData = await actions.readPhoneaccount(route.params.client_id, route.params.phoneaccount_id)
         Object.assign(app.store.phoneaccounts, phoneaccountData)
         return phoneaccountData
     }
@@ -13,7 +12,7 @@ module.exports = (app, actions) => {
             return asyncData.call(this, route)
         },
         methods: {
-            deleteClient: actions.deleteClient,
+            deletePhoneaccount: actions.deletePhoneaccount,
         },
         render: template.r,
         staticRenderFns: template.s,

@@ -15,6 +15,9 @@ class ModulesModule extends Module {
 
         app.router.addRoutes([{
             component: Modules,
+            meta: {
+                breadcrumbs: ['Modules'],
+            },
             name: 'modules',
             path: '/partners/:partner_id/clients/:client_id/modules/',
         }])

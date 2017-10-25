@@ -8,7 +8,7 @@
                 <router-link class="button is-primary"
                     :to="{name: 'add_phoneaccount'}">
                     <span class="icon"><i class="fa fa-plus"></i></span>
-                    <span>{{$t('Add VoIP-account')}}</span>
+                    <span>{{$t('Add VoIP account')}}</span>
                 </router-link>
             </p>
         </div>

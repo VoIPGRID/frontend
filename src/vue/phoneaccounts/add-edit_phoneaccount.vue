@@ -62,7 +62,7 @@
     </Tab>
 
     <Tab slot="tabs" :data="tabs[1]">
-        <em>Not implemented yet</em>
+        <em>{{$t('Not implemented yet')}}</em>
     </Tab>
 
     <template slot="controls">

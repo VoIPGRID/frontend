@@ -1,4 +1,16 @@
-.dashboard-home {
+.dashboard {
+
+    .table {
+            border: 1px #e6e7eb solid;
+
+        thead {
+            th {
+                background: #fff;
+                border: 0;
+            }
+        }
+    }
+
     .module {
         text-align: center;
 

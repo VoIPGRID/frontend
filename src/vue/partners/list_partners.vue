@@ -26,7 +26,7 @@
                 </td>
                 <td>{{partner.description}}</td>
                 <td class="table-actions">
-                    <router-link :to="{name: 'edit_partner', params: {partner_id: partner.id}}">
+                    <router-link @click.native="selectPartnerContext(partner)" :to="{name: 'edit_partner', params: {partner_id: partner.id}}">
                         <i class="fa fa-edit"></i>
                     </router-link>
                     <router-link :to="{name: 'delete_partner', params: {partner_id: partner.id}, query: $router.currentRoute.query}">

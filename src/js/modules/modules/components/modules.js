@@ -30,7 +30,7 @@ module.exports = (app) => {
                     ],
                     general: [
                         {disabled: true, icon: 'vg-icon-phone-dial-buttons', name: 'Phone numbers'},
-                        {icon: 'vg-icon-phoneaccount', name: 'VoIP account', route: 'list_phoneaccounts'},
+                        {icon: 'vg-icon-phoneaccount', name: 'VoIP accounts', route: 'list_phoneaccounts'},
                         {disabled: true, icon: 'vg-icon-user', name: 'Users'},
                     ],
                     integrations: [

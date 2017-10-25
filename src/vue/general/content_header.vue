@@ -18,7 +18,7 @@
         <i class="fa fa-cog"></i>
     </router-link>
 
-    <router-link class="nav-item" to="/wiki">
+    <router-link class="nav-item" to="/">
         <i class="fa fa-question-circle"></i>
     </router-link>
 </nav>

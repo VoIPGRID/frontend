@@ -8,17 +8,17 @@ module.exports = function(app, _module) {
     let $t = Vue.i18n.translate
 
     /**
-    * Delete a client to the API, update the store and add a notification.
+    * Delete a VoIP account, update the store and add a notification.
     * Route to the last route afterwards.
     * @param {Observable} client - The client store object.
     */
-    actions.deletePhoneaccount = async function(client) {
-        const res = await app.api.client.delete(`clients/${client.id}/`)
+    actions.deletePhoneaccount = async function(client, phoneaccount) {
+        const res = await app.api.client.delete(`clients/${client.id}/phoneaccounts/${phoneaccount.id}/`)
         if (res.status === 204) {
-            let clients = this.$store.clients.clients.results
-            this.$store.clients.clients.results = clients.filter((i) => i.id !== client.id)
-            app.vm.$notify({message: $t('Client {name} succesfully deleted', {name: client.name})})
-            app.router.push({name: 'list_clients'})
+            let phoneaccounts = this.$store.phoneaccounts.phoneaccounts.results
+            this.$store.phoneaccounts.phoneaccounts.results = phoneaccounts.filter((i) => i.id !== client.id)
+            app.vm.$notify({message: $t('Phoneaccount {name} succesfully deleted', {name: client.name})})
+            app.router.push({name: 'list_phoneaccounts'})
         }
     }
 
