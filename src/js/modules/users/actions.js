@@ -43,15 +43,16 @@ module.exports = function(app, _module) {
     */
     actions.login = function(root, credentials) {
         app.api.client.post('login/', credentials).then((res) => {
-            if (res.data) {
-                window.csrf = res.data.csrf
+            if (res.data.user.authenticated) {
                 app.api.client = axios.create({
-                    baseURL: 'http://localhost/api/v2/',
-                    headers: {'X-CSRFToken': csrf},
+                    baseURL: '/api/v2/',
+                    headers: {'X-CSRFToken': res.data.user.csrf},
                     timeout: 1000,
                 })
                 Object.assign(this.$store, res.data)
                 app.router.replace('/')
+            } else {
+                app.vm.$notify({message: $t('Incorrect username or password')})
             }
         })
     }

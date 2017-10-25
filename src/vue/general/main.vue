@@ -11,6 +11,7 @@
         </section>
     </div>
     <div v-else>
+        <Notifications :notifications="notifications"></Notifications>
         <UserLogin></UserLogin>
     </div>
 </div>

@@ -78,6 +78,7 @@ global.translations.nl = {
     'Foreign code': 'Intern klantnummer',
     'General': 'Algemeen',
     'Geography': 'Geografie',
+    'Incorrect username or password': 'Gebruikersnaam of wachtwoord onjuist',
     'Integrations': 'Integraties',
     'IVR': 'Keuzemenu\'s',
     'Language': 'Taal',

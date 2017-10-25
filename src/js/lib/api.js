@@ -8,9 +8,7 @@ class Api {
         // Add a response interceptor that serves the default error page,
         // when the response has a status code that indicates an application
         // error.
-        this.client.interceptors.response.use((response) => {
-            return response
-        }, (err) => {
+        this.client.interceptors.response.use((response) => response, (err) => {
             // Reject all status codes above 500 and serve the oops page.
             if (err.response.status >= 500) {
                 app.router.push({path: '/oops'})

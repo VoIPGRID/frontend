@@ -6,7 +6,6 @@
         </header>
         <section class="modal-card-body">
             <div>
-
                 <Field name="email" type="text"
                     :label="$t('Email address')"
                     :model.sync="credentials.email"
@@ -21,7 +20,10 @@
             </div>
         </section>
         <footer class="modal-card-foot has-text-right">
-            <button class="is-pulled-right button is-primary" v-on:click="login(credentials, credentials)">Login</button>
+            <button class="is-pulled-right button is-primary"
+                v-on:click="login(credentials, credentials)"
+                :disabled="$v.$invalid"
+            >Login</button>
         </footer>
     </div>
 </div>
