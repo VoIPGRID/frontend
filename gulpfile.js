@@ -36,7 +36,7 @@ const watchify = require('watchify')
 const BUILD_DIR = process.env.BUILD_DIR || '/srv/http/data/frontend'
 const NODE_ENV = process.env.NODE_ENV || 'development'
 const NODE_INSPECT = process.env.NODE_INSPECT ? ' --inspect' : ''
-const NODE_PATH = process.env.NODE_PATH || path.join(__dirname, 'node_modules')
+const NODE_PATH = path.join(__dirname, 'node_modules')
 const PRODUCTION = argv.production ? argv.production : (process.env.NODE_ENV === 'production')
 const RUN_SSR = argv.ssr ? argv.ssr : false
 const SRCDIR = path.join(__dirname, 'src')
