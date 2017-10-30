@@ -34,6 +34,7 @@
                     </router-link>
                 </td>
             </tr>
+
             <tr v-if="partners.results && partners.results.length === 0">
                 <td colspan="3">{{$t('No partners yet')}}</td>
             </tr>

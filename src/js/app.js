@@ -142,7 +142,7 @@ class App {
             }
 
             // Unset selected client/partner on these routes.
-            if (to.name === 'list_clients') {
+            if (to.name === 'list_clients' && !to.params.client_id) {
                 this.store.user.selectedClient = {id: null, name: ''}
             } else if (to.name === 'list_partners') {
                 this.store.user.selectedClient = {id: null, name: ''}

@@ -43,7 +43,7 @@ class ClientsModule extends Module {
                 breadcrumbs: [$t('Clients')],
             },
             name: 'list_clients',
-            path: '/partners/:partner_id/clients/:client_id?',
+            path: '/partners/:partner_id/clients/',
         }])
 
         app.router.addRoutes([{
