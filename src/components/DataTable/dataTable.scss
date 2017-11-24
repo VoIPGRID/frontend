@@ -1,0 +1,40 @@
+.data-table {
+  background-color: white;
+  box-sizing: border-box;
+  width: 100%;
+  font-size: 14px;
+  padding: 0.5rem;
+
+  > table {
+    width: 100%;
+    border-collapse: collapse;
+
+    td,
+    th {
+      padding: 0.9rem 0.5rem;
+    }
+
+    td {
+      border: 1px solid #f6f7fb;
+    }
+    th {
+      text-align: left;
+      text-transform: capitalize;
+      border-bottom: 2px #e6e7eb solid;
+
+      &:hover {
+        border-bottom-color: #e94e1b;
+      }
+    }
+
+    tbody > tr {
+      td:first-child {
+        margin-left: 1px;
+      }
+      &:hover > td:first-child {
+        border-left: 2px solid #e94e1b;
+        margin-left: 0;
+      }
+    }
+  }
+}

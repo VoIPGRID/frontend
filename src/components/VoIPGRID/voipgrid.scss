@@ -1,0 +1,35 @@
+@import '../../sass/variables.scss';
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,300,500,700');
+
+html {
+  background-color: $baseColor;
+  font-family: 'Roboto', sans-serif;
+}
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+html,
+body,
+#root,
+.voipgrid,
+.voipgrid > * {
+  min-height: 100vh;
+}
+
+.voipgrid {
+  display: flex;
+}
+.voipgrid > div:first-child {
+  z-index: 1;
+  max-width: 4rem;
+}
+.voipgrid > div:last-child {
+  flex: 1;
+}
+
+main {
+  padding: 1rem;
+}

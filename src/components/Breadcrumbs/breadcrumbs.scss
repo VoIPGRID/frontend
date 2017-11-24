@@ -1,0 +1,15 @@
+.breadcrumbs {
+  padding: 1rem;
+  border-bottom: 1px solid #e6e7eb;
+
+  > span {
+    display: inline-block;
+    line-height: 1rem;
+    padding: 0.5rem 1rem;
+    border-right: 1px #e6e7eb solid;
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+}

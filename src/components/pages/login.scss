@@ -1,0 +1,25 @@
+.login {
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  > section {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 1rem;
+    max-width: 20rem;
+    padding: 2rem;
+
+    border-radius: 0.2rem;
+    background-color: white;
+  }
+
+  @media screen and (min-height: 800px) {
+    align-items: flex-start;
+    > section {
+      margin-top: 8rem;
+    }
+  }
+}

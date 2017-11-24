@@ -1,0 +1,77 @@
+nav {
+  width: 4rem;
+  height: 100vh;
+  background-color: #2a3042;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+
+  transition: width 0.15s ease-in-out;
+  &:hover {
+    width: 200px;
+    border-right: 1px solid #202532;
+  }
+
+  > .account-selection {
+    background-color: #202532;
+    height: 4rem;
+    border-bottom: 1px solid #3a425b;
+    + ul {
+      flex: 1;
+    }
+  }
+
+  > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    &:first-child {
+      box-sizing: border-box;
+      padding-top: 1.2rem;
+      height: 4.9rem; /* 2.5rem (logo height) + 2  * 1.2rem padding */
+    }
+  }
+  button {
+    border: none;
+    padding: 0;
+    width: 100%;
+    text-align: left;
+  }
+  a,
+  button {
+    white-space: nowrap;
+    display: block;
+    font-size: 18px;
+    font-weight: 400;
+    background: transparent;
+    color: #ffffff66;
+    cursor: pointer;
+
+    &.active {
+      color: #f8f8f8;
+    }
+    &:hover {
+      color: white;
+    }
+
+    > span {
+      display: inline-block;
+      &:first-child {
+        width: 4rem;
+        &::before {
+          content: '';
+          display: block;
+          width: 1rem;
+          height: 1rem;
+          margin: 0 auto;
+          background-color: currentcolor;
+        }
+      }
+      &:last-child {
+        line-height: 3rem;
+      }
+    }
+  }
+}
