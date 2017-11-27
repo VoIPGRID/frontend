@@ -4,7 +4,16 @@ import ErrorBoundry from '../ErrorBoundry/';
 import Header from '../Header/';
 import Breadcrumbs from '../Breadcrumbs/';
 import Nav from '../Nav/';
-import pages from '../pages/';
+import Administration from '../pages/Administration';
+import Calls from '../pages/Calls';
+import Dashboard from '../pages/Dashboard';
+import DialPlans from '../pages/DialPlans';
+import Login from '../pages/Login';
+import Modules from '../pages/Modules';
+import NotFound from '../pages/NotFound';
+import Partners from '../pages/Partners';
+import Statistics from '../pages/Statistics';
+import Users from '../pages/Users';
 import api from '../../lib/api';
 import history from '../../utils/history';
 
@@ -32,7 +41,6 @@ class VoIPGRID extends Component {
 
   render() {
     const { loading } = this.state;
-    const { Login } = pages;
 
     if (loading) {
       return <div>Loading</div>;
@@ -58,15 +66,15 @@ class VoIPGRID extends Component {
                 <main>
                   <ErrorBoundry>
                     <Switch>
-                      <Route path="/administration" exact component={pages.Administration} />
-                      <Route path="/calls" component={pages.Calls} />
-                      <Route path="/dialplans" component={pages.DialPlans} />
-                      <Route path="/modules" component={pages.Modules} />
-                      <Route path="/partners" component={pages.Partners} />
-                      <Route path="/statistics" component={pages.Statistics} />
-                      <Route path="/users" component={pages.Users} />
-                      <Route path="/" exact component={pages.Dashboard} />
-                      <Route path="*" component={pages.NotFound} />
+                      <Route path="/administration" exact component={Administration} />
+                      <Route path="/calls" component={Calls} />
+                      <Route path="/dialplans" component={DialPlans} />
+                      <Route path="/modules" component={Modules} />
+                      <Route path="/partners" component={Partners} />
+                      <Route path="/statistics" component={Statistics} />
+                      <Route path="/users" component={Users} />
+                      <Route path="/" exact component={Dashboard} />
+                      <Route path="*" component={NotFound} />
                     </Switch>
                   </ErrorBoundry>
                 </main>

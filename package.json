@@ -13,10 +13,7 @@
   },
   "proxy": {
     "/api/v2/": {
-      "target": "http://localhost:8888/",
-      "pathRewrite": {
-        "/api/v2": ""
-      }
+      "target": "http://localhost:8888"
     }
   },
   "scripts": {

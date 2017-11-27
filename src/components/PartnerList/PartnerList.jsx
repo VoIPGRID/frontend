@@ -12,7 +12,7 @@ class PartnerList extends Component {
   }
 
   componentDidMount() {
-    api('/partners').then(data => {
+    api('/partners?page=1&per_page=3').then(data => {
       this.setState({ data });
     });
   }

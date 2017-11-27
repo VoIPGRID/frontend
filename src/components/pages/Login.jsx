@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { func } from 'prop-types';
 import history from '../../utils/history';
 import api from '../../lib/api';
+import './login.css';
 
 class Login extends Component {
   constructor(props) {
@@ -15,7 +16,9 @@ class Login extends Component {
     };
   }
 
-  submit = () => {
+  submit = e => {
+    e.preventDefault();
+
     const { username, password, usernameIsValid, passwordIsValid } = this.state;
 
     if (!usernameIsValid || !passwordIsValid) {
