@@ -57,19 +57,40 @@ class Login extends Component {
           <form onSubmit={this.submit}>
             <ul>
               <li>
-                <label className={`clean required ${usernameIsValid ? 'valid' : 'invalid'}`}>
+                <label
+                  className={`clean required ${
+                    usernameIsValid ? 'valid' : 'invalid'
+                  }`}
+                >
                   <span>E-mail</span>
-                  <input type="text" name="username" value={username} onChange={this.updateUsernameState} />
+                  <input
+                    type="text"
+                    name="username"
+                    value={username}
+                    onChange={this.updateUsernameState}
+                  />
                 </label>
               </li>
               <li>
-                <label className={`clean required ${passwordIsValid ? 'valid' : 'invalid'}`}>
+                <label
+                  className={`clean required ${
+                    passwordIsValid ? 'valid' : 'invalid'
+                  }`}
+                >
                   <span>Password</span>
-                  <input type="password" name="password" value={password} onChange={this.updatePasswordState} />
+                  <input
+                    type="password"
+                    name="password"
+                    value={password}
+                    onChange={this.updatePasswordState}
+                  />
                 </label>
               </li>
               <li>
-                <button disabled={!passwordIsValid || !usernameIsValid} onClick={this.submit}>
+                <button
+                  disabled={!passwordIsValid || !usernameIsValid}
+                  onClick={this.submit}
+                >
                   Log in
                 </button>
               </li>
