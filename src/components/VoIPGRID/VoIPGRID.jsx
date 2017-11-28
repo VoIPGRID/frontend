@@ -14,7 +14,7 @@ import NotFound from '../pages/NotFound';
 import Partners from '../pages/Partners';
 import Statistics from '../pages/Statistics';
 import Users from '../pages/Users';
-import api from '../../lib/api';
+import { get } from '../../lib/api';
 import history from '../../utils/history';
 
 class VoIPGRID extends Component {
@@ -31,7 +31,7 @@ class VoIPGRID extends Component {
   check = () => {
     this.setState({ loading: true });
 
-    api('/session').then(res => {
+    get('/session').then(res => {
       this.setState({ loading: false });
       if (res.error) {
         history.push('/login');
@@ -66,7 +66,11 @@ class VoIPGRID extends Component {
                 <main>
                   <ErrorBoundry>
                     <Switch>
-                      <Route path="/administration" exact component={Administration} />
+                      <Route
+                        path="/administration"
+                        exact
+                        component={Administration}
+                      />
                       <Route path="/calls" component={Calls} />
                       <Route path="/dialplans" component={DialPlans} />
                       <Route path="/modules" component={Modules} />

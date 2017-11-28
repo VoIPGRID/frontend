@@ -7,5 +7,6 @@
       "content-type": "application/json",
       "X-csrftoken": "random"
     }
-  }
+  },
+  "cachePostResponseAsGet": ["/session"]
 }

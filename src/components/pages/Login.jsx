@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { func } from 'prop-types';
 import history from '../../utils/history';
-import api from '../../lib/api';
+import { post } from '../../lib/api';
 import './login.css';
 
 class Login extends Component {
@@ -25,7 +25,7 @@ class Login extends Component {
       return;
     }
 
-    api('/session', { method: 'POST', body: { username, password } }, true);
+    post('/session', { body: { username, password } });
     this.props.handler();
     history.push('/');
   };

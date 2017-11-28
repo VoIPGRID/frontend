@@ -2,20 +2,22 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { second } from '../../utils/time';
 import history from '../../utils/history';
-import api from '../../lib/api';
+import { del } from '../../lib/api';
 import navItems from '../../config/nav.json';
 
 class Nav extends Component {
   logOut = () => {
-    api('/session', { method: 'delete' });
+    del('/session');
     history.replace('/login');
   };
 
   // make the nav collapse if we click on a coordinate which is outside the initial view size of the nav (collpased)
   collapseIfNeeded = ({ currentTarget, clientX }) => {
     const span = currentTarget.querySelector('span');
+
     if (span && clientX > span.clientWidth) {
       const { nav: { style } } = this.refs;
+
       style.pointerEvents = 'none';
       setTimeout(() => {
         style.pointerEvents = 'initial';
