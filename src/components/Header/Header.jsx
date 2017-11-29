@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import AvailabilityMenu from '../AvailabilityMenu/';
+import LanguageSelector from '../LanguageSelector';
 import logo from './logo.svg';
 
 export default () => (
@@ -10,6 +11,7 @@ export default () => (
     </div>
     <div className="header-quick-links">
       <AvailabilityMenu />
+      <LanguageSelector />
       <NavLink to="/help">
         <span className="icon help-icon" />
       </NavLink>

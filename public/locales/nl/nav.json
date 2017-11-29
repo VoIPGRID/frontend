@@ -1,0 +1,10 @@
+{
+  "maintenance": "beheer",
+  "administration": "beheer",
+  "dashboard": "overzicht",
+  "statistics": "statistieken",
+  "users": "gebruikers",
+  "dialplans": "belplan",
+  "modules": "modules",
+  "calls": "gesprekken"
+}

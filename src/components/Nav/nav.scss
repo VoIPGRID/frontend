@@ -55,9 +55,13 @@ nav {
     &:hover {
       color: white;
     }
-
     > span {
       display: inline-block;
+
+      &::first-letter {
+        text-transform: capitalize;
+      }
+
       &:first-child {
         width: 4rem;
         &::before {

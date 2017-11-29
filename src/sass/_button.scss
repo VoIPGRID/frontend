@@ -10,10 +10,13 @@ button {
   font-size: 14px;
   font-weight: 400;
   cursor: pointer;
-  text-transform: capitalize;
   white-space: nowrap;
   position: relative;
   border-bottom: 2px #bf3d12 solid;
+
+  &::first-letter {
+    text-transform: capitalize;
+  }
 
   &[disabled] {
     background-color: lightgrey;

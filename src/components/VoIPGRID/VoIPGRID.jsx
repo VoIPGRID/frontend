@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import ErrorBoundry from '../ErrorBoundry/';
 import Header from '../Header/';
@@ -49,22 +49,28 @@ class VoIPGRID extends Component {
     }
 
     return (
-      <Switch>
-        <Route path="/login">
-          <ErrorBoundry>
-            <Login handler={this.getData} />
-          </ErrorBoundry>
-        </Route>
+      <div className="voipgrid">
+        <Switch>
+          <Route path="/login">
+            <ErrorBoundry>
+              <Login handler={this.getData} />
+            </ErrorBoundry>
+          </Route>
 
-        <Route path="*">
-          <ErrorBoundry>
-            <div className="voipgrid">
+          <Route path="*">
+            <Fragment>
               <div className="column">
-                <Nav />
+                <ErrorBoundry>
+                  <Nav />
+                </ErrorBoundry>
               </div>
               <div className="column">
-                <Header />
-                <Breadcrumbs />
+                <ErrorBoundry>
+                  <Header />
+                </ErrorBoundry>
+                <ErrorBoundry>
+                  <Breadcrumbs />
+                </ErrorBoundry>
                 <main>
                   <ErrorBoundry>
                     <Switch>
@@ -85,10 +91,10 @@ class VoIPGRID extends Component {
                   </ErrorBoundry>
                 </main>
               </div>
-            </div>
-          </ErrorBoundry>
-        </Route>
-      </Switch>
+            </Fragment>
+          </Route>
+        </Switch>
+      </div>
     );
   }
 }

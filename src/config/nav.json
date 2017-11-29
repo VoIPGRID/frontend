@@ -1,37 +1,37 @@
 [
   {
     "icon": "dashboard",
-    "text": "Dashboard",
+    "text": "dashboard",
     "link": "/"
   },
   {
     "icon": "statistics",
-    "text": "Statistieken",
+    "text": "statistics",
     "link": "/statistics"
   },
   {
     "icon": "entity",
-    "text": "Gebruikers",
+    "text": "users",
     "link": "/users"
   },
   {
     "icon": "dialplans",
-    "text": "Belplan",
+    "text": "dialplans",
     "link": "/dialplans"
   },
   {
     "icon": "admin",
-    "text": "Modules",
+    "text": "modules",
     "link": "/modules"
   },
   {
     "icon": "phone",
-    "text": "Gesprekken",
+    "text": "calls",
     "link": "/calls"
   },
   {
     "icon": "menu",
-    "text": "Administratie",
+    "text": "administration",
     "link": "/administration"
   }
 ]

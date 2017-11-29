@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+import { translate } from 'react-i18next';
 import { second } from '../../utils/time';
 import history from '../../utils/history';
 import { del } from '../../lib/api/';
@@ -26,13 +27,15 @@ class Nav extends Component {
   };
 
   render() {
+    const { t } = this.props;
+
     return (
       <nav ref="nav">
         <ul>
           <li>
             <NavLink to="/partners" exact onClick={this.collapseIfNeeded}>
               <span className="icon partners-icon" />
-              <span>Beheer</span>
+              <span>{t('maintenance')}</span>
             </NavLink>
           </li>
         </ul>
@@ -42,7 +45,7 @@ class Nav extends Component {
             <li key={index}>
               <NavLink to={navItem.link} exact onClick={this.collapseIfNeeded}>
                 <span className={`icon ${navItem.icon}-icon`} />
-                <span>{navItem.text}</span>
+                <span>{t(navItem.text)}</span>
               </NavLink>
             </li>
           ))}
@@ -51,13 +54,13 @@ class Nav extends Component {
           <li>
             <NavLink to="/wiki" onClick={this.collapseIfNeeded}>
               <span className="icon wiki-icon" />
-              <span>Wiki</span>
+              <span>{t('wiki')}</span>
             </NavLink>
           </li>
           <li>
             <button onClick={this.logOut}>
               <span className="icon wiki-icon" />
-              <span>Log out</span>
+              <span>{t('logout')}</span>
             </button>
           </li>
         </ul>
@@ -65,4 +68,4 @@ class Nav extends Component {
     );
   }
 }
-export default Nav;
+export default translate(['shared', 'nav'])(Nav);
