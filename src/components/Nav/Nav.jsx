@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { second } from '../../utils/time';
 import history from '../../utils/history';
-import { del } from '../../lib/api';
+import { del } from '../../lib/api/';
 import navItems from '../../config/nav.json';
 
 class Nav extends Component {

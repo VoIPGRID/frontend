@@ -2,7 +2,7 @@ import isPromise from '../utils/isPromise';
 import { minute } from '../utils/time';
 
 const cache = {};
-const cacheTTL = minute * 5;
+const cacheTTL = minute;
 
 export function clear(uri = '') {
   delete cache[uri];

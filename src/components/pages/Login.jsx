@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { func } from 'prop-types';
 import history from '../../utils/history';
-import { post } from '../../lib/api';
+import { post } from '../../lib/api/';
 import './login.css';
 
 class Login extends Component {

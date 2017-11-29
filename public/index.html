@@ -27,7 +27,7 @@
   </script>
 
   <script>
-    window.voipgrid = { session: fetch('/api/v2/session', { credentials: 'same-origin' }).then(res => res.json()) };
+    window.voipgrid = { session: fetch('/api/v2/session', { credentials: 'same-origin' }) };
   </script>
 </head>
 <body>

@@ -1,17 +1,11 @@
-import * as cache from './cache';
-import {
-  base,
-  defaultRequest,
-  cachePostResponseAsGet
-} from '../config/api.json';
+import * as cache from '../cache';
+import { base, cachePostResponseAsGet } from '../../config/api.json';
+import { handleResponse } from './handleResponse';
+import { setupRequestOptions } from './setupRequestOptions';
 
-function setupRequestOptions(path, _options) {
-  return {
-    uri: `${base}${path}`,
-    options: Object.assign({}, defaultRequest, _options)
-  };
-}
+/*
 
+*/
 export function get(path, _options) {
   const { uri, options } = setupRequestOptions(path, _options);
 
@@ -19,13 +13,16 @@ export function get(path, _options) {
     return cache.get(uri);
   }
 
-  const promise = fetch(uri, options).then(res => res.json());
+  const promise = fetch(uri, options).then(handleResponse);
 
   cache.add({ uri, promise });
 
   return promise;
 }
 
+/*
+
+*/
 export function post(path, body) {
   const { uri, options } = setupRequestOptions(path, { body, method: 'POST' });
 
@@ -33,7 +30,7 @@ export function post(path, body) {
     options.body = JSON.stringify(options.body);
   }
 
-  const promise = fetch(uri, options).then(res => res.json());
+  const promise = fetch(uri, options).then(handleResponse);
 
   if (cachePostResponseAsGet.includes(path)) {
     cache.add({ uri, promise });
@@ -42,6 +39,9 @@ export function post(path, body) {
   return promise;
 }
 
+/*
+
+*/
 export function put(path, body) {
   const { uri, options } = setupRequestOptions(path, { body, method: 'PUT' });
 
@@ -49,24 +49,25 @@ export function put(path, body) {
     options.body = JSON.stringify(options.body);
   }
 
-  return fetch(uri, options).then(res => res.json());
+  return fetch(uri, options).then(handleResponse);
 }
 
+/*
+
+*/
 export function del(path) {
   const { uri, options } = setupRequestOptions(path, { method: 'DELETE' });
-  return fetch(uri, options).then(res => res.json());
+  return fetch(uri, options).then(handleResponse);
 }
 
 // prime the cache with the external session request
-// and set the csrf-token
 {
-  if (window && window.csrf) {
-    defaultRequest.headers['X-csrftoken'] = window.csrf;
-  }
-
   const { session } = window.voipgrid;
   if (session) {
-    cache.add({ uri: `${base}/session`, promise: session });
+    cache.add({
+      uri: `${base}/session`,
+      promise: session.then(handleResponse)
+    });
     delete window.voipgrid.session;
   }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { get } from '../../lib/api';
+import { get } from '../../lib/api/';
 import DataTable from '../DataTable/';
 
 class PartnerList extends Component {
@@ -12,9 +12,15 @@ class PartnerList extends Component {
   }
 
   componentDidMount() {
-    get('/partners?page=1&per_page=3').then(data => {
-      this.setState({ data });
-    });
+    get('/partners?page=1&per_page=3')
+      .then(response => {
+        const { data, totalCount, links } = response;
+        this.setState({ data, totalCount, links, loading: false });
+      })
+      .catch(err => {
+        console.error(err);
+        this.setState({ data: [], loading: false });
+      });
   }
 
   render() {

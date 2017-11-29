@@ -14,29 +14,31 @@ import NotFound from '../pages/NotFound';
 import Partners from '../pages/Partners';
 import Statistics from '../pages/Statistics';
 import Users from '../pages/Users';
-import { get } from '../../lib/api';
 import history from '../../utils/history';
+import { get } from '../../lib/api/';
 
 class VoIPGRID extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { loading: true };
+    this.state = { loading: true, data: undefined };
   }
 
   componentDidMount() {
-    this.check();
+    this.getData();
   }
 
-  check = () => {
+  getData = () => {
     this.setState({ loading: true });
 
-    get('/session').then(res => {
-      this.setState({ loading: false });
-      if (res.error) {
+    get('/session')
+      .then(data => {
+        this.setState({ data, loading: false });
+      })
+      .catch(res => {
+        this.setState({ loading: false });
         history.push('/login');
-      }
-    });
+      });
   };
 
   render() {
@@ -50,7 +52,7 @@ class VoIPGRID extends Component {
       <Switch>
         <Route path="/login">
           <ErrorBoundry>
-            <Login handler={this.check} />
+            <Login handler={this.getData} />
           </ErrorBoundry>
         </Route>
 

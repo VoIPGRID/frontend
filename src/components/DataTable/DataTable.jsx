@@ -1,11 +1,21 @@
 import React from 'react';
 
-export default ({ headers = [], data = [] }) => {
+export default ({ headers = [], data = [], totalCount, links }) => {
   if (0 === data.length) {
     return <div className="loading" />;
   }
   return (
     <div className="data-table">
+      <div>total count: {totalCount}</div>
+      <div>
+        links:{' '}
+        {Object.keys(links).map(link => (
+          <div key={link}>
+            {link}:
+            {links[link]}
+          </div>
+        ))}
+      </div>
       <table cellSpacing="0">
         <thead>
           <tr>
