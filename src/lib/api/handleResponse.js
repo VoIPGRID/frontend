@@ -22,10 +22,9 @@ export async function handleResponse(response) {
     throw error;
   }
 
-  const totalCount = headers.get('X-total-count');
-  const links = headers.get('Link');
-
-  if (totalCount || links) {
+  if (headers.has('X-total-count') || headers.has('Link')) {
+    const totalCount = parseInt(headers.get('X-total-count'), 10);
+    const links = headers.get('Link');
     return { data, totalCount, links: getLinks(links) };
   }
 

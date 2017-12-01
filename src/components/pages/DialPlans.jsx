@@ -6,8 +6,8 @@ const Dialplans = ({ match: { path } }) => (
   <div>
     <Tabbed
       buttons={[
-        { path: '/fsdfa', text: 'one' },
-        { path: '/dsgaf', text: 'two' }
+        { path: '/fsdfa', text: 'fsdfa' },
+        { path: '/dsgaf', text: 'sdasg' }
       ]}
       title="tab shizzle"
       base={path}

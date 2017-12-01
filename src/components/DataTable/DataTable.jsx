@@ -1,21 +1,20 @@
 import React from 'react';
+import Pagination from '../Pagination';
 
-export default ({ headers = [], data = [], totalCount, links }) => {
+export default ({
+  headers = [],
+  data = [],
+  totalCount,
+  page = 1,
+  per_page,
+  links,
+  handler
+}) => {
   if (0 === data.length) {
     return <div className="loading" />;
   }
   return (
     <div className="data-table">
-      <div>total count: {totalCount}</div>
-      <div>
-        links:{' '}
-        {Object.keys(links).map(link => (
-          <div key={link}>
-            {link}:
-            {links[link]}
-          </div>
-        ))}
-      </div>
       <table cellSpacing="0">
         <thead>
           <tr>
@@ -32,6 +31,13 @@ export default ({ headers = [], data = [], totalCount, links }) => {
           ))}
         </tbody>
       </table>
+      <Pagination
+        totalCount={totalCount}
+        links={links}
+        handler={handler}
+        page={page}
+        per_page={per_page}
+      />
     </div>
   );
 };
