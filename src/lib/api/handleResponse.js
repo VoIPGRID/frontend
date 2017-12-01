@@ -22,11 +22,13 @@ export async function handleResponse(response) {
     throw error;
   }
 
-  if (headers.has('X-total-count') || headers.has('Link')) {
-    const totalCount = parseInt(headers.get('X-total-count'), 10);
-    const links = headers.get('Link');
-    return { data, totalCount, links: getLinks(links) };
+  let normalized = { data };
+  if (headers.has('X-total-count')) {
+    normalized.totalCount = parseInt(headers.get('X-total-count'), 10);
+  }
+  if (headers.has('Link')) {
+    normalized.links = getLinks(headers.get('Link'));
   }
 
-  return data;
+  return normalized;
 }

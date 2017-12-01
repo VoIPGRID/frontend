@@ -51,7 +51,7 @@ class VoIPGRID extends Component {
     return (
       <div className="voipgrid">
         <Switch>
-          <Route path="/login">
+          <Route path="/login" exact>
             <ErrorBoundry>
               <Login handler={this.getData} />
             </ErrorBoundry>
@@ -74,7 +74,6 @@ class VoIPGRID extends Component {
                 <main>
                   <ErrorBoundry>
                     <Switch>
-                      <Redirect from="/" to="/dashboard" exact />
                       <Route
                         path="/administration"
                         exact
@@ -87,6 +86,7 @@ class VoIPGRID extends Component {
                       <Route path="/statistics" component={Statistics} />
                       <Route path="/users" component={Users} />
                       <Route path="/dashboard" component={Dashboard} />
+                      <Redirect from="/" to="/dashboard" exact />
                       <Route path="*" component={NotFound} />
                     </Switch>
                   </ErrorBoundry>

@@ -25,7 +25,7 @@ const Tabbed = ({ title, icon, children, buttons, base }) => {
       </div>
       <div className="tabbed-content">
         <Switch>
-          <Redirect from="/" to={`${base}${paths[0]}`} />
+          <Redirect from="" to={`${base}${paths[0]}`} exact />
           {Array.from(children).map((child, index) => {
             const path = paths[index];
             if (index === paths.length) {
