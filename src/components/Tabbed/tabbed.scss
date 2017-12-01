@@ -1,0 +1,33 @@
+.tabbed {
+  display: flex;
+}
+.tabbed-buttons {
+  width: 10rem;
+  > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  a {
+    display: block;
+    padding: 1rem;
+    border-radius: 5px 0 0 5px;
+
+    &.active {
+      position: relative;
+      left: 2px;
+      background-color: white;
+      color: #e94e1b;
+      border: 1px #e6e7eb solid;
+      border-right-color: white;
+      z-index: 1;
+    }
+  }
+}
+
+.tabbed-content {
+  flex: 1;
+  padding: 1rem;
+  border: 1px #e6e7eb solid;
+  background-color: white;
+}

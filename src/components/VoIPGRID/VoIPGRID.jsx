@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import ErrorBoundry from '../ErrorBoundry/';
 import Header from '../Header/';
 import Breadcrumbs from '../Breadcrumbs/';
@@ -74,6 +74,7 @@ class VoIPGRID extends Component {
                 <main>
                   <ErrorBoundry>
                     <Switch>
+                      <Redirect from="/" to="/dashboard" exact />
                       <Route
                         path="/administration"
                         exact
@@ -85,7 +86,7 @@ class VoIPGRID extends Component {
                       <Route path="/partners" component={Partners} />
                       <Route path="/statistics" component={Statistics} />
                       <Route path="/users" component={Users} />
-                      <Route path="/" exact component={Dashboard} />
+                      <Route path="/dashboard" component={Dashboard} />
                       <Route path="*" component={NotFound} />
                     </Switch>
                   </ErrorBoundry>
